@@ -5,6 +5,8 @@ import toxi.processing.*;
 
 import controlP5.*;
 
+import java.util.*;
+
 Toolbar toolbar;
 Properties properties;
 ControlP5 cp5;
@@ -31,6 +33,10 @@ int view3DPosY = 50;
 int cameraX = 45;
 int cameraY = 1000;
 
+Vec3D cameraPosition;
+Tool selectedTool;
+Rectangle previewRectangle;
+
 void setup()
 {
     size(displayWidth,displayHeight,P3D);
@@ -42,14 +48,14 @@ void setup()
     gfx = new ToxiclibsSupport(this, view3D);   
 
     rectangles = new ArrayList<Rectangle>();
-    // rectangles.add(new Rectangle(50, 50, 100, 100, 50));
     
     cp5 = new ControlP5(this);
 
     createProperties();
-
     createToolbar();
-
+    
+    cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0,0.0,1.0), radians(cameraX));
+    selectedTool = new SelectTool(rectangles);
 }
 
 void draw()
@@ -65,25 +71,18 @@ void draw()
 void draw2DView()
 {
     view2D.beginDraw();
+    
     view2D.background(100);
 
     for (Rectangle r : rectangles)
     {
-        if (selecting && r.mouseOver(mouseX, mouseY, view2DPosX, view2DPosY))
-        {
-            view2D.fill(255,0,0);
             r.drawRectangle2D(view2D);
-            view2D.fill(255);
-        }
-        else
-        {
-            r.drawRectangle2D(view2D);    
-        }
     }
 
-    if (startedDrawing)
+    if (previewRectangle != null)
     {
-        Rectangle.drawPreview(view2D, startX, startY, mouseX-startX-view2DPosX, mouseY-startY-view2DPosY);
+        previewRectangle.drawRectangle2D(view2D);
+        // Rectangle.drawPreview(view2D, startX, startY, mouseX-startX-view2DPosX, mouseY-startY-view2DPosY);
     }
 
     view2D.endDraw();
@@ -93,8 +92,6 @@ void draw2DView()
 
 void draw3DView()
 {
-    Vec3D cameraPosition = findCameraPosition();
-
     view3D.beginDraw();
 
     view3D.ortho();
@@ -106,37 +103,12 @@ void draw3DView()
     view3D.background(100);
     for (Rectangle r : rectangles)
     {
-        if (selecting && r.mouseOver(mouseX, mouseY, view2DPosX, view2DPosY))
-        {
-            view3D.stroke(255);
-            view3D.fill(255,0,0);
-            gfx.mesh(r.getMesh());
-            view3D.fill(255);
-        }
-        else
-        {
-            view3D.stroke(255,0,0);
-            gfx.mesh(r.getMesh());
-        }
+        r.drawRectangle3D(view3D, gfx);
     }
 
     view3D.endDraw();
 
     image(view3D, view3DPosX, view3DPosY); 
-}
-
-Vec3D findCameraPosition()
-{
-    Vec3D cameraPosition;
-    if (mousePressed && mouseOver3DView())
-    {
-        cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D(0.0,0.0,1.0), radians(cameraX + mouseX - view3DPosX - startX));
-    }
-    else
-    {
-        cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0,0.0,1.0), radians(cameraX));   
-    }
-    return cameraPosition;
 }
 
 void createToolbar()
@@ -169,66 +141,32 @@ void createToolbar()
 void createProperties()
 {
     properties = new Properties(cp5, 0, 0, width, 50);
-
-    // properties.plugTo(rectangles.get(0));
     properties.hide();
 }
 
 void mousePressed()
-{
-    if (mouseOver2DView() && drawing)
-    {
-        startX = mouseX - view2DPosX;
-        startY = mouseY - view2DPosY;
-        startedDrawing = true;
-    }
+{   
     if (mouseOver3DView())
     {
         startX = mouseX - view3DPosX;
         startY = mouseY - view3DPosY;
     }
-    if (selecting)
-    {
-        for (Rectangle r : rectangles)
-        {
-            if (r.mouseOver(mouseX, mouseY, view2DPosX, view2DPosY))
-            {
-                if (mouseButton == LEFT)
-                {
-                    properties.plugTo(r);
-                    properties.show();
-                }
-            }
-        }
-    }
+    
+    selectedTool.mouseButtonPressed(mouseX, mouseY, mouseButton);
 }
 
 void mouseDragged()
 {
-    if (selecting)
-    {
-        for (Rectangle r : rectangles)
-        {
-            if (r.mouseOver(mouseX, mouseY, view2DPosX, view2DPosY))
-            {
-                if (mouseButton == RIGHT)
-                {
-                    r.moveTo(mouseX-view2DPosX, mouseY-view2DPosY);
-                }
-            }
-        }
+    if (mouseOver3DView()) {
+        cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D(0.0,0.0,1.0), radians(cameraX + mouseX - view3DPosX - startX));
     }
+
+    selectedTool.mouseMoved(mouseX, mouseY);
 }
 
 void mouseReleased()
 {
-    if (mouseOver2DView() && drawing && startedDrawing)
-    {
-        endX = mouseX - view2DPosX;
-        endY = mouseY - view2DPosY;
-        rectangles.add(new Rectangle(startX, startY, endX-startX, endY-startY, 50));
-    }
-    startedDrawing = false;
+    selectedTool.mouseButtonReleased(mouseX, mouseY, mouseButton);
 
     if (mouseOver3DView())
     {
@@ -237,14 +175,14 @@ void mouseReleased()
     }
 }
 
+void mouseMoved() 
+{
+    selectedTool.mouseMoved(mouseX, mouseY);
+}
+
 boolean mouseOver3DView()
 {
     return mouseX > view3DPosX && mouseX <= view3DPosX + viewSizeX && mouseY > view3DPosY && mouseY <= view3DPosY + viewSizeY;
-}
-
-boolean mouseOver2DView()
-{
-    return mouseX > view2DPosX && mouseX <= view2DPosX + viewSizeX && mouseY > view2DPosY && mouseY <= view2DPosY + viewSizeY;
 }
 
 void controlEvent(ControlEvent theEvent) 
@@ -259,14 +197,115 @@ void controlEvent(ControlEvent theEvent)
         // For now: 0 is Select, 1 is Rectangle
         if (id == 0)
         {
+            selectedTool = new SelectTool(rectangles);
             drawing = false;
             selecting = true;
         }
         if (id == 1)
         {
+            selectedTool = new DrawTool(new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY));
             drawing = true;
             selecting = false;
             properties.hide();
         }
     }
+}
+
+
+abstract class Tool {
+    public abstract void mouseButtonPressed(int x, int y, int button);
+    public abstract void mouseButtonReleased(int x, int y, int button);
+    public abstract void mouseMoved(int x, int y);
+}
+
+class SelectTool extends Tool {
+    
+    List<Rectangle> rectangles;
+    boolean dragging;
+
+    public SelectTool(List<Rectangle> rectangles) {
+        this.rectangles = rectangles;
+        this.dragging = false;
+    }
+
+    public void mouseButtonPressed(int x, int y , int button){
+        for (Rectangle r : rectangles)
+        {
+            if (r.isSelected() && button == LEFT)
+            {
+                properties.plugTo(r);
+                properties.show();
+            } else if (r.isSelected() && button == RIGHT){
+                this.dragging = true;
+            }
+        }
+    };
+
+    public void mouseButtonReleased(int x, int y, int button){
+        if (button == RIGHT) {
+            this.dragging = false;
+        }
+    };
+    
+    public void mouseMoved(int x, int y){
+        for (Rectangle r : rectangles) {
+            r.setSelected(r.mouseOver(x, y, view2DPosX, view2DPosY));
+
+            if (r.isSelected() && this.dragging)
+            {
+                r.moveTo(x-view2DPosX, y-view2DPosY);
+            }
+        }
+    };
+};
+
+class DrawTool extends Tool {
+    
+    boolean isDrawing;
+
+    int startCoordX;
+    int startCoordY;
+
+    Rect drawableArea;
+
+    public DrawTool(Rect drawableArea) {
+        this.drawableArea = drawableArea;
+    }
+
+    public void mouseButtonPressed(int x, int y, int button){
+        if (this.inDrawableArea(x, y)){
+            isDrawing = true;
+            startCoordX = x - (int) drawableArea.getTopLeft().x();
+            startCoordY = y - (int) drawableArea.getTopLeft().y();
+            previewRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 50);
+        }
+    };
+
+    public void mouseButtonReleased(int x, int y, int button){
+        if (isDrawing && this.inDrawableArea(x, y)) {
+
+            endX = x - (int) drawableArea.getTopLeft().x();
+            endY = y - (int) drawableArea.getTopLeft().y();
+
+            rectangles.add(previewRectangle);
+            previewRectangle = null;
+
+            isDrawing = false;
+        }
+    };
+
+    public void mouseMoved(int x, int y){
+        if (isDrawing){
+            endX = x - (int) drawableArea.getTopLeft().x();
+            endY = y - (int) drawableArea.getTopLeft().y();
+            previewRectangle.setSizeX(endX - startCoordX);
+            previewRectangle.setSizeY(endY - startCoordY);
+        }
+    };
+
+    private boolean inDrawableArea(int x, int y) {
+        return x > drawableArea.getTopLeft().x() && x <= drawableArea.getBottomRight().x() 
+        && y > drawableArea.getTopLeft().y() && y <= drawableArea.getBottomRight().y() ;
+    }
+
 }

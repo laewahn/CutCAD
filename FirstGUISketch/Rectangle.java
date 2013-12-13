@@ -8,6 +8,7 @@ import toxi.processing.*;
 public class Rectangle
 {
     private int posX, posY, sizeX, sizeY, thickness;
+    private boolean isSeleceted;
     private TriangleMesh mesh;
 
     public Rectangle(int posX, int posY, int sizeX, int sizeY, int thickness)
@@ -17,6 +18,9 @@ public class Rectangle
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.thickness = thickness;
+
+        this.isSeleceted = false;
+
         this.mesh = new TriangleMesh();
         calcMesh();
     }
@@ -27,8 +31,23 @@ public class Rectangle
     }
 
     public void drawRectangle2D(PGraphics p)
-    {
-        p.rect(posX,posY,sizeX,sizeY);
+    {   
+        this.setFillColor(p);
+        Rectangle.drawPreview(p, posX, posY, sizeX, sizeY);
+    }
+
+    public void drawRectangle3D(PGraphics p, ToxiclibsSupport gfx) {
+        this.setFillColor(p);
+        gfx.mesh(this.getMesh());
+
+    }
+
+    private void setFillColor(PGraphics p) {
+        if (this.isSelected()) {
+            p.fill(255,0,0);
+        } else {
+            p.fill(255);
+        }
     }
 
     private void calcMesh()
@@ -97,6 +116,14 @@ public class Rectangle
     public TriangleMesh getMesh()
     {
         return this.mesh;
+    }
+
+    public boolean isSelected() {
+        return this.isSeleceted;
+    }
+
+    public void setSelected(boolean selected) {
+        this.isSeleceted = selected;
     }
 
     public void moveTo(int posX, int posY)
