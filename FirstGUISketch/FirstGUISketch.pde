@@ -14,14 +14,12 @@ ControlP5 cp5;
 ToxiclibsSupport gfx;
 PGraphics view2D, view3D;
 ArrayList<Rectangle> rectangles;
+ArrayList<Connection> connections;
 
 int startX = 0;
 int startY = 0;
 int endX = 0;
 int endY = 0;
-boolean drawing = false;
-boolean startedDrawing = false;
-boolean selecting = true;
 
 int viewSizeX = 500;
 int viewSizeY = 500;
@@ -36,6 +34,7 @@ int cameraY = 1000;
 Vec3D cameraPosition;
 Tool selectedTool;
 Rectangle previewRectangle;
+Connection previewConnection;
 
 void setup()
 {
@@ -45,9 +44,10 @@ void setup()
     view2D = createGraphics(viewSizeX, viewSizeY);
     view3D = createGraphics(viewSizeX, viewSizeY, P3D);
 
-    gfx = new ToxiclibsSupport(this, view3D);   
+    gfx = new ToxiclibsSupport(this, view3D);
 
     rectangles = new ArrayList<Rectangle>();
+    connections = new ArrayList<Connection>();
     
     cp5 = new ControlP5(this);
 
@@ -76,13 +76,21 @@ void draw2DView()
 
     for (Rectangle r : rectangles)
     {
-            r.drawRectangle2D(view2D);
+        r.drawRectangle2D(view2D);
     }
 
     if (previewRectangle != null)
     {
         previewRectangle.drawRectangle2D(view2D);
         // Rectangle.drawPreview(view2D, startX, startY, mouseX-startX-view2DPosX, mouseY-startY-view2DPosY);
+    }
+
+    if (previewConnection != null)
+    {
+        Vec2D mid = previewConnection.getEdge1().getMid();
+        stroke(255,0,0);
+        line(mid.x()+view2DPosX, mid.y()+view2DPosY, mouseX, mouseY);
+        stroke(0);
     }
 
     view2D.endDraw();
@@ -136,6 +144,17 @@ void createToolbar()
     Rectangle.drawPreview(rectangleIcon, 50, 10, 50, 30);
     rectangleIcon.endDraw();
     toolbar.addCustomItem("Rectangle", 1, new ShapeButton(rectangleIcon));
+
+    PGraphics connectIcon = createGraphics(150,50);
+    connectIcon.beginDraw();
+    connectIcon.noFill();
+    connectIcon.stroke(0);
+    connectIcon.strokeWeight(2);
+    connectIcon.line(25, 10, 25, 40);
+    connectIcon.line(25, 25, 125, 25);
+    connectIcon.line(125, 10, 125, 40);
+    connectIcon.endDraw();
+    toolbar.addCustomItem("Connect", 2, new ShapeButton(connectIcon));
 }
 
 void createProperties()
@@ -198,14 +217,15 @@ void controlEvent(ControlEvent theEvent)
         if (id == 0)
         {
             selectedTool = new SelectTool(rectangles);
-            drawing = false;
-            selecting = true;
         }
         if (id == 1)
         {
             selectedTool = new DrawTool(new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY));
-            drawing = true;
-            selecting = false;
+            properties.hide();
+        }
+        if (id == 2)
+        {
+            selectedTool = new ConnectTool(rectangles);
             properties.hide();
         }
     }
@@ -259,6 +279,67 @@ class SelectTool extends Tool {
     };
 };
 
+class ConnectTool extends Tool
+{
+    boolean selectedFirst;
+
+    List<Rectangle> rectangles;
+
+    public ConnectTool(List<Rectangle> rectangles)
+    {
+        this.rectangles = rectangles;
+        this.selectedFirst = false;
+    }
+
+    public void mouseButtonPressed(int x, int y, int button)
+    {
+
+        for (Rectangle r : rectangles)
+        {
+            for (Edge e : r.getEdges())
+            {
+                if (e.isSelected() && button == LEFT)
+                {
+                    if (!selectedFirst)
+                    {
+                        previewConnection = new Connection();
+                        previewConnection.setEdge1(e);
+                        selectedFirst = true;                        
+                    }
+                    else
+                    {
+                        previewConnection.setEdge2(e);
+                        connections.add(previewConnection);
+                        println("Added Connection between " + previewConnection.getEdge1() + " and " + previewConnection.getEdge2());
+                        previewConnection = null;
+                        selectedFirst = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public void mouseButtonReleased(int x, int y, int button)
+    {
+        // no actions required
+    }
+
+    public void mouseMoved(int x, int y)
+    {
+        for (Rectangle r : rectangles)
+        {
+            for (Edge e : r.getEdges())
+            {
+                e.setSelected(e.mouseOver(x, y, view2DPosX, view2DPosY));
+                // if (e.isSelected())
+                // {
+                //     println("selected edge " + e);
+                // }
+            }
+        }
+    }
+}
+
 class DrawTool extends Tool {
     
     boolean isDrawing;
@@ -277,7 +358,7 @@ class DrawTool extends Tool {
             isDrawing = true;
             startCoordX = x - (int) drawableArea.getTopLeft().x();
             startCoordY = y - (int) drawableArea.getTopLeft().y();
-            previewRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 50);
+            previewRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 0, 50);
         }
     };
 
