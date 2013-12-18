@@ -232,13 +232,13 @@ void controlEvent(ControlEvent theEvent)
 }
 
 
-abstract class Tool {
-    public abstract void mouseButtonPressed(int x, int y, int button);
-    public abstract void mouseButtonReleased(int x, int y, int button);
-    public abstract void mouseMoved(int x, int y);
+interface Tool {
+    public void mouseButtonPressed(int x, int y, int button);
+    public void mouseButtonReleased(int x, int y, int button);
+    public void mouseMoved(int x, int y);
 }
 
-class SelectTool extends Tool {
+class SelectTool implements Tool {
     
     List<Rectangle> rectangles;
     boolean dragging;
@@ -279,7 +279,7 @@ class SelectTool extends Tool {
     };
 };
 
-class ConnectTool extends Tool
+class ConnectTool implements Tool
 {
     boolean selectedFirst;
 
@@ -340,7 +340,7 @@ class ConnectTool extends Tool
     }
 }
 
-class DrawTool extends Tool {
+class DrawTool implements Tool {
     
     boolean isDrawing;
 
