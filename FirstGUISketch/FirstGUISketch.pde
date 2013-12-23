@@ -171,13 +171,14 @@ void createProperties()
 
 void mousePressed()
 {   
-  if (mouseOver3DView())
-  {
-    startX = mouseX - view3DPosX;
-    startY = mouseY - view3DPosY;
-  }
-
-  selectedTool.mouseButtonPressed(mouseX, mouseY, mouseButton);
+    if (mouseOver3DView())
+    {
+        startX = mouseX - view3DPosX;
+        startY = mouseY - view3DPosY;
+    }
+    
+    Vec2D mousePosition = new Vec2D(mouseX, mouseY);
+    selectedTool.mouseButtonPressed(mousePosition, mouseButton);
 }
 
 void mouseDragged()
@@ -186,12 +187,12 @@ void mouseDragged()
     cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D(0.0, 0.0, 1.0), radians(cameraX + mouseX - view3DPosX - startX));
   }
 
-  selectedTool.mouseMoved(mouseX, mouseY);
+  selectedTool.mouseMoved(new Vec2D(mouseX, mouseY));
 }
 
 void mouseReleased()
 {
-  selectedTool.mouseButtonReleased(mouseX, mouseY, mouseButton);
+  selectedTool.mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
 
   if (mouseOver3DView())
   {
@@ -202,7 +203,7 @@ void mouseReleased()
 
 void mouseMoved() 
 {
-  selectedTool.mouseMoved(mouseX, mouseY);
+    selectedTool.mouseMoved(new Vec2D(mouseX, mouseY));
 }
 
 boolean mouseOver3DView()
@@ -239,9 +240,9 @@ void controlEvent(ControlEvent theEvent)
 
 
 interface Tool {
-  public void mouseButtonPressed(int x, int y, int button);
-  public void mouseButtonReleased(int x, int y, int button);
-  public void mouseMoved(int x, int y);
+    public void mouseButtonPressed(Vec2D position, int button);
+    public void mouseButtonReleased(Vec2D position, int button);
+    public void mouseMoved(Vec2D position);
 }
 
 class SelectTool implements Tool {
@@ -250,45 +251,84 @@ class SelectTool implements Tool {
   boolean dragging;
   Vec2D originalMousePosition;
 
+// <<<<<<< HEAD
   public SelectTool(List<Shapes> shapes) {
     this.shapes = shapes;
     this.dragging = false;
     this.originalMousePosition = new Vec2D(0,0);
   }
 
-  public void mouseButtonPressed(int x, int y, int button) {
-    for (Shapes s : shapes)
+//   public void mouseButtonPressed(int x, int y, int button) {
+//     for (Shapes s : shapes)
+//     {
+//       if (s.getShape().isSelected() && button == LEFT)
+//       {
+//         properties.plugTo(s);
+//         properties.show();
+//       } 
+//       else if (s.getShape().isSelected() && button == RIGHT) {
+//         this.dragging = true;
+//         this.originalMousePosition.set(new Vec2D(x-view2DPosX, y-view2DPosY));
+//       }
+//     }
+//   };
+
+//   public void mouseButtonReleased(int x, int y, int button) {
+//     if (button == RIGHT) {
+//       this.dragging = false;
+//     }
+//   };
+
+//   public void mouseMoved(int x, int y) {
+//     for (Shapes s : shapes) {
+//       s.getShape().setSelected(s.getShape().mouseOver(x, y, view2DPosX, view2DPosY));
+
+//       if (s.getShape().isSelected() && this.dragging)
+//       {
+//         Vec2D currentMousePosition = new Vec2D(x-view2DPosX, y-view2DPosY);
+//         s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
+//         originalMousePosition.set(currentMousePosition);
+//       }
+//     }
+//   };
+// =======
+
+    public void mouseButtonPressed(Vec2D position, int button)
     {
-      if (s.getShape().isSelected() && button == LEFT)
-      {
-        properties.plugTo(s);
-        properties.show();
-      } 
-      else if (s.getShape().isSelected() && button == RIGHT) {
-        this.dragging = true;
-        this.originalMousePosition.set(new Vec2D(x-view2DPosX, y-view2DPosY));
-      }
+        for (Shapes s : shapes)
+        {
+            if (s.getShape().isSelected() && button == LEFT)
+            {
+                properties.plugTo(s);
+                properties.show();
+            } else if (s.getShape().isSelected() && button == RIGHT){
+                this.dragging = true;
+                this.originalMousePosition.set(position.sub(new Vec2D(view2DPosX, view2DPosY)));
+            }
+        }
     }
-  };
 
-  public void mouseButtonReleased(int x, int y, int button) {
-    if (button == RIGHT) {
-      this.dragging = false;
+    public void mouseButtonReleased(Vec2D position, int button)
+    {
+        if (button == RIGHT) {
+            this.dragging = false;
+        }
     }
-  };
+    
+    public void mouseMoved(Vec2D position)
+    {
+        for (Shapes s : shapes) {
+            s.getShape().setSelected(s.getShape().mouseOver((int)position.x(), (int)position.y(), view2DPosX, view2DPosY));
 
-  public void mouseMoved(int x, int y) {
-    for (Shapes s : shapes) {
-      s.getShape().setSelected(s.getShape().mouseOver(x, y, view2DPosX, view2DPosY));
-
-      if (s.getShape().isSelected() && this.dragging)
-      {
-        Vec2D currentMousePosition = new Vec2D(x-view2DPosX, y-view2DPosY);
-        s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
-        originalMousePosition.set(currentMousePosition);
-      }
+            if (s.getShape().isSelected() && this.dragging)
+            {
+                Vec2D currentMousePosition = position.sub(new Vec2D(view2DPosX, view2DPosY));
+                s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
+                originalMousePosition.set(currentMousePosition);
+            }
+        }
     }
-  };
+// >>>>>>> Refactored tools to use Vec2D for mouse input
 };
 
 class ConnectTool implements Tool
@@ -303,9 +343,8 @@ class ConnectTool implements Tool
     this.selectedFirst = false;
   }
 
-  public void mouseButtonPressed(int x, int y, int button)
+  public void mouseButtonPressed(Vec2D position, int button)
   {
-
     for (Shapes s : shapes)
     {
       for (Edge e : s.getShape().getEdges())
@@ -332,18 +371,18 @@ class ConnectTool implements Tool
     }
   }
 
-  public void mouseButtonReleased(int x, int y, int button)
+  public void mouseButtonReleased(Vec2D position, int button)
   {
     // no actions required
   }
 
-  public void mouseMoved(int x, int y)
+  public void mouseMoved(Vec2D position)
   {
     for (Shapes s : shapes)
     {
       for (Edge e : s.getShape().getEdges())
       {
-        e.setSelected(e.mouseOver(x, y, view2DPosX, view2DPosY));
+        e.setSelected(e.mouseOver((int) position.x(), (int) position.y(), view2DPosX, view2DPosY));
       }
     }
   }
@@ -351,10 +390,14 @@ class ConnectTool implements Tool
 
 class DrawTool implements Tool {
 
+// <<<<<<< HEAD
   boolean isDrawing;
 
-  int startCoordX;
-  int startCoordY;
+  // int startCoordX;
+  // int startCoordY;
+// =======
+    Vec2D startCoord;
+// >>>>>>> Refactored tools to use Vec2D for mouse input
 
   Rect drawableArea;
 
@@ -362,42 +405,51 @@ class DrawTool implements Tool {
     this.drawableArea = drawableArea;
   }
 
-  public void mouseButtonPressed(int x, int y, int button) {
-    if (this.inDrawableArea(x, y)) {
-      isDrawing = true;
-      startCoordX = x - (int) drawableArea.getTopLeft().x();
-      startCoordY = y - (int) drawableArea.getTopLeft().y();
-      newRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 0, 50);
+    public void mouseButtonPressed(Vec2D position, int button)
+    {
+        if (this.inDrawableArea(position)){
+            isDrawing = true;
+            
+            this.startCoord = this.positionRelativeToDrawArea(position);
+            
+            newRectangle = new Rectangle((int)startCoord.x(), (int)startCoord.y(), 0, 0, 0, 5);
+        }
     }
-  };
 
-  public void mouseButtonReleased(int x, int y, int button) {
-    if (isDrawing && this.inDrawableArea(x, y)) {
+    public void mouseButtonReleased(Vec2D position, int button)
+    {
 
-      endX = x - (int) drawableArea.getTopLeft().x();
-      endY = y - (int) drawableArea.getTopLeft().y();
-      newRectangle.changeValue(0, endX - startCoordX);
-      newRectangle.changeValue(1, endY - startCoordY);
+        if (isDrawing && this.inDrawableArea(position)) {
 
-      shapes.add(newRectangle);
-      newRectangle = null;
+            Vec2D endCoord = this.positionRelativeToDrawArea(position);
+            Vec2D rectSize = endCoord.sub(this.startCoord);
+            
+            newRectangle.changeValue(0, (int) rectSize.x());
+            newRectangle.changeValue(1, (int) rectSize.y());
 
-      isDrawing = false;
+            isDrawing = false;
+        }
     }
-  };
+    
+    public void mouseMoved(Vec2D position)
+    {
+        if (isDrawing){
 
-  public void mouseMoved(int x, int y) {
-    if (isDrawing) {
-      endX = x - (int) drawableArea.getTopLeft().x();
-      endY = y - (int) drawableArea.getTopLeft().y();
-      newRectangle.changeValue(0, endX - startCoordX);
-      newRectangle.changeValue(1, endY - startCoordY);
+            Vec2D endCoord = this.positionRelativeToDrawArea(position);
+            Vec2D rectSize = endCoord.sub(this.startCoord);
+
+            newRectangle.changeValue(0, (int) rectSize.x());
+            newRectangle.changeValue(1, (int) rectSize.y());
+        }
+
     }
-  };
 
-  private boolean inDrawableArea(int x, int y) {
-    return x > drawableArea.getTopLeft().x() && x <= drawableArea.getBottomRight().x() 
-      && y > drawableArea.getTopLeft().y() && y <= drawableArea.getBottomRight().y() ;
-  }
+    private Vec2D positionRelativeToDrawArea(Vec2D inPosition) {
+        return inPosition.sub(drawableArea.getTopLeft());
+    }
+
+    private boolean inDrawableArea(Vec2D position) {
+        return this.drawableArea.containsPoint(position);
+    }
 }
 
