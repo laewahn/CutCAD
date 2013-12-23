@@ -6,7 +6,7 @@ class Properties
 {
     private ArrayList<Controller> controllers;
     private Slider setSizeX, setSizeY, setThickness;
-    private Rectangle currentlyPluggedTo;
+    private Shapes currentlyPluggedTo;
     private int posX, posY, sizeX, sizeY;
     private boolean hidden;
 
@@ -23,17 +23,17 @@ class Properties
 
         setSizeX = cp5.addSlider("setSizeX")
             .setPosition(100, 25)
-            .setRange(0, 255)
+            .setRange(10, 255)
             .setCaptionLabel("Width");
 
         setSizeY = cp5.addSlider("setSizeY")
             .setPosition(300, 25)
-            .setRange(0, 255)
+            .setRange(10, 255)
             .setCaptionLabel("Length");
 
         setThickness = cp5.addSlider("setThickness")
             .setPosition(500, 25)
-            .setRange(0, 255)
+            .setRange(1, 255)
             .setCaptionLabel("Thickness");
 
         controllers.add(setSizeX);
@@ -41,7 +41,7 @@ class Properties
         controllers.add(setThickness);
     }
 
-    public void plugTo(Rectangle r)
+    public void plugTo(Shapes s)
     {
         if (this.currentlyPluggedTo != null)
         {
@@ -49,11 +49,11 @@ class Properties
                 setSizeY.unplugFrom(this.currentlyPluggedTo);
                 setThickness.unplugFrom(this.currentlyPluggedTo);
         }
-        setSizeX.plugTo(r).setValue(r.getSizeX());
-        setSizeY.plugTo(r).setValue(r.getSizeY());
-        setThickness.plugTo(r).setValue(r.getThickness());
+        setSizeX.plugTo(s).setValue(s.getValue(0));
+        setSizeY.plugTo(s).setValue(s.getValue(1));
+        setThickness.plugTo(s).setValue(s.getShape().getThickness());
 
-        this.currentlyPluggedTo = r;
+        this.currentlyPluggedTo = s;
     }
 
     public void hide()

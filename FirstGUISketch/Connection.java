@@ -39,4 +39,13 @@ public class Connection
     {
         this.edge2 = e;
     }
+    
+    public void drawConnection(PGraphics p)
+    {
+        Vec2D mid1 = this.getEdge1().getMid().add(getEdge1().getShape().getPosition2D());
+        Vec2D mid2 = this.getEdge2().getMid().add(getEdge2().getShape().getPosition2D());
+        p.stroke(255,0,0);
+        p.line(mid1.x(), mid1.y(), mid2.x(), mid2.y());
+        p.stroke(0);
+    }
 }

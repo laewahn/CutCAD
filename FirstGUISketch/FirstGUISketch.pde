@@ -13,7 +13,7 @@ ControlP5 cp5;
 
 ToxiclibsSupport gfx;
 PGraphics view2D, view3D;
-ArrayList<Rectangle> rectangles;
+ArrayList<Shapes> shapes;
 ArrayList<Connection> connections;
 
 int startX = 0;
@@ -33,7 +33,8 @@ int cameraY = 1000;
 
 Vec3D cameraPosition;
 Tool selectedTool;
-Rectangle previewRectangle;
+Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
+Shapes newRectangle;
 Connection previewConnection;
 
 void setup()
@@ -41,13 +42,13 @@ void setup()
     size(displayWidth,displayHeight,P3D);
     ortho();
 
-    view2D = createGraphics(viewSizeX, viewSizeY);
+    view2D = createGraphics(viewSizeX, viewSizeY, P3D);
     view3D = createGraphics(viewSizeX, viewSizeY, P3D);
 
-    gfx = new ToxiclibsSupport(this, view3D);
-
-    rectangles = new ArrayList<Rectangle>();
+    shapes = new ArrayList<Shapes>();
     connections = new ArrayList<Connection>();
+    
+    shapes.add(new Rectangle(50, 50, 0, 100, 100, 5));
     
     cp5 = new ControlP5(this);
 
@@ -55,7 +56,7 @@ void setup()
     createToolbar();
     
     cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0,0.0,1.0), radians(cameraX));
-    selectedTool = new SelectTool(rectangles);
+    selectedTool = new SelectTool(shapes);
 }
 
 void draw()
@@ -74,20 +75,24 @@ void draw2DView()
     
     view2D.background(100);
 
-    for (Rectangle r : rectangles)
+    for (Shapes s : shapes)
     {
-        r.drawRectangle2D(view2D);
+        s.getShape().draw2D(view2D);
+    }
+    
+    for (Connection c : connections)
+    {
+        c.drawConnection(view2D);
     }
 
-    if (previewRectangle != null)
+    if (newRectangle != null)
     {
-        previewRectangle.drawRectangle2D(view2D);
-        // Rectangle.drawPreview(view2D, startX, startY, mouseX-startX-view2DPosX, mouseY-startY-view2DPosY);
+        newRectangle.getShape().draw2D(view2D);
     }
 
     if (previewConnection != null)
     {
-        Vec2D mid = previewConnection.getEdge1().getMid();
+        Vec2D mid = previewConnection.getEdge1().getMid().add(previewConnection.getEdge1().getShape().getPosition2D());
         stroke(255,0,0);
         line(mid.x()+view2DPosX, mid.y()+view2DPosY, mouseX, mouseY);
         stroke(0);
@@ -109,9 +114,9 @@ void draw3DView()
     view3D.endCamera();
     
     view3D.background(100);
-    for (Rectangle r : rectangles)
+    for (Shapes s : shapes)
     {
-        r.drawRectangle3D(view3D, gfx);
+        s.getShape().draw3D(view3D);
     }
 
     view3D.endDraw();
@@ -141,7 +146,7 @@ void createToolbar()
     rectangleIcon.noFill();
     rectangleIcon.stroke(0);
     rectangleIcon.strokeWeight(2);
-    Rectangle.drawPreview(rectangleIcon, 50, 10, 50, 30);
+    previewRectangle.getShape().drawPreview(rectangleIcon, 50, 10, 50, 30);
     rectangleIcon.endDraw();
     toolbar.addCustomItem("Rectangle", 1, new ShapeButton(rectangleIcon));
 
@@ -216,7 +221,7 @@ void controlEvent(ControlEvent theEvent)
         // For now: 0 is Select, 1 is Rectangle
         if (id == 0)
         {
-            selectedTool = new SelectTool(rectangles);
+            selectedTool = new SelectTool(shapes);
         }
         if (id == 1)
         {
@@ -225,7 +230,7 @@ void controlEvent(ControlEvent theEvent)
         }
         if (id == 2)
         {
-            selectedTool = new ConnectTool(rectangles);
+            selectedTool = new ConnectTool(shapes);
             properties.hide();
         }
     }
@@ -240,22 +245,22 @@ interface Tool {
 
 class SelectTool implements Tool {
     
-    List<Rectangle> rectangles;
+    List<Shapes> shapes;
     boolean dragging;
 
-    public SelectTool(List<Rectangle> rectangles) {
-        this.rectangles = rectangles;
+    public SelectTool(List<Shapes> shapes) {
+        this.shapes = shapes;
         this.dragging = false;
     }
 
     public void mouseButtonPressed(int x, int y , int button){
-        for (Rectangle r : rectangles)
+        for (Shapes s : shapes)
         {
-            if (r.isSelected() && button == LEFT)
+            if (s.getShape().isSelected() && button == LEFT)
             {
-                properties.plugTo(r);
+                properties.plugTo(s);
                 properties.show();
-            } else if (r.isSelected() && button == RIGHT){
+            } else if (s.getShape().isSelected() && button == RIGHT){
                 this.dragging = true;
             }
         }
@@ -268,12 +273,12 @@ class SelectTool implements Tool {
     };
     
     public void mouseMoved(int x, int y){
-        for (Rectangle r : rectangles) {
-            r.setSelected(r.mouseOver(x, y, view2DPosX, view2DPosY));
+        for (Shapes s : shapes) {
+            s.getShape().setSelected(s.getShape().mouseOver(x, y, view2DPosX, view2DPosY));
 
-            if (r.isSelected() && this.dragging)
+            if (s.getShape().isSelected() && this.dragging)
             {
-                r.moveTo(x-view2DPosX, y-view2DPosY);
+                s.getShape().setPosition2D(new Vec2D(x-view2DPosX, y-view2DPosY));
             }
         }
     };
@@ -283,20 +288,20 @@ class ConnectTool implements Tool
 {
     boolean selectedFirst;
 
-    List<Rectangle> rectangles;
+    List<Shapes> shapes;
 
-    public ConnectTool(List<Rectangle> rectangles)
+    public ConnectTool(List<Shapes> shapes)
     {
-        this.rectangles = rectangles;
+        this.shapes = shapes;
         this.selectedFirst = false;
     }
 
     public void mouseButtonPressed(int x, int y, int button)
     {
 
-        for (Rectangle r : rectangles)
+        for (Shapes s : shapes)
         {
-            for (Edge e : r.getEdges())
+            for (Edge e : s.getShape().getEdges())
             {
                 if (e.isSelected() && button == LEFT)
                 {
@@ -326,15 +331,11 @@ class ConnectTool implements Tool
 
     public void mouseMoved(int x, int y)
     {
-        for (Rectangle r : rectangles)
+        for (Shapes s : shapes)
         {
-            for (Edge e : r.getEdges())
+            for (Edge e : s.getShape().getEdges())
             {
                 e.setSelected(e.mouseOver(x, y, view2DPosX, view2DPosY));
-                // if (e.isSelected())
-                // {
-                //     println("selected edge " + e);
-                // }
             }
         }
     }
@@ -358,7 +359,7 @@ class DrawTool implements Tool {
             isDrawing = true;
             startCoordX = x - (int) drawableArea.getTopLeft().x();
             startCoordY = y - (int) drawableArea.getTopLeft().y();
-            previewRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 0, 50);
+            newRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 0, 50);
         }
     };
 
@@ -367,9 +368,11 @@ class DrawTool implements Tool {
 
             endX = x - (int) drawableArea.getTopLeft().x();
             endY = y - (int) drawableArea.getTopLeft().y();
+            newRectangle.changeValue(0, endX - startCoordX);
+            newRectangle.changeValue(1, endY - startCoordY);
 
-            rectangles.add(previewRectangle);
-            previewRectangle = null;
+            shapes.add(newRectangle);
+            newRectangle = null;
 
             isDrawing = false;
         }
@@ -379,8 +382,8 @@ class DrawTool implements Tool {
         if (isDrawing){
             endX = x - (int) drawableArea.getTopLeft().x();
             endY = y - (int) drawableArea.getTopLeft().y();
-            previewRectangle.setSizeX(endX - startCoordX);
-            previewRectangle.setSizeY(endY - startCoordY);
+            newRectangle.changeValue(0, endX - startCoordX);
+            newRectangle.changeValue(1, endY - startCoordY);
         }
     };
 
