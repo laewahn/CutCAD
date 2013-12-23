@@ -4,6 +4,7 @@ import toxi.geom.*;
 import toxi.geom.mesh.*;
 import toxi.geom.mesh.subdiv.*;
 import toxi.processing.*;
+import toxi.math.*;
 
 import java.util.*;
 import static java.lang.System.*;
@@ -186,31 +187,46 @@ public class GShape
   }
   
   public void draw3D(PGraphics p) {
-    this.createCover(p, getTenons(), thickness/2, position3D);
-    this.createCover(p, getTenons(), -thickness/2, position3D);
+    this.createCover(p, getTenons(), thickness/2, position3D, angle3D);
+    this.createCover(p, getTenons(), -thickness/2, position3D, angle3D);
 //ToDo? Switch-off-Sides-Option for better performance (...if too many objects...)
-    this.createSides(p, getTenons(), thickness, position3D);
+    this.createSides(p, getTenons(), thickness, position3D, angle3D);
 //ToDo: Same for cut-out sides -> external function for sides
   }
   
+  private Vec3D transformVector(Vec2D vector, int distanceToBottom, Vec3D position, Vec3D angle)
+  {
+    Vec3D result = new Vec3D(vector.x(), vector.y(), distanceToBottom);
+    result = result.rotateX((float)Math.toRadians(angle.x())).rotateY((float)Math.toRadians(angle.y())).rotateZ((float)Math.toRadians(angle.z()));
+    result = result.add(position);
+    return result;
+  }
+  
 //ToDo include 3D-Angles (rotation around x,y,z axis in vertex-computation...iiiiiiiiih...
-  private void createSides(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position) 
+  private void createSides(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position, Vec3D angle) 
   {
     this.setFillColor(p);
+    ArrayList<Vec3D> resultTop = new ArrayList<Vec3D>();
+    ArrayList<Vec3D> resultBottom = new ArrayList<Vec3D>();
+    for (Vec2D actVector : vectors) {
+      resultTop.add(transformVector(actVector, +distanceToBottom/2, position, angle));
+      resultBottom.add(transformVector(actVector, -distanceToBottom/2, position, angle));
+    }
+
     for (int i=0; i<vectors.size()-1; i++) {
         p.beginShape();
-        p.vertex(  vectors.get(i).x()+position.x(),   vectors.get(i).y()+position.y(), position.z() - distanceToBottom/2);
-        p.vertex(  vectors.get(i).x()+position.x(),   vectors.get(i).y()+position.y(), position.z() + distanceToBottom/2);
-        p.vertex(vectors.get(i+1).x()+position.x(), vectors.get(i+1).y()+position.y(), position.z() + distanceToBottom/2);
-        p.vertex(vectors.get(i+1).x()+position.x(), vectors.get(i+1).y()+position.y(), position.z() - distanceToBottom/2);
+        p.vertex(resultBottom.get(i).x(),   resultBottom.get(i).y(),   resultBottom.get(i).z());
+        p.vertex(resultTop.get(i).x(),      resultTop.get(i).y(),      resultTop.get(i).z());
+        p.vertex(resultTop.get(i+1).x(),    resultTop.get(i+1).y(),    resultTop.get(i+1).z());
+        p.vertex(resultBottom.get(i+1).x(), resultBottom.get(i+1).y(), resultBottom.get(i+1).z());
         p.endShape(PConstants.CLOSE);
      }
      p.beginShape();
      int i = vectors.size()-1;
-     p.vertex(vectors.get(i).x()+position.x(), vectors.get(i).y()+position.y(), position.z() - distanceToBottom/2);
-     p.vertex(vectors.get(i).x()+position.x(), vectors.get(i).y()+position.y(), position.z() + distanceToBottom/2);
-     p.vertex(vectors.get(0).x()+position.x(), vectors.get(0).y()+position.y(), position.z() + distanceToBottom/2);
-     p.vertex(vectors.get(0).x()+position.x(), vectors.get(0).y()+position.y(), position.z() - distanceToBottom/2);
+     p.vertex(resultBottom.get(i).x(), resultBottom.get(i).y(), resultBottom.get(i).z());
+     p.vertex(resultTop.get(i).x(),    resultTop.get(i).y(),    resultTop.get(i).z());
+     p.vertex(resultTop.get(0).x(),    resultTop.get(0).y(),    resultTop.get(0).z());
+     p.vertex(resultBottom.get(0).x(), resultBottom.get(0).y(), resultBottom.get(0).z());
      p.endShape(PConstants.CLOSE);
   }
  
@@ -235,11 +251,12 @@ public class GShape
     p.endShape(PConstants.CLOSE);
   }
   
-  private void createCover(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position) {
+  private void createCover(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position, Vec3D angle) {
     this.setFillColor(p);
     p.beginShape();
     for (Vec2D vector : vectors) {
-      p.vertex(vector.x()+position.x(), vector.y()+position.y(), position.z() + distanceToBottom);
+      Vec3D result = transformVector(vector, distanceToBottom, position, angle);
+      p.vertex(result.x(), result.y(), result.z());
     }
     p.beginContour();
 //ToDo: add additional figures for cut-outs
