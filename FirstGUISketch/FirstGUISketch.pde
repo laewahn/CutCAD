@@ -34,7 +34,7 @@ int cameraY = 1000;
 Vec3D cameraPosition;
 Tool selectedTool;
 Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
-Shapes newRectangle;
+Rectangle newRectangle;
 Connection previewConnection;
 
 void setup()
@@ -412,7 +412,7 @@ class DrawTool implements Tool {
             
             this.startCoord = this.positionRelativeToDrawArea(position);
             
-            newRectangle = new Rectangle((int)startCoord.x(), (int)startCoord.y(), 0, 0, 0, 5);
+            newRectangle = new Rectangle(startCoord, new Vec2D(), 5);
         }
     }
 
@@ -424,8 +424,7 @@ class DrawTool implements Tool {
             Vec2D endCoord = this.positionRelativeToDrawArea(position);
             Vec2D rectSize = endCoord.sub(this.startCoord);
             
-            newRectangle.changeValue(0, (int) rectSize.x());
-            newRectangle.changeValue(1, (int) rectSize.y());
+            newRectangle.setSize(rectSize);
 
             isDrawing = false;
         }
@@ -438,8 +437,7 @@ class DrawTool implements Tool {
             Vec2D endCoord = this.positionRelativeToDrawArea(position);
             Vec2D rectSize = endCoord.sub(this.startCoord);
 
-            newRectangle.changeValue(0, (int) rectSize.x());
-            newRectangle.changeValue(1, (int) rectSize.y());
+            newRectangle.setSize(rectSize);
         }
 
     }

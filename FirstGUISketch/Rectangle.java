@@ -12,6 +12,16 @@ public class Rectangle extends Shapes
   private int sizeX, sizeY;
   private GShape basic;
 
+  private Vec2D origin2D;
+  private Vec2D size;
+
+  public Rectangle(Vec2D origin2D, Vec2D size, int thickness) 
+  {
+    this((int) origin2D.x(), (int) origin2D.y(), 0, (int) size.x(), (int) size.y(), thickness);
+    this.origin2D = origin2D;
+      this.size = size;
+  }
+
   public Rectangle(int posX, int posY, int posZ, int sizeX, int sizeY, int thickness)
   {
     this.sizeX = sizeX;
@@ -67,6 +77,18 @@ public class Rectangle extends Shapes
   public int getSizeY()
   {
     return sizeY;
+  }
+
+  public Vec2D getSize()
+  {
+    return this.size;
+  }
+
+  public void setSize(Vec2D newSize)
+  {
+    this.size = newSize;
+    this.setSizeX((int)this.size.x());
+    this.setSizeY((int)this.size.y());
   }
 
   public int getThickness()
