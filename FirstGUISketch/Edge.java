@@ -9,14 +9,14 @@ import java.util.*;
 class Edge
 {
     private GShape parent;
-    private int vector1, vector2;
+    private Vec2D v1, v2;
     private boolean isSelected;
 
-    public Edge(GShape parent, int vector1Number, int vector2Number)
+    public Edge(GShape parent, Vec2D v1, Vec2D v2)
     {
         this.parent = parent;
-        this.vector1 = vector1Number;
-        this.vector2 = vector2Number;
+        this.v1 = v1;
+        this.v2 = v2;
         this.isSelected = false;
     }
     
@@ -37,22 +37,22 @@ class Edge
 
     public Vec2D getV1()
     {
-        return this.parent.getVector(vector1);
+        return this.v1;
     }
 
     public Vec2D getV2()
     {
-        return this.parent.getVector(vector2);
+        return this.v2;
     }
 
     public void setV1(Vec2D v)
     {
-        this.parent.setVector(vector1, v);
+        this.getV1().set(v);
     }
 
     public void setV2(Vec2D v)
     {
-        this.parent.setVector(vector2, v);
+        this.getV2().set(v);
     }
 
 //    public void drawEdge(PGraphics p)
