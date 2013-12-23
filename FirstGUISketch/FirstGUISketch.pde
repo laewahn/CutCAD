@@ -55,9 +55,9 @@ void setup()
 
   createProperties();
   createToolbar();
-
+  
   cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0, 0.0, 1.0), radians(cameraX));
-  selectedTool = new SelectTool(view2DRect, shapes);
+  selectedTool = new SelectTool(view2DRect, properties, shapes);
 }
 
 void draw()
@@ -212,234 +212,17 @@ void controlEvent(ControlEvent theEvent)
     // For now: 0 is Select, 1 is Rectangle
     if (id == 0)
     {
-        selectedTool = new SelectTool(view2DRect, shapes);
+        selectedTool = new SelectTool(view2DRect, properties, shapes);
     }
     if (id == 1)
     {
-        selectedTool = new DrawTool(view2DRect);
+        selectedTool = new DrawTool(view2DRect, properties, shapes);
         properties.hide();
     }
     if (id == 2)
     {
-        selectedTool = new ConnectTool(view2DRect, shapes);
+        selectedTool = new ConnectTool(view2DRect, properties, shapes);
         properties.hide();
     }
   }
 }
-
-
-abstract class Tool implements Drawable2D {
-
-    protected Rect view;
-
-    public Tool(Rect view)
-    {
-        this.view = view;
-    }
-
-    protected Vec2D positionRelativeToView(Vec2D inPosition) 
-    {
-        return inPosition.sub(this.view.getTopLeft());
-    }
-
-    protected boolean inView(Vec2D position) 
-    {
-        return this.view.containsPoint(position);
-    }
-
-    abstract public void mouseButtonPressed(Vec2D position, int button);
-    abstract public void mouseButtonReleased(Vec2D position, int button);
-    abstract public void mouseMoved(Vec2D position);
-
-    public void draw2D(PGraphics p) {};
-
-}
-
-class SelectTool extends Tool {
-    
-  List<Shapes> shapes;
-  boolean dragging;
-  Vec2D originalMousePosition;
-
-  public SelectTool(Rect view, List<Shapes> shapes) {
-    super(view);
-
-    this.shapes = shapes;
-    this.dragging = false;
-    this.originalMousePosition = new Vec2D(0,0);
-  }
-
-  public void mouseButtonPressed(Vec2D position, int button)
-  {
-      for (Shapes s : shapes)
-      {
-          if (s.getShape().isSelected() && button == LEFT)
-          {
-              properties.plugTo(s);
-              properties.show();
-          } else if (s.getShape().isSelected() && button == RIGHT){
-              this.dragging = true;
-              this.originalMousePosition.set(position.sub(new Vec2D(view2DPosX, view2DPosY)));
-          }
-      }
-  }
-
-  public void mouseButtonReleased(Vec2D position, int button)
-  {
-      if (button == RIGHT) {
-          this.dragging = false;
-      }
-  }
-  
-  public void mouseMoved(Vec2D position)
-  {
-      Vec2D relativePosition = this.positionRelativeToView(position);
-
-      for (Shapes s : shapes) {
-          s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
-
-          if (s.getShape().isSelected() && this.dragging)
-          {
-              Vec2D currentMousePosition = position.sub(new Vec2D(view2DPosX, view2DPosY));
-              s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
-              originalMousePosition.set(currentMousePosition);
-          }
-      }
-  }
-};
-
-class ConnectTool extends Tool
-{
-
-  boolean selectedFirst;
-  Connection previewConnection;
-
-  List<Shapes> shapes;
-
-
-    public ConnectTool(Rect view, List<Shapes> shapes)
-    {
-        super(view);
-        this.shapes = shapes;
-        this.selectedFirst = false;
-    }
-
-  public void mouseButtonPressed(Vec2D position, int button)
-  {
-    for (Shapes s : shapes)
-    {
-      for (Edge e : s.getShape().getEdges())
-      {
-        if (e.isSelected() && button == LEFT)
-        {
-          if (!selectedFirst)
-          {
-            previewConnection = new Connection();
-            previewConnection.setMasterEdge(e);
-            selectedFirst = true;
-          }
-          else
-          {
-            this.previewConnection.setEdge2(e);
-            connections.add(this.previewConnection);
-            println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
-            this.previewConnection = null;
-
-            selectedFirst = false;
-          }
-        }
-      }
-    }
-  }
-
-  public void mouseButtonReleased(Vec2D position, int button)
-  {
-    // no actions required
-  }
-
-  public void mouseMoved(Vec2D position)
-  {
-    for (Shapes s : shapes)
-    {
-      for (Edge e : s.getShape().getEdges())
-      {
-        Vec2D relativePosition = this.positionRelativeToView(position);
-        e.setSelected(e.mouseOver(relativePosition));
-      }
-    }
-  }
-
-  public void draw2D(PGraphics p)
-    {
-        p.beginDraw();
-
-        Vec2D mid = previewConnection.getEdge1().getMid().add(previewConnection.getEdge1().getShape().getPosition2D());
-        stroke(255,0,0);
-        line(mid.x()+view2DPosX, mid.y()+view2DPosY, mouseX, mouseY);
-        stroke(0);
-
-        p.endDraw();
-    }
-};
-
-class DrawTool extends Tool {
-
-  boolean isDrawing;
-  Vec2D startCoord;
-
-  Rectangle previewRectangle;
-
-  public DrawTool(Rect view)
-  {
-      super(view);
-      this.isDrawing = false;
-  }
-
-  public void mouseButtonPressed(Vec2D position, int button)
-  {
-      if (this.inView(position)){
-          isDrawing = true;
-          
-          this.startCoord = this.positionRelativeToView(position);
-          
-          this.previewRectangle = new Rectangle(startCoord, new Vec2D(), 5);
-      }
-  }
-
-  public void mouseButtonReleased(Vec2D position, int button)
-  {
-
-      if (isDrawing && this.inView(position)) {
-
-          Vec2D endCoord = this.positionRelativeToView(position);
-          Vec2D rectSize = endCoord.sub(this.startCoord);
-          
-          this.previewRectangle.setSize(rectSize);
-          shapes.add(this.previewRectangle);
-          this.previewRectangle = null;
-
-          isDrawing = false;
-      }
-  }
-  
-  public void mouseMoved(Vec2D position)
-  {
-      if (isDrawing){
-
-          Vec2D endCoord = this.positionRelativeToView(position);
-          Vec2D rectSize = endCoord.sub(this.startCoord);
-
-          this.previewRectangle.setSize(rectSize);
-      }
-
-  }
-
-  public void draw2D(PGraphics p)
-  {
-      p.beginDraw();
-      if (this.previewRectangle != null) {
-          this.previewRectangle.draw2D(p);
-      }
-      p.endDraw();
-  }
-};
