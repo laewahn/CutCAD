@@ -76,20 +76,27 @@ void draw2DView()
 
   view2D.background(100);
 
+// <<<<<<< HEAD
   for (Shapes s : shapes)
   {
     s.getShape().draw2D(view2D);
   }
+// =======
+    if (newRectangle != null)
+    {
+        newRectangle.draw2D(view2D);
+    }
+// >>>>>>> Added Drawable and Selectable interfaces and added made Rectangle implement them
 
   for (Connection c : connections)
   {
     c.drawConnection(view2D);
   }
 
-  if (newRectangle != null)
-  {
-    newRectangle.getShape().draw2D(view2D);
-  }
+  // if (newRectangle != null)
+  // {
+  //   newRectangle.getShape().draw2D(view2D);
+  // }
 
   if (previewConnection != null)
   {
@@ -383,6 +390,8 @@ class DrawTool implements Tool {
             Vec2D rectSize = endCoord.sub(this.startCoord);
             
             newRectangle.setSize(rectSize);
+            shapes.add(newRectangle);
+            newRectangle = null;
 
             isDrawing = false;
         }

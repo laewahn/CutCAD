@@ -7,7 +7,7 @@ import toxi.processing.*;
 
 import java.util.*;
 
-public class Rectangle extends Shapes
+public class Rectangle extends Shapes implements Drawable2D, Drawable3D, Selectable
 {
   private int sizeX, sizeY;
   private GShape basic;
@@ -131,6 +131,7 @@ public class Rectangle extends Shapes
     Vec3D vector3D1 = new Vec3D(sizeX+posX, posY, posZ);
     Vec3D vector3D2 = new Vec3D(sizeX+posX, sizeY+posY, posZ);
     Vec3D vector3D3 = new Vec3D(posX, sizeY+posY, posZ);
+
     
     // Vertices Edge 3D
     basic.getEdges().get(0).setP3D1(vector3D0);
@@ -142,5 +143,22 @@ public class Rectangle extends Shapes
     basic.getEdges().get(3).setP3D1(vector3D3);
     basic.getEdges().get(3).setP3D2(vector3D0);
   }
+
+    public void draw2D(PGraphics p) {
+      this.basic.draw2D(p);
+    }
+
+    public void draw3D(PGraphics p) {
+      this.basic.draw3D(p);
+    }
+
+    public boolean mouseOver(Vec2D mousePosition) {
+      return this.basic.mouseOver((int) mousePosition.x(), (int) mousePosition.y(), 0, 0);
+    }
+
+    public Rect getBoundingBox()
+    {
+      return null;
+    }
 }
 
