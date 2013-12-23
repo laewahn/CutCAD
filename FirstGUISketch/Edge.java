@@ -106,7 +106,7 @@ class Edge
   // Checks whether the mousepointer is within a certain area around the edge
   // only checking if the mousepointer is ON the edge would result in bad usability
   // since the user would have to precisely point to a line that is one pixel wide.
-  public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
+  public boolean mouseOver(Vec2D position)
   {
     // create a vector that is perpendicular to the edge
     Vec2D perpendicularVector = this.getV2().sub(this.getV1()).perpendicular().getNormalized();
@@ -122,8 +122,15 @@ class Edge
     Polygon2D borders = new Polygon2D(definingPoints);
 
     // check if the mousePointer is within the created rectangle
+    // Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
+    // return borders.containsPoint(mousePointer);
+    return borders.containsPoint(position);
+  }
+
+  public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
+  {
     Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
-    return borders.containsPoint(mousePointer);
+    return this.mouseOver(mousePointer);
   }
 }
 
