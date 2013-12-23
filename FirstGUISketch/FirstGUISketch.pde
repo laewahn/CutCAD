@@ -258,41 +258,6 @@ class SelectTool implements Tool {
     this.originalMousePosition = new Vec2D(0,0);
   }
 
-//   public void mouseButtonPressed(int x, int y, int button) {
-//     for (Shapes s : shapes)
-//     {
-//       if (s.getShape().isSelected() && button == LEFT)
-//       {
-//         properties.plugTo(s);
-//         properties.show();
-//       } 
-//       else if (s.getShape().isSelected() && button == RIGHT) {
-//         this.dragging = true;
-//         this.originalMousePosition.set(new Vec2D(x-view2DPosX, y-view2DPosY));
-//       }
-//     }
-//   };
-
-//   public void mouseButtonReleased(int x, int y, int button) {
-//     if (button == RIGHT) {
-//       this.dragging = false;
-//     }
-//   };
-
-//   public void mouseMoved(int x, int y) {
-//     for (Shapes s : shapes) {
-//       s.getShape().setSelected(s.getShape().mouseOver(x, y, view2DPosX, view2DPosY));
-
-//       if (s.getShape().isSelected() && this.dragging)
-//       {
-//         Vec2D currentMousePosition = new Vec2D(x-view2DPosX, y-view2DPosY);
-//         s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
-//         originalMousePosition.set(currentMousePosition);
-//       }
-//     }
-//   };
-// =======
-
     public void mouseButtonPressed(Vec2D position, int button)
     {
         for (Shapes s : shapes)
@@ -328,7 +293,6 @@ class SelectTool implements Tool {
             }
         }
     }
-// >>>>>>> Refactored tools to use Vec2D for mouse input
 };
 
 class ConnectTool implements Tool
@@ -390,14 +354,8 @@ class ConnectTool implements Tool
 
 class DrawTool implements Tool {
 
-// <<<<<<< HEAD
   boolean isDrawing;
-
-  // int startCoordX;
-  // int startCoordY;
-// =======
-    Vec2D startCoord;
-// >>>>>>> Refactored tools to use Vec2D for mouse input
+  Vec2D startCoord;
 
   Rect drawableArea;
 
