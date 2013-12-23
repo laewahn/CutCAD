@@ -27,7 +27,7 @@ public class GShape
         edges = new ArrayList<Edge>();
         for (int i = 0; i<vertices.size(); i++) 
         {
-          edges.add(new Edge(this, i, (i+1)%(vertices.size())));
+          edges.add(new Edge(this, vertices.get(i), vertices.get((i+1)%(vertices.size()))));
         }
         
         tenons = new ArrayList<Tenon>();
