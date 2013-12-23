@@ -76,27 +76,20 @@ void draw2DView()
 
   view2D.background(100);
 
-// <<<<<<< HEAD
   for (Shapes s : shapes)
   {
     s.getShape().draw2D(view2D);
   }
-// =======
-    if (newRectangle != null)
+  
+   if (newRectangle != null)
     {
         newRectangle.draw2D(view2D);
     }
-// >>>>>>> Added Drawable and Selectable interfaces and added made Rectangle implement them
 
   for (Connection c : connections)
   {
     c.drawConnection(view2D);
   }
-
-  // if (newRectangle != null)
-  // {
-  //   newRectangle.getShape().draw2D(view2D);
-  // }
 
   if (previewConnection != null)
   {
@@ -258,7 +251,6 @@ class SelectTool implements Tool {
   boolean dragging;
   Vec2D originalMousePosition;
 
-// <<<<<<< HEAD
   public SelectTool(List<Shapes> shapes) {
     this.shapes = shapes;
     this.dragging = false;
@@ -289,8 +281,9 @@ class SelectTool implements Tool {
     
     public void mouseMoved(Vec2D position)
     {
+        Vec2D relativePosition = position.sub(new Vec2D(view2DPosX, view2DPosY));
         for (Shapes s : shapes) {
-            s.getShape().setSelected(s.getShape().mouseOver((int)position.x(), (int)position.y(), view2DPosX, view2DPosY));
+            s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
 
             if (s.getShape().isSelected() && this.dragging)
             {
@@ -357,7 +350,7 @@ class ConnectTool implements Tool
       }
     }
   }
-}
+};
 
 class DrawTool implements Tool {
 

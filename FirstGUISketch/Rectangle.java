@@ -153,7 +153,7 @@ public class Rectangle extends Shapes implements Drawable2D, Drawable3D, Selecta
     }
 
     public boolean mouseOver(Vec2D mousePosition) {
-      return this.basic.mouseOver((int) mousePosition.x(), (int) mousePosition.y(), 0, 0);
+      return this.basic.mouseOver(mousePosition);
     }
 
     public Rect getBoundingBox()
