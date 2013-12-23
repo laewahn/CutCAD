@@ -124,28 +124,22 @@ public class Tenon
     ArrayList<Vec2D> list1 = new ArrayList<Vec2D>();
 
     int compare = extr1start ? 0 : 1;
-    for (int i = 0; i<tenonNumber+1; i++) 
+    for (int i = 0; i<tenonNumber; i++) 
     {
 //ToDo: wie zum Teufel weiss man, was innen und was aussen ist??????... containsPoint()
       if ((i%2)==compare) 
       {
         list0.add(start[0].add(((modT0length.scale(i)).add(modT0extr))));
+        list0.add(start[0].add(((modT0length.scale(i+1)).add(modT0extr))));
         list1.add(start[0].add(((modT1length.scale(i)).add(modT1intr))));
-        if (i < tenonNumber) 
-        {
-          list0.add(start[0].add(((modT0length.scale(i+1)).add(modT0extr))));
-          list1.add(start[0].add(((modT1length.scale(i+1)).add(modT1intr))));
-        }
+        list1.add(start[0].add(((modT1length.scale(i+1)).add(modT1intr))));
       } 
       else 
       {
         list0.add(start[0].add(((modT0length.scale(i)).add(modT0intr))));
+        list0.add(start[0].add(((modT0length.scale(i+1)).add(modT0intr))));
         list1.add(start[0].add(((modT1length.scale(i)).add(modT1extr))));
-        if (i < tenonNumber) 
-        {
-          list0.add(start[0].add(((modT0length.scale(i+1)).add(modT0intr))));
-          list1.add(start[0].add(((modT1length.scale(i+1)).add(modT1extr))));
-        }
+        list1.add(start[0].add(((modT1length.scale(i+1)).add(modT1extr))));
       }
     }
     tenon1 = list0;
@@ -180,13 +174,13 @@ public class Tenon
   public Line2D getStartLine(GShape shape)
   {
     if (testShape(shape)) return new Line2D(tenon1.get(1), tenon1.get(0));
-    return new Line2D(tenon1.get(1), tenon2.get(0));
+    else return new Line2D(tenon2.get(1), tenon2.get(0));
   }
   
   public Line2D getEndLine(GShape shape)
   {
-    if (testShape(shape)) return new Line2D(tenon1.get(tenon1.size()-3), tenon1.get(tenon1.size()-2));
-    return new Line2D(tenon1.get(tenon1.size()-3), tenon2.get(tenon1.size()-2));
+    if (testShape(shape)) return new Line2D(tenon1.get(tenon1.size()-2), tenon1.get(tenon1.size()-1));
+    else return new Line2D(tenon1.get(tenon2.size()-2), tenon2.get(tenon2.size()-1));
   }
   
   public void correctStartEdge(GShape shape, Vec2D vector) 

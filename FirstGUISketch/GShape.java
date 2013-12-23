@@ -25,11 +25,10 @@ public class GShape
     {
         vertices = initVertices;
         edges = new ArrayList<Edge>();
-        for (int i = 0; i<vertices.size()-1; i++) 
+        for (int i = 0; i<vertices.size(); i++) 
         {
-          edges.add(new Edge(this, i, i+1));
+          edges.add(new Edge(this, i, (i+1)%(vertices.size())));
         }
-        edges.add(new Edge(this, vertices.size()-1, 0));
         
         tenons = new ArrayList<Tenon>();
         for (Edge e : edges)
@@ -77,39 +76,44 @@ public class GShape
         return this.vertices;
     }
     
+    public void correctIntersections ()
+    {
+      for (int i=0; i<tenons.size(); i++) 
+          {
+            Line2D test1 = tenons.get((i+1)%(tenons.size())).getStartLine(this).toRay2D().toLine2DWithPointAtDistance(10000);
+            Line2D test2 = tenons.get(i).getEndLine(this).toRay2D().toLine2DWithPointAtDistance(10000);
+            if (String.valueOf(test1.intersectLine(test2).getType()).equals("INTERSECTING")) 
+            {
+              Vec2D intersection = test1.intersectLine(test2).getPos();
+              tenons.get((i+1)%(tenons.size())).correctStartEdge(this, intersection);
+              tenons.get(i).correctEndEdge(this, intersection);
+            }
+          }
+    }
+    
     public ArrayList<Vec2D> getTenons()
     {      
 //ToDO Update function!!!
-        tenons.clear();
-        for (Edge e : edges)
-        {
-          tenons.add(new Tenon(e));       
-        }
-        if(((new Polygon2D((List) vertices)).getArea())>10) 
-       {
-          tenons.set(0, new Tenon(edges.get(0), edges.get(0), 90, true, true));
-          tenons.set(1, new Tenon(edges.get(1), edges.get(1), 45, true, true));
-          tenons.set(2, new Tenon(edges.get(2), edges.get(2), 30, true, true));
-          tenons.set(3, new Tenon(edges.get(3), edges.get(3), 10, true, true));
-        }
-        // correct tenons: last/first two Vertices of neighboured tenons 
-        
-        // -> expand as line
-        // -> intersection as new 
-//        for (int i=0; i<tenons.size()-1; i++) 
+//        if (tenons == null) 
 //        {
-//          if (tenons.get(i).getStartLine(this).intersectLine(tenons.get(i+1).getEndLine(this))!= null) {
-//            out.println("intersection found");
-//          //Vec2D test = (tenons.get(i).getStartLine(this).intersectLine(tenons.get(i+1).getEndLine(this))).getPos();
-//          //if (test != null)out.println("Intersection: x:" + test.x() + " y:" + test.y());
-//          out.println("Intersection: x:" + tenons.get(i).getStartLine(this).intersectLine(tenons.get(i+1).getEndLine(this)).getType());
-//          }
+          tenons.clear();  
+          for (Edge e : edges)
+          {
+            tenons.add(new Tenon(e));       
+          }
+//        }
+//        if(((new Polygon2D((List) vertices)).getArea())>10) 
+//        {
+//          tenons.set(0, new Tenon(edges.get(0), edges.get(0), 90, true, true));
+//          tenons.set(1, new Tenon(edges.get(1), edges.get(1), 45, true, true));
+//          tenons.set(2, new Tenon(edges.get(2), edges.get(2), 30, true, true));
+//          tenons.set(3, new Tenon(edges.get(3), edges.get(3), 10, true, true));
+//          correctIntersections();
 //        }
       ArrayList<Vec2D> allVectors = new ArrayList<Vec2D>();
       for (Tenon t : tenons) 
       {
-// skip the last vector of each list (it's the same as the next)something is strange here???
-        for (int i=0; i<t.getVectors(this).size()-1; i++)
+        for (int i=0; i<t.getVectors(this).size(); i++)
         {
           allVectors.add(t.getVectors(this).get(i));
         }
@@ -202,7 +206,6 @@ public class GShape
     return result;
   }
   
-//ToDo include 3D-Angles (rotation around x,y,z axis in vertex-computation...iiiiiiiiih...
   private void createSides(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position, Vec3D angle) 
   {
     this.setFillColor(p);
