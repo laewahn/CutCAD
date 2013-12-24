@@ -221,7 +221,7 @@ void controlEvent(ControlEvent theEvent)
     }
     if (id == 2)
     {
-        selectedTool = new ConnectTool(view2DRect, properties, shapes);
+        selectedTool = new ConnectTool(view2DRect, properties, shapes, connections);
         properties.hide();
     }
   }

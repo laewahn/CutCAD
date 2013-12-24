@@ -14,12 +14,12 @@ class ConnectTool extends Tool
     List<Shapes> shapes;
     
 
-    public ConnectTool(Rect view, Properties properties, List<Shapes> shapes)
+    public ConnectTool(Rect view, Properties properties, List<Shapes> shapes, List<Connection> connections)
     {
         super(view, properties);
         this.shapes = shapes;
         this.selectedFirst = false;
-        this.connections = new ArrayList<Connection>();
+        this.connections = connections;
     }
 
     public void mouseButtonPressed(Vec2D position, int button)
