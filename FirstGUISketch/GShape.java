@@ -16,6 +16,7 @@ public class GShape
   private Vec3D position3D;
   private boolean isSeleceted;
   private ArrayList<Vec2D> vertices;
+  private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
   private ArrayList<Tenon> tenons;
   private Shapes shape;
@@ -24,9 +25,14 @@ public class GShape
   {
     vertices = initVertices;
     edges = new ArrayList<Edge>();
+    vertices3D = new ArrayList<Vec3D>();
+    for (int i = 0; i<vertices.size(); i++)
+    {
+      vertices3D.add(vertices.get(i).add(p2D).to3DXY());
+    }
     for (int i = 0; i<vertices.size(); i++) 
     {
-      edges.add(new Edge(this, vertices.get(i).add(p2D).to3DXY(), vertices.get((i+1)%(vertices.size())).add(p2D).to3DXY(), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
+      edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
     }
 
     tenons = new ArrayList<Tenon>();
@@ -148,6 +154,27 @@ public class GShape
     this.position2D.addSelf(direction);
   }
 
+  public void rotateAroundAxis(Vec3D rotationAxis, float theta)
+  {
+    for (Vec3D v : vertices3D)
+    {
+      v.rotateAroundAxis(rotationAxis, theta);
+    }   
+  }
+
+  public void translate3D(Vec3D translationVector)
+  {
+    for (Vec3D v : vertices3D)
+    {
+      v.addSelf(translationVector);
+    }   
+  }
+
+  public Vec3D getNormalVector()
+  {
+    return edges.get(0).getP3D1().sub(edges.get(0).getP3D2()).cross(edges.get(1).getP3D1().sub(edges.get(1).getP3D2())).getNormalized();
+  }
+
   public ArrayList<Vec2D> getResized (int sizeX, int sizeY) 
   {
     int minX = Integer.MAX_VALUE;
@@ -187,7 +214,7 @@ public class GShape
   public void draw3D(PGraphics p) 
   {
     this.setFillColor(p);
-    Vec3D pV = edges.get(0).getP3D1().sub(edges.get(0).getP3D2()).cross(edges.get(1).getP3D1().sub(edges.get(1).getP3D2())).getNormalized().scale(thickness);
+    Vec3D pV = this.getNormalVector().scale(thickness);
     p.beginShape();
     for (Edge e : edges) {
       p.vertex(e.getP3D1().add(pV).x(), e.getP3D1().add(pV).y(), e.getP3D1().add(pV).z());

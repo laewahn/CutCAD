@@ -5,51 +5,111 @@ import toxi.geom.mesh.*;
 import toxi.geom.mesh.subdiv.*;
 import toxi.processing.*;
 
+import java.util.*;
+
 public class Connection 
 {
-  private Edge edge1, edge2;
+  private Edge masterEdge, slaveEdge;
   private Tenon tenon;
 
   public Connection()
   {
   }
 
-  public Connection(Edge edge1, Edge edge2)
+  public Connection(Edge masterEdge, Edge slaveEdge)
   {
-    this.edge1 = edge1;
-    this.edge2 = edge2;
+    this.masterEdge = masterEdge;
+    this.slaveEdge = slaveEdge;
   }
 
-  public Edge getEdge1()
+  public Edge getMasterEdge()
   {
-    return this.edge1;
+    return this.masterEdge;
   }
 
-  public Edge getEdge2()
+  public Edge getSlaveEdge()
   {
-    return this.edge2;
+    return this.slaveEdge;
   }
 
-  public void setEdge1(Edge e)
+  public void setMasterEdge(Edge e)
   {
-    this.edge1 = e;
+    this.masterEdge = e;
   }
 
-  public void setEdge2(Edge e)
+  public void setSlaveEdge(Edge e)
   {
-    this.edge2 = e;
-    this.tenon = new Tenon(edge1, edge2, 90, true, true);
-    edge1.getShape().setTenon(edge1, tenon);
-    edge2.getShape().setTenon(edge2, tenon);
+    this.slaveEdge = e;
   }
 
   public void drawConnection(PGraphics p)
   {
-    Vec2D mid1 = this.getEdge1().getMid().add(getEdge1().getShape().getPosition2D());
-    Vec2D mid2 = this.getEdge2().getMid().add(getEdge2().getShape().getPosition2D());
+    Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
+    Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
     p.stroke(255, 0, 0);
     p.line(mid1.x(), mid1.y(), mid2.x(), mid2.y());
     p.stroke(0);
+  }
+
+  public void connect()
+  {
+    this.tenon = new Tenon(masterEdge, slaveEdge, 90, true, true);
+    masterEdge.getShape().setTenon(masterEdge, tenon);
+    slaveEdge.getShape().setTenon(slaveEdge, tenon);
+
+    GShape master = masterEdge.getShape();
+    GShape slave = slaveEdge.getShape();
+
+    alignEdges(slave, masterEdge, slaveEdge);
+
+    Vec3D toOrigin = slaveEdge.getP3D1().scale(-1);
+
+    slave.translate3D(toOrigin);
+
+    alignShapes(master, slave, masterEdge, slaveEdge);
+
+    // rotate the slave by the specified angle (currently hardcoded 90 degrees)
+    Vec3D rotationAxis = slaveEdge.getP3D2().getNormalized();
+    slave.rotateAroundAxis(rotationAxis, (float) Math.toRadians(-90.0));
+
+    Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
+    slave.translate3D(toMaster);
+  }
+
+  private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)
+  {
+    Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
+    Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
+
+    float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+
+    Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
+    if (normalVector.equals(new Vec3D(0,0,0)))
+    {
+      normalVector = masterEdgeDirection.cross(new Vec3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
+    }
+    slave.rotateAroundAxis(normalVector, angle);
+  }
+
+  private void alignShapes(GShape master, GShape slave, Edge masterEdge, Edge slaveEdge)
+  {
+    Vec3D slaveEdgeDirection = slaveEdge.getP3D2().getNormalized();
+
+    float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
+    slave.rotateAroundAxis(slaveEdgeDirection, angleBetweenNormals);
+
+    if (calculateAngleBetweenNormals(master, slave) > 0)
+    {
+      slave.rotateAroundAxis(slaveEdgeDirection, (float) -2.0 * angleBetweenNormals);
+    }
+  }
+
+  private float calculateAngleBetweenNormals(GShape master, GShape slave)
+  {
+    Vec3D masterNormal = master.getNormalVector();
+    Vec3D slaveNormal = slave.getNormalVector();
+
+    return masterNormal.angleBetween(slaveNormal, true);
   }
 }
 

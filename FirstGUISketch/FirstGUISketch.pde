@@ -93,7 +93,7 @@ void draw2DView()
 
   if (previewConnection != null)
   {
-    Vec2D mid = previewConnection.getEdge1().getMid().add(previewConnection.getEdge1().getShape().getPosition2D());
+    Vec2D mid = previewConnection.getMasterEdge().getMid().add(previewConnection.getMasterEdge().getShape().getPosition2D());
     stroke(255, 0, 0);
     line(mid.x()+view2DPosX, mid.y()+view2DPosY, mouseX, mouseY);
     stroke(0);
@@ -315,14 +315,15 @@ class ConnectTool implements Tool
           if (!selectedFirst)
           {
             previewConnection = new Connection();
-            previewConnection.setEdge1(e);
+            previewConnection.setMasterEdge(e);
             selectedFirst = true;
           }
           else
           {
-            previewConnection.setEdge2(e);
+            previewConnection.setSlaveEdge(e);
+            previewConnection.connect();
             connections.add(previewConnection);
-            println("Added Connection between " + previewConnection.getEdge1() + " and " + previewConnection.getEdge2());
+            println("Added Connection between " + previewConnection.getMasterEdge() + " and " + previewConnection.getSlaveEdge());
             previewConnection = null;
             selectedFirst = false;
           }
