@@ -248,10 +248,12 @@ class SelectTool implements Tool {
 
   List<Shapes> shapes;
   boolean dragging;
+  Vec2D originalMousePosition;
 
   public SelectTool(List<Shapes> shapes) {
     this.shapes = shapes;
     this.dragging = false;
+    this.originalMousePosition = new Vec2D(0,0);
   }
 
   public void mouseButtonPressed(int x, int y, int button) {
@@ -264,6 +266,7 @@ class SelectTool implements Tool {
       } 
       else if (s.getShape().isSelected() && button == RIGHT) {
         this.dragging = true;
+        this.originalMousePosition.set(new Vec2D(x-view2DPosX, y-view2DPosY));
       }
     }
   };
@@ -280,7 +283,9 @@ class SelectTool implements Tool {
 
       if (s.getShape().isSelected() && this.dragging)
       {
-        s.getShape().setPosition2D(new Vec2D(x-view2DPosX, y-view2DPosY));
+        Vec2D currentMousePosition = new Vec2D(x-view2DPosX, y-view2DPosY);
+        s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
+        originalMousePosition.set(currentMousePosition);
       }
     }
   };

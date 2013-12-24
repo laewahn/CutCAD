@@ -132,6 +132,11 @@ public class GShape
     this.position2D = position;
   }
 
+  public void translate2D(Vec2D direction)
+  {
+    this.position2D.addSelf(direction);
+  }
+
   public ArrayList<Vec2D> getResized (int sizeX, int sizeY) 
   {
     int minX = Integer.MAX_VALUE;
