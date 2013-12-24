@@ -124,7 +124,7 @@ class Edge
     // check if the mousePointer is within the created rectangle
     // Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
     // return borders.containsPoint(mousePointer);
-    return borders.containsPoint(position);
+    return borders.containsPoint(position.sub(this.parent.getPosition2D()));
   }
 
   public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
