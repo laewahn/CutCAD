@@ -24,7 +24,7 @@ public class Rectangle extends Shapes
     Vec2D position2D = new Vec2D(posX, posY);
     Vec3D position3D = new Vec3D(posX, posY, posZ);
     Vec3D angle3D = new Vec3D(0, 0, 0);
-    basic = new GShape(rect, position2D, position3D, angle3D, thickness, this);
+    basic = new GShape(rect, position2D, thickness, this);
   }
 
   public void changeValue(int index, int value)

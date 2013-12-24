@@ -9,13 +9,16 @@ import java.util.*;
 class Edge
 {
   private GShape parent;
+  private Vec3D p3D1, p3D2;
   private Vec2D v1, v2;
   private boolean isSelected;
   ArrayList<Vec2D> definingPoints; // there should be a better finalsolution???
 
-  public Edge(GShape parent, Vec2D v1, Vec2D v2)
+  public Edge(GShape parent, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2)
   {
     this.parent = parent;
+    this.p3D1 = p3D1;
+    this.p3D2 = p3D2;
     this.v1 = v1;
     this.v2 = v2;
     this.isSelected = false;
@@ -44,6 +47,26 @@ class Edge
   public Vec2D getV2()
   {
     return this.v2;
+  }
+
+  public Vec3D getP3D1()
+  {
+    return p3D1;
+  }
+
+  public Vec3D getP3D2()
+  {
+    return p3D2;
+  }
+
+  public void setP3D1(Vec3D v)
+  {
+    this.p3D1 = v;
+  }
+
+  public void setP3D2(Vec3D v)
+  {
+    this.p3D2 = v;
   }
 
   public void setV1(Vec2D v)

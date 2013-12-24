@@ -14,20 +14,19 @@ public class GShape
   private int thickness;
   //private Material material;
   private Vec2D position2D;
-  private Vec3D position3D, angle3D;
   private boolean isSeleceted;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Edge> edges;
   private ArrayList<Tenon> tenons;
   private Shapes shape;
 
-  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, Vec3D p3D, Vec3D a3D, int thickness, Shapes shape)
+  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, int thickness, Shapes shape)
   {
     vertices = initVertices;
     edges = new ArrayList<Edge>();
     for (int i = 0; i<vertices.size(); i++) 
     {
-      edges.add(new Edge(this, vertices.get(i), vertices.get((i+1)%(vertices.size()))));
+      edges.add(new Edge(this, vertices.get(i).add(p2D).to3DXY(), vertices.get((i+1)%(vertices.size())).add(p2D).to3DXY(), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
     }
 
     tenons = new ArrayList<Tenon>();
@@ -36,10 +35,7 @@ public class GShape
       tenons.add(new Tenon(e));
     }
 
-
     this.position2D = p2D;
-    this.position3D = p3D;
-    this.angle3D = a3D;
     this.thickness = thickness;
 
     this.isSeleceted = false;
@@ -122,17 +118,6 @@ public class GShape
     return this.position2D;
   }
 
-  public Vec3D getPosition3D()
-  {
-    return this.position3D;
-  }
-
-  public Vec3D getAngle3D()
-  {
-    return this.angle3D;
-  }
-
-
   public void setThickness(int thickness)
   {
     this.thickness = thickness;
@@ -147,17 +132,8 @@ public class GShape
     this.position2D = position;
   }
 
-  public void setPosition3D(Vec3D position)
+  public ArrayList<Vec2D> getResized (int sizeX, int sizeY) 
   {
-    this.position3D = position;
-  }
-
-  public void setAngle3D(Vec3D angle)
-  {
-    this.angle3D = angle;
-  }
-
-  public ArrayList<Vec2D> getResized (int sizeX, int sizeY) {
     int minX = Integer.MAX_VALUE;
     int minY = Integer.MAX_VALUE;
     int maxX = 0;
@@ -176,13 +152,15 @@ public class GShape
   }
 
   // drawing routines
-  public void drawPreview(PGraphics p, int posX, int posY, int sizeX, int sizeY) {
+  public void drawPreview(PGraphics p, int posX, int posY, int sizeX, int sizeY) 
+  {
     ArrayList<Vec2D> toDraw = this.getResized(sizeX, sizeY);
     this.createCover2D(p, toDraw, new Vec2D (posX, posY));
   }
 
 
-  public void draw2D(PGraphics p) {
+  public void draw2D(PGraphics p) 
+  {
     this.createCover2D(p, getTenons(), position2D);
     for (Edge e: edges) //not good... but i've no better idea
     {
@@ -190,47 +168,28 @@ public class GShape
     }
   }
 
-  public void draw3D(PGraphics p) {
-    this.createCover3D(p, getTenons(), thickness/2, position3D, angle3D);
-    this.createCover3D(p, getTenons(), -thickness/2, position3D, angle3D);
-    //ToDo? Switch-off-Sides-Option for better performance (...if too many objects...)
-    this.createSides(p, getTenons(), thickness, position3D, angle3D);
-    //ToDo: Same for cut-out sides -> external function for sides
-  }
-
-  private Vec3D transformVector(Vec2D vector, int distanceToBottom, Vec3D position, Vec3D angle)
-  {
-    Vec3D result = new Vec3D(vector.x(), vector.y(), distanceToBottom);
-    result = result.rotateX((float)Math.toRadians(angle.x())).rotateY((float)Math.toRadians(angle.y())).rotateZ((float)Math.toRadians(angle.z()));
-    result = result.add(position);
-    return result;
-  }
-
-  private void createSides(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position, Vec3D angle) 
+  public void draw3D(PGraphics p) 
   {
     this.setFillColor(p);
-    ArrayList<Vec3D> resultTop = new ArrayList<Vec3D>();
-    ArrayList<Vec3D> resultBottom = new ArrayList<Vec3D>();
-    for (Vec2D actVector : vectors) {
-      resultTop.add(transformVector(actVector, +distanceToBottom/2, position, angle));
-      resultBottom.add(transformVector(actVector, -distanceToBottom/2, position, angle));
+    Vec3D pV = edges.get(0).getP3D1().sub(edges.get(0).getP3D2()).cross(edges.get(1).getP3D1().sub(edges.get(1).getP3D2())).getNormalized().scale(thickness);
+    p.beginShape();
+    for (Edge e : edges) {
+      p.vertex(e.getP3D1().add(pV).x(), e.getP3D1().add(pV).y(), e.getP3D1().add(pV).z());
     }
-
-    for (int i=0; i<vectors.size()-1; i++) {
+    p.endShape(PConstants.CLOSE);
+    p.beginShape();
+    for (Edge e : edges) {
+      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    }
+    p.endShape(PConstants.CLOSE);
+    for (Edge e : edges) {
       p.beginShape();
-      p.vertex(resultBottom.get(i).x(), resultBottom.get(i).y(), resultBottom.get(i).z());
-      p.vertex(resultTop.get(i).x(), resultTop.get(i).y(), resultTop.get(i).z());
-      p.vertex(resultTop.get(i+1).x(), resultTop.get(i+1).y(), resultTop.get(i+1).z());
-      p.vertex(resultBottom.get(i+1).x(), resultBottom.get(i+1).y(), resultBottom.get(i+1).z());
+      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+      p.vertex(e.getP3D2().x(), e.getP3D2().y(), e.getP3D2().z());
+      p.vertex(e.getP3D2().add(pV).x(), e.getP3D2().add(pV).y(), e.getP3D2().add(pV).z());
+      p.vertex(e.getP3D1().add(pV).x(), e.getP3D1().add(pV).y(), e.getP3D1().add(pV).z());
       p.endShape(PConstants.CLOSE);
     }
-    p.beginShape();
-    int i = vectors.size()-1;
-    p.vertex(resultBottom.get(i).x(), resultBottom.get(i).y(), resultBottom.get(i).z());
-    p.vertex(resultTop.get(i).x(), resultTop.get(i).y(), resultTop.get(i).z());
-    p.vertex(resultTop.get(0).x(), resultTop.get(0).y(), resultTop.get(0).z());
-    p.vertex(resultBottom.get(0).x(), resultBottom.get(0).y(), resultBottom.get(0).z());
-    p.endShape(PConstants.CLOSE);
   }
 
   private void setFillColor(PGraphics p) {
@@ -243,24 +202,12 @@ public class GShape
     }
   }
 
-  private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors, Vec2D position) {
+  private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors, Vec2D position) 
+  {
     this.setFillColor(p);
     p.beginShape();
     for (Vec2D vector : vectors) {
       p.vertex(vector.x()+position.x(), vector.y()+position.y());
-    }
-    p.beginContour();
-    //ToDo: add additional figures for cut-outs
-    p.endContour();
-    p.endShape(PConstants.CLOSE);
-  }
-
-  private void createCover3D(PGraphics p, ArrayList<Vec2D> vectors, int distanceToBottom, Vec3D position, Vec3D angle) {
-    this.setFillColor(p);
-    p.beginShape();
-    for (Vec2D vector : vectors) {
-      Vec3D result = transformVector(vector, distanceToBottom, position, angle);
-      p.vertex(result.x(), result.y(), result.z());
     }
     p.beginContour();
     //ToDo: add additional figures for cut-outs
