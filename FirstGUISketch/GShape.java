@@ -258,17 +258,26 @@ public class GShape
     p.endShape(PConstants.CLOSE);
   }
 
-  public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
+// <<<<<<< HEAD
+//   public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
+//   {
+//     Polygon2D test = new Polygon2D((List)vertices);
+//     if (test.containsPoint(new Vec2D(mouseX-view2DPosX-position2D.x(), mouseY-view2DPosY-position2D.y())))
+//     {
+//       return true;
+//     }
+//     else
+//     {
+//       return false;
+//     }
+//   }
+// =======
+  public boolean mouseOver(Vec2D mousePosition)
   {
     Polygon2D test = new Polygon2D((List)vertices);
-    if (test.containsPoint(new Vec2D(mouseX-view2DPosX-position2D.x(), mouseY-view2DPosY-position2D.y())))
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
+    return test.containsPoint(mousePosition.sub(position2D));
   }
+
+// >>>>>>> Made mouseOver functions independent from 2D and 3D area
 }
 

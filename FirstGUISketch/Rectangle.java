@@ -7,10 +7,20 @@ import toxi.processing.*;
 
 import java.util.*;
 
-public class Rectangle extends Shapes
+public class Rectangle extends Shapes implements Drawable2D, Drawable3D, Selectable
 {
   private int sizeX, sizeY;
   private GShape basic;
+
+  private Vec2D origin2D;
+  private Vec2D size;
+
+  public Rectangle(Vec2D origin2D, Vec2D size, int thickness) 
+  {
+    this((int) origin2D.x(), (int) origin2D.y(), 0, (int) size.x(), (int) size.y(), thickness);
+    this.origin2D = origin2D;
+      this.size = size;
+  }
 
   public Rectangle(int posX, int posY, int posZ, int sizeX, int sizeY, int thickness)
   {
@@ -69,6 +79,18 @@ public class Rectangle extends Shapes
     return sizeY;
   }
 
+  public Vec2D getSize()
+  {
+    return this.size;
+  }
+
+  public void setSize(Vec2D newSize)
+  {
+    this.size = newSize;
+    this.setSizeX((int)this.size.x());
+    this.setSizeY((int)this.size.y());
+  }
+
   public int getThickness()
   {
     return basic.getThickness();
@@ -109,6 +131,7 @@ public class Rectangle extends Shapes
     Vec3D vector3D1 = new Vec3D(sizeX+posX, posY, posZ);
     Vec3D vector3D2 = new Vec3D(sizeX+posX, sizeY+posY, posZ);
     Vec3D vector3D3 = new Vec3D(posX, sizeY+posY, posZ);
+
     
     // Vertices Edge 3D
     basic.getEdges().get(0).setP3D1(vector3D0);
@@ -120,5 +143,22 @@ public class Rectangle extends Shapes
     basic.getEdges().get(3).setP3D1(vector3D3);
     basic.getEdges().get(3).setP3D2(vector3D0);
   }
+
+    public void draw2D(PGraphics p) {
+      this.basic.draw2D(p);
+    }
+
+    public void draw3D(PGraphics p) {
+      this.basic.draw3D(p);
+    }
+
+    public boolean mouseOver(Vec2D mousePosition) {
+      return this.basic.mouseOver(mousePosition);
+    }
+
+    public Rect getBoundingBox()
+    {
+      return null;
+    }
 }
 

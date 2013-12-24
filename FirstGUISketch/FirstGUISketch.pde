@@ -25,6 +25,8 @@ int viewSizeX = 500;
 int viewSizeY = 500;
 int view2DPosX = 150;
 int view2DPosY = 50;
+Rect view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
+
 int view3DPosX = 700;
 int view3DPosY = 50;
 
@@ -34,8 +36,6 @@ int cameraY = 1000;
 Vec3D cameraPosition;
 Tool selectedTool;
 Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
-Shapes newRectangle;
-Connection previewConnection;
 
 void setup()
 {
@@ -55,9 +55,9 @@ void setup()
 
   createProperties();
   createToolbar();
-
+  
   cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0, 0.0, 1.0), radians(cameraX));
-  selectedTool = new SelectTool(shapes);
+  selectedTool = new SelectTool(view2DRect, properties, shapes);
 }
 
 void draw()
@@ -80,24 +80,13 @@ void draw2DView()
   {
     s.getShape().draw2D(view2D);
   }
-
+  
   for (Connection c : connections)
   {
     c.drawConnection(view2D);
   }
 
-  if (newRectangle != null)
-  {
-    newRectangle.getShape().draw2D(view2D);
-  }
-
-  if (previewConnection != null)
-  {
-    Vec2D mid = previewConnection.getMasterEdge().getMid().add(previewConnection.getMasterEdge().getShape().getPosition2D());
-    stroke(255, 0, 0);
-    line(mid.x()+view2DPosX, mid.y()+view2DPosY, mouseX, mouseY);
-    stroke(0);
-  }
+  this.selectedTool.draw2D(view2D);
 
   view2D.endDraw();
 
@@ -171,13 +160,14 @@ void createProperties()
 
 void mousePressed()
 {   
-  if (mouseOver3DView())
-  {
-    startX = mouseX - view3DPosX;
-    startY = mouseY - view3DPosY;
-  }
-
-  selectedTool.mouseButtonPressed(mouseX, mouseY, mouseButton);
+    if (mouseOver3DView())
+    {
+        startX = mouseX - view3DPosX;
+        startY = mouseY - view3DPosY;
+    }
+    
+    Vec2D mousePosition = new Vec2D(mouseX, mouseY);
+    selectedTool.mouseButtonPressed(mousePosition, mouseButton);
 }
 
 void mouseDragged()
@@ -186,12 +176,12 @@ void mouseDragged()
     cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D(0.0, 0.0, 1.0), radians(cameraX + mouseX - view3DPosX - startX));
   }
 
-  selectedTool.mouseMoved(mouseX, mouseY);
+  selectedTool.mouseMoved(new Vec2D(mouseX, mouseY));
 }
 
 void mouseReleased()
 {
-  selectedTool.mouseButtonReleased(mouseX, mouseY, mouseButton);
+  selectedTool.mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
 
   if (mouseOver3DView())
   {
@@ -202,7 +192,7 @@ void mouseReleased()
 
 void mouseMoved() 
 {
-  selectedTool.mouseMoved(mouseX, mouseY);
+    selectedTool.mouseMoved(new Vec2D(mouseX, mouseY));
 }
 
 boolean mouseOver3DView()
@@ -222,182 +212,17 @@ void controlEvent(ControlEvent theEvent)
     // For now: 0 is Select, 1 is Rectangle
     if (id == 0)
     {
-      selectedTool = new SelectTool(shapes);
+        selectedTool = new SelectTool(view2DRect, properties, shapes);
     }
     if (id == 1)
     {
-      selectedTool = new DrawTool(new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY));
-      properties.hide();
+        selectedTool = new DrawTool(view2DRect, properties, shapes);
+        properties.hide();
     }
     if (id == 2)
     {
-      selectedTool = new ConnectTool(shapes);
-      properties.hide();
+        selectedTool = new ConnectTool(view2DRect, properties, shapes);
+        properties.hide();
     }
   }
 }
-
-
-interface Tool {
-  public void mouseButtonPressed(int x, int y, int button);
-  public void mouseButtonReleased(int x, int y, int button);
-  public void mouseMoved(int x, int y);
-}
-
-class SelectTool implements Tool {
-
-  List<Shapes> shapes;
-  boolean dragging;
-  Vec2D originalMousePosition;
-
-  public SelectTool(List<Shapes> shapes) {
-    this.shapes = shapes;
-    this.dragging = false;
-    this.originalMousePosition = new Vec2D(0,0);
-  }
-
-  public void mouseButtonPressed(int x, int y, int button) {
-    for (Shapes s : shapes)
-    {
-      if (s.getShape().isSelected() && button == LEFT)
-      {
-        properties.plugTo(s);
-        properties.show();
-      } 
-      else if (s.getShape().isSelected() && button == RIGHT) {
-        this.dragging = true;
-        this.originalMousePosition.set(new Vec2D(x-view2DPosX, y-view2DPosY));
-      }
-    }
-  };
-
-  public void mouseButtonReleased(int x, int y, int button) {
-    if (button == RIGHT) {
-      this.dragging = false;
-    }
-  };
-
-  public void mouseMoved(int x, int y) {
-    for (Shapes s : shapes) {
-      s.getShape().setSelected(s.getShape().mouseOver(x, y, view2DPosX, view2DPosY));
-
-      if (s.getShape().isSelected() && this.dragging)
-      {
-        Vec2D currentMousePosition = new Vec2D(x-view2DPosX, y-view2DPosY);
-        s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
-        originalMousePosition.set(currentMousePosition);
-      }
-    }
-  };
-};
-
-class ConnectTool implements Tool
-{
-  boolean selectedFirst;
-
-  List<Shapes> shapes;
-
-  public ConnectTool(List<Shapes> shapes)
-  {
-    this.shapes = shapes;
-    this.selectedFirst = false;
-  }
-
-  public void mouseButtonPressed(int x, int y, int button)
-  {
-
-    for (Shapes s : shapes)
-    {
-      for (Edge e : s.getShape().getEdges())
-      {
-        if (e.isSelected() && button == LEFT)
-        {
-          if (!selectedFirst)
-          {
-            previewConnection = new Connection();
-            previewConnection.setMasterEdge(e);
-            selectedFirst = true;
-          }
-          else
-          {
-            previewConnection.setSlaveEdge(e);
-            previewConnection.connect();
-            connections.add(previewConnection);
-            println("Added Connection between " + previewConnection.getMasterEdge() + " and " + previewConnection.getSlaveEdge());
-            previewConnection = null;
-            selectedFirst = false;
-          }
-        }
-      }
-    }
-  }
-
-  public void mouseButtonReleased(int x, int y, int button)
-  {
-    // no actions required
-  }
-
-  public void mouseMoved(int x, int y)
-  {
-    for (Shapes s : shapes)
-    {
-      for (Edge e : s.getShape().getEdges())
-      {
-        e.setSelected(e.mouseOver(x, y, view2DPosX, view2DPosY));
-      }
-    }
-  }
-}
-
-class DrawTool implements Tool {
-
-  boolean isDrawing;
-
-  int startCoordX;
-  int startCoordY;
-
-  Rect drawableArea;
-
-  public DrawTool(Rect drawableArea) {
-    this.drawableArea = drawableArea;
-  }
-
-  public void mouseButtonPressed(int x, int y, int button) {
-    if (this.inDrawableArea(x, y)) {
-      isDrawing = true;
-      startCoordX = x - (int) drawableArea.getTopLeft().x();
-      startCoordY = y - (int) drawableArea.getTopLeft().y();
-      newRectangle = new Rectangle(startCoordX, startCoordY, 0, 0, 0, 50);
-    }
-  };
-
-  public void mouseButtonReleased(int x, int y, int button) {
-    if (isDrawing && this.inDrawableArea(x, y)) {
-
-      endX = x - (int) drawableArea.getTopLeft().x();
-      endY = y - (int) drawableArea.getTopLeft().y();
-      newRectangle.changeValue(0, endX - startCoordX);
-      newRectangle.changeValue(1, endY - startCoordY);
-
-      shapes.add(newRectangle);
-      newRectangle = null;
-
-      isDrawing = false;
-    }
-  };
-
-  public void mouseMoved(int x, int y) {
-    if (isDrawing) {
-      endX = x - (int) drawableArea.getTopLeft().x();
-      endY = y - (int) drawableArea.getTopLeft().y();
-      newRectangle.changeValue(0, endX - startCoordX);
-      newRectangle.changeValue(1, endY - startCoordY);
-    }
-  };
-
-  private boolean inDrawableArea(int x, int y) {
-    return x > drawableArea.getTopLeft().x() && x <= drawableArea.getBottomRight().x() 
-      && y > drawableArea.getTopLeft().y() && y <= drawableArea.getBottomRight().y() ;
-  }
-}
-
