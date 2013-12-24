@@ -48,6 +48,11 @@ public class GShape
     this.isSeleceted = false;
     this.shape = shape;
   }
+  
+  public void setVector3D(int i, Vec3D v)
+  {
+    this.vertices3D.get(i).set(v);
+  }
 
   public Vec2D getVector(int i) 
   {

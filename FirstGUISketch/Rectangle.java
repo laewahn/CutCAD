@@ -134,14 +134,10 @@ public class Rectangle extends Shapes implements Drawable2D, Drawable3D, Selecta
 
     
     // Vertices Edge 3D
-    basic.getEdges().get(0).setP3D1(vector3D0);
-    basic.getEdges().get(0).setP3D2(vector3D1);
-    basic.getEdges().get(1).setP3D1(vector3D1);
-    basic.getEdges().get(1).setP3D2(vector3D2);
-    basic.getEdges().get(2).setP3D1(vector3D2);
-    basic.getEdges().get(2).setP3D2(vector3D3);
-    basic.getEdges().get(3).setP3D1(vector3D3);
-    basic.getEdges().get(3).setP3D2(vector3D0);
+    basic.setVector3D(0, vector3D0);
+    basic.setVector3D(1, vector3D1);
+    basic.setVector3D(2, vector3D2);
+    basic.setVector3D(3, vector3D3);
   }
 
     public void draw2D(PGraphics p) {
