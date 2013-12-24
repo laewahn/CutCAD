@@ -33,12 +33,13 @@ class ConnectTool extends Tool
                     if (!selectedFirst)
                     {
                         this.previewConnection = new Connection();
-                        this.previewConnection.setEdge1(e);
+                        this.previewConnection.setMasterEdge(e);
                         selectedFirst = true;                        
                     }
                     else
                     {
-                        this.previewConnection.setEdge2(e);
+                        this.previewConnection.setSlaveEdge(e);
+                        this.previewConnection.connect();
                         this.connections.add(this.previewConnection);
                         // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
                         this.previewConnection = null;
@@ -75,11 +76,10 @@ class ConnectTool extends Tool
         p.beginDraw();
 
         if (selectedFirst) {
-            Vec2D mid = previewConnection.getEdge1().getMid().add(previewConnection.getEdge1().getShape().getPosition2D());
+            Vec2D mid = previewConnection.getMasterEdge().getMid().add(previewConnection.getMasterEdge().getShape().getPosition2D());
             p.stroke(255,0,0);
             Vec2D lineStart = mid.add(this.view.getTopLeft());
             p.line(lineStart.x(), lineStart.y(), this.lastMousePosition.x(), this.lastMousePosition.y());
-            // line(mid.x()+view2DPosX, mid.y()+view2DPosY, mouseX, mouseY);
             p.stroke(0);
         }
 
