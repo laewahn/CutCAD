@@ -59,10 +59,8 @@ class DrawTool extends Tool {
 
     public void draw2D(PGraphics p)
     {
-        p.beginDraw();
         if (this.previewRectangle != null) {
             this.previewRectangle.draw2D(p);
         }
-        p.endDraw();
     }
 }

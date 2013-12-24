@@ -71,8 +71,6 @@ class ConnectTool extends Tool
 
     public void draw2D(PGraphics p)
     {
-        p.beginDraw();
-
         if (selectedFirst) {
             Vec2D mid = previewConnection.getMasterEdge().getMid().add(previewConnection.getMasterEdge().getShape().getPosition2D());
             p.stroke(255,0,0);
@@ -81,8 +79,6 @@ class ConnectTool extends Tool
             p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
             p.stroke(0);
         }
-
-        p.endDraw();
     }
 
 }
