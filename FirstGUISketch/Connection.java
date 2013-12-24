@@ -84,7 +84,7 @@ public class Connection
     float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
 
     Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
-    if (normalVector.equals(new Vec3D(0,0,0)))
+    while (normalVector.equals(new Vec3D(0,0,0)))
     {
       normalVector = masterEdgeDirection.cross(new Vec3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
     }
