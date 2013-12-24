@@ -12,15 +12,15 @@ import static java.lang.System.*;
 public class GShape
 {
   private int thickness;
-  //private Material material;
   private Vec2D position2D;
+  private Vec3D position3D;
   private boolean isSeleceted;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Edge> edges;
   private ArrayList<Tenon> tenons;
   private Shapes shape;
 
-  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, int thickness, Shapes shape)
+  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, Vec3D p3D, int thickness, Shapes shape)
   {
     vertices = initVertices;
     edges = new ArrayList<Edge>();
@@ -36,6 +36,7 @@ public class GShape
     }
 
     this.position2D = p2D;
+    this.position3D = p3D;
     this.thickness = thickness;
 
     this.isSeleceted = false;
@@ -117,6 +118,11 @@ public class GShape
   {
     return this.position2D;
   }
+  
+  public Vec3D getPosition3D()
+  {
+    return this.position3D;
+  }
 
   public void setThickness(int thickness)
   {
@@ -130,6 +136,11 @@ public class GShape
   public void setPosition2D(Vec2D position)
   {
     this.position2D = position;
+  }
+  
+  public void setPosition3D(Vec3D position)
+  {
+    this.position3D = position;
   }
 
   public void translate2D(Vec2D direction)
