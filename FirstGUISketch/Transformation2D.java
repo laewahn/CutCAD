@@ -15,7 +15,7 @@ class Transformation2D
     public void transform(PGraphics view)
     {
         view.scale(this.scale);
-        view.translate(this.translation.x(), this.translation.y());
+        view.translate(-this.translation.x(), -this.translation.y());
     }
 
     public float getScale()
@@ -38,8 +38,8 @@ class Transformation2D
         this.scale -= amount;
     }
 
-    public void translate(Vec2D translation)
+    public void translate(Vec2D v)
     {
-        this.translation.add(translation);
+        this.translation.subSelf(v);
     }
 }

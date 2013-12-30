@@ -34,6 +34,7 @@ class SelectTool extends Tool {
 
     public void mouseButtonPressed(Vec2D position, int button)
     {
+        boolean noneSelected = true;
         for (Shapes s : shapes)
         {
             if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
@@ -45,7 +46,14 @@ class SelectTool extends Tool {
                 // this.originalMousePosition.set(position.sub(new Vec2D(view2DPosX, view2DPosY)));
                 Vec2D currentMousePosition = this.positionRelativeToView(position);
                 this.originalMousePosition.set(currentMousePosition);
+                noneSelected = false;
             }
+        }
+        if (this.inView(position) && button == PConstants.RIGHT && noneSelected)
+        {
+            this.dragging = true;
+            Vec2D currentMousePosition = this.positionRelativeToView(position);
+            this.originalMousePosition.set(currentMousePosition);
         }
     }
 
@@ -61,7 +69,9 @@ class SelectTool extends Tool {
         if (this.inView(position))
         {
             Vec2D relativePosition = this.positionRelativeToView(position);
-            
+
+            boolean noneSelected = true;
+
             for (Shapes s : shapes) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
 
@@ -70,7 +80,15 @@ class SelectTool extends Tool {
                     Vec2D currentMousePosition = this.positionRelativeToView(position);
                     s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
                     originalMousePosition.set(currentMousePosition);
+                    noneSelected = false;
                 }
+            }
+            if (noneSelected && this.dragging)
+            {
+                Vec2D currentMousePosition = this.positionRelativeToView(position);
+                
+                transform.translate(currentMousePosition.sub(originalMousePosition));
+                originalMousePosition.set(this.positionRelativeToView(position));                
             }
         }
         else
