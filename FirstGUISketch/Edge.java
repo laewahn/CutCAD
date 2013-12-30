@@ -11,7 +11,7 @@ class Edge
   private GShape parent;
   private Vec3D p3D1, p3D2;
   private Vec2D v1, v2;
-  private boolean isSelected;
+  private boolean isSelected, isLocked;
   ArrayList<Vec2D> definingPoints; // there should be a better finalsolution???
 
   public Edge(GShape parent, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2)
@@ -24,6 +24,16 @@ class Edge
     this.isSelected = false;
   }
 
+  public boolean isLocked()
+  {
+    return isLocked;
+  }
+
+  public void setLocked(boolean locked)
+  {
+    this.isLocked = locked;
+  }
+  
   public GShape getShape()
   {
     return parent;

@@ -14,7 +14,7 @@ public class GShape
   private int thickness;
   private Vec2D position2D;
   private Vec3D position3D;
-  private boolean isSeleceted;
+  private boolean isSeleceted, alignLocked, rotatedLocked;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
@@ -48,6 +48,26 @@ public class GShape
 
     this.isSeleceted = false;
     this.shape = shape;
+  }
+  
+  public boolean isAlignLocked() 
+  {
+    return this.alignLocked;
+  }
+
+  public boolean isRotatedLocked() 
+  {
+    return this.rotatedLocked;
+  }
+
+  public void setAlignLocked(boolean locked)
+  {
+    this.alignLocked = locked;
+  }
+
+  public void setRotatedLocked(boolean locked)
+  {
+    this.rotatedLocked = locked;
   }
 
   public void setVector3D(int i, Vec3D v)
@@ -152,11 +172,16 @@ public class GShape
     Vec3D edge3D = edges.get(0).getP3D2().sub(edges.get(0).getP3D1());
     Vec3D edge2D = edges.get(0).getV2().to3DXY().sub(edges.get(0).getV1().to3DXY());
 
-    Vec3D position3D = edges.get(0).getP3D1();
-    Vec3D position2D = edges.get(0).getV1().to3DXY();
+    Vec3D position3D = edges.get(0).getP3D1().copy();
+    Vec3D position2D = edges.get(0).getV1().copy().to3DXY();
+
+    Vec3D control3D1 = edges.get(0).getP3D2().copy();
+    Vec3D control2D1 = edges.get(0).getV2().copy().to3DXY();
+
+    Vec3D control3D2 = edges.get(1).getP3D2().copy();
+    Vec3D control2D2 = edges.get(1).getV2().copy().to3DXY();
 
     float angleBetweenEdges = edge2D.angleBetween(edge3D, true);
-
 
     Vec3D normalVector = edge2D.cross(edge3D).getNormalized();
 
@@ -177,6 +202,25 @@ public class GShape
     if ((normalVector.equals(new Vec3D(0, 0, 0)))) 
     {
       notAligned = false;
+    }
+    
+    if (notAligned) control2D1.rotateAroundAxis(normalVector, angleBetweenEdges);
+    control2D1.rotateAroundAxis(edge3D.getNormalized(), -angleBetweenNormals);
+    control2D1.addSelf(diffPosition);
+    if (!(control3D1.equalsWithTolerance(control2D1, 0.1f))) 
+    {
+      angleBetweenEdges = angleBetweenEdges*(-1);
+    }
+    position2D = edges.get(0).getV1().copy().to3DXY();
+    position2D = position2D.rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals);
+    diffPosition = position3D.sub(position2D);
+
+    if (notAligned) control2D2.rotateAroundAxis(normalVector, angleBetweenEdges);
+    control2D2.rotateAroundAxis(edge3D.getNormalized(), -angleBetweenNormals);
+    control2D2.addSelf(diffPosition);
+    if (!(control3D2.equalsWithTolerance(control2D2, 0.1f))) 
+    {
+      angleBetweenNormals = angleBetweenNormals *(-1);
     }
 
     for (int i=0; i<allTenons.size(); i++)
