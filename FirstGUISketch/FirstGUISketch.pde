@@ -33,6 +33,8 @@ int view3DPosY = 50;
 int cameraX = 45;
 int cameraY = 1000;
 
+Transformation2D transform2D = new Transformation2D(1.0, new Vec2D(0,0));
+
 Vec3D cameraPosition;
 Tool selectedTool;
 Tool tools[] = {
@@ -79,6 +81,7 @@ void draw()
 void draw2DView()
 {
   view2D.beginDraw();
+  transform2D.transform(view2D);
 
   view2D.background(100);
 
@@ -207,5 +210,17 @@ void controlEvent(ControlEvent theEvent)
         selectedTool = new ConnectTool(view2DRect, properties, shapes, connections);
         properties.hide();
     }
+  }
+}
+
+void keyPressed()
+{
+  if (key == '+')
+  {
+    transform2D.scaleUp(0.05);
+  }
+  if (key == '-')
+  {
+    transform2D.scaleDown(0.05);
   }
 }
