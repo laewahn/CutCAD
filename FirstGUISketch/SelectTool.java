@@ -8,9 +8,9 @@ class SelectTool extends Tool {
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public SelectTool(Rect view, Properties properties, List<Shapes> shapes) 
+    public SelectTool(Rect view, Properties properties, List<Shapes> shapes, Transformation2D transform) 
     {
-        super(view, properties);
+        super(view, properties, transform);
         
         this.shapes = shapes;
         this.dragging = false;
@@ -61,7 +61,7 @@ class SelectTool extends Tool {
         if (this.inView(position))
         {
             Vec2D relativePosition = this.positionRelativeToView(position);
-
+            
             for (Shapes s : shapes) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
 

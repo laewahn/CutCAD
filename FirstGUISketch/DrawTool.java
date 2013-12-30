@@ -10,9 +10,9 @@ class DrawTool extends Tool {
     Rectangle previewRectangle;
     List<Shapes> rectangles;
 
-    public DrawTool(Rect view, Properties properties, List<Shapes> rectangles)
+    public DrawTool(Rect view, Properties properties, List<Shapes> rectangles, Transformation2D transform)
     {
-        super(view, properties);
+        super(view, properties, transform);
         this.isDrawing = false;
         this.rectangles = rectangles;
     }

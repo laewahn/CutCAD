@@ -38,9 +38,9 @@ Transformation2D transform2D = new Transformation2D(1.0, new Vec2D(0,0));
 Vec3D cameraPosition;
 Tool selectedTool;
 Tool tools[] = {
-  new SelectTool(view2DRect, properties, shapes),
-  new DrawTool(view2DRect, properties, shapes),
-  new ConnectTool(view2DRect, properties, shapes, connections)
+  new SelectTool(view2DRect, properties, shapes, transform2D),
+  new DrawTool(view2DRect, properties, shapes, transform2D),
+  new ConnectTool(view2DRect, properties, shapes, connections, transform2D)
 };
 
 Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
@@ -69,7 +69,7 @@ void setup()
   createToolbar();
   
   cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0, 0.0, 1.0), radians(cameraX));
-  selectedTool = new SelectTool(view2DRect, properties, shapes);
+  selectedTool = new SelectTool(view2DRect, properties, shapes, transform2D);
 }
 
 void draw()
@@ -202,16 +202,16 @@ void controlEvent(ControlEvent theEvent)
     // For now: 0 is Select, 1 is Rectangle
     if (id == 0)
     {
-        selectedTool = new SelectTool(view2DRect, properties, shapes);
+        selectedTool = new SelectTool(view2DRect, properties, shapes, transform2D);
     }
     if (id == 1)
     {
-        selectedTool = new DrawTool(view2DRect, properties, shapes);
+        selectedTool = new DrawTool(view2DRect, properties, shapes, transform2D);
         properties.hide();
     }
     if (id == 2)
     {
-        selectedTool = new ConnectTool(view2DRect, properties, shapes, connections);
+        selectedTool = new ConnectTool(view2DRect, properties, shapes, connections, transform2D);
         properties.hide();
     }
   }
@@ -221,10 +221,10 @@ void keyPressed()
 {
   if (key == '+')
   {
-    transform2D.scaleUp(0.05);
+    transform2D.scaleUp(0.01);
   }
   if (key == '-')
   {
-    transform2D.scaleDown(0.05);
+    transform2D.scaleDown(0.01);
   }
 }
