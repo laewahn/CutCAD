@@ -17,6 +17,21 @@ class SelectTool extends Tool {
         this.originalMousePosition = new Vec2D(0,0);
     }
 
+    public PGraphics getIcon(PGraphics context)
+    {
+        context.beginDraw();
+        context.noFill();
+        context.stroke(0);
+        context.strokeWeight(2);
+        context.translate(60, 10);
+        context.rotate(PApplet.radians(-45));
+        context.triangle(0, 0, -10, 30, 10, 30);
+        context.rect(-5, 30, 10, 10);
+        context.endDraw();
+
+        return context;
+    }
+
     public void mouseButtonPressed(Vec2D position, int button)
     {
         for (Shapes s : shapes)

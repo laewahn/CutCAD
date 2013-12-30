@@ -27,6 +27,8 @@ abstract class Tool implements Drawable2D {
     abstract public void mouseButtonReleased(Vec2D position, int button);
     abstract public void mouseMoved(Vec2D position);
 
+    abstract public PGraphics getIcon(PGraphics context);
+    
     public void draw2D(PGraphics p) {};
 
 }

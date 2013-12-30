@@ -13,5 +13,15 @@ class Toolbar extends ListBox
     addItem(theName, theValue);
     buttons.get(buttons.size()-1).setView(theView);
   }
+
+  void addTool(Tool theTool) 
+  {
+
+  }
+
+  Tool getSelectedTool() 
+  {
+  	return null;
+  }
 }
 

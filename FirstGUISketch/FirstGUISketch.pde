@@ -35,6 +35,12 @@ int cameraY = 1000;
 
 Vec3D cameraPosition;
 Tool selectedTool;
+Tool tools[] = {
+  new SelectTool(view2DRect, properties, shapes),
+  new DrawTool(view2DRect, properties, shapes),
+  new ConnectTool(view2DRect, properties, shapes, connections)
+};
+
 Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
 
 void setup()
@@ -119,36 +125,13 @@ void createToolbar()
   toolbar = new Toolbar(cp5, "Toolbar");
   toolbar.setPosition(0, 50).setSize(150, 500).setItemHeight(50).disableCollapse().hideBar();
 
-  PGraphics cursorIcon = createGraphics(150, 50);
-  cursorIcon.beginDraw();
-  cursorIcon.noFill();
-  cursorIcon.stroke(0);
-  cursorIcon.strokeWeight(2);
-  cursorIcon.translate(60, 10);
-  cursorIcon.rotate(radians(-45));
-  cursorIcon.triangle(0, 0, -10, 30, 10, 30);
-  cursorIcon.rect(-5, 30, 10, 10);
-  cursorIcon.endDraw();
+  PGraphics cursorIcon = tools[0].getIcon(createGraphics(150, 50));
   toolbar.addCustomItem("Cursor", 0, new ShapeButton(cursorIcon));
 
-  PGraphics rectangleIcon = createGraphics(150, 50);
-  rectangleIcon.beginDraw();
-  rectangleIcon.noFill();
-  rectangleIcon.stroke(0);
-  rectangleIcon.strokeWeight(2);
-  previewRectangle.getShape().drawPreview(rectangleIcon, 50, 10, 50, 30);
-  rectangleIcon.endDraw();
+  PGraphics rectangleIcon = tools[1].getIcon(createGraphics(150, 50));
   toolbar.addCustomItem("Rectangle", 1, new ShapeButton(rectangleIcon));
 
-  PGraphics connectIcon = createGraphics(150, 50);
-  connectIcon.beginDraw();
-  connectIcon.noFill();
-  connectIcon.stroke(0);
-  connectIcon.strokeWeight(2);
-  connectIcon.line(25, 10, 25, 40);
-  connectIcon.line(25, 25, 125, 25);
-  connectIcon.line(125, 10, 125, 40);
-  connectIcon.endDraw();
+  PGraphics connectIcon = tools[2].getIcon(createGraphics(150, 50));
   toolbar.addCustomItem("Connect", 2, new ShapeButton(connectIcon));
 }
 

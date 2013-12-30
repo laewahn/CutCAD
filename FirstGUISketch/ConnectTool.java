@@ -22,6 +22,20 @@ class ConnectTool extends Tool
         this.connections = connections;
     }
 
+    public PGraphics getIcon(PGraphics context) 
+    {
+        context.beginDraw();
+        context.noFill();
+        context.stroke(0);
+        context.strokeWeight(2);
+        context.line(25, 10, 25, 40);
+        context.line(25, 25, 125, 25);
+        context.line(125, 10, 125, 40);
+        context.endDraw();
+
+        return context;
+    }
+
     public void mouseButtonPressed(Vec2D position, int button)
     {
         for (Shapes s : shapes)

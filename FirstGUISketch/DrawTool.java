@@ -17,6 +17,18 @@ class DrawTool extends Tool {
         this.rectangles = rectangles;
     }
 
+    public PGraphics getIcon(PGraphics context) 
+    {
+        context.beginDraw();
+        context.noFill();
+        context.stroke(0);
+        context.strokeWeight(2);
+        context.rect(50, 10, 50, 30);
+        context.endDraw();
+        
+        return context;
+    }
+
     public void mouseButtonPressed(Vec2D position, int button)
     {
         if (this.inView(position)){
