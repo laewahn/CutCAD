@@ -98,6 +98,30 @@ class Edge
     }
   }
 
+  public void drawBox3D(PGraphics p)
+  {
+    if (this.isSelected())
+    {
+      Vec3D offset = this.parent.getNormalVector().normalizeTo(this.parent.getThickness()/2+4);
+      p.stroke(255, 0, 0);
+      p.noFill();
+      p.strokeWeight(2);
+      p.beginShape();
+      Vec3D vector = p3D1.copy().add(offset);
+      p.vertex(vector.x(), vector.y(), vector.z());
+      vector = p3D2.copy().add(offset);
+      p.vertex(vector.x(), vector.y(), vector.z());   
+      vector = p3D2.copy().sub(offset);
+      p.vertex(vector.x(), vector.y(), vector.z());  
+      vector = p3D1.copy().sub(offset);
+      p.vertex(vector.x(), vector.y(), vector.z());
+      p.endShape(PConstants.CLOSE);
+      p.strokeWeight(1);
+      p.fill(255);
+      p.stroke(0);
+    }
+  }
+
   public Vec2D getMid()
   {
     return new Vec2D((this.getV1().x() + this.getV2().x()) / 2, (this.getV1().y() + this.getV2().y()) / 2);

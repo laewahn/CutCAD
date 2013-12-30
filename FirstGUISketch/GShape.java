@@ -141,7 +141,7 @@ public class GShape
     ArrayList<Vec3D> allTenons = new ArrayList<Vec3D>();
     for (Vec2D v : getTenons())
     {
-      allTenons.add(v.to3DXY().addSelf(new Vec3D(0,0,offsetZ)));
+      allTenons.add(v.to3DXY().addSelf(new Vec3D(0, 0, offsetZ)));
     }
 
     // Original normal vector of the 2D object is in the z axis
@@ -181,7 +181,7 @@ public class GShape
 
     for (int i=0; i<allTenons.size(); i++)
     {
-      if(notAligned) allTenons.set(i, allTenons.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
+      if (notAligned) allTenons.set(i, allTenons.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
       allTenons.set(i, allTenons.get(i).rotateAroundAxis(edge3D.getNormalized(), -angleBetweenNormals));
       allTenons.set(i, allTenons.get(i).addSelf(diffPosition));
     }
@@ -281,13 +281,18 @@ public class GShape
 
   public void draw3D(PGraphics p) 
   {
-    // Logic
-    p.noFill();
-    p.beginShape();
-    for (Edge e : edges) {
-      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    // if we want to show the "Logic" shape:
+    //    p.noFill();
+    //    p.beginShape();
+    //    for (Edge e : edges) {
+    //      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    //    }
+    //    p.endShape(PConstants.CLOSE);
+    for (Edge e: edges) //not good... but i've no better idea...still no better version
+    {
+      e.drawBox3D(p);
     }
-    p.endShape(PConstants.CLOSE);
+
     this.setFillColor(p);
     ArrayList<Vec3D> top = getTenons3D(true);
     ArrayList<Vec3D> bottom = getTenons3D(false);
@@ -299,7 +304,7 @@ public class GShape
     //ToDo: add additional figures for cut-outs
     p.endContour();
     p.endShape(PConstants.CLOSE);
-    
+
     p.beginShape();
     for (Vec3D vector : bottom) {
       p.vertex(vector.x(), vector.y(), vector.z());
@@ -308,7 +313,7 @@ public class GShape
     //ToDo: add additional figures for cut-outs
     p.endContour();
     p.endShape(PConstants.CLOSE);
-    
+
     for (int i=0; i<top.size()-1; i++) {
       p.beginShape();
       p.vertex(top.get(i).x(), top.get(i).y(), top.get(i).z());
