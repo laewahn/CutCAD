@@ -16,14 +16,13 @@ public class Tenon
   private Vec2D[] end = new Vec2D[2];
   private GShape[] shape = new GShape[2];
   private int[] thickness = new int[2];
-  private int angle, tenonNumber;
-  private float edgeLength, tenonLength, scalingLength, scaling0, scaling1, lengthIntr, lengthIntrNew;
+  private int tenonNumber;
+  private float angle, edgeLength, tenonLength, scalingLength, scaling0, scaling1, lengthIntr, lengthIntrNew;
   private boolean extr1start, extr1end, isIndependant;
 
   private int relationTenonLength = 4;
 
-  public Tenon(Edge edge1, Edge edge2, int angle, boolean extr1start, boolean extr1end)
-    //ToDO extr1start, extr1end per ....containsPoint()
+  public Tenon(Edge edge1, Edge edge2, float angle, boolean extr1start, boolean extr1end)
   {
     this.angle = angle;
     this.extr1start = extr1start;
@@ -37,8 +36,9 @@ public class Tenon
     this.shape[0] = edge1.getShape();
     this.shape[1] = edge2.getShape();
     this.isIndependant = false;
-    determineNumberOfTenons();
 
+    determineAngle();
+    determineNumberOfTenons();
     determineSizeOfTenons();
     makeTenons();
   }
@@ -77,40 +77,75 @@ public class Tenon
     Vec2D modT1length = (end[1].sub(start[1])).scale(scalingLength);
 
     //intrusion of the tenons ("go inside the base shape")
-    Vec2D modT0intr = (end[0].sub(start[0])).perpendicular().normalizeTo(scaling1);
-    Vec2D modT1intr = (end[1].sub(start[1])).perpendicular().normalizeTo(scaling0);
+    Vec2D modT0S1 = (end[0].sub(start[0])).perpendicular().normalizeTo(scaling1/2);
+    Vec2D modT1S0 = (end[1].sub(start[1])).perpendicular().normalizeTo(scaling0/2);
 
     //extrusion of the tenons ("get out of base shape")
-    Vec2D modT0extr = (end[0].sub(start[0])).perpendicular().normalizeTo(scaling0);
-    Vec2D modT1extr = (end[1].sub(start[1])).perpendicular().normalizeTo(scaling1);
+    Vec2D modT0S0 = (end[0].sub(start[0])).perpendicular().normalizeTo(scaling0/2);
+    Vec2D modT1S1 = (end[1].sub(start[1])).perpendicular().normalizeTo(scaling1/2);
 
-    //Special case:
-    if ((angle == 0) || (angle == 90) || (angle == 180) || (angle == 270)) {
-      modT0extr = new Vec2D(0, 0);
-      modT1extr = new Vec2D(0, 0);
-    } 
-    else {
-      float modSin = (float)(1/Math.sin(Math.toRadians(180-angle)));
-      modT0intr = modT0intr.scale(modSin);
-      modT1intr = modT1intr.scale(modSin);
+    Vec2D modT0extr, modT1extr, modT0intr, modT1intr;
 
-      float modTan = (float)(1/Math.tan(Math.toRadians(180-angle)));
-      modT0extr = modT0extr.scale(modTan);
-      modT1extr = modT1extr.scale(modTan);
+    // acute angle
+    float modASin = (float)(1/Math.sin(angle));
+    float modATan = (float)(1/Math.tan(angle));
+
+    // obtuse angle
+    float modTan = (float)(Math.tan(angle-(float)Math.PI/2));
+    float modSin = (float)(Math.sin(angle-(float)Math.PI/2));
+    float modACos = (float)(1/Math.cos(angle-(float)Math.PI/2));
+
+    if (angle == (float)0 || angle == (float)Math.PI) {
+      modT0intr = modT0S1;
+      modT1intr = modT1S0;
+
+      modT0extr = modT0S0;
+      modT1extr = modT1S1;
+    }
+    else if (angle == (float)Math.PI/2 || angle == (float)Math.PI*3/2) {
+      modT0intr = modT0S1.scale(modASin);
+      modT1intr = modT1S0.scale(modASin);
+
+      modT0extr = modT0S1.scale(modASin);
+      modT1extr = modT1S0.scale(modASin);
+    }
+    else if ((angle >(float)0 && angle < (float)Math.PI/2) || (angle > (float)Math.PI && angle < (float)Math.PI*3/2))
+    {
+      // acute angle
+      out.println("test2");
+      modT0intr = modT0S1.scale(modASin).addSelf(modT0S0.scale(modATan));
+      modT1intr = modT1S0.scale(modASin).addSelf(modT1S1.scale(modATan));
+
+      modT0extr = modT0S1.scale(modASin).addSelf(modT0S0.scale(modATan));
+      modT1extr = modT1S0.scale(modASin).addSelf(modT1S1.scale(modATan));
+      modSin = (float)(Math.sin(angle)); // for tenon intrusion to big
+    }
+    else
+    {
+      // obtuse angle
+      modT0intr = modT0S1.scale(modACos).addSelf(modT0S0.scale(modTan));
+      modT1intr = modT1S0.scale(modACos).addSelf(modT1S1.scale(modTan));
+
+      modT0extr = modT0S1.scale(modACos).addSelf(modT0S0.scale(modTan));
+      modT1extr = modT1S0.scale(modACos).addSelf(modT1S1.scale(modTan));
     }
 
-    //tenon intrusions to big (longer than tenonSize)
+    
+    // tenon intrusions to big (longer than tenonSize)
+    // Problem: did not work for small angles...
+    // user has to modify the tenons afterwards
+    // allow bigger intrusions has the inert problem, that this may interfere with neighbour tenons
     lengthIntr = modT0intr.magnitude(); 
     if (lengthIntr>2*thickness[0]) {
       modT0intr = modT0intr.normalizeTo(2*thickness[0]);
       lengthIntrNew = modT0intr.magnitude(); 
-      modT1extr = modT1extr.scale(lengthIntrNew/lengthIntr);
+      modT1extr = modT1S0.normalizeTo(lengthIntrNew).scale(modSin);
     }
     lengthIntr = modT1intr.magnitude();
     if (lengthIntr>2*thickness[1]) {
       modT1intr = modT1intr.normalizeTo(2*thickness[1]);
       lengthIntrNew = modT1intr.magnitude(); 
-      modT0extr = modT1extr.scale(lengthIntrNew/lengthIntr);
+      modT0extr = modT0S1.normalizeTo(lengthIntrNew).scale(modSin);
     }
 
     ArrayList<Vec2D> list0 = new ArrayList<Vec2D>();
@@ -121,8 +156,8 @@ public class Tenon
     {
       if ((i%2)==compare) 
       {
-        list0.add(start[0].add(((modT0length.scale(i)).add(modT0extr))));
-        list0.add(start[0].add(((modT0length.scale(i+1)).add(modT0extr))));
+        list0.add(start[0].add(((modT0length.scale(i)).sub(modT0extr))));
+        list0.add(start[0].add(((modT0length.scale(i+1)).sub(modT0extr))));
         list1.add(start[1].add(((modT1length.scale(i)).add(modT1intr))));
         list1.add(start[1].add(((modT1length.scale(i+1)).add(modT1intr))));
       } 
@@ -130,26 +165,17 @@ public class Tenon
       {
         list0.add(start[0].add(((modT0length.scale(i)).add(modT0intr))));
         list0.add(start[0].add(((modT0length.scale(i+1)).add(modT0intr))));
-        list1.add(start[1].add(((modT1length.scale(i)).add(modT1extr))));
-        list1.add(start[1].add(((modT1length.scale(i+1)).add(modT1extr))));
+        list1.add(start[1].add(((modT1length.scale(i)).sub(modT1extr))));
+        list1.add(start[1].add(((modT1length.scale(i+1)).sub(modT1extr))));
       }
     }
     tenon1 = list0;
     tenon2 = list1;
   }
 
-  //  private void determineAngle() {
-  ////ToDo!!!!!    
-  //    /*
-  //    firstShape.getAngle() //object oriantation in 3D
-  //    Math.tan((firstShape.getVertexIY(shape1v1)-firstShape.getVertexIY(shape1v2))/(firstShape.getVertexIX(shape1v1)-firstShape.getVertexIX(shape1v2)));
-  //    // edge oriantation within object
-  //    //-> combine booth
-  //    analog. secondShape.getAngle()...
-  //    */
-  //                                
-  //    angle = 90;
-  //  }
+  private void determineAngle() {
+    this.angle = shape[0].getNormalVector().angleBetween(shape[1].getNormalVector(), true);
+  }
 
   private boolean testShape(GShape shape)
   {

@@ -53,9 +53,6 @@ public class Connection
 
   public void connect()
   {
-    this.tenon = new Tenon(masterEdge, slaveEdge, 90, true, true);
-    masterEdge.getShape().setTenon(masterEdge, tenon);
-    slaveEdge.getShape().setTenon(slaveEdge, tenon);
 
     GShape master = masterEdge.getShape();
     GShape slave = slaveEdge.getShape();
@@ -74,6 +71,9 @@ public class Connection
 
     Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
     slave.translate3D(toMaster);
+    this.tenon = new Tenon(masterEdge, slaveEdge, (float)Math.PI/2, true, true);
+    masterEdge.getShape().setTenon(masterEdge, tenon);
+    slaveEdge.getShape().setTenon(slaveEdge, tenon);
   }
 
   private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)

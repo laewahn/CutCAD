@@ -19,6 +19,7 @@ public class GShape
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
   private ArrayList<Tenon> tenons;
+  private ArrayList<Vec3D> tenons3D;
   private Shapes shape;
 
   public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, Vec3D p3D, int thickness, Shapes shape)
@@ -48,7 +49,7 @@ public class GShape
     this.isSeleceted = false;
     this.shape = shape;
   }
-  
+
   public void setVector3D(int i, Vec3D v)
   {
     this.vertices3D.get(i).set(v);
@@ -125,11 +126,73 @@ public class GShape
     return allVectors;
   }
 
+  public ArrayList<Vec3D> getTenons3D(boolean top)
+  {      
+    int offsetZ;
+    if (top)
+    {
+      offsetZ = this.thickness/2;
+    }
+    else
+    {
+      offsetZ = -this.thickness/2;
+    }
+    //we want to change the tenon structure to the (logical) 3D positon, therefor first change them to 3D vectors
+    ArrayList<Vec3D> allTenons = new ArrayList<Vec3D>();
+    for (Vec2D v : getTenons())
+    {
+      allTenons.add(v.to3DXY().addSelf(new Vec3D(0,0,offsetZ)));
+    }
+
+    // Original normal vector of the 2D object is in the z axis
+    Vec3D normal2D = new Vec3D(0, 0, 1);
+
+
+    //align first edge
+    Vec3D edge3D = edges.get(0).getP3D2().sub(edges.get(0).getP3D1());
+    Vec3D edge2D = edges.get(0).getV2().to3DXY().sub(edges.get(0).getV1().to3DXY());
+
+    Vec3D position3D = edges.get(0).getP3D1();
+    Vec3D position2D = edges.get(0).getV1().to3DXY();
+
+    float angleBetweenEdges = edge2D.angleBetween(edge3D, true);
+
+
+    Vec3D normalVector = edge2D.cross(edge3D).getNormalized();
+
+    if (!(normalVector.equals(new Vec3D(0, 0, 0)))) {
+      normal2D = normal2D.rotateAroundAxis(normalVector, angleBetweenEdges);
+      position2D = position2D.rotateAroundAxis(normalVector, angleBetweenEdges);
+    }
+    float angleBetweenNormals = getNormalVector().angleBetween(normal2D, true);
+    if (Float.isNaN(angleBetweenNormals)) angleBetweenNormals = (float)Math.PI;
+
+    position2D = position2D.rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals);
+    Vec3D diffPosition = position3D.sub(position2D);
+
+    // Something seems to be missing (the angle>0 comparison corresponding to the connection logic)...
+    // but seems still to work (maybe because 2Dposition and Normalvector fixed????
+
+    boolean notAligned = true;
+    if ((normalVector.equals(new Vec3D(0, 0, 0)))) 
+    {
+      notAligned = false;
+    }
+
+    for (int i=0; i<allTenons.size(); i++)
+    {
+      if(notAligned) allTenons.set(i, allTenons.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
+      allTenons.set(i, allTenons.get(i).rotateAroundAxis(edge3D.getNormalized(), -angleBetweenNormals));
+      allTenons.set(i, allTenons.get(i).addSelf(diffPosition));
+    }
+    return allTenons;
+  }
+
   public Vec2D getPosition2D()
   {
     return this.position2D;
   }
-  
+
   public Vec3D getPosition3D()
   {
     return this.position3D;
@@ -148,7 +211,7 @@ public class GShape
   {
     this.position2D = position;
   }
-  
+
   public void setPosition3D(Vec3D position)
   {
     this.position3D = position;
@@ -164,7 +227,7 @@ public class GShape
     for (Vec3D v : vertices3D)
     {
       v.rotateAroundAxis(rotationAxis, theta);
-    }   
+    }
   }
 
   public void translate3D(Vec3D translationVector)
@@ -172,7 +235,7 @@ public class GShape
     for (Vec3D v : vertices3D)
     {
       v.addSelf(translationVector);
-    }   
+    }
   }
 
   public Vec3D getNormalVector()
@@ -218,24 +281,40 @@ public class GShape
 
   public void draw3D(PGraphics p) 
   {
+    // Logic
+    p.noFill();
+    p.beginShape();
+    for (Edge e : edges) {
+      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    }
+    p.endShape(PConstants.CLOSE);
     this.setFillColor(p);
-    Vec3D pV = this.getNormalVector().scale(thickness);
+    ArrayList<Vec3D> top = getTenons3D(true);
+    ArrayList<Vec3D> bottom = getTenons3D(false);
     p.beginShape();
-    for (Edge e : edges) {
-      p.vertex(e.getP3D1().add(pV).x(), e.getP3D1().add(pV).y(), e.getP3D1().add(pV).z());
+    for (Vec3D vector : top) {
+      p.vertex(vector.x(), vector.y(), vector.z());
     }
+    p.beginContour();
+    //ToDo: add additional figures for cut-outs
+    p.endContour();
     p.endShape(PConstants.CLOSE);
+    
     p.beginShape();
-    for (Edge e : edges) {
-      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    for (Vec3D vector : bottom) {
+      p.vertex(vector.x(), vector.y(), vector.z());
     }
+    p.beginContour();
+    //ToDo: add additional figures for cut-outs
+    p.endContour();
     p.endShape(PConstants.CLOSE);
-    for (Edge e : edges) {
+    
+    for (int i=0; i<top.size()-1; i++) {
       p.beginShape();
-      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
-      p.vertex(e.getP3D2().x(), e.getP3D2().y(), e.getP3D2().z());
-      p.vertex(e.getP3D2().add(pV).x(), e.getP3D2().add(pV).y(), e.getP3D2().add(pV).z());
-      p.vertex(e.getP3D1().add(pV).x(), e.getP3D1().add(pV).y(), e.getP3D1().add(pV).z());
+      p.vertex(top.get(i).x(), top.get(i).y(), top.get(i).z());
+      p.vertex(top.get(i+1).x(), top.get(i+1).y(), top.get(i+1).z());
+      p.vertex(bottom.get(i+1).x(), bottom.get(i+1).y(), bottom.get(i+1).z());
+      p.vertex(bottom.get(i).x(), bottom.get(i).y(), bottom.get(i).z());
       p.endShape(PConstants.CLOSE);
     }
   }

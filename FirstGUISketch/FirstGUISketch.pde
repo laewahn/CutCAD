@@ -48,8 +48,8 @@ void setup()
   shapes = new ArrayList<Shapes>();
   connections = new ArrayList<Connection>();
 
-  shapes.add(new Rectangle(50, 50, 0, 150, 150, 5));
-  shapes.add(new Rectangle(300, 150, 0, 150, 150, 5));
+  shapes.add(new Rectangle(50, 50, 0, 300, 300, 30));
+  shapes.add(new Rectangle(400, 150, 0, 300, 300, 15));
 
   cp5 = new ControlP5(this);
 
