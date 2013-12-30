@@ -21,11 +21,11 @@ class SelectTool extends Tool {
     {
         for (Shapes s : shapes)
         {
-            if (s.getShape().isSelected() && button == PConstants.LEFT)
+            if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
             {
                 properties.plugTo(s);
                 properties.show();
-            } else if (s.getShape().isSelected() && button == PConstants.RIGHT){
+            } else if (this.inView(position) && s.getShape().isSelected() && button == PConstants.RIGHT){
                 this.dragging = true;
                 // this.originalMousePosition.set(position.sub(new Vec2D(view2DPosX, view2DPosY)));
                 Vec2D currentMousePosition = this.positionRelativeToView(position);
@@ -43,16 +43,25 @@ class SelectTool extends Tool {
     
     public void mouseMoved(Vec2D position)
     {
-        Vec2D relativePosition = this.positionRelativeToView(position);
+        if (this.inView(position))
+        {
+            Vec2D relativePosition = this.positionRelativeToView(position);
 
-        for (Shapes s : shapes) {
-            s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
+            for (Shapes s : shapes) {
+                s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
 
-            if (s.getShape().isSelected() && this.dragging)
-            {
-                Vec2D currentMousePosition = this.positionRelativeToView(position);
-                s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
-                originalMousePosition.set(currentMousePosition);
+                if (s.getShape().isSelected() && this.dragging)
+                {
+                    Vec2D currentMousePosition = this.positionRelativeToView(position);
+                    s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
+                    originalMousePosition.set(currentMousePosition);
+                }
+            }
+        }
+        else
+        {
+            for (Shapes s : shapes) {
+                s.getShape().setSelected(false);
             }
         }
     }
