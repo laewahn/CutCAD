@@ -7,12 +7,14 @@ abstract class Tool implements Drawable2D {
     protected Properties properties;
     protected Rect view;
     protected Transformation2D transform;
+    protected String name;
 
-    public Tool(Rect view, Properties properties, Transformation2D transform)
+    public Tool(Rect view, Properties properties, Transformation2D transform, String name)
     {
         this.view = view;
         this.properties = properties;
         this.transform = transform;
+        this.name = name;
     }
 
     protected Vec2D positionRelativeToView(Vec2D inPosition) 
@@ -28,6 +30,11 @@ abstract class Tool implements Drawable2D {
         return this.view.containsPoint(position);
     }
 
+    public String getName()
+    {
+        return this.name;
+    }
+    
     abstract public void mouseButtonPressed(Vec2D position, int button);
     abstract public void mouseButtonReleased(Vec2D position, int button);
     abstract public void mouseMoved(Vec2D position);

@@ -12,7 +12,7 @@ class DrawTool extends Tool {
 
     public DrawTool(Rect view, Properties properties, List<Shapes> rectangles, Transformation2D transform)
     {
-        super(view, properties, transform);
+        super(view, properties, transform, "DrawTool");
         this.isDrawing = false;
         this.rectangles = rectangles;
     }

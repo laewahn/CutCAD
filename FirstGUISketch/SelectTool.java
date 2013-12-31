@@ -10,7 +10,7 @@ class SelectTool extends Tool {
     
     public SelectTool(Rect view, Properties properties, List<Shapes> shapes, Transformation2D transform) 
     {
-        super(view, properties, transform);
+        super(view, properties, transform, "SelectTool");
         
         this.shapes = shapes;
         this.dragging = false;

@@ -16,7 +16,7 @@ class ConnectTool extends Tool
 
     public ConnectTool(Rect view, Properties properties, List<Shapes> shapes, List<Connection> connections, Transformation2D transform)
     {
-        super(view, properties, transform);
+        super(view, properties, transform, "ConnectTool");
         this.shapes = shapes;
         this.selectedFirst = false;
         this.connections = connections;

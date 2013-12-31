@@ -37,11 +37,7 @@ Transformation2D transform2D = new Transformation2D(1.0, new Vec2D(0,0));
 
 Vec3D cameraPosition;
 Tool selectedTool;
-Tool tools[] = {
-  new SelectTool(view2DRect, properties, shapes, transform2D),
-  new DrawTool(view2DRect, properties, shapes, transform2D),
-  new ConnectTool(view2DRect, properties, shapes, connections, transform2D)
-};
+Tool tools[];
 
 Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
 
@@ -67,7 +63,7 @@ void setup()
 
   createProperties();
   createToolbar();
-  
+
   cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D(0.0, 0.0, 1.0), radians(cameraX));
   selectedTool = new SelectTool(view2DRect, properties, shapes, transform2D);
 }
@@ -132,14 +128,18 @@ void createToolbar()
   toolbar = new Toolbar(cp5, "Toolbar");
   toolbar.setPosition(0, 50).setSize(150, 500).setItemHeight(50).disableCollapse().hideBar();
 
-  PGraphics cursorIcon = tools[0].getIcon(createGraphics(150, 50));
-  toolbar.addCustomItem("Cursor", 0, new ShapeButton(cursorIcon));
+  tools = new Tool[]{
+    new SelectTool(view2DRect, properties, shapes, transform2D),
+    new DrawTool(view2DRect, properties, shapes, transform2D),
+    new ConnectTool(view2DRect, properties, shapes, connections, transform2D)
+  };
 
-  PGraphics rectangleIcon = tools[1].getIcon(createGraphics(150, 50));
-  toolbar.addCustomItem("Rectangle", 1, new ShapeButton(rectangleIcon));
-
-  PGraphics connectIcon = tools[2].getIcon(createGraphics(150, 50));
-  toolbar.addCustomItem("Connect", 2, new ShapeButton(connectIcon));
+  for (int i = 0; i < tools.length; i++)
+  {
+    Tool theTool = tools[i];
+    PGraphics toolIcon = theTool.getIcon(createGraphics(150, 50));
+    toolbar.addCustomItem(theTool.getName(), i, new ShapeButton(toolIcon));
+  }
 }
 
 void createProperties()
@@ -196,23 +196,10 @@ void controlEvent(ControlEvent theEvent)
   if (theEvent.isGroup() && theEvent.isFrom("Toolbar"))
   {
     int id = (int)theEvent.group().value();
-    // TODO: Find another method to find out which element of the list sent the event. 
-    // One should be able to get the object or at the very least the name instead of an ID
-
-    // For now: 0 is Select, 1 is Rectangle
-    if (id == 0)
-    {
-        selectedTool = new SelectTool(view2DRect, properties, shapes, transform2D);
-    }
-    if (id == 1)
-    {
-        selectedTool = new DrawTool(view2DRect, properties, shapes, transform2D);
-        properties.hide();
-    }
-    if (id == 2)
-    {
-        selectedTool = new ConnectTool(view2DRect, properties, shapes, connections, transform2D);
-        properties.hide();
+    selectedTool = tools[id];
+    
+    if (!selectedTool.getName().equals("SelectTool")){
+      properties.hide();
     }
   }
 }
