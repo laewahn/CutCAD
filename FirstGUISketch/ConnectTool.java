@@ -11,10 +11,10 @@ class ConnectTool extends Tool
     Connection previewConnection;
     List<Connection> connections;
 
-    List<Shapes> shapes;
+    List<Shape> shapes;
     
 
-    public ConnectTool(Rect view, Properties properties, List<Shapes> shapes, List<Connection> connections, Transformation2D transform)
+    public ConnectTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform)
     {
         super(view, properties, transform, "ConnectTool");
         this.shapes = shapes;
@@ -38,7 +38,7 @@ class ConnectTool extends Tool
 
     public void mouseButtonPressed(Vec2D position, int button)
     {
-        for (Shapes s : shapes)
+        for (Shape s : shapes)
         {
             for (Edge e : s.getShape().getEdges())
             {
@@ -73,7 +73,7 @@ class ConnectTool extends Tool
     {
         this.lastMousePosition = position;
     
-        for (Shapes s : shapes)
+        for (Shape s : shapes)
         {
             for (Edge e : s.getShape().getEdges())
             {

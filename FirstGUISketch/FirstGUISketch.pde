@@ -13,7 +13,7 @@ ControlP5 cp5;
 
 ToxiclibsSupport gfx;
 PGraphics view2D, view3D;
-ArrayList<Shapes> shapes;
+ArrayList<Shape> shapes;
 ArrayList<Connection> connections;
 
 int startX = 0;
@@ -39,7 +39,7 @@ Vec3D cameraPosition;
 Tool selectedTool;
 Tool tools[];
 
-Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
+Shape previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
 
 void setup()
 {
@@ -49,7 +49,7 @@ void setup()
   view2D = createGraphics(viewSizeX, viewSizeY, P3D);
   view3D = createGraphics(viewSizeX, viewSizeY, P3D);
 
-  shapes = new ArrayList<Shapes>();
+  shapes = new ArrayList<Shape>();
   connections = new ArrayList<Connection>();
 
   shapes.add(new Rectangle(50, 50, 0, 150, 100, 5));
@@ -85,7 +85,7 @@ void draw2DView()
 
   view2D.background(100);
 
-  for (Shapes s : shapes)
+  for (Shape s : shapes)
   {
     s.getShape().draw2D(view2D);
   }
@@ -113,7 +113,7 @@ void draw3DView()
   view3D.endCamera();
 
   view3D.background(100);
-  for (Shapes s : shapes)
+  for (Shape s : shapes)
   {
     s.getShape().draw3D(view3D);
   }
@@ -131,7 +131,8 @@ void createToolbar()
   tools = new Tool[]{
     new SelectTool(view2DRect, properties, shapes, transform2D),
     new DrawTool(view2DRect, properties, shapes, transform2D),
-    new ConnectTool(view2DRect, properties, shapes, connections, transform2D)
+    new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
+    new DeleteTool(view2DRect, properties, shapes, connections, transform2D)
   };
 
   for (int i = 0; i < tools.length; i++)
@@ -200,6 +201,11 @@ void controlEvent(ControlEvent theEvent)
     
     if (!selectedTool.getName().equals("SelectTool")){
       properties.hide();
+    }
+    if (id == 3)
+    {
+        selectedTool = new DeleteTool(view2DRect, properties, shapes, connections, transform2D);
+        properties.hide();        
     }
   }
 }

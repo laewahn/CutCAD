@@ -8,9 +8,9 @@ class DrawTool extends Tool {
 
     Vec2D startCoord;
     Rectangle previewRectangle;
-    List<Shapes> rectangles;
+    List<Shape> rectangles;
 
-    public DrawTool(Rect view, Properties properties, List<Shapes> rectangles, Transformation2D transform)
+    public DrawTool(Rect view, Properties properties, List<Shape> rectangles, Transformation2D transform)
     {
         super(view, properties, transform, "DrawTool");
         this.isDrawing = false;

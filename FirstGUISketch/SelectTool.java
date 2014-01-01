@@ -4,11 +4,11 @@ import java.util.*;
 
 class SelectTool extends Tool {
     
-    List<Shapes> shapes;
+    List<Shape> shapes;
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public SelectTool(Rect view, Properties properties, List<Shapes> shapes, Transformation2D transform) 
+    public SelectTool(Rect view, Properties properties, List<Shape> shapes, Transformation2D transform) 
     {
         super(view, properties, transform, "SelectTool");
         
@@ -35,7 +35,7 @@ class SelectTool extends Tool {
     public void mouseButtonPressed(Vec2D position, int button)
     {
         boolean noneSelected = true;
-        for (Shapes s : shapes)
+        for (Shape s : shapes)
         {
             if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
             {
@@ -72,7 +72,7 @@ class SelectTool extends Tool {
 
             boolean noneSelected = true;
 
-            for (Shapes s : shapes) {
+            for (Shape s : shapes) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
 
                 if (s.getShape().isSelected() && this.dragging)
@@ -93,7 +93,7 @@ class SelectTool extends Tool {
         }
         else
         {
-            for (Shapes s : shapes) {
+            for (Shape s : shapes) {
                 s.getShape().setSelected(false);
             }
         }

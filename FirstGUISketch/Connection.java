@@ -13,9 +13,11 @@ public class Connection
   private Edge masterEdge, slaveEdge;
   private Tenon tenon;
   private boolean connected;
+  private boolean isSelected;
 
   public Connection()
   {
+    this.isSelected = false;
   }
 
   public Connection(Edge masterEdge, Edge slaveEdge)
@@ -23,6 +25,7 @@ public class Connection
     this.masterEdge = masterEdge;
     this.slaveEdge = slaveEdge;
     this.connected = false;
+    this.isSelected = false;
   }
 
   public Edge getMasterEdge()
@@ -50,10 +53,57 @@ public class Connection
     if (connected) {
       Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
       Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
-      p.stroke(255, 0, 0);
+      if (this.isSelected)
+      {
+        p.stroke(255, 0, 0);
+      }
+      else
+      {
+        p.stroke(150, 0, 0);
+      }
       p.line(mid1.x(), mid1.y(), mid2.x(), mid2.y());
       p.stroke(0);
     }
+  }
+
+  public void setSelected(boolean b)
+  {
+    this.isSelected = b;
+  }
+
+  public boolean isSelected()
+  {
+    return this.isSelected;
+  }
+
+  public boolean mouseOver(Vec2D position)
+  {
+    Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
+    Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
+
+    // create a vector that is perpendicular to the connections line
+    Vec2D perpendicularVector = mid1.sub(mid2).perpendicular().getNormalized();
+
+    // with the perpendicular vector, calculate the defining points of a rectangle around the connections line
+    ArrayList<Vec2D> definingPoints = new ArrayList<Vec2D>();
+    definingPoints.add(mid1.sub(perpendicularVector.getNormalizedTo(4)));
+    definingPoints.add(mid2.sub(perpendicularVector.getNormalizedTo(4)));
+    definingPoints.add(mid2.add(perpendicularVector.getNormalizedTo(4)));
+    definingPoints.add(mid1.add(perpendicularVector.getNormalizedTo(4)));
+
+    // create a rectangle around the edge
+    Polygon2D borders = new Polygon2D(definingPoints);
+
+    // check if the mousePointer is within the created rectangle
+    // Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
+    // return borders.containsPoint(mousePointer);
+    return borders.containsPoint(position);
+  }
+
+  public void undoConnection()
+  {
+    // TODO: This should remove the tenons from the edges. 
+    // Maybe in the future, this should also rotate the 3D-Shape back to its original position
   }
 
   public void connect()
@@ -69,7 +119,7 @@ public class Connection
       // do not connect edges which already have a connection
       out.println("At least one edge is already connected!");
     }
-    else if (masterEdge.getV2().sub(masterEdge.getV1()).magnitude() != slaveEdge.getV2().sub(slaveEdge.getV1()).magnitude())
+    else if (masterEdge.getV2().distanceTo(masterEdge.getV1()) != slaveEdge.getV2().distanceTo(slaveEdge.getV1()))
     {
       // no connection between edges of different length (problem: not exacty same length...)
       out.println("Edges have different length!");

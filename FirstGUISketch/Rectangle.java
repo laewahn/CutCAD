@@ -7,7 +7,7 @@ import toxi.processing.*;
 
 import java.util.*;
 
-public class Rectangle extends Shapes implements Drawable2D, Drawable3D, Selectable
+public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectable
 {
   private int sizeX, sizeY;
   private GShape basic;

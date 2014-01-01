@@ -6,7 +6,7 @@ class Properties
 {
   private ArrayList<Controller> controllers;
   private Slider setSizeX, setSizeY, setThickness;
-  private Shapes currentlyPluggedTo;
+  private Shape currentlyPluggedTo;
   private int posX, posY, sizeX, sizeY;
   private boolean hidden;
 
@@ -41,7 +41,7 @@ class Properties
     controllers.add(setThickness);
   }
 
-  public void plugTo(Shapes s)
+  public void plugTo(Shape s)
   {
     if (this.currentlyPluggedTo != null)
     {
