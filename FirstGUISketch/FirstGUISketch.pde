@@ -40,7 +40,8 @@ Tool selectedTool;
 Tool tools[] = {
   new SelectTool(view2DRect, properties, shapes, transform2D),
   new DrawTool(view2DRect, properties, shapes, transform2D),
-  new ConnectTool(view2DRect, properties, shapes, connections, transform2D)
+  new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
+  new DeleteTool(view2DRect, properties, shapes, connections, transform2D)
 };
 
 Shapes previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
@@ -140,6 +141,9 @@ void createToolbar()
 
   PGraphics connectIcon = tools[2].getIcon(createGraphics(150, 50));
   toolbar.addCustomItem("Connect", 2, new ShapeButton(connectIcon));
+
+  PGraphics deleteIcon = tools[3].getIcon(createGraphics(150, 50));
+  toolbar.addCustomItem("Delete", 3, new ShapeButton(deleteIcon));
 }
 
 void createProperties()
@@ -213,6 +217,11 @@ void controlEvent(ControlEvent theEvent)
     {
         selectedTool = new ConnectTool(view2DRect, properties, shapes, connections, transform2D);
         properties.hide();
+    }
+    if (id == 3)
+    {
+        selectedTool = new DeleteTool(view2DRect, properties, shapes, connections, transform2D);
+        properties.hide();        
     }
   }
 }

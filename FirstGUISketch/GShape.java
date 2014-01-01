@@ -80,6 +80,11 @@ public class GShape
     return this.vertices.get(i);
   }
 
+  public Shapes getParent()
+  {
+    return this.shape;
+  }
+
   public int getThickness()
   {
     return this.thickness;
