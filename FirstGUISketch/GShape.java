@@ -14,15 +14,15 @@ public class GShape
   private int thickness;
   private Vec2D position2D;
   private Vec3D position3D;
-  private boolean isSeleceted, alignLocked, rotatedLocked;
+  private boolean isSelected, alignLocked, rotatedLocked;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
   private ArrayList<Tenon> tenons;
   private ArrayList<Vec3D> tenons3D;
-  private Shapes shape;
+  private Shape shape;
 
-  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, Vec3D p3D, int thickness, Shapes shape)
+  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, Vec3D p3D, int thickness, Shape shape)
   {
     vertices = initVertices;
     edges = new ArrayList<Edge>();
@@ -46,7 +46,7 @@ public class GShape
     this.position3D = p3D;
     this.thickness = thickness;
 
-    this.isSeleceted = false;
+    this.isSelected = false;
     this.shape = shape;
   }
 
@@ -80,7 +80,7 @@ public class GShape
     return this.vertices.get(i);
   }
 
-  public Shapes getParent()
+  public Shape getParent()
   {
     return this.shape;
   }
@@ -96,7 +96,7 @@ public class GShape
   }
 
   public boolean isSelected() {
-    return this.isSeleceted;
+    return this.isSelected;
   }
 
   public ArrayList<Edge> getEdges()
@@ -251,7 +251,7 @@ public class GShape
   }
 
   public void setSelected(boolean selected) {
-    this.isSeleceted = selected;
+    this.isSelected = selected;
   }
 
   public void setPosition2D(Vec2D position)

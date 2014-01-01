@@ -4,12 +4,12 @@ import java.util.*;
 
 class DeleteTool extends Tool {
     
-    List<Shapes> shapes;
+    List<Shape> shapes;
     List<Connection> connections;
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public DeleteTool(Rect view, Properties properties, List<Shapes> shapes, List<Connection> connections, Transformation2D transform) 
+    public DeleteTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform) 
     {
         super(view, properties, transform);
         
@@ -34,9 +34,9 @@ class DeleteTool extends Tool {
 
     public void mouseButtonPressed(Vec2D position, int button)
     {
-        Iterator<Shapes> shapeIterator = shapes.iterator();
+        Iterator<Shape> shapeIterator = shapes.iterator();
 
-        Shapes s;
+        Shape s;
         while(shapeIterator.hasNext())
         {
             s = shapeIterator.next();
@@ -61,7 +61,7 @@ class DeleteTool extends Tool {
         }
     }
 
-    private void removeConnectionsContaining(Shapes s)
+    private void removeConnectionsContaining(Shape s)
     {
         Iterator<Connection> connectionIterator = connections.iterator();
 
@@ -91,7 +91,7 @@ class DeleteTool extends Tool {
             Vec2D relativePosition = this.positionRelativeToView(position);
 
 
-            for (Shapes s : shapes) {
+            for (Shape s : shapes) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
             }
             for (Connection c : connections) {
@@ -100,7 +100,7 @@ class DeleteTool extends Tool {
         }
         else
         {
-            for (Shapes s : shapes) {
+            for (Shape s : shapes) {
                 s.getShape().setSelected(false);
             }
             for (Connection c : connections) {

@@ -1,4 +1,4 @@
-public abstract class Shapes
+public abstract class Shape
 {
   public abstract GShape getShape();
   public abstract void changeValue(int index, int value);
