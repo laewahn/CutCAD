@@ -11,7 +11,7 @@ class DeleteTool extends Tool {
     
     public DeleteTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform) 
     {
-        super(view, properties, transform);
+        super(view, properties, transform, "DeleteTool");
         
         this.shapes = shapes;
         this.connections = connections;
