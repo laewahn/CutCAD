@@ -36,7 +36,7 @@ class DrawTool extends Tool {
             
             this.startCoord = this.positionRelativeToView(position);
             
-            this.previewRectangle = new Rectangle(startCoord, new Vec2D(), 5);
+            this.previewRectangle = new Rectangle(startCoord.to3DXY(), 0,0);
         }
     }
 

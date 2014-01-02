@@ -22,33 +22,56 @@ public class GShape
   private ArrayList<Vec3D> tenons3D;
   private Shape shape;
 
-  public GShape(ArrayList<Vec2D> initVertices, Vec2D p2D, Vec3D p3D, int thickness, Shape shape)
+  public GShape(ArrayList<Vec2D> initVertices, Vec3D position, Shape shape)
   {
+    this.position2D = position.to2DXY();
+    this.position3D = position;
+    this.isSelected = false;
+    this.shape = shape;
+    this.isConnected = 0;
+    this.thickness = 5;
+    
     vertices = initVertices;
     edges = new ArrayList<Edge>();
     vertices3D = new ArrayList<Vec3D>();
-    for (int i = 0; i<vertices.size(); i++)
+    tenons = new ArrayList<Tenon>();
+    
+    for (Vec2D v : vertices)
     {
-      vertices3D.add(vertices.get(i).add(p2D).to3DXY());
+      vertices3D.add(v.to3DXY().add(position3D));
     }
     for (int i = 0; i<vertices.size(); i++) 
     {
       edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
     }
-
-    tenons = new ArrayList<Tenon>();
     for (Edge e : edges)
     {
       tenons.add(new Tenon(e));
+    }   
+  }
+  
+  public void recalculate(ArrayList <Vec2D> basicShape)
+  {
+    if(this.isConnected == 0)
+    {
+      vertices = basicShape;
+      edges.clear();
+      vertices3D.clear();
+      tenons.clear();
+      
+      for (Vec2D v : vertices)
+      {
+        vertices3D.add(v.add(position2D).to3DXY());
+      }
+      for (int i = 0; i<vertices.size(); i++) 
+      {
+        edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
+      }
+      for (Edge e : edges)
+      {
+        tenons.add(new Tenon(e));
+      }
     }
-
-    this.position2D = p2D;
-    this.position3D = p3D;
-    this.thickness = thickness;
-
-    this.isSelected = false;
-    this.shape = shape;
-    this.isConnected = 0;
   }
 
   public int getConnected() 
@@ -245,7 +268,10 @@ public class GShape
 
   public void setThickness(int thickness)
   {
-    this.thickness = thickness;
+    if(this.isConnected == 0)
+    {
+      this.thickness = thickness;
+    }
   }
 
   public void setSelected(boolean selected) {

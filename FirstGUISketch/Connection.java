@@ -104,6 +104,14 @@ public class Connection
     // Edges are not locked anymore
     lockConnection(false);
     // Maybe in the future, this should also rotate the 3D-Shape back to its original position
+    if(masterEdge.getShape().getConnected() == 0)
+    {
+      masterEdge.getShape().recalculate(masterEdge.getShape().getVertices());
+    }
+    if(slaveEdge.getShape().getConnected() == 0)
+    {
+      slaveEdge.getShape().recalculate(slaveEdge.getShape().getVertices());
+    }
   }
 
   public boolean connect()

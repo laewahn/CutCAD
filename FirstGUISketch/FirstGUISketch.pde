@@ -39,7 +39,7 @@ Vec3D cameraPosition;
 Tool selectedTool;
 Tool tools[];
 
-Shape previewRectangle = new Rectangle(50, 50, 0, 100, 100, 50);
+Shape previewRectangle = new Rectangle(new Vec3D(50,50,0), 100, 100);
 
 void setup()
 {
@@ -52,11 +52,12 @@ void setup()
   shapes = new ArrayList<Shape>();
   connections = new ArrayList<Connection>();
 
-  shapes.add(new Rectangle(50, 50, 0, 150, 100, 5));
-  shapes.add(new Rectangle(50, 200, 0, 150, 100, 5));
-  shapes.add(new Rectangle(400, 200, 0, 75, 100, 5));
-  shapes.add(new Rectangle(400, 50, 0, 75, 100, 5));
-  shapes.add(new Rectangle(250, 250, 0, 75, 150, 5));
+//Just for testing: add some shapes
+  shapes.add(new Rectangle(new Vec3D(50, 50, 0), 150, 100));
+  shapes.add(new Rectangle(new Vec3D(50, 200, 0), 150, 100));
+  shapes.add(new Rectangle(new Vec3D(400, 200, 0), 75, 100));
+  shapes.add(new Rectangle(new Vec3D(400, 50, 0), 75, 100));
+  shapes.add(new Rectangle(new Vec3D(250, 250, 0), 75, 150));
 
 
   cp5 = new ControlP5(this);

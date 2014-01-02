@@ -47,11 +47,11 @@ class Properties
     {
       setSizeX.unplugFrom(this.currentlyPluggedTo);
       setSizeY.unplugFrom(this.currentlyPluggedTo);
-      setThickness.unplugFrom(this.currentlyPluggedTo);
+      setThickness.unplugFrom(this.currentlyPluggedTo.getShape());
     }
     setSizeX.plugTo(s).setValue(s.getValue(0));
     setSizeY.plugTo(s).setValue(s.getValue(1));
-    setThickness.plugTo(s).setValue(s.getShape().getThickness());
+    setThickness.plugTo(s.getShape()).setValue(s.getShape().getThickness());
 
     this.currentlyPluggedTo = s;
   }
