@@ -11,10 +11,10 @@ import static java.lang.System.*;
 
 public class GShape
 {
-  private int thickness;
+  private int thickness, isConnected;
   private Vec2D position2D;
   private Vec3D position3D;
-  private boolean isSelected, alignLocked, rotatedLocked;
+  private boolean isSelected;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
@@ -48,26 +48,24 @@ public class GShape
 
     this.isSelected = false;
     this.shape = shape;
+    this.isConnected = 0;
   }
 
-  public boolean isAlignLocked() 
+  public int getConnected() 
   {
-    return this.alignLocked;
+    return this.isConnected;
   }
 
-  public boolean isRotatedLocked() 
+  public void setConnected(boolean connected)
   {
-    return this.rotatedLocked;
-  }
-
-  public void setAlignLocked(boolean locked)
-  {
-    this.alignLocked = locked;
-  }
-
-  public void setRotatedLocked(boolean locked)
-  {
-    this.rotatedLocked = locked;
+    if (connected)
+    {
+      this.isConnected = this.isConnected+1;
+    }
+    else
+    {
+      this.isConnected = this.isConnected-1;
+    }
   }
 
   public void setVector3D(int i, Vec3D v)

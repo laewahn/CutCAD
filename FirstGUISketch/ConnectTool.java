@@ -53,8 +53,10 @@ class ConnectTool extends Tool
                     else
                     {
                         this.previewConnection.setSlaveEdge(e);
-                        this.previewConnection.connect();
-                        this.connections.add(this.previewConnection);
+                        if(this.previewConnection.connect()) 
+                        {
+                            this.connections.add(this.previewConnection);
+                        }
                         // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
                         this.previewConnection = null;
                         selectedFirst = false;

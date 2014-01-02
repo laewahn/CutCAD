@@ -12,7 +12,6 @@ public class Connection
 {
   private Edge masterEdge, slaveEdge;
   private Tenon tenon;
-  private boolean connected;
   private boolean isSelected;
 
   public Connection()
@@ -24,7 +23,6 @@ public class Connection
   {
     this.masterEdge = masterEdge;
     this.slaveEdge = slaveEdge;
-    this.connected = false;
     this.isSelected = false;
   }
 
@@ -50,20 +48,18 @@ public class Connection
 
   public void drawConnection(PGraphics p)
   {
-    if (connected) {
-      Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
-      Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
-      if (this.isSelected)
-      {
-        p.stroke(255, 0, 0);
-      }
-      else
-      {
-        p.stroke(150, 0, 0);
-      }
-      p.line(mid1.x(), mid1.y(), mid2.x(), mid2.y());
-      p.stroke(0);
+    Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
+    Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
+    if (this.isSelected)
+    {
+      p.stroke(255, 0, 0);
     }
+    else
+    {
+      p.stroke(60, 60, 60);
+    }
+    p.line(mid1.x(), mid1.y(), mid2.x(), mid2.y());
+    p.stroke(0);
   }
 
   public void setSelected(boolean b)
@@ -102,102 +98,87 @@ public class Connection
 
   public void undoConnection()
   {
-    // TODO: This should remove the tenons from the edges. 
+    // remove Tenons
+    masterEdge.getShape().setTenon(masterEdge, new Tenon(masterEdge));
+    slaveEdge.getShape().setTenon(slaveEdge, new Tenon(slaveEdge));
+    // Edges are not locked anymore
+    lockConnection(false);
     // Maybe in the future, this should also rotate the 3D-Shape back to its original position
   }
 
-  public void connect()
+  public boolean connect()
   {
     if (masterEdge.getShape() == slaveEdge.getShape())
     {
       // no connection allowed between two sides of the same shape
       // (until we use flexible materals :-)
       out.println("Do not connect two sides of the same shape!");
+      return false;
     }
     else if (masterEdge.isLocked() || slaveEdge.isLocked())
     {
       // do not connect edges which already have a connection
       out.println("At least one edge is already connected!");
+      return false;
     }
     else if (masterEdge.getV2().distanceTo(masterEdge.getV1()) != slaveEdge.getV2().distanceTo(slaveEdge.getV1()))
     {
       // no connection between edges of different length (problem: not exacty same length...)
       out.println("Edges have different length!");
+      return false;
     }
-    else if (!slaveEdge.getShape().isAlignLocked())
+    else if (slaveEdge.getShape().getConnected() == 0)
     {
-      // align & rotate slave, makeTennons
       connectAlign(masterEdge, slaveEdge);
       connectRotate(masterEdge, slaveEdge, (float) Math.toRadians(-90.0));
       createTenons(masterEdge, slaveEdge);
-
-      lockAlign();
-      lockRotated();
-      lockEdge();
+      lockConnection(true);
+      return true;
+      
     }
-    else if (!masterEdge.getShape().isAlignLocked())
+    else if (masterEdge.getShape().getConnected() == 0)
     {
-      // align & rotate master, makeTennons
       connectAlign(slaveEdge, masterEdge);
       connectRotate(slaveEdge, masterEdge, (float) Math.toRadians(-90.0));
       createTenons(masterEdge, slaveEdge);
-
-      lockAlign();
-      lockRotated();
-      lockEdge();
+      lockConnection(true);
+      return true;
     }
-    else if (!slaveEdge.getShape().isRotatedLocked())
+    else if (isEqualEdge(masterEdge, slaveEdge))
     {
-      // rotate slave, makeTennons
+      createTenons(masterEdge, slaveEdge); // tenons are symmetric, the different orientation didn't do something wrong (at least i hope so)
+      lockConnection(true);
+      return true;
+    }
+    
+    // if only one conenction between two shapes exists, we might rotate around this axis
+    if (slaveEdge.getShape().getConnected() == 1 && isEqualEdge(masterEdge, slaveEdge))
+    {
       connectRotate(masterEdge, slaveEdge, (float) Math.toRadians(-90.0));
       createTenons(masterEdge, slaveEdge);
-
-      lockRotated();
-      lockEdge();
     }
-    else if (!masterEdge.getShape().isRotatedLocked())
+    else if (masterEdge.getShape().getConnected() == 1 && isEqualEdge(masterEdge, slaveEdge))
     {
-      // rotate master, makeTennons
       connectRotate(slaveEdge, masterEdge, (float) Math.toRadians(-90.0));
       createTenons(masterEdge, slaveEdge);
-
-      lockRotated();
-      lockEdge();
     }
-    else if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), 0.01f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 0.01f))
-    {
-      // makeTennons
-      createTenons(masterEdge, slaveEdge);
-      lockEdge();
-    }
-    else if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), 0.01f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 0.01f))
-    {
-      // makeTennons
-      createTenons(masterEdge, slaveEdge); //tenons are symmetric, the different orientation didn't do something wrong (at least i hope so)
-      lockEdge();
-    } 
-    else {
-      // do nothing, if we haven't forgotten anything
-    }
+    
+    return false;
+  }
+  
+  private boolean isEqualEdge(Edge masterEdge, Edge slaveEdge)
+  {
+    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), 0.01f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 0.01f)) return true;
+    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), 0.01f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 0.01f)) return true;
+    return false;
   }
 
-  private void lockAlign()
+  private void lockConnection(boolean locked)
   {
-    slaveEdge.getShape().setAlignLocked(true);
-    masterEdge.getShape().setAlignLocked(true);
-  }
-
-  private void lockRotated()
-  {
-    slaveEdge.getShape().setRotatedLocked(true);
-    masterEdge.getShape().setRotatedLocked(true);
-  }
-
-  private void lockEdge()
-  {
-    slaveEdge.setLocked(true);
-    masterEdge.setLocked(true);
-    this.connected = true;
+    slaveEdge.getShape().setConnected(locked);
+    masterEdge.getShape().setConnected(locked);
+    slaveEdge.setLocked(locked);
+    masterEdge.setLocked(locked);
   }
 
   private void connectAlign(Edge masterEdge, Edge slaveEdge) {
@@ -210,10 +191,17 @@ public class Connection
 
     slave.translate3D(toOrigin);
 
-    alignShapes(master, slave, masterEdge, slaveEdge);
+    alignShapes(master, slave, masterEdge, slaveEdge);  
+    // Might be necessary for independent rotate/align?
+    Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
+    slave.translate3D(toMaster);
   }
 
   private void connectRotate(Edge masterEdge, Edge slaveEdge, float angle) {
+    // Might be necessary for independent rotate/align?
+    Vec3D toOrigin = slaveEdge.getP3D1().scale(-1);
+    slaveEdge.getShape().translate3D(toOrigin);
+    
     GShape slave = slaveEdge.getShape();
     // rotate the slave by the specified angle (currently hardcoded 90 degrees)
     Vec3D rotationAxis = slaveEdge.getP3D2().getNormalized();
