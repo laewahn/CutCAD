@@ -11,7 +11,6 @@ import static java.lang.System.*;
 public class Connection 
 {
   private Edge masterEdge, slaveEdge;
-  private Tenon tenon;
   private boolean isSelected;
 
   public Connection()
@@ -91,16 +90,14 @@ public class Connection
     Polygon2D borders = new Polygon2D(definingPoints);
 
     // check if the mousePointer is within the created rectangle
-    // Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
-    // return borders.containsPoint(mousePointer);
     return borders.containsPoint(position);
   }
 
   public void undoConnection()
   {
     // remove Tenons
-    masterEdge.getShape().setTenon(masterEdge, new Tenon(masterEdge));
-    slaveEdge.getShape().setTenon(slaveEdge, new Tenon(slaveEdge));
+    new Tenon(masterEdge);
+    new Tenon(slaveEdge);
     // Edges are not locked anymore
     lockConnection(false);
     // Maybe in the future, this should also rotate the 3D-Shape back to its original position
@@ -139,7 +136,7 @@ public class Connection
     {
       connectAlign(masterEdge, slaveEdge);
       connectRotate(masterEdge, slaveEdge, (float) Math.toRadians(-90.0));
-      createTenons(masterEdge, slaveEdge);
+      new Tenon(masterEdge, slaveEdge);
       lockConnection(true);
       return true;
       
@@ -148,13 +145,13 @@ public class Connection
     {
       connectAlign(slaveEdge, masterEdge);
       connectRotate(slaveEdge, masterEdge, (float) Math.toRadians(-90.0));
-      createTenons(masterEdge, slaveEdge);
+      new Tenon(masterEdge, slaveEdge);
       lockConnection(true);
       return true;
     }
     else if (isEqualEdge(masterEdge, slaveEdge))
     {
-      createTenons(masterEdge, slaveEdge); // tenons are symmetric, the different orientation didn't do something wrong (at least i hope so)
+      new Tenon(masterEdge, slaveEdge); // tenons are symmetric, the different orientation didn't do something wrong (at least i hope so)
       lockConnection(true);
       return true;
     }
@@ -163,12 +160,12 @@ public class Connection
     if (slaveEdge.getShape().getConnected() == 1 && isEqualEdge(masterEdge, slaveEdge))
     {
       connectRotate(masterEdge, slaveEdge, (float) Math.toRadians(-90.0));
-      createTenons(masterEdge, slaveEdge);
+      new Tenon(masterEdge, slaveEdge);
     }
     else if (masterEdge.getShape().getConnected() == 1 && isEqualEdge(masterEdge, slaveEdge))
     {
       connectRotate(slaveEdge, masterEdge, (float) Math.toRadians(-90.0));
-      createTenons(masterEdge, slaveEdge);
+      new Tenon(masterEdge, slaveEdge);
     }
     
     return false;
@@ -220,9 +217,7 @@ public class Connection
   }
 
   private void createTenons(Edge masterEdge, Edge slaveEdge) {
-    this.tenon = new Tenon(masterEdge, slaveEdge, (float)Math.PI/2, true, true);
-    masterEdge.getShape().setTenon(masterEdge, tenon);
-    slaveEdge.getShape().setTenon(slaveEdge, tenon);
+    Tenon tenon = new Tenon(masterEdge, slaveEdge);
   }
 
   private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)

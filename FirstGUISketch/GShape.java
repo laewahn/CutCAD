@@ -13,19 +13,15 @@ public class GShape
 {
   private int thickness, isConnected;
   private Vec2D position2D;
-  private Vec3D position3D;
   private boolean isSelected;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
-  private ArrayList<Tenon> tenons;
-  private ArrayList<Vec3D> tenons3D;
   private Shape shape;
 
   public GShape(ArrayList<Vec2D> initVertices, Vec3D position, Shape shape)
   {
     this.position2D = position.to2DXY();
-    this.position3D = position;
     this.isSelected = false;
     this.shape = shape;
     this.isConnected = 0;
@@ -34,20 +30,15 @@ public class GShape
     vertices = initVertices;
     edges = new ArrayList<Edge>();
     vertices3D = new ArrayList<Vec3D>();
-    tenons = new ArrayList<Tenon>();
     
     for (Vec2D v : vertices)
     {
-      vertices3D.add(v.to3DXY().add(position3D));
+      vertices3D.add(v.add(position2D).to3DXY());
     }
     for (int i = 0; i<vertices.size(); i++) 
     {
       edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
     }
-    for (Edge e : edges)
-    {
-      tenons.add(new Tenon(e));
-    }   
   }
   
   public void recalculate(ArrayList <Vec2D> basicShape)
@@ -57,7 +48,6 @@ public class GShape
       vertices = basicShape;
       edges.clear();
       vertices3D.clear();
-      tenons.clear();
       
       for (Vec2D v : vertices)
       {
@@ -66,10 +56,6 @@ public class GShape
       for (int i = 0; i<vertices.size(); i++) 
       {
         edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
-      }
-      for (Edge e : edges)
-      {
-        tenons.add(new Tenon(e));
       }
     }
   }
@@ -91,15 +77,15 @@ public class GShape
     }
   }
 
-  public void setVector3D(int i, Vec3D v)
-  {
-    this.vertices3D.get(i).set(v);
-  }
+  // public void setVector3D(int i, Vec3D v)
+  // {
+  //   this.vertices3D.get(i).set(v);
+  // }
   
-  public Vec2D getVector(int i) 
-  {
-    return this.vertices.get(i);
-  }
+  // public Vec2D getVector(int i) 
+  // {
+  //   return this.vertices.get(i);
+  // }
 
   public Shape getParent()
   {
@@ -111,10 +97,10 @@ public class GShape
     return this.thickness;
   }
 
-  public void setVector(int i, Vec2D v) 
-  {
-    this.vertices.set(i, v);
-  }
+  // public void setVector(int i, Vec2D v) 
+  // {
+  //   this.vertices.set(i, v);
+  // }
 
   public boolean isSelected() {
     return this.isSelected;
@@ -130,44 +116,44 @@ public class GShape
     return this.vertices;
   }
 
-  public void correctIntersections ()
+  private Vec2D correctIntersection(Edge edge)
   {
-    for (int i=0; i<tenons.size(); i++) 
-    {
-      Line2D test1 = tenons.get((i+1)%(tenons.size())).getStartLine(this).toRay2D().toLine2DWithPointAtDistance(10000);
-      Line2D test2 = tenons.get(i).getEndLine(this).toRay2D().toLine2DWithPointAtDistance(10000);
-      if (String.valueOf(test1.intersectLine(test2).getType()).equals("INTERSECTING")) 
-      {
-        Vec2D intersection = test1.intersectLine(test2).getPos();
-        tenons.get((i+1)%(tenons.size())).correctStartEdge(this, intersection);
-        tenons.get(i).correctEndEdge(this, intersection);
-      }
-    }
-  }
+    int index = edges.indexOf(edge);
 
-  public void setTenon(Edge edge, Tenon tenon) 
-  {
-    int i = edges.indexOf(edge);
-    tenons.set(i, tenon);
+    index = (index == 0) ? edges.size()-1 : index-1;
+
+    Edge edge1 = edges.get(index);
+    Edge edge2 = edge;
+
+    Vec2D firstVectorOfEdge1 = edge1.getTenons().get(0);
+    Vec2D secondVectorOfEdge1 = edge1.getTenons().get(1);
+    Vec2D firstVectorOfEdge2 = edge2.getTenons().get(1);
+    Vec2D secondVectorOfEdge2 = edge2.getTenons().get(0);
+
+    Line2D firstTenonOfEdge1 = new Line2D(firstVectorOfEdge1, secondVectorOfEdge1);
+    firstTenonOfEdge1 = firstTenonOfEdge1.toRay2D().toLine2DWithPointAtDistance(10000);
+    Line2D firstTenonOfEdge2 = new Line2D(firstVectorOfEdge2, secondVectorOfEdge2);
+    firstTenonOfEdge2 = firstTenonOfEdge2.toRay2D().toLine2DWithPointAtDistance(10000);
+
+    if (String.valueOf(firstTenonOfEdge1.intersectLine(firstTenonOfEdge2).getType()).equals("INTERSECTING")) 
+    {
+      return firstTenonOfEdge1.intersectLine(firstTenonOfEdge2).getPos();
+    }
+    return firstVectorOfEdge2;
   }
 
   public ArrayList<Vec2D> getTenons()
-  {      
-    for (int i=0; i<tenons.size(); i++)
-    {
-      Tenon t = tenons.get(i);
-      if (t.isIndependant()) {
-        tenons.set(i, new Tenon(edges.get(i)));
-      }
-    }
-    correctIntersections ();
+  {
     ArrayList<Vec2D> allVectors = new ArrayList<Vec2D>();
-    for (Tenon t : tenons) 
+    for (Edge e : edges)
     {
-      for (int i=0; i<t.getVectors(this).size(); i++)
+      
+      allVectors.add(correctIntersection(e));
+      for(int i=1; i<e.getTenons().size()-1; i++)
       {
-        allVectors.add(t.getVectors(this).get(i));
+        allVectors.add(e.getTenons().get(i));
       }
+      
     }
     return allVectors;
   }
@@ -253,17 +239,12 @@ public class GShape
         return normal.cross(v2.sub(v1)).invert().add(v1).normalize();
       }
     }
-    return new Vec3D (0, 0, 0);
+    return new Vec3D (0, 0, 1);
   }
 
   public Vec2D getPosition2D()
   {
     return this.position2D;
-  }
-
-  public Vec3D getPosition3D()
-  {
-    return this.position3D;
   }
 
   public void setThickness(int thickness)
@@ -281,11 +262,6 @@ public class GShape
   public void setPosition2D(Vec2D position)
   {
     this.position2D = position;
-  }
-
-  public void setPosition3D(Vec3D position)
-  {
-    this.position3D = position;
   }
 
   public void translate2D(Vec2D direction)
@@ -314,6 +290,7 @@ public class GShape
     return edges.get(0).getP3D1().sub(edges.get(0).getP3D2()).cross(edges.get(1).getP3D1().sub(edges.get(1).getP3D2())).getNormalized();
   }
 
+  // Just to display the basic shape in a certain areal (e.g. within a button):
   public ArrayList<Vec2D> getResized (int sizeX, int sizeY) 
   {
     int minX = Integer.MAX_VALUE;
@@ -344,6 +321,7 @@ public class GShape
   public void draw2D(PGraphics p) 
   {
     this.createCover2D(p, getTenons(), position2D);
+
     for (Edge e: edges) //not good... but i've no better idea
     {
       e.drawBox(p);
@@ -361,10 +339,6 @@ public class GShape
     }
     p.endShape(PConstants.CLOSE);
     */
-    for (Edge e: edges) //not good... but i've no better idea...still no better version
-    {
-      e.drawBox3D(p);
-    }
 
     this.setFillColor(p);
     ArrayList<Vec3D> top = getTenons3D(true);
@@ -395,9 +369,28 @@ public class GShape
       p.vertex(bottom.get(i).x(), bottom.get(i).y(), bottom.get(i).z());
       p.endShape(PConstants.CLOSE);
     }
+
+    for (Edge e: edges) //not good... but i've no better idea...still no better version
+    {
+      e.drawBox3D(p);
+    }
   }
 
-  private void setFillColor(PGraphics p) {
+  private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors, Vec2D position)
+  {
+    this.setFillColor(p);
+    p.beginShape();
+    for (Vec2D vector : getTenons()) {
+      p.vertex(vector.x()+getPosition2D().x(), vector.y()+getPosition2D().y());
+    }
+    p.beginContour();
+    //ToDo: add additional figures for cut-outs
+    p.endContour();
+    p.endShape(PConstants.CLOSE);
+  }
+
+  private void setFillColor(PGraphics p) 
+  {
     //Todo color dependent on material...
     if (this.isSelected()) {
       p.fill(255, 0, 0);
@@ -405,19 +398,6 @@ public class GShape
     else {
       p.fill(255);
     }
-  }
-
-  private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors, Vec2D position) 
-  {
-    this.setFillColor(p);
-    p.beginShape();
-    for (Vec2D vector : vectors) {
-      p.vertex(vector.x()+position.x(), vector.y()+position.y());
-    }
-    p.beginContour();
-    //ToDo: add additional figures for cut-outs
-    p.endContour();
-    p.endShape(PConstants.CLOSE);
   }
 
   public boolean mouseOver(Vec2D mousePosition)

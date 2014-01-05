@@ -53,6 +53,8 @@ void setup()
   connections = new ArrayList<Connection>();
 
 //Just for testing: add some shapes
+  // shapes.add(new Rectangle(new Vec3D(50, 50, 0), 300, 300));
+  // shapes.add(new Rectangle(new Vec3D(450, 200, 0), 300, 300));
   shapes.add(new Rectangle(new Vec3D(50, 50, 0), 150, 100));
   shapes.add(new Rectangle(new Vec3D(50, 200, 0), 150, 100));
   shapes.add(new Rectangle(new Vec3D(400, 200, 0), 75, 100));

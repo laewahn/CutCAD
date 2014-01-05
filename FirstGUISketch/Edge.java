@@ -5,22 +5,28 @@ import toxi.geom.mesh.*;
 import toxi.geom.mesh.subdiv.*;
 import toxi.processing.*;
 import java.util.*;
+import static java.lang.System.*;
 
 class Edge
 {
-  private GShape parent;
-  private Vec3D p3D1, p3D2;
-  private Vec2D v1, v2;
-  private boolean isSelected, isLocked;
-  ArrayList<Vec2D> definingPoints; // there should be a better finalsolution???
+  private GShape shape; //know parent
 
-  public Edge(GShape parent, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2)
+  private Vec3D p3D1, p3D2; // 3D logic
+  private Vec2D v1, v2; // 2D logic
+  private ArrayList<Vec2D> tenons; // 2D representation
+
+  private boolean isSelected, isLocked;
+  ArrayList<Vec2D> definingPoints; // highlighting areal for selecting an edge
+
+
+  public Edge(GShape shape, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2)
   {
-    this.parent = parent;
+    this.shape = shape;
     this.p3D1 = p3D1;
     this.p3D2 = p3D2;
     this.v1 = v1;
     this.v2 = v2;
+    new Tenon(this);
     this.isSelected = false;
   }
 
@@ -28,15 +34,10 @@ class Edge
   {
     return isLocked;
   }
-
-  public void setLocked(boolean locked)
-  {
-    this.isLocked = locked;
-  }
   
   public GShape getShape()
   {
-    return parent;
+    return shape;
   }
 
   public boolean isSelected()
@@ -69,6 +70,16 @@ class Edge
     return p3D2;
   }
 
+  public ArrayList<Vec2D> getTenons()
+  {
+    return tenons;
+  }
+
+  public void setLocked(boolean locked)
+  {
+    this.isLocked = locked;
+  }
+
   public void setP3D1(Vec3D v)
   {
     this.p3D1 = v;
@@ -87,6 +98,11 @@ class Edge
   public void setV2(Vec2D v)
   {
     this.getV2().set(v);
+  }
+
+  public void setTenons(ArrayList<Vec2D> tenons)
+  {
+    this.tenons = tenons;
   }
 
   public void drawBox(PGraphics p)
@@ -112,7 +128,7 @@ class Edge
   {
     if (this.isSelected())
     {
-      Vec3D offset = this.parent.getNormalVector().normalizeTo(this.parent.getThickness()/2+4);
+      Vec3D offset = this.getShape().getNormalVector().normalizeTo(this.getShape().getThickness()/2+4);
       p.stroke(255, 0, 0);
       p.noFill();
       p.strokeWeight(2);
@@ -143,7 +159,7 @@ class Edge
   public boolean mouseOver(Vec2D position)
   {
     // create a vector that is perpendicular to the edge
-    Vec2D perpendicularVector = this.getV2().sub(this.getV1()).perpendicular().getNormalized();
+    Vec2D perpendicularVector = this.getV2().sub(this.getV1()).perpendicular();
 
     // with the perpendicular vector, calculate the defining points of a rectangle around the edge
     definingPoints = new ArrayList<Vec2D>();
@@ -156,14 +172,12 @@ class Edge
     Polygon2D borders = new Polygon2D(definingPoints);
 
     // check if the mousePointer is within the created rectangle
-    // Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
-    // return borders.containsPoint(mousePointer);
-    return borders.containsPoint(position.sub(this.parent.getPosition2D()));
+    return borders.containsPoint(position.sub(this.shape.getPosition2D()));
   }
 
   public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
   {
-    Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-parent.getPosition2D().x(), mouseY-view2DPosY-parent.getPosition2D().y());
+    Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-shape.getPosition2D().x(), mouseY-view2DPosY-shape.getPosition2D().y());
     return this.mouseOver(mousePointer);
   }
 }
