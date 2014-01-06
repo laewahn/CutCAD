@@ -1,0 +1,67 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Acrylic</identity>
+	<thickness value="40">
+		<cut>
+			<speed>100</speed>
+    		<power>15</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="50">
+		<cut>
+			<speed>100</speed>
+    		<power>19</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="75">
+		<cut>
+			<speed>100</speed>
+    		<power>50</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="100">
+		<cut>
+			<speed>100</speed>
+    		<power>70</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="150">
+		<cut>
+			<speed>100</speed>
+    		<power>80</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="200">
+		<cut>
+			<speed>40</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="400">
+		<cut>
+			<speed>30</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="500">
+		<cut>
+			<speed>20</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

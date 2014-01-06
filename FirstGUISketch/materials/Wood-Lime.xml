@@ -1,0 +1,27 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Wood-Lime</identity>
+	<thickness value="100">
+		<cut>
+			<speed>100</speed>
+    		<power>50</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="300">
+		<cut>
+			<speed>53</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="600">
+		<cut>
+			<speed>32</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

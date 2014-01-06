@@ -15,6 +15,7 @@ ToxiclibsSupport gfx;
 PGraphics view2D, view3D;
 ArrayList<Shape> shapes;
 ArrayList<Connection> connections;
+ArrayList<Material> materials;
 
 int startX = 0;
 int startY = 0;
@@ -51,6 +52,40 @@ void setup()
 
   shapes = new ArrayList<Shape>();
   connections = new ArrayList<Connection>();
+
+  materials= new ArrayList<Material>();
+
+  // XML listOfMaterials = loadXML("Material.xml");
+  // XML[] materials = listOfMaterials.getChildren("material");
+
+  File[] files= new File(sketchPath("") + "/materials").listFiles();
+
+  for(int i=1; i<files.length; i++) 
+  {
+    XML material = loadXML(sketchPath("") + "/materials/" + files[i].getName());
+
+    XML identity = material.getChild("identity");
+    String      name = identity.getContent();
+    
+    int     redColor = identity.getInt("red");
+    int    blueColor = identity.getInt("green");
+    int   greenColor = identity.getInt("blue");
+    int alphaChannel = identity.getInt("alpha");
+    color materialColor = color(redColor, blueColor, greenColor, alphaChannel);
+
+    XML[] differentThickness = material.getChildren("thickness");
+
+    for (int j=0; j<differentThickness.length; j++)
+    {
+      int thickness = (int)(differentThickness[j].getInt("value")/10);
+      int     power = differentThickness[j].getChild("cut").getChild("power").getIntContent();
+      int     speed = differentThickness[j].getChild("cut").getChild("speed").getIntContent();
+      int     focus = differentThickness[j].getChild("cut").getChild("focus").getIntContent();
+      int frequency = differentThickness[j].getChild("cut").getChild("frequency").getIntContent();
+
+      materials.add(new Material(name, thickness, materialColor, power, speed, focus, frequency));
+    }
+  }
 
 //Just for testing: add some shapes
   // shapes.add(new Rectangle(new Vec3D(50, 50, 0), 300, 300));

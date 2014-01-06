@@ -1,0 +1,19 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Wood-Poplar</identity>
+	<thickness value="400">
+		<cut>
+			<speed>42</speed>
+    		<power>100</power>
+    		<frequency>2500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="600">
+		<cut>
+			<speed>30</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

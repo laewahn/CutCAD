@@ -1,0 +1,19 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Latex</identity>
+	<thickness value="6">
+		<cut>
+			<speed>25</speed>
+    		<power>2</power>
+    		<frequency>30</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="35">
+		<cut>
+			<speed>13</speed>
+    		<power>2</power>
+    		<frequency>30</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

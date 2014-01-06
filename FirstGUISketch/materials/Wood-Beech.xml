@@ -1,0 +1,11 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Wood-Beech</identity>
+	<thickness value="80">
+		<cut>
+			<speed>100</speed>
+    		<power>70</power>
+    		<frequency>2500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

@@ -1,0 +1,11 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Wood-Cherry</identity>
+	<thickness value="60">
+		<cut>
+			<speed>100</speed>
+    		<power>50</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

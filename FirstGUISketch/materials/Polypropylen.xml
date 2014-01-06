@@ -1,0 +1,19 @@
+<material>
+	<identity red="255" green="0" blue="0" alpha="255">Polypropylen</identity>
+	<thickness value="50">
+		<cut>
+			<speed>30</speed>
+    		<power>10</power>
+    		<frequency>500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="90">
+		<cut>
+			<speed>60</speed>
+    		<power>45</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

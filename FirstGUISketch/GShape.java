@@ -11,21 +11,23 @@ import static java.lang.System.*;
 
 public class GShape
 {
-  private int thickness, isConnected;
+  private int thickness, numberOfConnections;
   private Vec2D position2D;
   private boolean isSelected;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
   private Shape shape;
+  private Material material; //change to int (position arraylist)
 
   public GShape(ArrayList<Vec2D> initVertices, Vec3D position, Shape shape)
   {
     this.position2D = position.to2DXY();
     this.isSelected = false;
     this.shape = shape;
-    this.isConnected = 0;
+    this.numberOfConnections = 0;
     this.thickness = 5;
+    // this.material = 0; //??????
     
     vertices = initVertices;
     edges = new ArrayList<Edge>();
@@ -43,7 +45,7 @@ public class GShape
   
   public void recalculate(ArrayList <Vec2D> basicShape)
   {
-    if(this.isConnected == 0)
+    if(this.numberOfConnections == 0)
     {
       vertices = basicShape;
       edges.clear();
@@ -60,32 +62,15 @@ public class GShape
     }
   }
 
-  public int getConnected() 
+  public int getNumberOfConnections() 
   {
-    return this.isConnected;
+    return this.numberOfConnections;
   }
 
-  public void setConnected(boolean connected)
+  public void addNumberOfConnections(int connections)
   {
-    if (connected)
-    {
-      this.isConnected = this.isConnected+1;
-    }
-    else
-    {
-      this.isConnected = this.isConnected-1;
-    }
+    this.numberOfConnections = this.numberOfConnections+connections;
   }
-
-  // public void setVector3D(int i, Vec3D v)
-  // {
-  //   this.vertices3D.get(i).set(v);
-  // }
-  
-  // public Vec2D getVector(int i) 
-  // {
-  //   return this.vertices.get(i);
-  // }
 
   public Shape getParent()
   {
@@ -97,10 +82,10 @@ public class GShape
     return this.thickness;
   }
 
-  // public void setVector(int i, Vec2D v) 
-  // {
-  //   this.vertices.set(i, v);
-  // }
+  public Material getMaterial()
+  {
+    return this.material;
+  }
 
   public boolean isSelected() {
     return this.isSelected;
@@ -249,10 +234,15 @@ public class GShape
 
   public void setThickness(int thickness)
   {
-    if(this.isConnected == 0)
+    if(this.getNumberOfConnections() == 0)
     {
       this.thickness = thickness;
     }
+  }
+
+  public void setMaterial(Material material)
+  {
+    this.material = material;
   }
 
   public void setSelected(boolean selected) {
@@ -369,6 +359,12 @@ public class GShape
       p.vertex(bottom.get(i).x(), bottom.get(i).y(), bottom.get(i).z());
       p.endShape(PConstants.CLOSE);
     }
+    p.beginShape();
+    p.vertex(top.get(top.size()-1).x(), top.get(top.size()-1).y(), top.get(top.size()-1).z());
+    p.vertex(top.get(0).x(), top.get(0).y(), top.get(0).z());
+    p.vertex(bottom.get(0).x(), bottom.get(0).y(), bottom.get(0).z());
+    p.vertex(bottom.get(top.size()-1).x(), bottom.get(top.size()-1).y(), bottom.get(top.size()-1).z());
+    p.endShape(PConstants.CLOSE);
 
     for (Edge e: edges) //not good... but i've no better idea...still no better version
     {
@@ -393,10 +389,10 @@ public class GShape
   {
     //Todo color dependent on material...
     if (this.isSelected()) {
-      p.fill(255, 0, 0);
+      p.fill(255, 0, 0, 255);
     } 
     else {
-      p.fill(255);
+      p.fill(255, 255);
     }
   }
 

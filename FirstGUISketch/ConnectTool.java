@@ -46,7 +46,7 @@ class ConnectTool extends Tool
                 {
                     if (!selectedFirst)
                     {
-                        this.previewConnection = new Connection();
+                        this.previewConnection = new Connection(connections);
                         this.previewConnection.setMasterEdge(e);
                         selectedFirst = true;                        
                     }
