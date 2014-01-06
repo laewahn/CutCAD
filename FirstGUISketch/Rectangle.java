@@ -70,6 +70,11 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
     this.setSizeX((int)newSize.x());
     this.setSizeY((int)newSize.y());
   }
+  
+  public void setShape(GShape shape)
+  {
+    this.basic = shape;
+  }
 
   public GShape getShape()
   {

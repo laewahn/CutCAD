@@ -3,6 +3,13 @@ import toxi.geom.mesh.*;
 import toxi.geom.mesh.subdiv.*;
 import toxi.processing.*;
 
+import com.t_oster.liblasercut.dithering.*;
+import com.t_oster.liblasercut.vectoroptimizers.*;
+import com.t_oster.liblasercut.utils.*;
+import com.t_oster.liblasercut.drivers.*;
+import com.t_oster.liblasercut.laserscript.*;
+import com.t_oster.liblasercut.platform.*;
+
 import controlP5.*;
 
 import java.util.*;
@@ -142,6 +149,14 @@ void createToolbar()
     PGraphics toolIcon = theTool.getIcon(createGraphics(150, 50));
     toolbar.addCustomItem(theTool.getName(), i, new ShapeButton(toolIcon));
   }
+  
+  PGraphics printIcon = createGraphics(150, 50);
+  printIcon.beginDraw();
+  printIcon.textSize(30.0);
+  printIcon.text("print",40,33);
+  printIcon.endDraw();
+  toolbar.addCustomItem("Print", 4, new ShapeButton(printIcon));
+  
 }
 
 void createProperties()
@@ -198,7 +213,10 @@ void controlEvent(ControlEvent theEvent)
   if (theEvent.isGroup() && theEvent.isFrom("Toolbar"))
   {
     int id = (int)theEvent.group().value();
-    selectedTool = tools[id];
+    if(id != 4)
+    {
+      selectedTool = tools[id];
+    }
     
     if (!selectedTool.getName().equals("SelectTool")){
       properties.hide();
@@ -207,6 +225,10 @@ void controlEvent(ControlEvent theEvent)
     {
         selectedTool = new DeleteTool(view2DRect, properties, shapes, connections, transform2D);
         properties.hide();        
+    }
+    if(id == 4)
+    {
+      PrintDialog printDialog = new PrintDialog(shapes); 
     }
   }
 }
