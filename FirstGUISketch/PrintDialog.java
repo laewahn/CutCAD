@@ -11,8 +11,6 @@ public class PrintDialog
   private ArrayList<Shape> shapes;
   private ArrayList<PrintInstance> printInstances;
   
-  //int instanceSelected;
-  
   private PrintDialogFrame printDialogWindow;
   private Frame f;
   
@@ -22,16 +20,7 @@ public class PrintDialog
     this.shapes = new ArrayList<Shape>();
     for(int i = 0; i < shapes.size(); i++)
     {
-     if(shapes.get(i) instanceof Rectangle )
-     {
-       this.shapes.add(new Rectangle(new Vec3D(10,10,0), shapes.get(i).getValue(0),shapes.get(i).getValue(1)));
-       ArrayList<Vec2D> newVertices = new ArrayList<Vec2D>();
-       for(int j = 0; j < shapes.get(i).getShape().getTenons().size(); j++)
-       {
-        newVertices.add(shapes.get(i).getShape().getTenons().get(j).copy()); 
-       }
-       this.shapes.get(i).setShape(new GShape(newVertices, shapes.get(i).getShape().getPosition3D(), this.shapes.get(i)));
-     } 
+       this.shapes.add(shapes.get(i).copy());
     }
     calculateInstances();
     printDialogWindow = addPrintDialogFrame(600, 650, this.printInstances);

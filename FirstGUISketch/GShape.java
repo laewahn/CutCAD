@@ -425,5 +425,10 @@ public class GShape
     Polygon2D test = new Polygon2D((List)vertices);
     return test.containsPoint(mousePosition.sub(position2D));
   }
+  
+  public GShape copy(Shape shape)
+  {
+    return new GShape(getTenons(), new Vec3D(position3D), shape); 
+  }
 }
 

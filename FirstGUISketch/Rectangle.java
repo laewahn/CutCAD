@@ -97,5 +97,13 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
   {
     return null;
   }
+  
+  public Shape copy()
+  {
+    Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()), this.sizeX, this.sizeY);
+    copy.setShape(this.basic.copy(copy));
+    return copy;
+    
+  }
 }
 
