@@ -29,6 +29,12 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
     counter++;
   }
 
+  public Rectangle(Vec3D position, int sizeX, int sizeY, int index)
+  {
+   this(position, sizeX, sizeY);
+   this.index = index;
+  }
+
   public void changeValue(int index, int value)
   {
     if (index==0) setSizeX(value);
@@ -108,7 +114,7 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
   
   public Shape copy()
   {
-    Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()), this.sizeX, this.sizeY);
+    Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()), this.sizeX, this.sizeY,this.index);
     copy.setShape(this.basic.copy(copy));
     return copy;
     
