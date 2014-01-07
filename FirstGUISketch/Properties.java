@@ -35,7 +35,7 @@ class Properties
           .setCaptionLabel("Length");
 
     setMaterial = cp5.addDropdownList("setMaterial")
-      .setPosition(500, 45)
+      .setPosition(sizeX-225, (sizeY-25)/2+25)
         .setSize(200,400);
 
     controllers.add(setSizeX);
@@ -102,7 +102,7 @@ class Properties
   public void drawProperties(PApplet p)
   {
     p.fill(180);
-    p.rect(posX, posY, sizeX, sizeY); // overwrites drop-down menu, move to show & if(hidden) branch????
+    // p.rect(posX, posY, sizeX, sizeY); // overwrites drop-down menu, move to show & if(hidden) branch????
     if (this.hidden)
     {
       p.textSize(24);

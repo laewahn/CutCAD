@@ -236,12 +236,10 @@ void controlEvent(ControlEvent theEvent)
       PrintDialog printDialog = new PrintDialog(shapes); 
     }
   }
-  else if (theEvent.isGroup())
+  else if (theEvent.isGroup() && theEvent.getGroup().getName() == "setMaterial")
   {
-    if (theEvent.getGroup().getName() == "setMaterial")
-    {
-      properties.changeMaterial(theEvent.getGroup().getValue());
-    }
+    properties.changeMaterial(theEvent.getGroup().getValue());
+    System.out.println("Value: " + theEvent.getGroup().getValue());
   }
 }
 
