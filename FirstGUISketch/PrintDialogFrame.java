@@ -47,8 +47,6 @@ public class PrintDialogFrame extends PApplet
     {
      selectedInstance = 0; 
     }
-    //printInstances.get(selectedInstance).placeShape(printInstances.get(selectedInstance).getUnplacedShapes().get(0));
-    //printInstances.get(selectedInstance).placeShape(printInstances.get(selectedInstance).getUnplacedShapes().get(0));
     this.w = theWidth;
     this.h = theHeight;
     this.bedWidth = 600; // These depend on the lasercutter used
@@ -109,7 +107,6 @@ public class PrintDialogFrame extends PApplet
   
   public void controlEvent(ControlEvent theEvent) 
   {
-    System.out.println("eventname: " + theEvent.name());
     if(theEvent.isGroup() && theEvent.name().equals("unplacedShapesList"))
     {
       int objectIndex = (int)theEvent.group().value();
@@ -132,15 +129,12 @@ public class PrintDialogFrame extends PApplet
     }
     else if(theEvent.isController())
     {
-      System.out.println("A button in group is pressed");
       int objectIndex = (int)theEvent.getController().getId();
-      System.out.println("And corresponds to buttonid: " + objectIndex);
       boolean instanceFound = false;
       int instance = 0;
       int subInstance = 0;
       while(!instanceFound)
       {
-        System.out.println("iteration: " + instance);
         if((subInstance + printInstances.get(instance).getNumberOfSubInstances()) > objectIndex)
         {
          instanceFound = true;
@@ -151,8 +145,6 @@ public class PrintDialogFrame extends PApplet
         }
       }
       subInstance = objectIndex-subInstance;
-      System.out.println("Printinstance selected: " + instance);
-      System.out.println("PrintSubInstance selected: " + subInstance);
       this.selectedInstance = instance;
       printInstances.get(this.selectedInstance).setActiveSubInstance(subInstance);
       updateListBox();
@@ -181,16 +173,14 @@ public class PrintDialogFrame extends PApplet
       {
        int row = (buttonNumber/4);
        int collumn = (buttonNumber%4);
-       int name = buttonNumber+1;
-       Button newButton = cp5.addButton("material " + name) //replace for material name and thickness
+       int name = j+1;
+       Button newButton = cp5.addButton(printInstances.get(i).getMaterial().getMaterialName() + " - " + name) //replace for material name and thickness
                              .setPosition((collumn*110),(row*50))
                              .setSize(100,30)
                              .setId(buttonNumber)
-                             .setGroup(instanceGroup); // It seems that grouping is a bit buggy in controlp5
+                             .setGroup(instanceGroup); 
        instanceButtons.add(newButton); 
-       //instanceGroup.add(newButton);
-       buttonNumber++; 
-       //System.out.println(newButton.getGroup());
+       buttonNumber++;
       }
     }
   }

@@ -12,14 +12,20 @@ public class PrintInstance
   
   private PrintDialogFrame parent;
   
-  public PrintInstance(ArrayList<Shape> shapes) //Add material and thichkness ass both are important for settings
+  public PrintInstance(Shape shape, Material material) //Add material and thichkness ass both are important for settings
   {
-    this.shapes = shapes;
+    this.shapes = new ArrayList<Shape>();
+    this.shapes.add(shape);
     subInstances = new ArrayList<PrintSubInstance>();
     PrintSubInstance initial = new PrintSubInstance(this);
     subInstances.add(initial);
     selected = getSubInstanceIndex(initial);
-    //this.material = material;
+    this.material = material;
+  }
+  
+  public void addShape(Shape shape)
+  {
+    this.shapes.add(shape);
   }
   
   public ArrayList<Shape> getUnplacedShapes()
@@ -30,6 +36,11 @@ public class PrintInstance
   public ArrayList<Shape> getPlacedShapes()
   {
    return subInstances.get(selected).getPlacedShapes();
+  }
+  
+  public Material getMaterial()
+  {
+   return this.material; 
   }
   
   public void placeShape(Shape shape)
@@ -64,8 +75,7 @@ public class PrintInstance
   public void print()
   {
    instancesPrinted = 0;
-   //int name = i+1;
-   subInstances.get(0).print("materialname " + "1");
+   subInstances.get(0).print(this.material.getMaterialName() + " - " + "1");
   }
   
   public void printNext()
@@ -74,7 +84,7 @@ public class PrintInstance
    if(instancesPrinted < subInstances.size())
    {
     int name = instancesPrinted+1;
-    subInstances.get(0).print("materialname " + name);
+    subInstances.get(0).print(this.material.getMaterialName() + " - " + name);
    } else
    {
     this.parent.printNext(); 
@@ -86,7 +96,7 @@ public class PrintInstance
    for(int i = 0; i < subInstances.size(); i++)
    {
     int name = i+1;
-    subInstances.get(i).printSVG("materialname " + name);
+    subInstances.get(i).printSVG(this.material.getMaterialName() + " - " + name);
    } 
   }
   

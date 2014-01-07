@@ -409,7 +409,9 @@ public class GShape
   
   public GShape copy(Shape shape)
   {
-    return new GShape(getTenons(), new Vec3D(position3D), shape); 
+    GShape copy = new GShape(getTenons(), new Vec3D(position3D), shape); 
+    copy.setMaterial(this.material);
+    return copy;
   }
 }
 

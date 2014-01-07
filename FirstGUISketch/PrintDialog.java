@@ -16,11 +16,12 @@ public class PrintDialog
   
   public PrintDialog(ArrayList<Shape> shapes)
   {
-    // Sadly needs to check for all types of shapes as contstuctor is not global, wenn no copy "call of reference" is used
     this.shapes = new ArrayList<Shape>();
     for(int i = 0; i < shapes.size(); i++)
     {
-       this.shapes.add(shapes.get(i).copy());
+       Shape copy = shapes.get(i).copy();
+       copy.getShape().setPosition2D(new Vec2D(10,10));
+       this.shapes.add(copy);
     }
     calculateInstances();
     printDialogWindow = addPrintDialogFrame(600, 650, this.printInstances);
@@ -33,7 +34,25 @@ public class PrintDialog
   private void calculateInstances()
   {
     printInstances = new ArrayList<PrintInstance>();
-    printInstances.add(new PrintInstance(this.shapes)); // replace by instance per material algorithm
+    //printInstances.add(new PrintInstance(this.shapes)); // replace by instance per material algorithm
+    for(int i = 0; i < this.shapes.size(); i++)
+    {
+      int j = 0;
+      boolean found = false;
+      while((j < printInstances.size()) && !found)
+      {
+       if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.shapes.get(i).getShape().getMaterial().getMaterialName()))
+       {
+         this.printInstances.get(j).addShape(this.shapes.get(i));
+         found = true;
+       } 
+       j++;
+      }
+      if(!found)
+      {
+        this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getShape().getMaterial()));
+      }
+    }
     /*if(this.shapes.size() > 2)
     {
       ArrayList<Shape> temp = new ArrayList<Shape>();
