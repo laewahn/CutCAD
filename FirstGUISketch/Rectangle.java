@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectable
 {
-  private int sizeX, sizeY;
+  private int sizeX, sizeY, index;
   private static int counter = 0;
   private GShape basic;
   private ArrayList <Vec2D> basicShape;
@@ -25,6 +25,7 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
     basicShape.add(new Vec2D(0, sizeY));
     Vec3D angle3D = new Vec3D(0, 0, 0);
     basic = new GShape(basicShape, position, this);
+    this.index = counter;
     counter++;
   }
 
@@ -69,7 +70,7 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
 
   public String getName()
   {
-    return ("Rectangle_" + counter);
+    return ("Rectangle_" + index);
   }
 
   public void setSize(Vec2D newSize)

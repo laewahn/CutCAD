@@ -71,7 +71,6 @@ void setup()
   shapes.add(new Rectangle(new Vec3D(400, 50, 0), 75, 100));
   shapes.add(new Rectangle(new Vec3D(250, 250, 0), 75, 150));
 
-
   cp5 = new ControlP5(this);
 
   createProperties();
@@ -145,7 +144,8 @@ void createToolbar()
     new SelectTool(view2DRect, properties, shapes, transform2D),
     new DrawTool(view2DRect, properties, shapes, transform2D),
     new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
-    new DeleteTool(view2DRect, properties, shapes, connections, transform2D)
+    new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
+    new PrintTool(view2DRect, properties, transform2D)
   };
 
   for (int i = 0; i < tools.length; i++)
@@ -154,14 +154,6 @@ void createToolbar()
     PGraphics toolIcon = theTool.getIcon(createGraphics(150, 50));
     toolbar.addCustomItem(theTool.getName(), i, new ShapeButton(toolIcon));
   }
-  
-  PGraphics printIcon = createGraphics(150, 50);
-  printIcon.beginDraw();
-  printIcon.textSize(30.0);
-  printIcon.text("print",40,33);
-  printIcon.endDraw();
-  toolbar.addCustomItem("Print", 4, new ShapeButton(printIcon));
-  
 }
 
 void createProperties()
