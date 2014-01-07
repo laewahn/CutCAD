@@ -9,7 +9,7 @@ class AllMaterials extends PApplet
 
 	public AllMaterials()
 	{
-		if(materials.isEmpty()) materials.add(new Material("Nothing", 5, 0, 0, 100, 0, 500));
+		if(materials.isEmpty()) materials.add(new Material("Nothing", 5, color(255,255,255,0), 0, 100, 0, 500));
 	}
 
 	public void addMaterialsFromFile(String path)

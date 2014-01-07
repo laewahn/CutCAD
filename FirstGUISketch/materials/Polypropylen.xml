@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Polypropylen</identity>
+	<identity red="200" green="200" blue="200" alpha="100">Polypropylen</identity>
 	<thickness value="50">
 		<cut>
 			<speed>30</speed>

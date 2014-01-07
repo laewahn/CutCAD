@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">MDF</identity>
+	<identity red="132" green="163" blue="65" alpha="255">MDF</identity>
 	<thickness value="100">
 		<cut>
 			<speed>100</speed>

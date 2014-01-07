@@ -7,7 +7,7 @@ import toxi.processing.*;
 import toxi.math.*;
 
 import java.util.*;
-import static java.lang.System.*;
+import java.lang.*;
 
 public class GShape
 {
@@ -392,13 +392,13 @@ public class GShape
 
   private void setFillColor(PGraphics p) 
   {
-    //Todo color dependent on material...
     if (this.isSelected()) {
-      p.fill(255, 0, 0, 255);
+      p.stroke(255,0,0);
     } 
     else {
-      p.fill(255, 255);
+      p.stroke(0);
     }
+    p.fill(getMaterial().getMaterialColor());
   }
 
   public boolean mouseOver(Vec2D mousePosition)

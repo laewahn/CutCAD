@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Polyoxymethylen</identity>
+	<identity red="129" green="0" blue="129" alpha="255">Polyoxymethylen</identity>
 	<thickness value="300">
 		<cut>
 			<speed>40</speed>

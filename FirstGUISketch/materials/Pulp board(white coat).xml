@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Pulp board(white coat)</identity>
+	<identity red="200" green="200" blue="200" alpha="255">Pulp board(white coat)</identity>
 	<thickness value="100">
 		<cut>
 			<speed>100</speed>

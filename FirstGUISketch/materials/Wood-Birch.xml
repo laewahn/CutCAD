@@ -1,5 +1,6 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Wood-Birch</identity>
+	<identity red="210" green="179" blue="148" alpha="255">Wood-Birch</identity>
+	'<!--' Birke'-->'
 	<thickness value="350">
 		<cut>
 			<speed>30</speed>

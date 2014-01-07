@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Leather</identity>
+	<identity red="136" green="55" blue="24" alpha="255">Leather</identity>
 	<thickness value="200">
 		<cut>
 			<speed>100</speed>

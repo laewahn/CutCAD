@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Polycarbonate</identity>
+	<identity red="80" green="137" blue="118" alpha="50">Polycarbonate</identity>
 	<thickness value="200">
 		<cut>
 			<speed>50</speed>

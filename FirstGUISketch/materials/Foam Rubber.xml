@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Foam Rubber</identity>
+	<identity red="208" green="176" blue="2" alpha="255">Foam Rubber</identity>
 	<thickness value="200">
 		<cut>
 			<speed>30</speed>

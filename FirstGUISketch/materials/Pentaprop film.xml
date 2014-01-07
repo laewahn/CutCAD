@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Pentraprop film</identity>
+	<identity red="200" green="200" blue="200" alpha="50">Pentraprop film</identity>
 	<thickness value="17">
 		<cut>
 			<speed>100</speed>

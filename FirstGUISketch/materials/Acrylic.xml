@@ -1,5 +1,5 @@
 <material>
-	<identity red="255" green="0" blue="0" alpha="255">Acrylic</identity>
+	<identity red="183" green="184" blue="189" alpha="50">Acrylic</identity>
 	<thickness value="40">
 		<cut>
 			<speed>100</speed>
