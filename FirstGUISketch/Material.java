@@ -21,7 +21,7 @@ class Material
 
 	public String getMaterialName()
 	{
-		return (name + " " + thickness + " mm");
+		return (name + " " + thickness/10 + "," + thickness%10 + " mm");
 	}
 
 	public int getMaterialThickness()
