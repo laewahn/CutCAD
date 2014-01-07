@@ -77,6 +77,11 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
     this.setSizeX((int)newSize.x());
     this.setSizeY((int)newSize.y());
   }
+  
+  public void setShape(GShape shape)
+  {
+    this.basic = shape;
+  }
 
   public GShape getShape()
   {
@@ -98,6 +103,14 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
   public Rect getBoundingBox()
   {
     return null;
+  }
+  
+  public Shape copy()
+  {
+    Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()), this.sizeX, this.sizeY);
+    copy.setShape(this.basic.copy(copy));
+    return copy;
+    
   }
 }
 

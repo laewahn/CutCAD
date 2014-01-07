@@ -1,6 +1,6 @@
 <material>
 	<identity red="255" green="0" blue="0" alpha="255">Nothing</identity>
-	<thickness value="0">
+	<thickness value="50">
 		<cut>
 			<speed>100</speed>
     		<power>0</power>

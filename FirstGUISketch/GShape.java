@@ -11,23 +11,24 @@ import static java.lang.System.*;
 
 public class GShape
 {
-  private int thickness, numberOfConnections;
+  private int numberOfConnections;
   private Vec2D position2D;
+  private Vec3D position3D;
   private boolean isSelected;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
   private ArrayList<Edge> edges;
   private Shape shape;
-  private Material material; //change to int (position arraylist)
+  private Material material;
 
   public GShape(ArrayList<Vec2D> initVertices, Vec3D position, Shape shape)
   {
     this.position2D = position.to2DXY();
+    this.position3D = position;
     this.isSelected = false;
     this.shape = shape;
     this.numberOfConnections = 0;
-    this.thickness = 5;
-    // this.material = 0; //??????
+    this.material = new Material("DummyMaterial", 5, 0, 0, 100, 0, 500);
     
     vertices = initVertices;
     edges = new ArrayList<Edge>();
@@ -79,12 +80,17 @@ public class GShape
 
   public int getThickness()
   {
-    return this.thickness;
+    return this.material.getMaterialThickness();
   }
 
   public Material getMaterial()
   {
     return this.material;
+  }
+
+  public Vec3D getPosition3D()
+  {
+    return this.position3D;
   }
 
   public boolean isSelected() {
@@ -148,11 +154,11 @@ public class GShape
     int offsetZ;
     if (top)
     {
-      offsetZ = this.thickness/2;
+      offsetZ = this.getThickness()/2;
     }
     else
     {
-      offsetZ = -this.thickness/2;
+      offsetZ = -this.getThickness()/2;
     }
     //we want to change the tenon structure to the (logical) 3D positon, therefor first change them to 3D vectors
     ArrayList<Vec3D> allTenons = new ArrayList<Vec3D>();
@@ -232,17 +238,12 @@ public class GShape
     return this.position2D;
   }
 
-  public void setThickness(int thickness)
+  public void setMaterial(Material material)
   {
     if(this.getNumberOfConnections() == 0)
     {
-      this.thickness = thickness;
+      this.material = material;
     }
-  }
-
-  public void setMaterial(Material material)
-  {
-    this.material = material;
   }
 
   public void setSelected(boolean selected) {
@@ -400,6 +401,11 @@ public class GShape
   {
     Polygon2D test = new Polygon2D((List)vertices);
     return test.containsPoint(mousePosition.sub(position2D));
+  }
+  
+  public GShape copy(Shape shape)
+  {
+    return new GShape(getTenons(), new Vec3D(position3D), shape); 
   }
 }
 

@@ -137,7 +137,7 @@ public class Connection
     }
     else if (slaveEdge.getShape().getNumberOfConnections() == 0)
     {
-      connectEdges(masterEdge, slaveEdge, (float) Math.toRadians(180.0));
+      connectEdges(masterEdge, slaveEdge, (float) Math.PI);
       new Tenon(masterEdge, slaveEdge);
       lockConnection(true);
       return true;
@@ -145,7 +145,7 @@ public class Connection
     }
     else if (masterEdge.getShape().getNumberOfConnections() == 0)
     {
-      connectEdges(slaveEdge, masterEdge, (float) Math.toRadians(180.0));
+      connectEdges(slaveEdge, masterEdge, (float) Math.PI);
       new Tenon(masterEdge, slaveEdge);
       lockConnection(true);
       return true;
@@ -163,12 +163,13 @@ public class Connection
           masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 0.01f) || 
           masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 0.01f)))
     {
-      findAngleIntersection(masterEdge, slaveEdge);
+      return findAngleIntersection(masterEdge, slaveEdge);
     }
     return false;
   }
 
-  private void findAngleIntersection(Edge masterEdge, Edge slaveEdge)
+//TODO Clean up, if it works
+  private boolean findAngleIntersection(Edge masterEdge, Edge slaveEdge)
   {
     // Assumption: 
     // - masterEdge, slaveEdge and connectingShape are within one plane
@@ -191,6 +192,10 @@ public class Connection
       commonPoint = masterEdge.getP3D2();
       notCommonPointMaster = masterEdge.getP3D1();
       notCommonPointSlave = (masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 0.01f)) ? slaveEdge.getP3D2() : slaveEdge.getP3D1();
+    }
+    else
+    {
+      return false;
     }
 
     // Find the shape, which connects both shapes, and wthin this shape the axis which are aligned to the master- and slaveEdge
@@ -220,13 +225,6 @@ public class Connection
     // angle between the new to connect (master-)edge and the rotatingEdge
     float angleMaster = notCommonPointRotatingEdgeMaster.sub(commonPoint).angleBetween(notCommonPointMaster.sub(commonPoint), true);
     
-    // Since both shapes are aligned in one plane, we can add the (master-)edge to the rotating edge as it is and a second time
-    // mirrored at the rotating edge. Both resulting points form a line perpendicular to the rotating edge, which is the projection
-    // of the circle on this plane, which is described through the rotation of the (master-)edge endpoint around the roating axis.
-    Vec3D master1 = notCommonPointRotatingEdgeMaster.sub(commonPoint).getNormalizedTo(lengthMasterEdge).rotateAroundAxis(connectingShape.getNormalVector(), angleMaster).add(commonPoint);
-    Vec3D master2 = notCommonPointRotatingEdgeMaster.sub(commonPoint).getNormalizedTo(lengthMasterEdge).rotateAroundAxis(connectingShape.getNormalVector(), -angleMaster).add(commonPoint);
-    Line3D intersectionLineMaster = new Line3D(master1, master2);
-
     // Do the same as above for the second (slave)shape
     Edge rotatingEdgeSlave = slaveEdge;
     Edge rotatingEdgeSlave2 = masterEdge;
@@ -251,49 +249,143 @@ public class Connection
     float lengthSlaveEdge = commonPoint.distanceTo(notCommonPointSlave);
     float angleSlave = notCommonPointRotatingEdgeSlave.sub(commonPoint).angleBetween(notCommonPointSlave.sub(commonPoint), true);
 
-    Vec3D slave1 = notCommonPointRotatingEdgeSlave.sub(commonPoint).getNormalizedTo(lengthSlaveEdge).rotateAroundAxis(connectingShape.getNormalVector(), angleSlave).add(commonPoint);
-    Vec3D slave2 = notCommonPointRotatingEdgeSlave.sub(commonPoint).getNormalizedTo(lengthSlaveEdge).rotateAroundAxis(connectingShape.getNormalVector(), -angleSlave).add(commonPoint);
-    Line3D intersectionLineSlave = new Line3D(slave1, slave2);
+    if (masterEdge.getShape().getNumberOfConnections() > 1) 
+    {
+      float angleResult = notCommonPointMaster.sub(commonPoint).angleBetween(notCommonPointRotatingEdgeSlave.sub(commonPoint));
+      if ((float)Math.abs(angleResult - angleSlave)<0.01) 
+      {
+        Vec3D newNormalSlave = notCommonPointMaster.sub(commonPoint).cross(notCommonPointRotatingEdgeSlave.sub(commonPoint));
+        float angle = connectingShape.getNormalVector().angleBetween(newNormalSlave, true);
 
-    // The intersection of both (circle-projection)lines is the projection of the point in the 3D space, where both endpoints of
-    // master- and slaveShape will met by rotation
-    Vec3D intersectionPoint = intersectionLineMaster.closestLineTo(intersectionLineSlave).getLine().getMidPoint();
+        connectEdges(rotatingEdgeSlave2, rotatingEdgeSlave, angle);
+        //Check
+        if (!notCommonPointSlave.equalsWithTolerance(notCommonPointMaster, 0.01f))
+        {
+          connectEdges(rotatingEdgeSlave2, rotatingEdgeSlave, angle + (float)Math.PI/2);
+          if (!notCommonPointSlave.equalsWithTolerance(notCommonPointMaster, 0.01f))
+          {
+            connectEdges(rotatingEdgeSlave2, rotatingEdgeSlave, -angle);
+            if (!notCommonPointSlave.equalsWithTolerance(notCommonPointMaster, 0.01f))
+            {
+              connectEdges(rotatingEdgeSlave2, rotatingEdgeSlave, -angle - (float)Math.PI/2);
+              if (!notCommonPointSlave.equalsWithTolerance(notCommonPointMaster, 0.01f))
+              {
+                return false; // I don't know how to rotate else
+              }
+            }
+          }
+        }
+        new Tenon(rotatingEdgeMaster2, rotatingEdgeMaster);
+        new Tenon(rotatingEdgeSlave2, rotatingEdgeSlave);
+        new Tenon(masterEdge, slaveEdge);
+        lockConnection(true);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else if (slaveEdge.getShape().getNumberOfConnections() > 1)
+    {
+      float angleResult = notCommonPointSlave.sub(commonPoint).angleBetween(notCommonPointRotatingEdgeMaster.sub(commonPoint));
+      if ((float)Math.abs(angleResult - angleMaster)<0.01) 
+      {
+        Vec3D newNormalMaster = notCommonPointSlave.sub(commonPoint).cross(notCommonPointRotatingEdgeMaster.sub(commonPoint));
+        float angle = connectingShape.getNormalVector().angleBetween(newNormalMaster, true);
 
-    // To get the angles for the rotation, we can produce a line in the direction of the roating axis
-    // and find intersection of this line with the above used circle-projection line and can compute the distance between
-    // this point and the previous computed intersection. This means: We have the projection of the distance between the
-    // goal point and the rotating axis and the distance between the actual position and the rotating axis.
-    // If we look at the plane perpendicular to the rotating edge, the first corresponds to the opposite/adjacent of a triangle
-    // while the other one is the hypotenuse with opposite/adgjacent perpendicul/parallel to the base shapes
-    Line3D axisRotateMaster = new Line3D(notCommonPointRotatingEdgeMaster, commonPoint).toRay3D().toLine3DWithPointAtDistance(10000);
-    Vec3D intersectionAxisMaster = intersectionLineMaster.closestLineTo(axisRotateMaster).getLine().getMidPoint();
-    float lengthIntersectionToAxisMaster = intersectionAxisMaster.distanceTo(intersectionPoint);
-    float lengthVectorToAxisMaster =  intersectionAxisMaster.distanceTo(notCommonPointMaster);
+        connectEdges(rotatingEdgeMaster2, rotatingEdgeMaster, angle);
+        //Check
+        if (!notCommonPointMaster.equalsWithTolerance(notCommonPointSlave, 0.01f))
+        {
+          connectEdges(rotatingEdgeMaster2, rotatingEdgeMaster, angle + (float)Math.PI/2);
+          if (!notCommonPointMaster.equalsWithTolerance(notCommonPointSlave, 0.01f))
+          {
+            connectEdges(rotatingEdgeMaster2, rotatingEdgeMaster, -angle);
+            if (!notCommonPointMaster.equalsWithTolerance(notCommonPointSlave, 0.01f))
+            {
+              connectEdges(rotatingEdgeMaster2, rotatingEdgeMaster, -angle - (float)Math.PI/2);
+              if (!notCommonPointMaster.equalsWithTolerance(notCommonPointSlave, 0.01f))
+              {
+                return false; // I don't know how to rotate else
+              }
+            }
+          }
+        }
+        new Tenon(rotatingEdgeMaster2, rotatingEdgeMaster);
+        new Tenon(rotatingEdgeSlave2, rotatingEdgeSlave);
+        new Tenon(masterEdge, slaveEdge);
+        lockConnection(true);
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else
+    {
+      // better save than sorry: align shapes
+      if (masterEdge.getShape().getNumberOfConnections() == 0) connectEdges(rotatingEdgeMaster2, masterEdge, (float) Math.PI);
+      if (slaveEdge.getShape().getNumberOfConnections() == 0) connectEdges(rotatingEdgeSlave2, slaveEdge, (float) Math.PI);
 
-    // Result: 4 possible angles, test, which one is the correct one
-    float angleMasterA = (float)Math.asin(lengthIntersectionToAxisMaster/lengthVectorToAxisMaster) + (float)Math.PI;
-    float angleMasterB = (float)Math.acos(lengthIntersectionToAxisMaster/lengthVectorToAxisMaster);
-    //and other rotating direction???
+      // Since both shapes are aligned in one plane, we can add the (master-)edge to the rotating edge as it is and a second time
+      // mirrored at the rotating edge. Both resulting points form a line perpendicular to the rotating edge, which is the projection
+      // of the circle on this plane, which is described through the rotation of the (master-)edge endpoint around the roating axis.
+      Vec3D master1 = notCommonPointRotatingEdgeMaster.sub(commonPoint).getNormalizedTo(lengthMasterEdge).rotateAroundAxis(connectingShape.getNormalVector(), angleMaster).add(commonPoint);
+      Vec3D master2 = notCommonPointRotatingEdgeMaster.sub(commonPoint).getNormalizedTo(lengthMasterEdge).rotateAroundAxis(connectingShape.getNormalVector(), -angleMaster).add(commonPoint);
+      Line3D intersectionLineMaster = new Line3D(master1, master2);
 
-    // and of course the same again for the slave
-    Line3D axisRotateSlave = new Line3D(notCommonPointRotatingEdgeSlave, commonPoint).toRay3D().toLine3DWithPointAtDistance(10000);
-    Vec3D intersectionAxisSlave = intersectionLineSlave.closestLineTo(axisRotateSlave).getLine().getMidPoint();
-    float lengthIntersectionToAxisSlave = intersectionAxisSlave.distanceTo(intersectionPoint);
-    float lengthVectorToAxisSlave =  intersectionAxisSlave.distanceTo(notCommonPointSlave);
+      Vec3D slave1 = notCommonPointRotatingEdgeSlave.sub(commonPoint).getNormalizedTo(lengthSlaveEdge).rotateAroundAxis(connectingShape.getNormalVector(), angleSlave).add(commonPoint);
+      Vec3D slave2 = notCommonPointRotatingEdgeSlave.sub(commonPoint).getNormalizedTo(lengthSlaveEdge).rotateAroundAxis(connectingShape.getNormalVector(), -angleSlave).add(commonPoint);
+      Line3D intersectionLineSlave = new Line3D(slave1, slave2);
     
-    float angleSlaveA = (float)Math.asin(lengthIntersectionToAxisSlave/lengthVectorToAxisSlave) + (float)Math.PI;
-    float angleSlaveB = (float)Math.acos(lengthIntersectionToAxisSlave/lengthVectorToAxisSlave);
+      // The intersection of both (circle-projection)lines is the projection of the point in the 3D space, where both endpoints of
+      // master- and slaveShape will met by rotation
+      Vec3D intersectionPoint = intersectionLineMaster.closestLineTo(intersectionLineSlave).getLine().getMidPoint();
 
-    //TODO: Check before rotating that only rotatable objects are rotated!!
-    connectEdges(rotatingEdgeMaster2, rotatingEdgeMaster, angleMasterB);
-    createTenons(rotatingEdgeMaster2, rotatingEdgeMaster);
-    //TODO: Check if rotated int the correct direction
+      // To get the angles for the rotation, we can produce a line in the direction of the roating axis
+      // and find intersection of this line with the above used circle-projection line and can compute the distance between
+      // this point and the previous computed intersection. This means: We have the projection of the distance between the
+      // goal point and the rotating axis and the distance between the actual position and the rotating axis.
+      // If we look at the plane perpendicular to the rotating edge, the first corresponds to the opposite/adjacent of a triangle
+      // while the other one is the hypotenuse with opposite/adgjacent perpendicul/parallel to the base shapes
+      Line3D axisRotateMaster = new Line3D(notCommonPointRotatingEdgeMaster, commonPoint).toRay3D().toLine3DWithPointAtDistance(10000);
+      Vec3D intersectionAxisMaster = intersectionLineMaster.closestLineTo(axisRotateMaster).getLine().getMidPoint();
+      float lengthIntersectionToAxisMaster = intersectionAxisMaster.distanceTo(intersectionPoint);
+      float lengthVectorToAxisMaster =  intersectionAxisMaster.distanceTo(notCommonPointMaster);
 
-    connectEdges(rotatingEdgeSlave2, rotatingEdgeSlave, angleSlaveB);
-    createTenons(rotatingEdgeSlave2, rotatingEdgeSlave);
-    //TODO: Check if rotated int the correct direction
+      // Result: 4 possible angles, test, which one is the correct one
+      float angleMasterA = (float)Math.asin(lengthIntersectionToAxisMaster/lengthVectorToAxisMaster) + (float)Math.PI;
+      float angleMasterB = (float)Math.acos(lengthIntersectionToAxisMaster/lengthVectorToAxisMaster);
+      //and other rotating direction???
 
-    createTenons(masterEdge, slaveEdge);
+      // and of course the same again for the slave
+      Line3D axisRotateSlave = new Line3D(notCommonPointRotatingEdgeSlave, commonPoint).toRay3D().toLine3DWithPointAtDistance(10000);
+      Vec3D intersectionAxisSlave = intersectionLineSlave.closestLineTo(axisRotateSlave).getLine().getMidPoint();
+      float lengthIntersectionToAxisSlave = intersectionAxisSlave.distanceTo(intersectionPoint);
+      float lengthVectorToAxisSlave =  intersectionAxisSlave.distanceTo(notCommonPointSlave);
+      
+      float angleSlaveA = (float)Math.asin(lengthIntersectionToAxisSlave/lengthVectorToAxisSlave) + (float)Math.PI;
+      float angleSlaveB = (float)Math.acos(lengthIntersectionToAxisSlave/lengthVectorToAxisSlave);
+
+
+      if(rotatingEdgeMaster.getShape().getNumberOfConnections()==1)
+      {
+        connectEdges(rotatingEdgeMaster2, rotatingEdgeMaster, angleMasterB);
+      }
+
+      if(rotatingEdgeSlave.getShape().getNumberOfConnections()==1)
+      {
+        connectEdges(rotatingEdgeSlave2, rotatingEdgeSlave, angleSlaveB);
+      }
+      //TODO: Check if rotated int the correct direction
+      new Tenon(rotatingEdgeMaster2, rotatingEdgeMaster);
+      new Tenon(rotatingEdgeSlave2, rotatingEdgeSlave);
+      new Tenon(masterEdge, slaveEdge);
+      lockConnection(true);
+      return true;
+    }
   }
   
   private boolean isEqualEdge(Edge masterEdge, Edge slaveEdge)
@@ -330,10 +422,6 @@ public class Connection
 
     Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
     slave.translate3D(toMaster);
-  }
-
-  private void createTenons(Edge masterEdge, Edge slaveEdge) {
-    Tenon tenon = new Tenon(masterEdge, slaveEdge);
   }
 
   private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)
