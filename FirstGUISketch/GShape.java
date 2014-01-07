@@ -28,7 +28,7 @@ public class GShape
     this.isSelected = false;
     this.shape = shape;
     this.numberOfConnections = 0;
-    this.material = new Material("DummyMaterial", 5, 0, 0, 100, 0, 500);
+    this.material = new AllMaterials().getMaterials().get(0);
     
     vertices = initVertices;
     edges = new ArrayList<Edge>();

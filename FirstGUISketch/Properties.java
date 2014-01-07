@@ -5,8 +5,9 @@ import java.util.*;
 class Properties
 {
   private ArrayList<Controller> controllers;
-  //private ArrayList<Material> materials;
-  private Slider setSizeX, setSizeY;// setThickness;
+  private ArrayList<Material> materials;
+  private Slider setSizeX, setSizeY;
+  private DropdownList setMaterial;
   private Shape currentlyPluggedTo;
   private int posX, posY, sizeX, sizeY;
   private boolean hidden;
@@ -20,7 +21,7 @@ class Properties
     this.hidden = false;
 
     this.controllers = new ArrayList<Controller>();
-    // this.materials = materials;
+    this.materials = new AllMaterials().getMaterials();
     this.currentlyPluggedTo = null;
 
     setSizeX = cp5.addSlider("setSizeX")
@@ -33,50 +34,34 @@ class Properties
         .setRange(10, 255)
           .setCaptionLabel("Length");
 
-    // setThickness = cp5.addSlider("setThickness")
-    //   .setPosition(500, 25)
-    //     .setRange(1, 255)
-    //       .setCaptionLabel("Thickness");
-
-    // setMaterial = cp5.addDropdownList("setMaterial")
-    //   .setPosition(500, 25)
-    //       .setCaptionLabel("Material");
-    //       customize(setMaterial);
+    setMaterial = cp5.addDropdownList("setMaterial")
+      .setPosition(500, 45)
+        .setSize(200,400);
 
     controllers.add(setSizeX);
     controllers.add(setSizeY);
-    // controllers.add(setThickness);
-    // controllers.add(setMaterial);
   }
 
-  // void customize(DropdownList ddl) 
-  // {
-  //   // ddl.setBackgroundColor(color(190));
-  //   ddl.setItemHeight(20);
-  //   ddl.setBarHeight(15);
-  //   ddl.captionLabel().style().marginTop = 3;
-  //   ddl.captionLabel().style().marginLeft = 3;
-  //   ddl.valueLabel().style().marginTop = 3;
-  //   for(Material m : materials) 
-  //   {
-  //     ddl.addItem(m.getMaterialName(), materials.indexOf(m));
-  //   }
-  //   ddl.scroll(materials.indexOf(GShape.getMaterial());
-  //   // ddl.setColorBackground(color(60));
-  //   // ddl.setColorActive(color(255,128));
-  // }
+  void customize(DropdownList ddl, Shape s) 
+  {
+    Material materialOfShape = s.getShape().getMaterial();
 
-  // void controlEvent(ControlEvent theEvent) 
-  // {
-  //   if (theEvent.isGroup()) {
-  //     // check if the Event was triggered from a ControlGroup
-  //     println(theEvent.group().value()+" from "+theEvent.group());
-  //   } else if(theEvent.isController()) {
-  //    println(theEvent.controller().value()+" from "+theEvent.controller());
-  //    // GShape.setMaterial(materials.get(theEvent.controller().value())); //???
-  //   }
-  // }
+    ddl.setItemHeight(25);
+    ddl.setBarHeight(25);
+    ddl.setCaptionLabel(materialOfShape.getMaterialName());
+    ddl.captionLabel().style().setMarginTop(7); //should be central -> dependant on code???
 
+
+    for(Material m : materials) 
+    {
+      ddl.addItem(m.getMaterialName(), materials.indexOf(m));
+    }
+  }
+
+  void changeMaterial(float eventNumber)
+  {
+    currentlyPluggedTo.getShape().setMaterial(materials.get((int)eventNumber));
+  }
 
   public void plugTo(Shape s)
   {
@@ -84,13 +69,10 @@ class Properties
     {
       setSizeX.unplugFrom(this.currentlyPluggedTo);
       setSizeY.unplugFrom(this.currentlyPluggedTo);
-      // setThickness.unplugFrom(this.currentlyPluggedTo.getShape());
-      // setMaterial.unplugFrom(this.currentlyPluggedTo.getShape());
     }
     setSizeX.plugTo(s).setValue(s.getValue(0));
     setSizeY.plugTo(s).setValue(s.getValue(1));
-    // setThickness.plugTo(s.getShape()).setValue(s.getShape().getThickness());
-    // setMaterial.plugTo(s.getShape()).setValue(s.getShape().getMaterial());
+    customize(setMaterial, s);
 
     this.currentlyPluggedTo = s;
   }
@@ -101,6 +83,8 @@ class Properties
     {
       c.hide();
     }
+    setMaterial.hide();
+
     this.hidden = true;
   }
 
@@ -110,13 +94,15 @@ class Properties
     {
       c.show();
     }
+    setMaterial.show();
+
     this.hidden = false;
   }
 
   public void drawProperties(PApplet p)
   {
     p.fill(180);
-    p.rect(posX, posY, sizeX, sizeY);
+    p.rect(posX, posY, sizeX, sizeY); // overwrites drop-down menu, move to show & if(hidden) branch????
     if (this.hidden)
     {
       p.textSize(24);
