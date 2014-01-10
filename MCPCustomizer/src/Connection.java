@@ -141,12 +141,10 @@ public class Connection
           if (c.getMasterEdge() == e) 
           {
       		connectEdges(c.getSlaveEdge(), c.getMasterEdge(), (float) Math.PI);
-        	Tenon.createOutlineOfEdge(c.getSlaveEdge(), c.getMasterEdge());  
           }
     	  if (c.getSlaveEdge() == e)
     	  {
     		connectEdges(c.getMasterEdge(), c.getSlaveEdge(), (float) Math.PI);
-    		Tenon.createOutlineOfEdge(c.getMasterEdge(), c.getSlaveEdge());
     	  }
     	}
       }
@@ -177,7 +175,6 @@ public class Connection
     else if (slaveEdge.getShape().getNumberOfConnections() == 0)
     {
       connectEdges(masterEdge, slaveEdge, (float) Math.PI);
-      Tenon.createOutlineOfEdge(masterEdge, slaveEdge);
       lockConnection(true);
       return true;
       
@@ -185,7 +182,6 @@ public class Connection
     else if (masterEdge.getShape().getNumberOfConnections() == 0)
     {
       connectEdges(slaveEdge, masterEdge, (float) Math.PI);
-      Tenon.createOutlineOfEdge(masterEdge, slaveEdge);
       lockConnection(true);
       return true;
     }
@@ -250,6 +246,8 @@ public class Connection
 
     Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
     slave.translate3D(toMaster);
+
+    Tenon.createOutlineOfEdge(masterEdge, slaveEdge);
   }
 
   private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)

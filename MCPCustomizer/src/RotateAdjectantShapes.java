@@ -60,30 +60,30 @@ class RotateAdjectantShapes
       // since we use a virtual shape, both edges have to be aligned planar
       connection.connectEdges(rotateEdgeMasterOfConnectingShape, rotatingEdgeMaster, (float) Math.PI);
       connection.connectEdges(rotateEdgeSlaveOfConnectingShape, rotatingEdgeSlave, (float) Math.PI);
-      out.println("Aligned");
+//      out.println("Aligned");
       
-       System.out.println("Master: ");
-       for (Edge e : masterEdge.getShape().getEdges())
-       {
-         System.out.println((e.getP3D1()) + ", " + (e.getP3D2()));
-       }
-       System.out.println("Slave: ");
-       for (Edge e : slaveEdge.getShape().getEdges())
-       {
-         System.out.println((e.getP3D1()) + ", "  + (e.getP3D2()));
-       }
-       System.out.println("Connection: ");
-       for (Edge e : virtualShape.getShape().getEdges())
-       {
-         System.out.println((e.getP3D1()) + ", "  + (e.getP3D2()));
-       }
+//       System.out.println("Master: ");
+//       for (Edge e : masterEdge.getShape().getEdges())
+//       {
+//         System.out.println((e.getP3D1()) + ", " + (e.getP3D2()));
+//       }
+//       System.out.println("Slave: ");
+//       for (Edge e : slaveEdge.getShape().getEdges())
+//       {
+//         System.out.println((e.getP3D1()) + ", "  + (e.getP3D2()));
+//       }
+//       System.out.println("Connection: ");
+//       for (Edge e : virtualShape.getShape().getEdges())
+//       {
+//         System.out.println((e.getP3D1()) + ", "  + (e.getP3D2()));
+//       }
 
       intersectionPoint = findIntersectionPoint(masterEdge, slaveEdge);
-      out.println("found intersectionPoint");
+//      out.println("found intersectionPoint");
 
       float angleMasterB = getRotationFor(masterEdge);
       float angleSlaveB = getRotationFor(slaveEdge);
-      out.println("found angles");
+//      out.println("found angles");
 
       boolean couldConnect = tryToConnectBothEdges(connection, rotateEdgeMasterOfConnectingShape, rotatingEdgeMaster, angleMasterB, rotateEdgeSlaveOfConnectingShape, rotatingEdgeSlave, angleSlaveB);
       if (!couldConnect) return false;
@@ -185,11 +185,11 @@ class RotateAdjectantShapes
 	Edge virtualEdgeB = virtualShape.getShape().getEdges().get(1);
     float angle = getPointOfRotatingEdge(edge).sub(getCommonPoint(edge)).angleBetween(getNotCommonPoint(edge).sub(getCommonPoint(edge)), true);
     Vec3D rotated = getNotCommonPoint(edge).sub(getCommonPoint(edge)).rotateAroundAxis(getNormalVector(virtualEdgeA, virtualEdgeB), -2*angle).add(getCommonPoint(edge));
-    out.println("Normalvec " + virtualShape.getShape().getNormalVector());
-    out.println("RotatingEdgePoint" + getPointOfRotatingEdge(edge));
-    out.println("CommonPoint" + getCommonPoint(edge));
-    out.println("NotCommonPoint" + getNotCommonPoint(edge));
-    out.println(new Line3D(getNotCommonPoint(edge), rotated));
+//    out.println("Normalvec " + virtualShape.getShape().getNormalVector());
+//    out.println("RotatingEdgePoint" + getPointOfRotatingEdge(edge));
+//    out.println("CommonPoint" + getCommonPoint(edge));
+//    out.println("NotCommonPoint" + getNotCommonPoint(edge));
+//    out.println(new Line3D(getNotCommonPoint(edge), rotated));
     return new Line3D(getNotCommonPoint(edge), rotated);
   }
 
