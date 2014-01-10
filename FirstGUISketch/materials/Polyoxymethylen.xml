@@ -1,0 +1,11 @@
+<material>
+	<identity red="129" green="0" blue="129" alpha="255">Polyoxymethylen</identity>
+	<thickness value="300">
+		<cut>
+			<speed>40</speed>
+    		<power>100</power>
+    		<frequency>4000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

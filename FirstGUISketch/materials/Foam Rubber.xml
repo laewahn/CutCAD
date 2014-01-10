@@ -1,0 +1,11 @@
+<material>
+	<identity red="208" green="176" blue="2" alpha="255">Foam Rubber</identity>
+	<thickness value="200">
+		<cut>
+			<speed>30</speed>
+    		<power>50</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>
