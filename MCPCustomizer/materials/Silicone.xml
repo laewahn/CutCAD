@@ -1,0 +1,28 @@
+<material>
+	<identity red="200" green="0" blue="0" alpha="255">Silicone</identity>
+	'<!--' values for red silcone :-) '-->'
+	<thickness value="100">
+		<cut>
+			<speed>100</speed>
+    		<power>50</power>
+    		<frequency>500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="120">
+		<cut>
+			<speed>80</speed>
+    		<power>70</power>
+    		<frequency>500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="200">
+		<cut>
+			<speed>13</speed>
+    		<power>40</power>
+    		<frequency>30</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

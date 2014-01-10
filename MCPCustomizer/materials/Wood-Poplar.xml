@@ -1,0 +1,20 @@
+<material>
+	<identity red="245" green="217" blue="170" alpha="255">Wood-Poplar</identity>
+	'<!--' which means: Pappel :-) '-->'
+	<thickness value="400">
+		<cut>
+			<speed>42</speed>
+    		<power>100</power>
+    		<frequency>2500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="600">
+		<cut>
+			<speed>30</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

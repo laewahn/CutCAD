@@ -1,0 +1,33 @@
+<material>
+	<identity red="246" green="209" blue="148" alpha="255">Wood-Lime</identity>
+	'<!--' 
+	...The boatman calls from the lake
+	A lone loon dives upon the water
+	I put my hand over her
+	Down in the Lindenbaum arbour...
+	'-->'
+	<thickness value="100">
+		<cut>
+			<speed>100</speed>
+    		<power>50</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="300">
+		<cut>
+			<speed>53</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+	<thickness value="600">
+		<cut>
+			<speed>32</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

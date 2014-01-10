@@ -1,0 +1,12 @@
+<material>
+	<identity red="215" green="174" blue="126" alpha="255">Wood-Pine</identity>
+	'<!--' which means: Kiefer :-) '-->'
+	<thickness value="400">
+		<cut>
+			<speed>50</speed>
+    		<power>100</power>
+    		<frequency>500</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>
