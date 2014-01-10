@@ -19,7 +19,6 @@ public class MCPCustomizer extends PApplet {
 	  PGraphics view2D, view3D;
 	  ArrayList<Shape> shapes;
 	  ArrayList<Connection> connections;
-	  // ArrayList<Material> materials;
 
 	  int startX = 0;
 	  int startY = 0;
@@ -44,8 +43,6 @@ public class MCPCustomizer extends PApplet {
 	  Tool selectedTool;
 	  Tool tools[];
 
-	  Shape previewRectangle = new Rectangle(new Vec3D(50,50,0), 100, 100);
-
 	  public void setup()
 	  {
 	    size(displayWidth, displayHeight, P3D);
@@ -58,15 +55,16 @@ public class MCPCustomizer extends PApplet {
 	    connections = new ArrayList<Connection>();
 
 	    new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
+	    Shape previewRectangle = new Rectangle(new Vec3D(50,50,0), 100, 100);
 
 	  //Just for testing: add some shapes
 	    // shapes.add(new Rectangle(new Vec3D(50, 50, 0), 300, 300));
 	    // shapes.add(new Rectangle(new Vec3D(450, 200, 0), 300, 300));
-	    shapes.add(new Rectangle(new Vec3D(50, 50, 0), 150, 100));
-	    shapes.add(new Rectangle(new Vec3D(50, 200, 0), 150, 100));
-	    shapes.add(new Rectangle(new Vec3D(400, 200, 0), 75, 100));
-	    shapes.add(new Rectangle(new Vec3D(400, 50, 0), 75, 100));
-	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 75, 150));
+	    shapes.add(new Rectangle(new Vec3D(50, 50, 0), 151, 101));
+	    shapes.add(new Rectangle(new Vec3D(50, 200, 0), 151, 101));
+	    shapes.add(new Rectangle(new Vec3D(400, 200, 0), 74, 101));
+	    shapes.add(new Rectangle(new Vec3D(400, 50, 0), 74, 101));
+	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 74, 151));
 
 	    cp5 = new ControlP5(this);
 
@@ -228,7 +226,6 @@ public class MCPCustomizer extends PApplet {
 	    else if (theEvent.isGroup() && theEvent.getGroup().getName() == "setMaterial")
 	    {
 	      properties.changeMaterial(theEvent.getGroup().getValue());
-	      System.out.println("Value: " + theEvent.getGroup().getValue());
 	    }
 	  }
 

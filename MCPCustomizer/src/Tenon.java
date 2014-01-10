@@ -5,9 +5,7 @@ import toxi.geom.Vec3D;
 
 public class Tenon 
 {
-  private int relationTenonLength = 4; //to determine length of a tenon corresponding to thickness of shapes
-
-  public Tenon(Edge edge1)
+  public static void createOutlineOfEdge(Edge edge1)
   {
     ArrayList<Vec2D> basic = new ArrayList<Vec2D>();
     basic.add(edge1.getV1());
@@ -15,8 +13,10 @@ public class Tenon
     edge1.setTenons(basic);
   }
 
-  public Tenon(Edge edgeMaster, Edge edgeSlave)
+  public static void createOutlineOfEdge(Edge edgeMaster, Edge edgeSlave)
   {
+    int relationTenonLength = 4; //to determine length of a tenon corresponding to thickness of shapes
+
     Vec3D p1 = edgeMaster.getShape().get3Dperpendicular(edgeMaster.getP3D1(), edgeMaster.getP3D2());
     Vec3D p2 = edgeSlave.getShape().get3Dperpendicular(edgeSlave.getP3D1(), edgeSlave.getP3D2());
     float angle = p1.angleBetween(p2, true);
@@ -41,11 +41,6 @@ public class Tenon
     // Problem: did not work for small angles...
     // user has to modify the tenons afterwards (sandpaper :-)
     // allow bigger intrusions has the inert problem that this may interfere with neighbour tenons
-    //if ((angle >(float)Math.PI/2 && angle < (float)Math.PI) || (angle > (float)Math.PI*3/2 && angle <= (float)Math.PI*2))
-    // if ((angle >(float)0 && angle < (float)Math.PI/2) || (angle > (float)Math.PI && angle < (float)Math.PI*3/2))
-    // {
-    //   angle = angle-(float)Math.PI/2; 
-    // }
     if ((angle >(float)0 && angle < (float)Math.PI/2) || (angle > (float)Math.PI && angle < (float)Math.PI*3/2))
     {
       if (masterTenonDepth>2*thicknessMaster) {
@@ -73,16 +68,17 @@ public class Tenon
     edgeSlave.setTenons(createTenons(edgeSlave, lengthOfATenon, slaveTenonHeight, slaveTenonDepth, numberOfTenons, false));
   }
 
-  private float getHeight(float lengthOfATenon, int thicknessMaster, int thicknessSlave, float angle)
+  private static float getHeight(float lengthOfATenon, int thicknessMaster, int thicknessSlave, float angle)
   {
     if (angle == (float)0 || angle == (float)Math.PI) 
     {
-      // 180° angle (and 0°, but that shouldn't happen)
+      // 180 degree angle (and 0 degree, but that shouldn't happen)
       // just use the intrusion of one side as a extrusion for the other
-      return thicknessSlave/2;
+      angle = angle - 0.001f - (float)Math.PI/2; 
+      return (thicknessSlave/2)/(float)Math.cos(angle)+(thicknessMaster/2)*(float)Math.tan(angle);
     }
     else if (angle == (float)Math.PI/2 || angle == (float)Math.PI*3/2) {
-      // 90°, -90° angle
+      // 90 degree, -90 degree angle
       // since the logical edge is in the middle of the thickness we have to add half the thickness the other (connected) shape
       // as extrusion as well as intrusion
       return thicknessSlave/2;
@@ -104,7 +100,7 @@ public class Tenon
     }
   }
 
-  private ArrayList<Vec2D> createTenons(Edge edge, float lengthOfATenon, float tenonHeight, float tenonDepth, int numberOfTenons, boolean beginWithExtrusion) 
+  private static ArrayList<Vec2D> createTenons(Edge edge, float lengthOfATenon, float tenonHeight, float tenonDepth, int numberOfTenons, boolean beginWithExtrusion) 
   {
     // Ech single tenon consists of two vectors at two points along the edge.
     // Each tenon has a length of modTXlength

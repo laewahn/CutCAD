@@ -25,7 +25,7 @@ class Edge
     this.p3D2 = p3D2;
     this.v1 = v1;
     this.v2 = v2;
-    new Tenon(this);
+    Tenon.createOutlineOfEdge(this);
     this.isSelected = false;
   }
 

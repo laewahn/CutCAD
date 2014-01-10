@@ -50,7 +50,7 @@ class AllMaterials extends PApplet
 		//TODO: get the material file from visicut and add them to materials
 	}
 
-	public ArrayList<Material> getMaterials()
+	public static ArrayList<Material> getMaterials()
 	{
 		return materials;
 	}

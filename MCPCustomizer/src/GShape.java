@@ -27,8 +27,8 @@ public class GShape
     this.isSelected = false;
     this.shape = shape;
     this.numberOfConnections = 0;
-    this.material = new AllMaterials().getMaterials().get(0);
-    
+    this.material = AllMaterials.getMaterials().get(0);
+     
     vertices = initVertices;
     edges = new ArrayList<Edge>();
     vertices3D = new ArrayList<Vec3D>();
@@ -243,11 +243,22 @@ public class GShape
 
   public void setMaterial(Material material)
   {
-    if(this.getNumberOfConnections() == 0)
+     if(this.getNumberOfConnections() == 0)
+     this.material = material;
+     if(this.getNumberOfConnections() > 0)
     {
-      this.material = material;
+       this.material = material;
+       for(Edge e : edges)
+       {
+         for (Connection c : Connection.getConnections())
+         {
+           if(c.getMasterEdge() == e) Tenon.createOutlineOfEdge(c.getSlaveEdge(), e);
+           else if (c.getSlaveEdge() == e) Tenon.createOutlineOfEdge(c.getMasterEdge(), e);
+         }
+       }
     }
   }
+
 
   public void setSelected(boolean selected) {
     this.isSelected = selected;
