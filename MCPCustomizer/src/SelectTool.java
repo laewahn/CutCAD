@@ -9,14 +9,16 @@ import toxi.geom.Vec2D;
 class SelectTool extends Tool {
     
     List<Shape> shapes;
+    List<Connection> connections;
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public SelectTool(Rect view, Properties properties, List<Shape> shapes, Transformation2D transform) 
+    public SelectTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform) 
     {
         super(view, properties, transform, "SelectTool");
         
         this.shapes = shapes;
+        this.connections = connections;
         this.dragging = false;
         this.originalMousePosition = new Vec2D(0,0);
     }
@@ -43,8 +45,8 @@ class SelectTool extends Tool {
         {
             if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
             {
-                properties.plugTo(s);
                 properties.show();
+                properties.plugTo(s);
             } else if (this.inView(position) && s.getShape().isSelected() && button == PConstants.RIGHT){
                 this.dragging = true;
                 // this.originalMousePosition.set(position.sub(new Vec2D(view2DPosX, view2DPosY)));
@@ -52,6 +54,14 @@ class SelectTool extends Tool {
                 this.originalMousePosition.set(currentMousePosition);
                 noneSelected = false;
             }
+        }
+        for (Connection c : connections)
+        {
+        	if (this.inView(position) && c.isSelected() && button == PConstants.LEFT)
+        	{
+        		properties.show();
+        		properties.plugTo(c);
+        	}
         }
         if (this.inView(position) && button == PConstants.RIGHT && noneSelected)
         {
@@ -84,6 +94,15 @@ class SelectTool extends Tool {
                     Vec2D currentMousePosition = this.positionRelativeToView(position);
                     s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
                     originalMousePosition.set(currentMousePosition);
+                    noneSelected = false;
+                }
+            }
+            for (Connection c : connections)
+            {
+                c.setSelected(c.mouseOver(relativePosition));
+
+                if (c.isSelected())
+                {
                     noneSelected = false;
                 }
             }

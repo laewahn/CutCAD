@@ -11,8 +11,10 @@ class Properties
   private ArrayList<Controller> controllers;
   private ArrayList<Material> materials;
   private Slider setSizeX, setSizeY;
+  private Slider setAngle;
   private DropdownList setMaterial;
-  private Shape currentlyPluggedTo;
+  private Shape shapeCurrentlyPluggedTo;
+  private Connection connectionCurrentlyPluggedTo;
   private int posX, posY, sizeX, sizeY;
   private boolean hidden;
 
@@ -26,7 +28,8 @@ class Properties
 
     this.controllers = new ArrayList<Controller>();
     this.materials = new AllMaterials().getMaterials();
-    this.currentlyPluggedTo = null;
+    this.shapeCurrentlyPluggedTo = null;
+    this.connectionCurrentlyPluggedTo = null;
 
     setSizeX = cp5.addSlider("setSizeX").setPosition(100, 25).setRange(10, 255).setCaptionLabel("Width");
 
@@ -34,11 +37,14 @@ class Properties
       .setPosition(300, 25)
         .setRange(10, 255)
           .setCaptionLabel("Length");
+          
+    setAngle = cp5.addSlider("setAngle").setPosition(100, 25).setRange(0, 360).setCaptionLabel("Angle");
 
     setMaterial = cp5.addDropdownList("setMaterial")
       .setPosition(sizeX-225, (sizeY-25)/2+25)
         .setSize(200,400);
 
+	controllers.add(setAngle);
     controllers.add(setSizeX);
     controllers.add(setSizeY);
   }
@@ -61,21 +67,59 @@ class Properties
 
   void changeMaterial(float eventNumber)
   {
-    currentlyPluggedTo.getShape().setMaterial(materials.get((int)eventNumber));
+    shapeCurrentlyPluggedTo.getShape().setMaterial(materials.get((int)eventNumber));
+  }
+  
+  public void plugTo(Connection c)
+  {
+    if (this.shapeCurrentlyPluggedTo != null)
+    {
+      setSizeX.unplugFrom(this.shapeCurrentlyPluggedTo);
+      setSizeY.unplugFrom(this.shapeCurrentlyPluggedTo);
+    }
+    if (this.connectionCurrentlyPluggedTo != null)
+    {
+      setAngle.unplugFrom(this.connectionCurrentlyPluggedTo);
+    }
+    showConnectionProperties();
+    setAngle.plugTo(c);
+
+    this.connectionCurrentlyPluggedTo = c;
   }
 
   public void plugTo(Shape s)
   {
-    if (this.currentlyPluggedTo != null)
+    if (this.shapeCurrentlyPluggedTo != null)
     {
-      setSizeX.unplugFrom(this.currentlyPluggedTo);
-      setSizeY.unplugFrom(this.currentlyPluggedTo);
+      setSizeX.unplugFrom(this.shapeCurrentlyPluggedTo);
+      setSizeY.unplugFrom(this.shapeCurrentlyPluggedTo);
     }
+    if (this.connectionCurrentlyPluggedTo != null)
+    {
+      setAngle.unplugFrom(this.connectionCurrentlyPluggedTo);
+    }
+    showShapeProperties();
     setSizeX.plugTo(s).setValue(s.getValue(0));
     setSizeY.plugTo(s).setValue(s.getValue(1));
     customize(setMaterial, s);
 
-    this.currentlyPluggedTo = s;
+    this.shapeCurrentlyPluggedTo = s;
+  }
+  
+  private void showConnectionProperties()
+  {
+    setAngle.show();
+    setMaterial.hide();
+    setSizeX.hide();
+    setSizeY.hide();
+  }
+  
+  private void showShapeProperties()
+  {
+    setAngle.hide();
+    setMaterial.show();
+    setSizeX.show();
+    setSizeY.show();
   }
 
   public void hide()

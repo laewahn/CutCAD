@@ -402,7 +402,7 @@ public class GShape
 
   public boolean mouseOver(Vec2D mousePosition)
   {
-    Polygon2D test = new Polygon2D((List)vertices);
+    Polygon2D test = new Polygon2D((List<Vec2D>)vertices);
     return test.containsPoint(mousePosition.sub(position2D));
   }
   

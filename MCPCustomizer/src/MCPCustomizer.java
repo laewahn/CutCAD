@@ -74,7 +74,7 @@ public class MCPCustomizer extends PApplet {
 	    createToolbar();
 
 	    cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX));
-	    selectedTool = new SelectTool(view2DRect, properties, shapes, transform2D);
+	    selectedTool = new SelectTool(view2DRect, properties, shapes, connections, transform2D);
 	  }
 
 	  public void draw()
@@ -138,7 +138,7 @@ public class MCPCustomizer extends PApplet {
 	    toolbar.setPosition(0, 50).setSize(150, 500).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
-	      new SelectTool(view2DRect, properties, shapes, transform2D),
+	      new SelectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DrawTool(view2DRect, properties, shapes, transform2D),
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),

@@ -404,6 +404,14 @@ public class Connection
     slaveEdge.setLocked(locked);
     masterEdge.setLocked(locked);
   }
+  
+  public void setAngle(float angle)
+  {
+	  if (!(this.slaveEdge.getShape().getNumberOfConnections() > 1))
+	  {
+		  connectEdges(this.masterEdge, this.slaveEdge, (float) Math.toRadians(angle));
+	  }
+  }
 
   private void connectEdges(Edge masterEdge, Edge slaveEdge, float angle) {
     GShape master = masterEdge.getShape();
