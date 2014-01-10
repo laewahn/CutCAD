@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import processing.core.PConstants;
@@ -16,6 +17,7 @@ public class GShape
   private boolean isSelected;
   private ArrayList<Vec2D> vertices;
   private ArrayList<Vec3D> vertices3D;
+  private ArrayList<Cutout> cutouts = new ArrayList<Cutout>();
   private ArrayList<Edge> edges;
   private Shape shape;
   private Material material;
@@ -28,7 +30,7 @@ public class GShape
     this.shape = shape;
     this.numberOfConnections = 0;
     this.material = AllMaterials.getMaterials().get(0);
-     
+
     vertices = initVertices;
     edges = new ArrayList<Edge>();
     vertices3D = new ArrayList<Vec3D>();
@@ -60,6 +62,16 @@ public class GShape
         edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
       }
     }
+  }
+  
+  public void addCutout(GShape cutout)
+  {
+	cutouts.add(new Cutout (this, cutout));
+  }
+  
+  public void removeCutout(Cutout cutout)
+  {
+	  cutouts.remove(cutout);
   }
 
   public int getNumberOfConnections() 
@@ -152,7 +164,7 @@ public class GShape
     return allVectors;
   }
 
-  public ArrayList<Vec3D> getTenons3D(boolean top)
+  public ArrayList<Vec3D> transformTo3D(boolean top, ArrayList<Vec2D> vectors2D)
   {      
     int offsetZ;
     if (top)
@@ -164,10 +176,10 @@ public class GShape
       offsetZ = -this.getThickness()/2;
     }
     //we want to change the tenon structure to the (logical) 3D positon, therefor first change them to 3D vectors
-    ArrayList<Vec3D> allTenons = new ArrayList<Vec3D>();
-    for (Vec2D v : getTenons())
+    ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
+    for (Vec2D v : vectors2D)
     {
-      allTenons.add(v.to3DXY().addSelf(new Vec3D(0, 0, offsetZ)));
+    	vectors3D.add(v.to3DXY().addSelf(new Vec3D(0, 0, offsetZ)));
     }
 
     //align first edge
@@ -209,13 +221,13 @@ public class GShape
       angleBetweenNormals = angleBetweenNormals*(-1);
     }
 
-    for (int i=0; i<allTenons.size(); i++)
+    for (int i=0; i<vectors3D.size(); i++)
     {
-      allTenons.set(i, allTenons.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
-      allTenons.set(i, allTenons.get(i).rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals));
-      allTenons.set(i, allTenons.get(i).addSelf(diffPosition));
+      vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
+      vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals));
+      vectors3D.set(i, vectors3D.get(i).addSelf(diffPosition));
     }
-    return allTenons;
+    return vectors3D;
   }
 
   public Vec2D get2Dperpendicular(Vec2D v1, Vec2D v2)
@@ -258,7 +270,6 @@ public class GShape
        }
     }
   }
-
 
   public void setSelected(boolean selected) {
     this.isSelected = selected;
@@ -346,45 +357,58 @@ public class GShape
     */
 
     this.setFillColor(p);
-    ArrayList<Vec3D> top = getTenons3D(true);
-    ArrayList<Vec3D> bottom = getTenons3D(false);
-    p.beginShape();
-    for (Vec3D vector : top) {
-      p.vertex(vector.x(), vector.y(), vector.z());
+    createCover3D(p,true);
+    createCover3D(p, false);
+    createSides(p, getTenons());
+    for (Cutout cutout : cutouts)
+    {
+    	createSides(p, cutout.getVectors());
     }
-    p.beginContour();
-    //ToDo: add additional figures for cut-outs
-    p.endContour();
-    p.endShape(PConstants.CLOSE);
-
-    p.beginShape();
-    for (Vec3D vector : bottom) {
-      p.vertex(vector.x(), vector.y(), vector.z());
-    }
-    p.beginContour();
-    //ToDo: add additional figures for cut-outs
-    p.endContour();
-    p.endShape(PConstants.CLOSE);
-
-    for (int i=0; i<top.size()-1; i++) {
-      p.beginShape();
-      p.vertex(top.get(i).x(), top.get(i).y(), top.get(i).z());
-      p.vertex(top.get(i+1).x(), top.get(i+1).y(), top.get(i+1).z());
-      p.vertex(bottom.get(i+1).x(), bottom.get(i+1).y(), bottom.get(i+1).z());
-      p.vertex(bottom.get(i).x(), bottom.get(i).y(), bottom.get(i).z());
-      p.endShape(PConstants.CLOSE);
-    }
-    p.beginShape();
-    p.vertex(top.get(top.size()-1).x(), top.get(top.size()-1).y(), top.get(top.size()-1).z());
-    p.vertex(top.get(0).x(), top.get(0).y(), top.get(0).z());
-    p.vertex(bottom.get(0).x(), bottom.get(0).y(), bottom.get(0).z());
-    p.vertex(bottom.get(top.size()-1).x(), bottom.get(top.size()-1).y(), bottom.get(top.size()-1).z());
-    p.endShape(PConstants.CLOSE);
-
+    
     for (Edge e: edges) //not good... but i've no better idea...still no better version
     {
       e.drawBox3D(p);
     }
+  }
+  
+  private void createSides(PGraphics p, ArrayList<Vec2D> vectors)
+  {
+    ArrayList<Vec3D> top = transformTo3D(true, vectors);
+	ArrayList<Vec3D> bottom = transformTo3D(false, vectors);
+
+	for (int i=0; i<top.size()-1; i++) {
+	  p.beginShape();
+	  p.vertex(top.get(i).x(), top.get(i).y(), top.get(i).z());
+	  p.vertex(top.get(i+1).x(), top.get(i+1).y(), top.get(i+1).z());
+	  p.vertex(bottom.get(i+1).x(), bottom.get(i+1).y(), bottom.get(i+1).z());
+	  p.vertex(bottom.get(i).x(), bottom.get(i).y(), bottom.get(i).z());
+	  p.endShape(PConstants.CLOSE);
+	}
+	p.beginShape();
+	p.vertex(top.get(top.size()-1).x(), top.get(top.size()-1).y(), top.get(top.size()-1).z());
+	p.vertex(top.get(0).x(), top.get(0).y(), top.get(0).z());
+	p.vertex(bottom.get(0).x(), bottom.get(0).y(), bottom.get(0).z());
+	p.vertex(bottom.get(top.size()-1).x(), bottom.get(top.size()-1).y(), bottom.get(top.size()-1).z());
+	p.endShape(PConstants.CLOSE);
+  }
+
+  private void createCover3D(PGraphics p, boolean b) 
+  {
+	p.beginShape();
+	for (Vec3D vector : transformTo3D(b, getTenons())) {
+	  p.vertex(vector.x(), vector.y(), vector.z());
+	}
+	    
+	for(Cutout cutout : cutouts)
+	{
+	  p.beginContour();
+	  for(Vec3D vector : transformTo3D(b, cutout.getVectors()))
+	  {
+	    p.vertex(vector.x(), vector.y(), vector.z());
+	  }
+	  p.endContour();
+	}
+	p.endShape(PConstants.CLOSE);
   }
 
   private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors, Vec2D position)
@@ -394,9 +418,16 @@ public class GShape
     for (Vec2D vector : getTenons()) {
       p.vertex(vector.x()+getPosition2D().x(), vector.y()+getPosition2D().y());
     }
-    p.beginContour();
-    //ToDo: add additional figures for cut-outs
-    p.endContour();
+    
+    for(Cutout cutout : cutouts)
+    {
+      p.beginContour();
+      for(Vec2D vector : cutout.getVectors())
+      {
+    	p.vertex(vector.x()+getPosition2D().x(), vector.y()+getPosition2D().y());
+      }
+      p.endContour();
+    }
     p.endShape(PConstants.CLOSE);
   }
 

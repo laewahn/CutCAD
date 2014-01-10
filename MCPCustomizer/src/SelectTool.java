@@ -63,6 +63,14 @@ class SelectTool extends Tool {
         		properties.plugTo(c);
         	}
         }
+        for (Cutout c : Cutout.getAllCutouts())
+        {
+        	if (this.inView(position) && c.isSelected() && button == PConstants.LEFT)
+        	{
+        		properties.show();
+        		properties.plugTo(c);
+        	}
+        }
         if (this.inView(position) && button == PConstants.RIGHT && noneSelected)
         {
             this.dragging = true;
@@ -98,6 +106,15 @@ class SelectTool extends Tool {
                 }
             }
             for (Connection c : connections)
+            {
+                c.setSelected(c.mouseOver(relativePosition));
+
+                if (c.isSelected())
+                {
+                    noneSelected = false;
+                }
+            }
+            for (Cutout c : Cutout.getAllCutouts())
             {
                 c.setSelected(c.mouseOver(relativePosition));
 

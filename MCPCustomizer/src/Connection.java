@@ -285,5 +285,9 @@ public class Connection
 
     return masterNormal.angleBetween(slaveNormal, true);
   }
+
+  public float getAngle() {
+    return calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape());
+  }
 }
 

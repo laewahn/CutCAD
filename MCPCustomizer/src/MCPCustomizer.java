@@ -101,6 +101,11 @@ public class MCPCustomizer extends PApplet {
 	    {
 	      c.drawConnection(view2D);
 	    }
+	    
+	    for (Cutout c : Cutout.getAllCutouts())
+	    {
+	      c.drawCutout(view2D);
+	    }
 
 	    this.selectedTool.draw2D(view2D);
 
@@ -140,6 +145,7 @@ public class MCPCustomizer extends PApplet {
 	      new DrawTool(view2DRect, properties, shapes, transform2D),
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
+	      new CutoutTool(view2DRect, properties, shapes, connections, transform2D),
 	      new PrintTool(view2DRect, properties, transform2D)
 	    };
 
@@ -205,7 +211,7 @@ public class MCPCustomizer extends PApplet {
 	    if (theEvent.isGroup() && theEvent.isFrom("Toolbar"))
 	    {
 	      int id = (int)theEvent.group().value();
-	      if(id != 4)
+	      if(id != 5)
 	      {
 	        selectedTool = tools[id];
 	      }
@@ -218,7 +224,12 @@ public class MCPCustomizer extends PApplet {
 	          selectedTool = new DeleteTool(view2DRect, properties, shapes, connections, transform2D);
 	          properties.hide();        
 	      }
-	      if(id == 4)
+	      if (id == 4)
+	      {
+	          selectedTool = new CutoutTool(view2DRect, properties, shapes, connections, transform2D);
+	          properties.hide();        
+	      }
+	      if(id == 5)
 	      {
 	        PrintDialog printDialog = new PrintDialog(shapes); 
 	      }

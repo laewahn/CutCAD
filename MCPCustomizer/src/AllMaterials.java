@@ -17,7 +17,8 @@ class AllMaterials extends PApplet
 	{
 		File[] files= new File(path).listFiles();
 
-		for(int i=1; i<files.length; i++) 
+		//make sure load only xml
+		for(int i=0; i<files.length; i++) 
 		{
 			XML material = loadXML(path + "/" + files[i].getName());
 

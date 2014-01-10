@@ -63,6 +63,19 @@ class DeleteTool extends Tool {
                 connectionIterator.remove();
             }
         }
+        
+        Iterator<Cutout> cutoutIterator = Cutout.getAllCutouts().iterator();
+
+        Cutout o;
+        while (cutoutIterator.hasNext())
+        {
+            o = cutoutIterator.next();
+            if (this.inView(position) && o.isSelected() && button == PConstants.LEFT)
+            {
+                o.removeCutout();
+                cutoutIterator.remove();
+            }
+        }
     }
 
     private void removeConnectionsContaining(Shape s)
@@ -101,6 +114,9 @@ class DeleteTool extends Tool {
             for (Connection c : connections) {
                 c.setSelected(c.mouseOver(relativePosition));
             }
+            for (Cutout c : Cutout.getAllCutouts()) {
+                c.setSelected(c.mouseOver(relativePosition));
+            }
         }
         else
         {
@@ -108,6 +124,9 @@ class DeleteTool extends Tool {
                 s.getShape().setSelected(false);
             }
             for (Connection c : connections) {
+                c.setSelected(false);
+            }
+            for (Cutout c : Cutout.getAllCutouts()) {
                 c.setSelected(false);
             }
         }
