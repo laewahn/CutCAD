@@ -4,6 +4,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
@@ -57,8 +58,8 @@ public class PrintSubInstance
   {
     for(int i = 0; i < shapesPlaced.size(); i++)
     {
-       ArrayList<Vec2D> vertices = shapesPlaced.get(i).getShape().getVertices();
-       ArrayList<Vec2D> newVertices = new ArrayList<Vec2D>();
+       List<Vec2D> vertices = shapesPlaced.get(i).getShape().getVertices();
+       List<Vec2D> newVertices = new ArrayList<Vec2D>();
        for(int j = 0; j < vertices.size(); j++)
        {
          newVertices.add(new Vec2D(vertices.get(j)));
@@ -111,7 +112,7 @@ public class PrintSubInstance
     String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">";
     for(int i = 0; i < shapesPlaced.size(); i++)
     {
-      ArrayList<Vec2D> vertices = shapesPlaced.get(i).getShape().getVertices();
+      List<Vec2D> vertices = shapesPlaced.get(i).getShape().getVertices();
       Vec2D position = shapesPlaced.get(i).getShape().getPosition2D();
       for(int j = 0; j < vertices.size(); j++)
       {

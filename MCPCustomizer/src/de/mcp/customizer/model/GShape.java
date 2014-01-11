@@ -15,14 +15,14 @@ public class GShape
   private Vec2D position2D;
   private Vec3D position3D;
   private boolean isSelected;
-  private ArrayList<Vec2D> vertices;
-  private ArrayList<Vec3D> vertices3D;
-  private ArrayList<Cutout> cutouts = new ArrayList<Cutout>();
-  private ArrayList<Edge> edges;
+  private List<Vec2D> vertices;
+  private List<Vec3D> vertices3D;
+  private List<Cutout> cutouts = new ArrayList<Cutout>();
+  private List<Edge> edges;
   private Shape shape;
   private Material material;
 
-  public GShape(ArrayList<Vec2D> initVertices, Vec3D position, Shape shape)
+  public GShape(List<Vec2D> initVertices, Vec3D position, Shape shape)
   {
     this.position2D = position.to2DXY();
     this.position3D = position;
@@ -45,7 +45,7 @@ public class GShape
     }
   }
   
-  public void recalculate(ArrayList <Vec2D> basicShape)
+  public void recalculate(List<Vec2D> basicShape)
   {
     if(this.numberOfConnections == 0)
     {
@@ -108,12 +108,12 @@ public class GShape
     return this.isSelected;
   }
 
-  public ArrayList<Edge> getEdges()
+  public List<Edge> getEdges()
   {
     return this.edges;
   }
 
-  public ArrayList<Vec2D> getVertices()
+  public List<Vec2D> getVertices()
   {
     return this.vertices;
   }

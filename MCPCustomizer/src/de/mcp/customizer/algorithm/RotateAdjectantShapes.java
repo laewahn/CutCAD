@@ -129,7 +129,7 @@ public class RotateAdjectantShapes
 
   private static Edge getRotatingEdge(Edge edge)
   {
-    ArrayList<Edge> edges = edge.getShape().getEdges();
+    List<Edge> edges = edge.getShape().getEdges();
     int numberOfEdges = edges.size();
     if (compareEdges(edge, getOtherEdge(edge))) 
     {
@@ -150,7 +150,7 @@ public class RotateAdjectantShapes
 
   private static void initialiseVirtualShape(Edge masterEdge, Edge slaveEdge)
   {
-    ArrayList<Edge> edges = virtualShape.getShape().getEdges();
+    List<Edge> edges = virtualShape.getShape().getEdges();
     
     edges.get(0).setP3D1(getRotatingEdge(masterEdge).getP3D1().copy());
     edges.get(0).setP3D2(getRotatingEdge(masterEdge).getP3D2().copy());

@@ -1,5 +1,6 @@
 package de.mcp.customizer.printdialog.lasercutter;
 import java.util.ArrayList;
+import java.util.List;
 
 import toxi.geom.Vec2D;
 
@@ -51,16 +52,16 @@ public class LaserJobCreator
     vp = new VectorPart(psffProperty,DPI); 
   }
   
-  public void addVerticesToVectorPart(ArrayList<Vec2D> shape)
+  public void addVerticesToVectorPart(List<Vec2D> newVertices)
   {
-     if(shape.get(0) != null)
+     if(newVertices.get(0) != null)
      {
-        vp.moveto((int)shape.get(0).getComponent(0),(int)shape.get(0).getComponent(1));
-        for(int i = 1; i < shape.size(); i++)
+        vp.moveto((int)newVertices.get(0).getComponent(0),(int)newVertices.get(0).getComponent(1));
+        for(int i = 1; i < newVertices.size(); i++)
         {
-          vp.lineto((int)shape.get(i).getComponent(0),(int)shape.get(i).getComponent(1));
+          vp.lineto((int)newVertices.get(i).getComponent(0),(int)newVertices.get(i).getComponent(1));
         }
-        vp.lineto((int)shape.get(0).getComponent(0),(int)shape.get(0).getComponent(1));
+        vp.lineto((int)newVertices.get(0).getComponent(0),(int)newVertices.get(0).getComponent(1));
      }
   }
   
