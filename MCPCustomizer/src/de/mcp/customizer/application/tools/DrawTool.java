@@ -80,7 +80,7 @@ public class DrawTool extends Tool {
     public void draw2D(PGraphics p)
     {
         if (this.previewRectangle != null) {
-            this.previewRectangle.draw2D(p);
+            this.previewRectangle.getShape().draw2D(p);
         }
     }
 }

@@ -1,15 +1,12 @@
 package de.mcp.customizer.model;
+
 import java.util.ArrayList;
 
-import de.mcp.customizer.application.tools.Selectable;
-import de.mcp.customizer.view.Drawable2D;
-import de.mcp.customizer.view.Drawable3D;
-import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
-public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectable
+public class Rectangle extends Shape
 {
   private int sizeX, sizeY, index;
   private static int counter = 0;
@@ -89,14 +86,6 @@ public class Rectangle extends Shape implements Drawable2D, Drawable3D, Selectab
   public GShape getShape()
   {
     return basic;
-  }
-
-  public void draw2D(PGraphics p) {
-    this.basic.draw2D(p);
-  }
-
-  public void draw3D(PGraphics p) {
-    this.basic.draw3D(p);
   }
 
   public boolean mouseOver(Vec2D mousePosition) {

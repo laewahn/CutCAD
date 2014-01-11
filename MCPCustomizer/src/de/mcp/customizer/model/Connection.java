@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
+import de.mcp.customizer.view.Drawable2D;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
-public class Connection 
+public class Connection implements Drawable2D
 {
   private Edge masterEdge, slaveEdge;
   private float angle = 400;
@@ -57,7 +58,12 @@ public class Connection
     this.slaveEdge = e;
   }
 
-  public void drawConnection(PGraphics p)
+  @Override
+  public void draw2D(PGraphics p) {
+  	this.drawConnection(p);
+  }
+  
+  private void drawConnection(PGraphics p)
   {
     Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
     Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
@@ -294,5 +300,6 @@ public class Connection
 	  if (angle == 400) angle = (float) Math.toDegrees(calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape()));
 	  return angle;
   }
+
 }
 

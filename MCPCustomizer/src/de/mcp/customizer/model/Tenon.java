@@ -6,6 +6,7 @@ import toxi.geom.Vec3D;
 
 public class Tenon 
 {
+	
   public static void createOutlineOfEdge(Edge edge1)
   {
     ArrayList<Vec2D> basic = new ArrayList<Vec2D>();

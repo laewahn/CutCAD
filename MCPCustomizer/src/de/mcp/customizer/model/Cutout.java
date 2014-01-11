@@ -1,10 +1,11 @@
 package de.mcp.customizer.model;
 import java.util.ArrayList;
 
+import de.mcp.customizer.view.Drawable2D;
 import processing.core.PGraphics;
 import toxi.geom.*;
 
-public class Cutout 
+public class Cutout implements Drawable2D
 {
 	private Vec2D position;
 	private float angle;
@@ -82,7 +83,12 @@ public class Cutout
 		this.angle = angle;
 	}
 
-	public void drawCutout(PGraphics p)
+	@Override
+	public void draw2D(PGraphics p) {
+		this.drawCutout(p);
+	}
+	
+	private void drawCutout(PGraphics p)
 	{
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(this.position);
 		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D());

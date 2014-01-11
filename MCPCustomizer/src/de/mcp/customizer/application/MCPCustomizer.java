@@ -107,12 +107,12 @@ public class MCPCustomizer extends PApplet {
 	    
 	    for (Connection c : connections)
 	    {
-	      c.drawConnection(view2D);
+	      c.draw2D(view2D);
 	    }
 	    
 	    for (Cutout c : Cutout.getAllCutouts())
 	    {
-	      c.drawCutout(view2D);
+	      c.draw2D(view2D);
 	    }
 
 	    this.toolbar.getSelectedTool().draw2D(view2D);
