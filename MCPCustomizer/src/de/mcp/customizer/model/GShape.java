@@ -2,6 +2,8 @@ package de.mcp.customizer.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.Drawable3D;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Line2D;
@@ -9,7 +11,7 @@ import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
-public class GShape
+public class GShape implements Drawable2D, Drawable3D
 {
   private int numberOfConnections;
   private Vec2D position2D;
@@ -307,31 +309,31 @@ public class GShape
   }
 
   // Just to display the basic shape in a certain areal (e.g. within a button):
-  public ArrayList<Vec2D> getResized (int sizeX, int sizeY) 
-  {
-    int minX = Integer.MAX_VALUE;
-    int minY = Integer.MAX_VALUE;
-    int maxX = 0;
-    int maxY = 0;
-    for (Vec2D vector : vertices) {
-      if ((int)vector.x() > maxX) maxX = (int)vector.x();
-      if ((int)vector.x() < minX) minX = (int)vector.x();
-      if ((int)vector.y() > maxY) maxY = (int)vector.y();
-      if ((int)vector.y() < minY) minY = (int)vector.y();
-    }
-    ArrayList<Vec2D> resized = new ArrayList<Vec2D>();
-    for (Vec2D vector : vertices) {
-      resized.add(new Vec2D(vector.x()*sizeX/(maxX-minX), vector.y()*sizeY/(maxY-minY)));
-    }
-    return resized;
-  }
+//  public ArrayList<Vec2D> getResized (int sizeX, int sizeY) 
+//  {
+//    int minX = Integer.MAX_VALUE;
+//    int minY = Integer.MAX_VALUE;
+//    int maxX = 0;
+//    int maxY = 0;
+//    for (Vec2D vector : vertices) {
+//      if ((int)vector.x() > maxX) maxX = (int)vector.x();
+//      if ((int)vector.x() < minX) minX = (int)vector.x();
+//      if ((int)vector.y() > maxY) maxY = (int)vector.y();
+//      if ((int)vector.y() < minY) minY = (int)vector.y();
+//    }
+//    ArrayList<Vec2D> resized = new ArrayList<Vec2D>();
+//    for (Vec2D vector : vertices) {
+//      resized.add(new Vec2D(vector.x()*sizeX/(maxX-minX), vector.y()*sizeY/(maxY-minY)));
+//    }
+//    return resized;
+//  }
 
   // drawing routines
-  public void drawPreview(PGraphics p, int posX, int posY, int sizeX, int sizeY) 
-  {
-    ArrayList<Vec2D> toDraw = this.getResized(sizeX, sizeY);
-    this.createCover2D(p, toDraw, new Vec2D (posX, posY));
-  }
+//  public void drawPreview(PGraphics p, int posX, int posY, int sizeX, int sizeY) 
+//  {
+//    ArrayList<Vec2D> toDraw = this.getResized(sizeX, sizeY);
+//    this.createCover2D(p, toDraw, new Vec2D (posX, posY));
+//  }
 
 
   public void draw2D(PGraphics p) 
@@ -340,7 +342,7 @@ public class GShape
 
     for (Edge e: edges) //not good... but i've no better idea
     {
-      e.drawBox(p);
+      e.draw2D(p);
     }
   }
 
@@ -367,7 +369,7 @@ public class GShape
     
     for (Edge e: edges) //not good... but i've no better idea...still no better version
     {
-      e.drawBox3D(p);
+      e.draw3D(p);
     }
   }
   
