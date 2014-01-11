@@ -3,6 +3,7 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.mcp.customizer.model.Shape;
 import toxi.geom.Vec2D;
@@ -15,7 +16,7 @@ public class PrintDialog
   private PrintDialogFrame printDialogWindow;
   private Frame f;
   
-  public PrintDialog(ArrayList<Shape> shapes)
+  public PrintDialog(List<Shape> shapes)
   {
     this.shapes = new ArrayList<Shape>();
     for(int i = 0; i < shapes.size(); i++)

@@ -45,6 +45,9 @@ public abstract class Tool implements Drawable2D {
 
     abstract public PGraphics getIcon(PGraphics context);
     
+    public void wasSelected(){};
+    public void wasUnselected(){};
+    
     public void draw2D(PGraphics p) {};
 
 }

@@ -1,5 +1,4 @@
 package de.mcp.customizer.printdialog.lasercutter;
-import java.util.ArrayList;
 import java.util.List;
 
 import toxi.geom.Vec2D;

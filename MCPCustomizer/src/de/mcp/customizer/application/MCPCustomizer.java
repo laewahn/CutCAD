@@ -1,17 +1,14 @@
 package de.mcp.customizer.application;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.processing.ToxiclibsSupport;
-
-import controlP5.ControlEvent;
 import controlP5.ControlP5;
-
 import de.mcp.customizer.application.tools.ConnectTool;
 import de.mcp.customizer.application.tools.CutoutTool;
 import de.mcp.customizer.application.tools.DeleteTool;
@@ -24,9 +21,6 @@ import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
-
-import de.mcp.customizer.printdialog.PrintDialog;
-
 import de.mcp.customizer.view.Transformation2D;
 
 public class MCPCustomizer extends PApplet {
@@ -61,7 +55,6 @@ public class MCPCustomizer extends PApplet {
 	  Transformation2D transform2D = new Transformation2D((float) 1.0, new Vec2D(0,0));
 
 	  Vec3D cameraPosition;
-	  Tool selectedTool;
 	  Tool tools[];
 
 	  public void setup()
@@ -92,7 +85,6 @@ public class MCPCustomizer extends PApplet {
 	    createToolbar();
 
 	    cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX));
-	    selectedTool = new SelectTool(view2DRect, properties, shapes, connections, transform2D);
 	  }
 
 	  public void draw()
@@ -127,7 +119,7 @@ public class MCPCustomizer extends PApplet {
 	      c.drawCutout(view2D);
 	    }
 
-	    this.selectedTool.draw2D(view2D);
+	    this.toolbar.getSelectedTool().draw2D(view2D);
 
 	    view2D.endDraw();
 
@@ -157,7 +149,7 @@ public class MCPCustomizer extends PApplet {
 
 	  void createToolbar()
 	  {
-	    toolbar = new Toolbar(cp5, "Toolbar");
+	    toolbar = new Toolbar(cp5, this);
 	    toolbar.setPosition(0, 50).setSize(150, 500).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
@@ -167,15 +159,11 @@ public class MCPCustomizer extends PApplet {
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
 	      new CutoutTool(view2DRect, properties, shapes, connections, transform2D),
-	      new PrintTool(view2DRect, properties, transform2D)
+	      new PrintTool(view2DRect, properties, transform2D, shapes)
 	    };
-
-	    for (int i = 0; i < tools.length; i++)
-	    {
-	      Tool theTool = tools[i];
-	      PGraphics toolIcon = theTool.getIcon(createGraphics(150, 50));
-	      toolbar.addCustomItem(theTool.getName(), i, new ShapeButton(toolIcon));
-	    }
+	    
+	    toolbar.addTools(Arrays.asList(tools));
+	    toolbar.setSelectedTool(tools[0]);
 	  }
 
 	  void createProperties()
@@ -193,7 +181,7 @@ public class MCPCustomizer extends PApplet {
 	      }
 	      
 	      Vec2D mousePosition = new Vec2D(mouseX, mouseY);
-	      selectedTool.mouseButtonPressed(mousePosition, mouseButton);
+	      toolbar.getSelectedTool().mouseButtonPressed(mousePosition, mouseButton);
 	  }
 
 	  public void mouseDragged()
@@ -202,12 +190,12 @@ public class MCPCustomizer extends PApplet {
 	      cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX + mouseX - view3DPosX - startX));
 	    }
 
-	    selectedTool.mouseMoved(new Vec2D(mouseX, mouseY));
+	    toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
 	  }
 
 	  public void mouseReleased()
 	  {
-	    selectedTool.mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
+	    toolbar.getSelectedTool().mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
 
 	    if (mouseOver3DView())
 	    {
@@ -218,45 +206,12 @@ public class MCPCustomizer extends PApplet {
 
 	  public void mouseMoved() 
 	  {
-	      selectedTool.mouseMoved(new Vec2D(mouseX, mouseY));
+	      toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
 	  }
 
 	  boolean mouseOver3DView()
 	  {
 	    return mouseX > view3DPosX && mouseX <= view3DPosX + viewSizeX && mouseY > view3DPosY && mouseY <= view3DPosY + viewSizeY;
-	  }
-
-	  public void controlEvent(ControlEvent theEvent) 
-	  {
-	    // an event from the toolbar
-	    if (theEvent.isGroup() && theEvent.isFrom("Toolbar"))
-	    {
-	      int id = (int)theEvent.group().value();
-	      if(id != 5)
-	      {
-	        selectedTool = tools[id];
-	      }
-	      
-	      if (!selectedTool.getName().equals("SelectTool")){
-	        properties.hide();
-	      }
-	      if (id == 3)
-	      {
-	          properties.hide();        
-	      }
-	      if (id == 4)
-	      {
-	          properties.hide();        
-	      }
-	      if(id == 5)
-	      {
-	        PrintDialog printDialog = new PrintDialog(shapes); 
-	      }
-	    }
-	    else if (theEvent.isGroup() && theEvent.getGroup().getName() == "setMaterial")
-	    {
-	      properties.changeMaterial(theEvent.getGroup().getValue());
-	    }
 	  }
 
 	  public void keyPressed()

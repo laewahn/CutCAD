@@ -1,16 +1,24 @@
 package de.mcp.customizer.application.tools;
+
+import java.util.List;
+
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.printdialog.PrintDialog;
 import de.mcp.customizer.view.Transformation2D;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 
 public class PrintTool extends Tool {
- 
-    public PrintTool(Rect view, Properties properties, Transformation2D transform) 
+	
+	private List<Shape> shapes;
+	
+    public PrintTool(Rect view, Properties properties, Transformation2D transform, List<Shape> shapes) 
     {
         super(view, properties, transform, "PrintTool");
+        this.shapes = shapes;
     }
 
     public PGraphics getIcon(PGraphics context)
@@ -46,5 +54,11 @@ public class PrintTool extends Tool {
     
     public void mouseMoved(Vec2D position)
     {
+    }
+    
+    @Override
+    public void wasSelected() {
+    	super.wasSelected();
+    	PrintDialog printDialog = new PrintDialog(shapes);
     }
 }

@@ -18,70 +18,81 @@ import de.mcp.customizer.view.Transformation2D;
 public class PolygonTool extends Tool {
 
 	private List<Shape> shapes;
-	
+
 	private GShape previewShape;
-	
+
 	private List<Vec2D> vertices;
-	
-	private boolean shapeOpen;
-	
-	public PolygonTool(Rect view, Properties properties, Transformation2D transform, List<Shape> shapes) {
+
+	public PolygonTool(Rect view, Properties properties,
+			Transformation2D transform, List<Shape> shapes) {
 		super(view, properties, transform, "PolygonTool");
 		this.shapes = shapes;
-		this.vertices = new ArrayList<Vec2D>();
 	}
 
 	@Override
 	public void mouseButtonPressed(Vec2D position, int button) {
-		
-		vertices.add(this.positionRelativeToView(position));
-		this.previewShape = new GShape(this.vertices, new Vec3D(), null);
-		
-		if(button == PConstants.RIGHT) {
-			Shape newShape = new PolygonShape(this.previewShape);
-			this.shapes.add(newShape);
-			this.vertices = new ArrayList<Vec2D>();
-		}
-		
-		
+
 	}
 
 	@Override
 	public void mouseButtonReleased(Vec2D position, int button) {
-		// TODO Auto-generated method stub
-		
+
+		if (!inView(position))
+			return;
+
+		vertices.add(this.positionRelativeToView(position));
+		this.previewShape = new GShape(this.vertices, new Vec3D(), null);
+
+		if (button == PConstants.RIGHT) {
+			Shape newShape = new PolygonShape(this.previewShape);
+			this.shapes.add(newShape);
+			this.vertices = new ArrayList<Vec2D>();
+		}
 	}
 
 	@Override
 	public void mouseMoved(Vec2D position) {
-		
+
 	}
 
 	@Override
 	public PGraphics getIcon(PGraphics context) {
 		context.beginDraw();
 		context.noFill();
-        context.stroke(0);
-        context.strokeWeight(2);
-		
-        context.line(50, 10, 120, 14);
+		context.stroke(0);
+		context.strokeWeight(2);
+
+		context.line(50, 10, 120, 14);
 		context.line(120, 14, 110, 34);
 		context.line(110, 34, 80, 44);
 		context.line(80, 44, 50, 22);
 		context.line(50, 22, 50, 10);
-		
+
 		context.endDraw();
-		
+
 		return context;
 	}
 
 	@Override
 	public void draw2D(PGraphics p) {
-		if(this.previewShape != null) {
-			this.previewShape.draw2D(p);			
+		if (this.previewShape != null) {
+			this.previewShape.draw2D(p);
 		}
-		
 		super.draw2D(p);
+	}
+	
+	@Override
+	public void wasSelected() {
+		super.wasSelected();
+		this.vertices = new ArrayList<Vec2D>();
+		this.previewShape = null;
+	}
+	
+	@Override
+	public void wasUnselected() {
+		super.wasUnselected();
+		Shape newShape = new PolygonShape(this.previewShape);
+		this.shapes.add(newShape);
 	}
 
 }
