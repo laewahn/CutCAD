@@ -72,12 +72,12 @@ public class Cutout
 		this.position.set(this.position.x(), position);
 	}
 
-	public float getAngleCutout() 
+	public float getAngle() 
 	{
 		return angle;
 	}
 
-	public void setAngleCutout(float angle) 
+	public void setAngle(float angle) 
 	{
 		this.angle = angle;
 	}

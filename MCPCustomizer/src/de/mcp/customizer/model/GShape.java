@@ -452,6 +452,11 @@ public class GShape
   {
     GShape copy = new GShape(getTenons(), new Vec3D(position3D), shape); 
     copy.setMaterial(this.material);
+    for(Cutout c : this.cutouts)
+    {
+      copy.addCutout(new GShape(c.getVectors(), new Vec3D(0,0,0), shape));
+      Cutout.getAllCutouts().remove(Cutout.getAllCutouts().size()-1);
+    }
     return copy;
   }
 }

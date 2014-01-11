@@ -17,7 +17,7 @@ public class Properties
   private ArrayList<Controller> controllers;
   private ArrayList<Material> materials;
   private Slider setSizeX, setSizeY;
-  private Slider setPositionXCutout, setPositionYCutout, setAngleCutout;
+  private Slider setPositionXCutout, setPositionYCutout;
   private Slider setAngle;
   private DropdownList setMaterial;
   private Shape shapeCurrentlyPluggedTo;
@@ -50,7 +50,6 @@ public class Properties
     
     setPositionXCutout = cp5.addSlider("setPositionXCutout").setPosition(300, 25).setRange(0, 255).setCaptionLabel("x-Position");
     setPositionYCutout = cp5.addSlider("setPositionYCutout").setPosition(500, 25).setRange(0, 255).setCaptionLabel("y-Position");
-    setAngleCutout = cp5.addSlider("setAngleCutout").setPosition(100, 25).setRange(0, 360).setCaptionLabel("Angle");
 
     setMaterial = cp5.addDropdownList("setMaterial")
       .setPosition(sizeX-225, (sizeY-25)/2+25)
@@ -70,7 +69,6 @@ public class Properties
     
     controllers.add(setPositionXCutout);
     controllers.add(setPositionYCutout);
-    controllers.add(setAngleCutout);
   }
 
   void changeMaterial(float eventNumber)
@@ -78,7 +76,7 @@ public class Properties
     shapeCurrentlyPluggedTo.getShape().setMaterial(materials.get((int)eventNumber));
   }
   
-  public void plugTo(Connection c)
+  public void unplugAll()
   {
     if (this.shapeCurrentlyPluggedTo != null)
     {
@@ -91,10 +89,16 @@ public class Properties
     }
     if (this.cutoutCurrentlyPluggedTo != null)
     {
-      setPositionXCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-      setPositionYCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-      setAngleCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
+      setPositionXCutout.unplugFrom(this.cutoutCurrentlyPluggedTo);
+      setPositionYCutout.unplugFrom(this.cutoutCurrentlyPluggedTo);
+      setAngle.unplugFrom(this.cutoutCurrentlyPluggedTo);
     }
+    hideAll();
+  }
+  
+  public void plugTo(Connection c)
+  {
+    unplugAll();
     showConnectionProperties();
     setAngle.plugTo(c).setValue(c.getAngle());
 
@@ -103,21 +107,7 @@ public class Properties
 
   public void plugTo(Shape s)
   {
-    if (this.shapeCurrentlyPluggedTo != null)
-    {
-      setSizeX.unplugFrom(this.shapeCurrentlyPluggedTo);
-      setSizeY.unplugFrom(this.shapeCurrentlyPluggedTo);
-    }
-    if (this.connectionCurrentlyPluggedTo != null)
-    {
-      setAngle.unplugFrom(this.connectionCurrentlyPluggedTo);
-    }
-    if (this.cutoutCurrentlyPluggedTo != null)
-    {
-      setPositionXCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-      setPositionYCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-      setAngleCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-    }
+    unplugAll();
     showShapeProperties();
     setSizeX.plugTo(s).setValue(s.getValue(0));
     setSizeY.plugTo(s).setValue(s.getValue(1));
@@ -128,60 +118,42 @@ public class Properties
   
   public void plugTo(Cutout c)
   {
-    if (this.shapeCurrentlyPluggedTo != null)
-    {
-      setSizeX.unplugFrom(this.shapeCurrentlyPluggedTo);
-      setSizeY.unplugFrom(this.shapeCurrentlyPluggedTo);
-    }
-    if (this.connectionCurrentlyPluggedTo != null)
-    {
-      setAngle.unplugFrom(this.connectionCurrentlyPluggedTo);
-    }
-    if (this.cutoutCurrentlyPluggedTo != null)
-    {
-      setPositionXCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-      setPositionYCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-      setAngleCutout.unplugFrom(this.connectionCurrentlyPluggedTo);
-    }
+    unplugAll();
     showCutoutProperties();
-    setAngleCutout.plugTo(c).setValue(c.getAngleCutout());
+    setAngle.plugTo(c).setValue(c.getAngle());
     setPositionXCutout.plugTo(c).setValue(c.getPositionXCutout());
     setPositionYCutout.plugTo(c).setValue(c.getPositionYCutout());
 
     this.cutoutCurrentlyPluggedTo = c;
   }
   
-  private void showCutoutProperties()
+  private void hideAll()
   {
     setAngle.hide();
-    setPositionXCutout.show();
-    setPositionYCutout.show();
-    setAngleCutout.show();
+    setPositionXCutout.hide();
+    setPositionYCutout.hide();
     setMaterial.hide();
     setSizeX.hide();
     setSizeY.hide();
+  } 
+  
+  private void showCutoutProperties()
+  {
+    setAngle.show();
+    setPositionXCutout.show();
+    setPositionYCutout.show();
   }
   
   private void showConnectionProperties()
   {
     setAngle.show();
-    setMaterial.hide();
-    setSizeX.hide();
-    setSizeY.hide();
-    setPositionXCutout.hide();
-    setPositionYCutout.hide();
-    setAngleCutout.hide();
   }
   
   private void showShapeProperties()
   {
-    setAngle.hide();
     setMaterial.show();
     setSizeX.show();
     setSizeY.show();
-    setPositionXCutout.hide();
-    setPositionYCutout.hide();
-    setAngleCutout.hide();
   }
 
   public void hide()

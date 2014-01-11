@@ -14,6 +14,7 @@ import toxi.geom.Vec3D;
 public class Connection 
 {
   private Edge masterEdge, slaveEdge;
+  private float angle = 400;
   private boolean isSelected;
   private static List<Connection> connections; // wrong place???
 
@@ -226,6 +227,7 @@ public class Connection
   {
 	  if (!(this.slaveEdge.getShape().getNumberOfConnections() > 1))
 	  {
+		  this.angle = angle;
 		  connectEdges(this.masterEdge, this.slaveEdge, (float) Math.toRadians(angle));
 	  }
   }
@@ -289,7 +291,8 @@ public class Connection
   }
 
   public float getAngle() {
-    return calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape());
+	  if (angle == 400) angle = (float) Math.toDegrees(calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape()));
+	  return angle;
   }
 }
 
