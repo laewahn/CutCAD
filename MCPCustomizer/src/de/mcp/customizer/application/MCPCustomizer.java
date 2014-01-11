@@ -18,7 +18,7 @@ import de.mcp.customizer.application.tools.DeleteTool;
 import de.mcp.customizer.application.tools.DrawTool;
 import de.mcp.customizer.application.tools.PrintTool;
 import de.mcp.customizer.application.tools.SelectTool;
-
+import de.mcp.customizer.application.tools.PolygonTool;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
@@ -163,6 +163,7 @@ public class MCPCustomizer extends PApplet {
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DrawTool(view2DRect, properties, shapes, transform2D),
+	      new PolygonTool(view2DRect, properties, transform2D, shapes),
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
 	      new CutoutTool(view2DRect, properties, shapes, connections, transform2D),
@@ -241,12 +242,10 @@ public class MCPCustomizer extends PApplet {
 	      }
 	      if (id == 3)
 	      {
-	          selectedTool = new DeleteTool(view2DRect, properties, shapes, connections, transform2D);
 	          properties.hide();        
 	      }
 	      if (id == 4)
 	      {
-	          selectedTool = new CutoutTool(view2DRect, properties, shapes, connections, transform2D);
 	          properties.hide();        
 	      }
 	      if(id == 5)
