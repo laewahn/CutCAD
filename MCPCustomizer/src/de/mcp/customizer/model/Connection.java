@@ -168,7 +168,7 @@ public class Connection
       out.println("At least one edge is already connected!");
       return false;
     }
-    else if (masterEdge.getV2().distanceTo(masterEdge.getV1()) != slaveEdge.getV2().distanceTo(slaveEdge.getV1()))
+    else if (masterEdge.getLength() != slaveEdge.getLength())
     {
       // no connection between edges of different length (problem: not exacty same length...)
       out.println("Edges have different length!");

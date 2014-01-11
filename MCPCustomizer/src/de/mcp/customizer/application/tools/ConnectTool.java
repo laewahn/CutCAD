@@ -90,7 +90,16 @@ public class ConnectTool extends Tool
             for (Edge e : s.getShape().getEdges())
             {
                 Vec2D relativePosition = this.positionRelativeToView(position);
-                e.setSelected(e.mouseOver(relativePosition));
+                boolean canBeSelected = e.mouseOver(relativePosition);
+                
+                if(this.previewConnection != null) {
+                	Edge firstEdge = this.previewConnection.getMasterEdge(); 
+                	if(firstEdge != null) {
+                		canBeSelected = canBeSelected && (firstEdge.getLength() == e.getLength());
+                	}
+                }
+                
+                e.setSelected(canBeSelected);
             }
         }
     }

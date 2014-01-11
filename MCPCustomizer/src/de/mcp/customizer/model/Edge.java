@@ -180,5 +180,9 @@ public class Edge
     Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-shape.getPosition2D().x(), mouseY-view2DPosY-shape.getPosition2D().y());
     return this.mouseOver(mousePointer);
   }
+  
+  public float getLength() {
+	  return this.getV2().distanceTo(this.getV1());
+  }
 }
 
