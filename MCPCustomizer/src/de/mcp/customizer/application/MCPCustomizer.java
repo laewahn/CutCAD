@@ -9,13 +9,9 @@ import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.processing.ToxiclibsSupport;
 import controlP5.ControlP5;
-import de.mcp.customizer.application.tools.ConnectTool;
-import de.mcp.customizer.application.tools.CutoutTool;
-import de.mcp.customizer.application.tools.DeleteTool;
-import de.mcp.customizer.application.tools.DrawTool;
-import de.mcp.customizer.application.tools.PrintTool;
-import de.mcp.customizer.application.tools.SelectTool;
-import de.mcp.customizer.application.tools.PolygonTool;
+
+import de.mcp.customizer.application.tools.*;
+
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
