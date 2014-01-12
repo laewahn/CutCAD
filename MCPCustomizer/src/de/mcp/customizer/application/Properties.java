@@ -16,7 +16,8 @@ public class Properties
 {
   private ArrayList<Controller> controllers;
   private ArrayList<Material> materials;
-  private Slider setSizeX, setSizeY;
+  private ArrayList<Slider> sliders;
+  private Slider setValue0, setValue1, setValue2, setValue3;
   private Slider setPositionXCutout, setPositionYCutout;
   private Slider setAngle;
   private DropdownList setMaterial;
@@ -38,13 +39,18 @@ public class Properties
     this.materials = AllMaterials.getMaterials();
     this.shapeCurrentlyPluggedTo = null;
     this.connectionCurrentlyPluggedTo = null;
-
-    setSizeX = cp5.addSlider("setSizeX").setPosition(100, 25).setRange(10, 255).setCaptionLabel("Width");
-
-    setSizeY = cp5.addSlider("setSizeY")
-      .setPosition(300, 25)
-        .setRange(10, 255)
-          .setCaptionLabel("Length");
+    
+    sliders = new ArrayList<Slider>();
+    sliders.add(setValue0 = cp5.addSlider("setValue0"));
+    sliders.add(setValue1 = cp5.addSlider("setValue1"));
+    sliders.add(setValue2 = cp5.addSlider("setValue2"));
+    sliders.add(setValue3 = cp5.addSlider("setValue3"));
+    
+    for (int i=0; i<sliders.size(); i++)
+    {
+    	sliders.get(i).setPosition(100+i*200, 25);
+    	controllers.add(sliders.get(i));
+    }
           
     setAngle = cp5.addSlider("setAngle").setPosition(100, 25).setRange(0, 360).setCaptionLabel("Angle");
     
@@ -64,14 +70,11 @@ public class Properties
     }
 
 	controllers.add(setAngle);
-    controllers.add(setSizeX);
-    controllers.add(setSizeY);
-    
     controllers.add(setPositionXCutout);
     controllers.add(setPositionYCutout);
   }
 
-  void changeMaterial(float eventNumber)
+  public void changeMaterial(float eventNumber)
   {
     shapeCurrentlyPluggedTo.getShape().setMaterial(materials.get((int)eventNumber));
   }
@@ -80,18 +83,20 @@ public class Properties
   {
     if (this.shapeCurrentlyPluggedTo != null)
     {
-      setSizeX.unplugFrom(this.shapeCurrentlyPluggedTo);
-      setSizeY.unplugFrom(this.shapeCurrentlyPluggedTo);
+      for(Slider s : sliders) s.unplugFrom(this.shapeCurrentlyPluggedTo);
+      this.shapeCurrentlyPluggedTo.getShape().setActive(false);
     }
     if (this.connectionCurrentlyPluggedTo != null)
     {
       setAngle.unplugFrom(this.connectionCurrentlyPluggedTo);
+      this.connectionCurrentlyPluggedTo.setActive(false);
     }
     if (this.cutoutCurrentlyPluggedTo != null)
     {
       setPositionXCutout.unplugFrom(this.cutoutCurrentlyPluggedTo);
       setPositionYCutout.unplugFrom(this.cutoutCurrentlyPluggedTo);
       setAngle.unplugFrom(this.cutoutCurrentlyPluggedTo);
+      this.cutoutCurrentlyPluggedTo.setActive(false);
     }
     hideAll();
   }
@@ -102,17 +107,27 @@ public class Properties
     showConnectionProperties();
     setAngle.plugTo(c).setValue(c.getAngle());
 
+    c.setActive(true);
     this.connectionCurrentlyPluggedTo = c;
   }
 
   public void plugTo(Shape s)
   {
     unplugAll();
-    showShapeProperties();
-    setSizeX.plugTo(s).setValue(s.getValue(0));
-    setSizeY.plugTo(s).setValue(s.getValue(1));
+    showShapeProperties(s);
+    for(int i=0; i<s.getNumberOfControls(); i++)
+    {
+    	int value = s.getValue(i);
+    	sliders.get(i).plugTo(s)
+    		.setRange(s.getMinValueOfControl(i), s.getMaxValueOfControl(i))
+    		.setCaptionLabel(s.getNameOfControl(i))
+    		.setValue(value)
+    		.show();
+    }
     setMaterial.setCaptionLabel(s.getShape().getMaterial().getMaterialName());
-
+    setMaterial.show();
+    
+    s.getShape().setActive(true);
     this.shapeCurrentlyPluggedTo = s;
   }
   
@@ -124,6 +139,7 @@ public class Properties
     setPositionXCutout.plugTo(c).setValue(c.getPositionXCutout());
     setPositionYCutout.plugTo(c).setValue(c.getPositionYCutout());
 
+    c.setActive(true);
     this.cutoutCurrentlyPluggedTo = c;
   }
   
@@ -133,8 +149,7 @@ public class Properties
     setPositionXCutout.hide();
     setPositionYCutout.hide();
     setMaterial.hide();
-    setSizeX.hide();
-    setSizeY.hide();
+    for(Slider s : sliders) s.hide();
   } 
   
   private void showCutoutProperties()
@@ -149,11 +164,10 @@ public class Properties
     setAngle.show();
   }
   
-  private void showShapeProperties()
+  private void showShapeProperties(Shape s)
   {
     setMaterial.show();
-    setSizeX.show();
-    setSizeY.show();
+    for(int i=0; i<s.getNumberOfControls(); i++) sliders.get(i).show();
   }
 
   public void hide()
@@ -187,6 +201,7 @@ public class Properties
       p.textSize(24);
       p.fill(255);
       p.text("No Object selected", p.width/2-125, 30);
+      unplugAll();
     }
   }
 }

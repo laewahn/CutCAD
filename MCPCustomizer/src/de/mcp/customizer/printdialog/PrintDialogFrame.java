@@ -105,7 +105,9 @@ public class PrintDialogFrame extends PApplet
     for(int i = 0; i < unplacedShapes.size(); i++)
     {
       int displayNumber = i+1;
-      unplacedShapesBox.addItem("object " + displayNumber, i);
+      unplacedShapesBox.addItem((String)unplacedShapes.get(i).getShape().getName(), i);
+
+//      unplacedShapesBox.addItem("object " + displayNumber, i);
     }
     unplacedShapesBox.updateListBoxItems();
   }

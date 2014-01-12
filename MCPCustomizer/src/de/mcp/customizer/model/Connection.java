@@ -16,13 +16,14 @@ public class Connection implements Drawable2D
 {
   private Edge masterEdge, slaveEdge;
   private float angle = 400;
-  private boolean isSelected;
+  private boolean isSelected, isActive;
   private static List<Connection> connections; // wrong place???
 
   public Connection(List<Connection> connections)
   {
     Connection.connections = connections;
     this.isSelected = false;
+    this.isActive = false;
   }
 
   public Connection(Edge masterEdge, Edge slaveEdge, List<Connection> connections)
@@ -70,6 +71,10 @@ public class Connection implements Drawable2D
     if (this.isSelected)
     {
       p.stroke(255, 0, 0);
+    }
+    else if (this.isActive)
+    {
+      p.stroke(125, 0, 0);
     }
     else
     {
@@ -175,7 +180,7 @@ public class Connection implements Drawable2D
       out.println("At least one edge is already connected!");
       return false;
     }
-    else if (masterEdge.getLength() != slaveEdge.getLength())
+    else if (Math.abs(masterEdge.getLength()-slaveEdge.getLength())>1f)
     {
       // no connection between edges of different length (problem: not exacty same length...)
       out.println("Edges have different length!");
@@ -215,8 +220,8 @@ public class Connection implements Drawable2D
   
   private boolean isEqualEdge(Edge masterEdge, Edge slaveEdge)
   {
-    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), 0.1f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 0.1f)) return true;
-    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), 0.1f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 0.1f)) return true;
+    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), 1f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 1f)) return true;
+    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), 1f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 1f)) return true;
     return false;
   }
 
@@ -300,6 +305,14 @@ public class Connection implements Drawable2D
 	  if (angle == 400) angle = (float) Math.toDegrees(calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape()));
 	  return angle;
   }
+
+public boolean isActive() {
+	return isActive;
+}
+
+public void setActive(boolean isActive) {
+	this.isActive = isActive;
+}
 
 }
 

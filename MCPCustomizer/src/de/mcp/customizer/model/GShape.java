@@ -16,19 +16,21 @@ public class GShape implements Drawable2D, Drawable3D
   private int numberOfConnections;
   private Vec2D position2D;
   private Vec3D position3D;
-  private boolean isSelected;
+  private boolean isSelected, isActive;
   private List<Vec2D> vertices;
   private List<Vec3D> vertices3D;
   private List<Cutout> cutouts = new ArrayList<Cutout>();
   private List<Edge> edges;
   private Shape shape;
   private Material material;
+  private String name;
 
   public GShape(List<Vec2D> initVertices, Vec3D position, Shape shape)
   {
     this.position2D = position.to2DXY();
     this.position3D = position;
     this.isSelected = false;
+    this.isActive = false;
     this.shape = shape;
     this.numberOfConnections = 0;
     this.material = AllMaterials.getMaterials().get(0);
@@ -257,11 +259,9 @@ public class GShape implements Drawable2D, Drawable3D
 
   public void setMaterial(Material material)
   {
-     if(this.getNumberOfConnections() == 0)
-     this.material = material;
-     if(this.getNumberOfConnections() > 0)
+	this.material = material;
+    if(this.getNumberOfConnections() > 0)
     {
-       this.material = material;
        for(Edge e : edges)
        {
          for (Connection c : Connection.getConnections())
@@ -437,8 +437,13 @@ public class GShape implements Drawable2D, Drawable3D
   {
     if (this.isSelected()) {
       p.stroke(255,0,0);
-    } 
-    else {
+    }
+    else if (this.isActive)
+    {
+      p.stroke(125,0,0);
+    }
+    else
+    {
       p.stroke(0);
     }
     p.fill(getMaterial().getMaterialColor());
@@ -454,12 +459,29 @@ public class GShape implements Drawable2D, Drawable3D
   {
     GShape copy = new GShape(getTenons(), new Vec3D(position3D), shape); 
     copy.setMaterial(this.material);
+    copy.setName(this.getName());
     for(Cutout c : this.cutouts)
     {
       copy.addCutout(new GShape(c.getVectors(), new Vec3D(0,0,0), shape));
       Cutout.getAllCutouts().remove(Cutout.getAllCutouts().size()-1);
     }
     return copy;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public boolean isActive() {
+	return isActive;
+  }
+
+  public void setActive(boolean isActive) {
+	this.isActive = isActive;
   }
 }
 

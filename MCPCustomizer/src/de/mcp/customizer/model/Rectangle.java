@@ -8,7 +8,7 @@ import toxi.geom.Vec3D;
 
 public class Rectangle extends Shape
 {
-  private int sizeX, sizeY, index;
+  private int sizeX, sizeY;
   private static int counter = 0;
   private GShape basic;
   private ArrayList <Vec2D> basicShape;
@@ -22,16 +22,14 @@ public class Rectangle extends Shape
     basicShape.add(new Vec2D(sizeX, 0));
     basicShape.add(new Vec2D(sizeX, sizeY));
     basicShape.add(new Vec2D(0, sizeY));
-    Vec3D angle3D = new Vec3D(0, 0, 0);
     basic = new GShape(basicShape, position, this);
-    this.index = counter;
+    basic.setName("Rectangle " + counter);
     counter++;
   }
-
-  public void changeValue(int index, int value)
+  
+  public int getNumberOfControls()
   {
-    if (index==0) setSizeX(value);
-    if (index==1) setSizeY(value);
+    return 2;
   }
 
   public int getValue(int index)
@@ -40,8 +38,29 @@ public class Rectangle extends Shape
     else if (index==1) return getSizeY();
     else return 0;
   }
+  
+  public int getMinValueOfControl(int index)
+  {
+    if (index==0) return 5;
+    else if (index==1) return 5;
+    else return 0;
+  }
+  
+  public int getMaxValueOfControl(int index)
+  {
+    if (index==0) return 600;
+    else if (index==1) return 600;
+    else return 0;
+  }
+  
+  public String getNameOfControl(int index)
+  {
+    if (index==0) return "Width";
+    else if (index==1) return "Heigth";
+    else return "0";
+  }
 
-  public void setSizeX(int size)
+  public void setValue0(int size)
   {
     sizeX = size;
     basicShape.set(1, new Vec2D(size, 0));
@@ -49,7 +68,7 @@ public class Rectangle extends Shape
     basic.recalculate(basicShape);
   }
 
-  public void setSizeY(int size)
+  public void setValue1(int size)
   {
     sizeY = size;
     basicShape.set(2, new Vec2D(sizeX, size));
@@ -67,15 +86,10 @@ public class Rectangle extends Shape
     return sizeY;
   }
 
-  public String getName()
-  {
-    return ("Rectangle_" + index);
-  }
-
   public void setSize(Vec2D newSize)
   {
-    this.setSizeX((int)newSize.x());
-    this.setSizeY((int)newSize.y());
+    this.setValue0((int)newSize.x());
+    this.setValue1((int)newSize.y());
   }
   
   public void setShape(GShape shape)

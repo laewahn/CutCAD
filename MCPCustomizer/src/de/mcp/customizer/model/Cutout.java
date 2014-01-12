@@ -10,7 +10,7 @@ public class Cutout implements Drawable2D
 	private Vec2D position;
 	private float angle;
 	private GShape master, slave;
-	private boolean isSelected;
+	private boolean isSelected, isActive;
 
 	private static ArrayList<Cutout> allCutouts = new ArrayList<Cutout>();
 
@@ -20,7 +20,8 @@ public class Cutout implements Drawable2D
 		this.slave = slave;
 		this.angle = 0;
 		this.position = new Vec2D(0,0);
-		this.setSelected(false);
+		this.isSelected = false;
+		this.isActive = false;
 		allCutouts.add(this);
 	}
 
@@ -96,6 +97,10 @@ public class Cutout implements Drawable2D
 		{
 			p.stroke(255, 0, 0);
 		}
+		else if (this.isActive)
+		{
+			p.stroke(125, 0, 0);
+		}
 		else
 		{
 			p.stroke(0, 60, 0);
@@ -137,5 +142,13 @@ public class Cutout implements Drawable2D
 	public void removeCutout() {
 		master.removeCutout(this);
 		
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 }

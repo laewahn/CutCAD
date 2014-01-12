@@ -16,13 +16,13 @@ public class DrawTool extends Tool {
 
     Vec2D startCoord;
     Rectangle previewRectangle;
-    List<Shape> rectangles;
+    List<Shape> shapes;
 
-    public DrawTool(Rect view, Properties properties, List<Shape> rectangles, Transformation2D transform)
+    public DrawTool(Rect view, Properties properties, List<Shape> shapes, Transformation2D transform)
     {
         super(view, properties, transform, "DrawTool");
         this.isDrawing = false;
-        this.rectangles = rectangles;
+        this.shapes = shapes;
     }
 
     public PGraphics getIcon(PGraphics context) 
@@ -58,7 +58,7 @@ public class DrawTool extends Tool {
             
             this.previewRectangle.setSize(rectSize);
 
-            rectangles.add(this.previewRectangle);
+            shapes.add(this.previewRectangle);
             this.previewRectangle = null;
 
             isDrawing = false;

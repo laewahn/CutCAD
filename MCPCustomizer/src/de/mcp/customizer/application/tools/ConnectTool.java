@@ -95,7 +95,8 @@ public class ConnectTool extends Tool
                 if(this.previewConnection != null) {
                 	Edge firstEdge = this.previewConnection.getMasterEdge(); 
                 	if(firstEdge != null) {
-                		canBeSelected = canBeSelected && (firstEdge.getLength() == e.getLength());
+                		//canBeSelected = canBeSelected && (firstEdge.getLength() == e.getLength());
+                		canBeSelected = canBeSelected && (Math.abs(firstEdge.getLength()-e.getLength()) < 5f);
                 	}
                 }
                 

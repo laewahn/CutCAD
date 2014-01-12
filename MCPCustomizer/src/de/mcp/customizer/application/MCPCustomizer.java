@@ -7,16 +7,18 @@ import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
+import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
+import controlP5.Button;
+import controlP5.ControlEvent;
 import controlP5.ControlP5;
-
 import de.mcp.customizer.application.tools.*;
-
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.Trapezium;
 import de.mcp.customizer.view.Transformation2D;
 
 public class MCPCustomizer extends PApplet {
@@ -30,6 +32,7 @@ public class MCPCustomizer extends PApplet {
 	  PGraphics view2D, view3D;
 	  ArrayList<Shape> shapes;
 	  ArrayList<Connection> connections;
+	  TriangleMesh mesh;
 
 	  int startX = 0;
 	  int startY = 0;
@@ -69,11 +72,16 @@ public class MCPCustomizer extends PApplet {
 	  //Just for testing: add some shapes
 	    // shapes.add(new Rectangle(new Vec3D(50, 50, 0), 300, 300));
 	    // shapes.add(new Rectangle(new Vec3D(450, 200, 0), 300, 300));
-	    shapes.add(new Rectangle(new Vec3D(50, 50, 0), 151, 101));
-	    shapes.add(new Rectangle(new Vec3D(50, 200, 0), 151, 101));
-	    shapes.add(new Rectangle(new Vec3D(400, 200, 0), 74, 101));
-	    shapes.add(new Rectangle(new Vec3D(400, 50, 0), 74, 101));
-	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 74, 151));
+//	    shapes.add(new Rectangle(new Vec3D(50, 50, 0), 151, 101));
+//	    shapes.add(new Rectangle(new Vec3D(50, 200, 0), 151, 101));
+//	    shapes.add(new Rectangle(new Vec3D(400, 200, 0), 74, 101));
+//	    shapes.add(new Rectangle(new Vec3D(400, 50, 0), 74, 101));
+//	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 74, 151));
+	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 100, 155));
+	    shapes.add(new Trapezium(new Vec3D(50,50,0), 155, 70));
+	    shapes.add(new Trapezium(new Vec3D(50,200,0), 155, 70));
+	    shapes.add(new Trapezium(new Vec3D(400,200,0), 100, 70));
+	    shapes.add(new Trapezium(new Vec3D(400,50,0), 100, 70));
 
 	    cp5 = new ControlP5(this);
 
@@ -151,6 +159,8 @@ public class MCPCustomizer extends PApplet {
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DrawTool(view2DRect, properties, shapes, transform2D),
+	      new SymmetricPolygonTool(view2DRect, properties, shapes, transform2D),
+	      new TrapeziumTool(view2DRect, properties, shapes, transform2D),
 	      new PolygonTool(view2DRect, properties, transform2D, shapes),
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
@@ -167,6 +177,14 @@ public class MCPCustomizer extends PApplet {
 	    properties = new Properties(cp5, 0, 0, width, 50);
 	    properties.hide();
 	  }
+	  
+	  public void controlEvent(ControlEvent theEvent)
+	  {
+		  if (theEvent.isGroup() && theEvent.getGroup().getName() == "setMaterial")
+		  {
+			  properties.changeMaterial(theEvent.getGroup().getValue());
+		  }
+	  } 
 
 	  public void mousePressed()
 	  {   
