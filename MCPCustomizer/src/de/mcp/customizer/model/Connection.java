@@ -18,6 +18,7 @@ public class Connection implements Drawable2D
   private float angle = 400;
   private boolean isSelected, isActive;
   private static List<Connection> connections; // wrong place???
+  private float tolerance = 5f;
 
   public Connection(List<Connection> connections)
   {
@@ -180,7 +181,7 @@ public class Connection implements Drawable2D
       out.println("At least one edge is already connected!");
       return false;
     }
-    else if (Math.abs(masterEdge.getLength()-slaveEdge.getLength())>1f)
+    else if (Math.abs(masterEdge.getLength()-slaveEdge.getLength())>tolerance)
     {
       // no connection between edges of different length (problem: not exacty same length...)
       out.println("Edges have different length!");
@@ -207,10 +208,10 @@ public class Connection implements Drawable2D
       return true;
     }
     else if(((masterEdge.getShape().getNumberOfConnections() == 1) || (slaveEdge.getShape().getNumberOfConnections() == 1))
-      && (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), 0.1f) || 
-          masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), 0.1f) || 
-          masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 0.1f) || 
-          masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 0.1f)))
+      && (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
+          masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), tolerance) || 
+          masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
+          masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), tolerance)))
     {
       return RotateAdjectantShapes.rotateBothShapes(this, masterEdge, slaveEdge);
 
@@ -220,8 +221,8 @@ public class Connection implements Drawable2D
   
   private boolean isEqualEdge(Edge masterEdge, Edge slaveEdge)
   {
-    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), 1f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), 1f)) return true;
-    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), 1f) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), 1f)) return true;
+    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), tolerance) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), tolerance)) return true;
+    if (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) && masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), tolerance)) return true;
     return false;
   }
 
@@ -269,8 +270,15 @@ public class Connection implements Drawable2D
   {
     Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
     Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
-
-    float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+    float angle;
+	if(slaveEdgeDirection.cross(masterEdgeDirection).distanceTo(new Vec3D(0,0,0)) < 0.1f)
+	{
+		angle = 0;
+	}
+	else
+	{
+		angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+	}
 
     Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
     while (normalVector.equals(new Vec3D(0,0,0)))

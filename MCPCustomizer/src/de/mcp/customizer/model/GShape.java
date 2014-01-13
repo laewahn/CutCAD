@@ -239,70 +239,90 @@ public class GShape implements Drawable2D, Drawable3D
   }
 
   public ArrayList<Vec3D> transformTo3D(boolean top, ArrayList<Vec2D> vectors2D)
-  {      
-    int offsetZ;
-    if (top)
-    {
-      offsetZ = this.getThickness()/2;
-    }
-    else
-    {
-      offsetZ = -this.getThickness()/2;
-    }
-    //we want to change the tenon structure to the (logical) 3D positon, therefor first change them to 3D vectors
-    ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
-    for (Vec2D v : vectors2D)
-    {
-    	vectors3D.add(v.to3DXY().addSelf(new Vec3D(0, 0, offsetZ)));
-    }
+	{      
+		// Use the algorithm for connecting two shapes to align logical 2D and 3D view
+		// Therefore produce a new GShape with the 2D positions (for the 3D represenation)
+		// 
+		GShape helperShape = new GShape(vertices, position3D, this.getParent());
 
-    //align first edge
-    Vec3D edge3D = edges.get(0).getP3D2().sub(edges.get(0).getP3D1());
-    Vec3D edge2D = edges.get(0).getV2().to3DXY().sub(edges.get(0).getV1().to3DXY());
+		GShape master = this;
+		GShape slave = helperShape;
+		Edge masterEdge = this.getEdges().get(0);
+		Edge slaveEdge = helperShape.getEdges().get(0);
 
-    Vec3D perpendicular3D = get3Dperpendicular(edges.get(0).getP3D1(), edges.get(0).getP3D2()).normalize();
-    Vec3D perpendicular2D = get2Dperpendicular(edges.get(0).getV1(), edges.get(0).getV2()).to3DXY().normalize();
+		Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
+		Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
 
-    Vec3D position3D = edges.get(0).getP3D1();
-    Vec3D position2D = edges.get(0).getV1().to3DXY();
+		float angleBetweenEdges;
+		if(slaveEdgeDirection.cross(masterEdgeDirection).distanceTo(new Vec3D(0,0,0)) < 0.1f)
+		{
+			angleBetweenEdges = 0;
+		}
+		else
+		{
+			angleBetweenEdges = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+		}
 
-    Vec3D control3D2 = edges.get(1).getP3D2();
-    Vec3D control2D2 = edges.get(1).getV2().to3DXY();
+		Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
+		while (normalVector.equals(new Vec3D(0,0,0)))
+		{
+			normalVector = masterEdgeDirection.cross(new Vec3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
+		}
+		slave.rotateAroundAxis(normalVector, angleBetweenEdges);
 
-    float angleBetweenEdges = edge2D.angleBetween(edge3D, true);
+		Vec3D toOrigin = slaveEdge.getP3D1().scale(-1).copy();
 
-    Vec3D normalVector = edge2D.cross(edge3D).getNormalized();
+		slave.translate3D(toOrigin);
 
+		Vec3D rotationAxis = slaveEdge.getP3D2().getNormalized();
 
-    if ((normalVector.equals(new Vec3D(0, 0, 0))))  
-    {
-      normalVector = new Vec3D (0, 0, 1);
-    }
+		float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
+		slave.rotateAroundAxis(rotationAxis, angleBetweenNormals);
 
-    perpendicular2D = perpendicular2D.rotateAroundAxis(normalVector, angleBetweenEdges);
-    position2D = position2D.rotateAroundAxis(normalVector, angleBetweenEdges);
+		if (calculateAngleBetweenNormals(master, slave) !=0 || calculateAngleBetweenNormals(master, slave) !=Math.PI)
+		{
+			slave.rotateAroundAxis(rotationAxis, (float) -2.0 * angleBetweenNormals);
+			angleBetweenNormals = -angleBetweenNormals;
+		} 
+		
+		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
+		//slave.translate3D(toMaster);
 
-    float angleBetweenNormals = perpendicular2D.angleBetween(perpendicular3D, true);
+		// Now we know everything, apply the same Translations to the outline Vec2D array
+		// Translated by thickness/2 to top or bottom
+		int offsetZ;
+		if (top)
+		{
+			offsetZ = this.getThickness()/2;
+		}
+		else
+		{
+			offsetZ = -this.getThickness()/2;
+		}
+		
+		ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
+		for (Vec2D v : vectors2D)
+		{
+			vectors3D.add(v.to3DXY().add(position3D).addSelf(new Vec3D(0, 0, offsetZ)));
+		}
+		
+		for (int i=0; i<vectors3D.size(); i++)
+		{
+			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
+			vectors3D.set(i, vectors3D.get(i).addSelf(toOrigin));
+			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(rotationAxis, angleBetweenNormals));
+			vectors3D.set(i, vectors3D.get(i).addSelf(toMaster));
+		}
+		return vectors3D;
+	}
 
-    position2D = position2D.rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals);
-    Vec3D diffPosition = position3D.sub(position2D);
+	private float calculateAngleBetweenNormals(GShape master, GShape slave)
+	{
+		Vec3D masterNormal = master.getNormalVector();
+		Vec3D slaveNormal = slave.getNormalVector();
 
-    control2D2.rotateAroundAxis(normalVector, angleBetweenEdges);
-    control2D2.rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals);
-    control2D2.addSelf(diffPosition);
-    if (!(control3D2.equalsWithTolerance(control2D2, 0.1f))) 
-    {
-      angleBetweenNormals = angleBetweenNormals*(-1);
-    }
-
-    for (int i=0; i<vectors3D.size(); i++)
-    {
-      vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
-      vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals));
-      vectors3D.set(i, vectors3D.get(i).addSelf(diffPosition));
-    }
-    return vectors3D;
-  }
+		return masterNormal.angleBetween(slaveNormal, true);
+	}
 
   public Vec2D get2Dperpendicular(Vec2D v1, Vec2D v2)
   {
