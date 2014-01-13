@@ -121,6 +121,76 @@ public class GShape implements Drawable2D, Drawable3D
   {
     return this.vertices;
   }
+  
+  public boolean overlapsWith(GShape s)
+  {
+      if (noLineIntersections(this.getVerticesIncludingPosition2D(), s.getVerticesIncludingPosition2D()))
+      {
+          if (this.containsAtLeastOnePointFromList(s.getVerticesIncludingPosition2D()) || s.containsAtLeastOnePointFromList(this.getVerticesIncludingPosition2D()))
+          {
+              return true;
+          }
+          else
+          {
+              return false;
+          }
+      }
+      else
+      {
+          return true;
+      }
+  }
+  
+  private boolean noLineIntersections(List<Vec2D> vectors1, List<Vec2D> vectors2)
+  {
+      List<Line2D> lines1 = createListOfLines(vectors1);
+      List<Line2D> lines2 = createListOfLines(vectors2);
+      
+      for (Line2D x : lines1)
+      {
+          for (Line2D y : lines2)
+          {
+              if (x.intersectLine(y).getType().equals(Line2D.LineIntersection.Type.valueOf("INTERSECTING")))
+              {
+                  return false;
+              }
+          }
+      }        
+      return true;
+  }
+  
+  private List<Line2D> createListOfLines(List<Vec2D> vectors)
+  {
+      ArrayList<Line2D> lines = new ArrayList<Line2D>();
+      
+      for (int i = 0; i < vectors.size() - 1; i++)
+      {
+          lines.add(new Line2D(vectors.get(i), vectors.get(i+1)));
+      }
+      lines.add(new Line2D(vectors.get(vectors.size()-1), vectors.get(0)));
+      
+      return lines;        
+  }   
+  
+  private boolean containsAtLeastOnePointFromList(List<Vec2D> points)
+  {
+      Polygon2D thisShape = new Polygon2D(this.getVerticesIncludingPosition2D());
+      for (Vec2D v : points)
+      {
+          if (thisShape.containsPoint(v)) return true;
+      }
+      return false;
+  }
+  
+  private List<Vec2D> getVerticesIncludingPosition2D()
+  {
+	  ArrayList<Vec2D> vectors = new ArrayList<Vec2D>();
+	  for (Vec2D v: this.getVertices())
+	  {
+		  vectors.add(v.add(this.position2D));
+	  }
+	  return vectors;
+  }
 
   private Vec2D correctIntersection(Edge edge)
   {
