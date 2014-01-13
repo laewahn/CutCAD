@@ -141,6 +141,9 @@ public class MCPCustomizer extends PApplet {
 	    view3D.endCamera();
 
 	    view3D.background(100);
+	    
+	    draw3DAxes();
+	    
 	    for (Shape s : shapes)
 	    {
 	      s.getShape().draw3D(view3D);
@@ -150,6 +153,18 @@ public class MCPCustomizer extends PApplet {
 
 	    image(view3D, view3DPosX, view3DPosY);
 	  }
+
+	private void draw3DAxes() {
+		view3D.strokeWeight(2);	    
+	    view3D.stroke(color(255,0,0));	    
+	    view3D.line(0, 0, 0, 500, 0, 0);
+	    view3D.stroke(color(0,255,0));	   
+	    view3D.line(0, 0, 0, 0, 500, 0);
+	    view3D.stroke(color(0,0,255));	   
+	    view3D.line(0, 0, 0, 0, 0, 500);
+	    view3D.stroke(color(0,0,0));	 
+	    view3D.strokeWeight(1);
+	}
 
 	  void createToolbar()
 	  {
