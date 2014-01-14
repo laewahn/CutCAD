@@ -36,7 +36,6 @@ public class PrintDialog
   private void calculateInstances()
   {
     printInstances = new ArrayList<PrintInstance>();
-    //printInstances.add(new PrintInstance(this.shapes)); // replace by instance per material algorithm
     for(int i = 0; i < this.shapes.size(); i++)
     {
       int j = 0;
@@ -55,29 +54,12 @@ public class PrintDialog
         this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getShape().getMaterial()));
       }
     }
-    /*if(this.shapes.size() > 2)
-    {
-      ArrayList<Shape> temp = new ArrayList<Shape>();
-      temp.add(this.shapes.get(0));
-      temp.add(this.shapes.get(1));
-      printInstances.add(new PrintInstance(temp)); // replace by instance per material algorithm
-      ArrayList<Shape> temp2 = new ArrayList<Shape>();
-      for(int i = 2; i < this.shapes.size(); i++)
-      {
-        temp2.add(this.shapes.get(i));
-      }
-      printInstances.add(new PrintInstance(temp2)); // replace by instance per material algorithm
-    } else
-    {
-      printInstances.add(new PrintInstance(this.shapes)); // replace by instance per material algorithm
-    }*/
-    
   }
   
   private PrintDialogFrame addPrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances)
   {
     f = new Frame("Print dialog");
-    PrintDialogFrame p = new PrintDialogFrame(this, theWidth, theHeight, printInstances);
+    PrintDialogFrame p = new PrintDialogFrame(/*this, */theWidth, theHeight, printInstances);
     f.add(p);
     p.init();
     p.setSize(theWidth,theHeight);

@@ -14,10 +14,10 @@ import de.mcp.customizer.model.Shape;
 
 public class Properties
 {
-  private ArrayList<Controller> controllers;
+  private ArrayList<Controller<?>> controllers;
   private ArrayList<Material> materials;
   private ArrayList<Slider> sliders;
-  private Slider setValue0, setValue1, setValue2, setValue3;
+  //private Slider setValue0, setValue1, setValue2, setValue3;
   private Slider setPositionXCutout, setPositionYCutout;
   private Slider setAngle;
   private DropdownList setMaterial;
@@ -35,16 +35,16 @@ public class Properties
     this.sizeY = sizeY;
     this.hidden = false;
 
-    this.controllers = new ArrayList<Controller>();
+    this.controllers = new ArrayList<Controller<?>>();
     this.materials = AllMaterials.getMaterials();
     this.shapeCurrentlyPluggedTo = null;
     this.connectionCurrentlyPluggedTo = null;
     
     sliders = new ArrayList<Slider>();
-    sliders.add(setValue0 = cp5.addSlider("setValue0"));
-    sliders.add(setValue1 = cp5.addSlider("setValue1"));
-    sliders.add(setValue2 = cp5.addSlider("setValue2"));
-    sliders.add(setValue3 = cp5.addSlider("setValue3"));
+    sliders.add(/*setValue0 = */cp5.addSlider("setValue0"));
+    sliders.add(/*setValue1 = */cp5.addSlider("setValue1"));
+    sliders.add(/*setValue2 = */cp5.addSlider("setValue2"));
+    sliders.add(/*setValue3 = */cp5.addSlider("setValue3"));
     
     for (int i=0; i<sliders.size(); i++)
     {
@@ -62,7 +62,7 @@ public class Properties
         .setSize(200,400)
     	.setItemHeight(25)
     	.setBarHeight(25);
-    setMaterial.captionLabel().style().setMarginTop(7); //should be central -> dependant on code???
+    setMaterial.getCaptionLabel().getStyle().setMarginTop(7); //should be central -> dependant on code???
 
     for(Material m : materials) 
     {
@@ -172,7 +172,7 @@ public class Properties
 
   public void hide()
   {
-    for (Controller c : controllers)
+    for (Controller<?> c : controllers)
     {
       c.hide();
     }
@@ -183,7 +183,7 @@ public class Properties
 
   public void show()
   {
-    for (Controller c : controllers)
+    for (Controller<?> c : controllers)
     {
       c.show();
     }

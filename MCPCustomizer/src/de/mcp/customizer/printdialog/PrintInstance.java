@@ -14,15 +14,15 @@ public class PrintInstance
   
   private PrintDialogFrame parent;
   
-  public PrintInstance(Shape shape, Material material) //Add material and thichkness ass both are important for settings
+  public PrintInstance(Shape shape, Material material) 
   {
     this.shapes = new ArrayList<Shape>();
     this.shapes.add(shape);
+    this.material = material;
     subInstances = new ArrayList<PrintSubInstance>();
     PrintSubInstance initial = new PrintSubInstance(this);
     subInstances.add(initial);
     selected = getSubInstanceIndex(initial);
-    this.material = material;
   }
   
   public void addShape(Shape shape)
@@ -122,5 +122,23 @@ public class PrintInstance
   public void setActiveSubInstance(int index)
   {
    this.selected = index; 
+  }
+  
+  public int getSelectedSubInstance()
+  {
+	  return this.selected;
+  }
+  
+  public boolean checkPlacedShapes()
+  {
+	  boolean shapePlaced = false;
+	  for(int i = 0; i < subInstances.size(); i++)
+	  {
+		  if(subInstances.get(i).getPlacedShapes().size() > 0)
+		  {
+			  shapePlaced = true;
+		  }
+	  }
+	  return shapePlaced;
   }
 }

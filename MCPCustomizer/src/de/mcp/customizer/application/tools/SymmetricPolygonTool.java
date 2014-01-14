@@ -3,7 +3,7 @@ import java.util.List;
 
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Tool;
-import de.mcp.customizer.model.Rectangle;
+//import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.SymmetricPolygon;
 import de.mcp.customizer.view.Transformation2D;

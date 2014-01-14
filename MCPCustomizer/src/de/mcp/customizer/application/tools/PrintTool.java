@@ -59,6 +59,6 @@ public class PrintTool extends Tool {
     @Override
     public void wasSelected() {
     	super.wasSelected();
-    	PrintDialog printDialog = new PrintDialog(shapes);
+    	new PrintDialog(shapes);
     }
 }

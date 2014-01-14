@@ -1,6 +1,6 @@
 package de.mcp.customizer.model;
 
-import toxi.geom.Vec3D;
+//import toxi.geom.Vec3D;
 
 public class PolygonShape extends Shape {
 	

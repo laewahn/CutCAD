@@ -11,13 +11,17 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Group;
 import controlP5.ListBox;
+import controlP5.Textlabel;
 import de.mcp.customizer.model.Shape;
 
 public class PrintDialogFrame extends PApplet
 {
-  private ControlP5 cp5;
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-  private Object parent;
+  private ControlP5 cp5;
  
   private int w, h;
   private int bgColor = 255;
@@ -28,9 +32,7 @@ public class PrintDialogFrame extends PApplet
    
   private PGraphics objectLayout;
   private ListBox unplacedShapesBox;
-  private Button printButton;
-  private Button printSVGButton;
-  private Button newInstance;
+  private Textlabel statusLabel;
   
   private Group instanceGroup; 
   private ArrayList<Button> instanceButtons;
@@ -39,14 +41,8 @@ public class PrintDialogFrame extends PApplet
   private Vec2D originalMousePosition;
   private Rect view;
   
-  private PrintDialogFrame() 
+  public PrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances) 
   {
-    
-  }
-
-  public PrintDialogFrame(Object theParent, int theWidth, int theHeight, ArrayList<PrintInstance> printInstances) 
-  {
-    parent = theParent;
     this.printInstances = printInstances;
     if(printInstances.get(0) != null)
     {
@@ -74,27 +70,32 @@ public class PrintDialogFrame extends PApplet
                          .setItemHeight(15)
                          .setBarHeight(15)
                          ;
-   unplacedShapesBox.captionLabel().set("Choose an object");
-   unplacedShapesBox.captionLabel().style().marginTop = 3;
-   unplacedShapesBox.valueLabel().style().marginTop = 3;
+   unplacedShapesBox.setCaptionLabel("Choose an object");
+   unplacedShapesBox.getCaptionLabel().getStyle().marginTop = 3;
+   unplacedShapesBox.getValueLabel().getStyle().marginTop = 3;
    updateListBox();
-   printButton = cp5.addButton("Start cutting")
-                    .setPosition(10,h-70)
-                    .setSize(100,30)
-                    .setId(0);
-   printSVGButton = cp5.addButton("Export as SVG")
-                    .setPosition(120,h-70)
-                    .setSize(80,30)
-                    .setId(1);
-   newInstance = cp5.addButton("Add extra job")
-                    .setPosition(10,h-140)
-                    .setSize(100,30)
-                    .setId(2);
+   cp5.addButton("Start cutting")
+      .setPosition(10,h-70)
+      .setSize(100,30)
+      .setId(0);
+   cp5.addButton("Export as SVG")
+      .setPosition(120,h-70)
+      .setSize(80,30)
+      .setId(1);
+   cp5.addButton("Add extra job")
+      .setPosition(10,h-140)
+      .setSize(100,30)
+      .setId(2);
+   statusLabel = cp5.addTextlabel("")
+		   			.setPosition(10,h-105)
+		   			.setSize(120,30)
+		   			.setColorValueLabel(0xffff0000)
+                    .setFont(createFont("Georgia",20));
    instanceButtons = new ArrayList<Button>();
    instanceGroup = cp5.addGroup("Jobs")
                       .setPosition(140,bedHeight+20)
-                      //.activateEvent(true)
-                      .setWidth(450);
+                      .setColorBackground(0x00000000)
+                      .setWidth(450);			  
    createButtons();
   }
   
@@ -105,31 +106,30 @@ public class PrintDialogFrame extends PApplet
     for(int i = 0; i < unplacedShapes.size(); i++)
     {
       int displayNumber = i+1;
-      unplacedShapesBox.addItem((String)unplacedShapes.get(i).getShape().getName(), i);
-
-//      unplacedShapesBox.addItem("object " + displayNumber, i);
+      unplacedShapesBox.addItem("object " + displayNumber, i);
     }
     unplacedShapesBox.updateListBoxItems();
   }
   
   public void controlEvent(ControlEvent theEvent) 
   {
-    if(theEvent.isGroup() && theEvent.name().equals("unplacedShapesList"))
+    if(theEvent.isGroup() && theEvent.getName().equals("unplacedShapesList"))
     {
-      int objectIndex = (int)theEvent.group().value();
+      int objectIndex = (int)theEvent.getGroup().getValue();
       Shape toBePlacedShape = this.printInstances.get(selectedInstance).getUnplacedShapes().get(objectIndex);
       printInstances.get(selectedInstance).placeShape(toBePlacedShape);
       updateListBox();
     }
-    else if(theEvent.isController() && theEvent.name().equals("Start cutting"))
+    else if(theEvent.isController() && theEvent.getName().equals("Start cutting"))
     {
        print();
     }
-    else if(theEvent.isController() && theEvent.name().equals("Export as SVG"))
+    else if(theEvent.isController() && theEvent.getName().equals("Export as SVG"))
     {
        printSVG();
     }
-    else if(theEvent.isController() && theEvent.name().equals("Add extra job"))
+    else if(theEvent.isController() && theEvent.getName().equals("Add extra job"))
+    	
     {
        this.printInstances.get(selectedInstance).addSubInstance();
        createButtons();
@@ -140,6 +140,13 @@ public class PrintDialogFrame extends PApplet
       boolean instanceFound = false;
       int instance = 0;
       int subInstance = 0;
+      int buttonNumber = 0;
+      for(int i = 0; i < selectedInstance; i++)
+      {
+        buttonNumber += printInstances.get(i).getNumberOfSubInstances();
+      }
+      buttonNumber += printInstances.get(selectedInstance).getSelectedSubInstance();
+      instanceButtons.get(buttonNumber).setColorBackground(0x00000000);
       while(!instanceFound)
       {
         if((subInstance + printInstances.get(instance).getNumberOfSubInstances()) > objectIndex)
@@ -155,9 +162,21 @@ public class PrintDialogFrame extends PApplet
       this.selectedInstance = instance;
       printInstances.get(this.selectedInstance).setActiveSubInstance(subInstance);
       updateListBox();
+      setActiveButton();
     }
   }
-
+  
+  private void setActiveButton()
+  {
+	  int buttonNumber = 0;
+	  for(int i = 0; i < selectedInstance; i++)
+	  {
+		 buttonNumber += printInstances.get(i).getNumberOfSubInstances();
+	  }
+	  buttonNumber += printInstances.get(selectedInstance).getSelectedSubInstance();
+	  instanceButtons.get(buttonNumber).setColorBackground(0xffff0000);
+  }
+  
   public void draw() 
   {
       background(bgColor);
@@ -185,11 +204,13 @@ public class PrintDialogFrame extends PApplet
                              .setPosition((collumn*110),(row*50))
                              .setSize(100,30)
                              .setId(buttonNumber)
+                             .setColorBackground(0x00000000)
                              .setGroup(instanceGroup); 
        instanceButtons.add(newButton); 
        buttonNumber++;
       }
     }
+    setActiveButton();
   }
   
   void drawObjectLayout()
@@ -203,19 +224,6 @@ public class PrintDialogFrame extends PApplet
       }
       objectLayout.endDraw();
       image(objectLayout, 0, 0);
-  }
-  
-  private int getSelectedInstanceIndex(PrintInstance selected)
-  {
-    for(int i = 0; i < printInstances.size(); i++)
-    {
-      if(printInstances.get(i) == selected)
-      {
-        return i; 
-      }
-    }
-    return -1;
-    
   }
   
   public void mouseMoved()
@@ -280,9 +288,32 @@ public class PrintDialogFrame extends PApplet
     
   public void print()
   {
-    printCounter = 0;
-    printInstances.get(printCounter).print();
+	if(checkPrintConstraints())
+	{
+		printCounter = 0;
+		printInstances.get(printCounter).print();
+	}
   }  
+  
+  private boolean checkPrintConstraints()
+  {
+	  statusLabel.setText("");
+	  boolean conditionsMet = true;
+	  boolean placedShapeFound = false;
+	  for(int i = 0; i < printInstances.size(); i++)
+	  {
+		if(printInstances.get(i).checkPlacedShapes())
+		{
+			placedShapeFound = true;
+		}
+	  }
+	  conditionsMet &= placedShapeFound;
+	  if(!conditionsMet)
+	  {
+		  statusLabel.setText("No shape has been placed");
+	  }
+	  return conditionsMet;
+  }
   
   public void printNext()
   {
@@ -295,10 +326,13 @@ public class PrintDialogFrame extends PApplet
   
   public void printSVG()
   {
-    for(int i = 0; i < printInstances.size(); i++)
-    {
-       printInstances.get(i).printSVG();
-    }
+	if(checkPrintConstraints())
+	{
+		for(int i = 0; i < printInstances.size(); i++)
+		{
+			printInstances.get(i).printSVG();
+		}
+	}
   }  
   
   public ControlP5 control() 

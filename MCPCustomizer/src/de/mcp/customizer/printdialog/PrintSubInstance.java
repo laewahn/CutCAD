@@ -8,7 +8,6 @@ import java.util.List;
 
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
-import processing.core.PGraphics;
 import processing.data.XML;
 import toxi.geom.Vec2D;
 
@@ -16,7 +15,6 @@ public class PrintSubInstance
 {
   private ArrayList<Shape> shapesPlaced;
   private LaserJobCreator laserJob;
-  private PGraphics objectLayout;
   
   private PrintSubDialog printSubDialog;
   private Frame f;
@@ -29,7 +27,7 @@ public class PrintSubInstance
     shapesPlaced = new ArrayList<Shape>();
     laserJob = new LaserJobCreator();
     laserJob.setLaserCutter("epilogZing", "137.226.56.228"); // replace by more lasercutter now only epilogzing supported
-    laserJob.setPsffProperty(70, 100, 0.0f, 500); // replace by material parameters, now for test purposes only
+    laserJob.setPsffProperty(this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
     laserJob.setDPI(500); // replace by material parameter
     laserJob.newVectorPart();
   }
@@ -106,9 +104,7 @@ public class PrintSubInstance
   }
   
   public void printSVG(String printJobName)
-  { //
-    //String output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    //output += "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
+  { 
     String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">";
     for(int i = 0; i < shapesPlaced.size(); i++)
     {
@@ -129,7 +125,6 @@ public class PrintSubInstance
     try
     {
       XML xml = XML.parse(output);
-      //System.out.println(xml.toString());
       xml.save(new File("C:/" + printJobName + ".svg"),"");
     } catch (Exception e)
     {
