@@ -253,15 +253,7 @@ public class GShape implements Drawable2D, Drawable3D
 		Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
 		Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
 
-		float angleBetweenEdges;
-		if(slaveEdgeDirection.cross(masterEdgeDirection).distanceTo(new Vec3D(0,0,0)) < 0.1f)
-		{
-			angleBetweenEdges = 0;
-		}
-		else
-		{
-			angleBetweenEdges = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
-		}
+		float angleBetweenEdges = safeAngleBetween(slaveEdgeDirection,masterEdgeDirection);
 
 		Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
 		while (normalVector.equals(new Vec3D(0,0,0)))
@@ -269,6 +261,21 @@ public class GShape implements Drawable2D, Drawable3D
 			normalVector = masterEdgeDirection.cross(new Vec3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
 		}
 		slave.rotateAroundAxis(normalVector, angleBetweenEdges);
+		
+		slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
+//		if (Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) < 0.1f)
+//		{
+//			// do nothing
+//		}
+//		else if (Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) > Math.PI - 0.1f && Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) < Math.PI + 0.1f)
+//		{
+//			angleBetweenEdges = (float)Math.PI;
+//		}
+//		else 
+//		{
+//			slave.rotateAroundAxis(normalVector, -2*angleBetweenEdges);
+//			angleBetweenEdges = -angleBetweenEdges;
+//		} 
 
 		Vec3D toOrigin = slaveEdge.getP3D1().scale(-1).copy();
 
@@ -279,14 +286,31 @@ public class GShape implements Drawable2D, Drawable3D
 		float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
 		slave.rotateAroundAxis(rotationAxis, angleBetweenNormals);
 
-		if (calculateAngleBetweenNormals(master, slave) !=0 || calculateAngleBetweenNormals(master, slave) !=Math.PI)
+		if (calculateAngleBetweenNormals(master, slave) > 0.001f)
 		{
+//		{
+//			// Do Nothing
+////			System.out.println("Right Angle");
+//		}
+//		else if (Math.abs(calculateAngleBetweenNormals(master, slave)) > Math.PI-0.0001f)
+//		{
+////			System.out.println("Rotate additional 180 degree");
+//			angleBetweenNormals = (float) Math.PI;
+//		}
+//		else
+//		{
+////			System.out.println("Rotate in the other direction");
 			slave.rotateAroundAxis(rotationAxis, (float) -2.0 * angleBetweenNormals);
 			angleBetweenNormals = -angleBetweenNormals;
-		} 
+		}
 		
 		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
-		//slave.translate3D(toMaster);
+//		slave.translate3D(toMaster);
+//		if(slave.getEdges().get(1).getP3D2().distanceTo(master.getEdges().get(1).getP3D2()) > 1f)
+//		{
+//			angleBetweenNormals = (float) (angleBetweenNormals + Math.PI);
+//		}
+
 
 		// Now we know everything, apply the same Translations to the outline Vec2D array
 		// Translated by thickness/2 to top or bottom
@@ -305,7 +329,10 @@ public class GShape implements Drawable2D, Drawable3D
 		{
 			vectors3D.add(v.to3DXY().add(position3D).addSelf(new Vec3D(0, 0, offsetZ)));
 		}
-		
+//		System.out.println("AngleEdges" + angleBetweenEdges);
+//		System.out.println("AngleNormals" + angleBetweenNormals);
+//		System.out.println("toOrigin" + toOrigin);
+//		System.out.println("toMaster" + toMaster);
 		for (int i=0; i<vectors3D.size(); i++)
 		{
 			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
@@ -315,13 +342,29 @@ public class GShape implements Drawable2D, Drawable3D
 		}
 		return vectors3D;
 	}
+  
+  	private float safeAngleBetween(Vec3D masterEdgeDirection,
+			Vec3D slaveEdgeDirection) {
+		float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+	    if (Float.isNaN(angle))
+		{
+	    	if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vec3D(0,0,0), 0.1f))
+	    	{
+	    		angle = (float)Math.PI;
+	    	}
+	    	else
+	    	{
+	    		angle = 0;
+	    	}
+	    }
+		return angle;
+	}
 
 	private float calculateAngleBetweenNormals(GShape master, GShape slave)
 	{
 		Vec3D masterNormal = master.getNormalVector();
 		Vec3D slaveNormal = slave.getNormalVector();
-
-		return masterNormal.angleBetween(slaveNormal, true);
+	    return safeAngleBetween(masterNormal,slaveNormal);
 	}
 
   public Vec2D get2Dperpendicular(Vec2D v1, Vec2D v2)
@@ -438,16 +481,6 @@ public class GShape implements Drawable2D, Drawable3D
 
   public void draw3D(PGraphics p) 
   {
-    // if we want to show the "Logic" shape:
-    /*
-    p.noFill();
-    p.beginShape();
-    for (Edge e : edges) {
-      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
-    }
-    p.endShape(PConstants.CLOSE);
-    */
-
     this.setFillColor(p);
     createCover3D(p,true);
     createCover3D(p, false);
@@ -456,6 +489,17 @@ public class GShape implements Drawable2D, Drawable3D
     {
     	createSides(p, cutout.getVectors());
     }
+    
+    // if we want to show the "Logic" shape:
+    ///*
+    p.noFill();
+    p.stroke(0,0,255);
+    p.beginShape();
+    for (Edge e : edges) {
+      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    }
+    p.endShape(PConstants.CLOSE);
+    //*/
     
     for (Edge e: edges) //not good... but i've no better idea...still no better version
     {

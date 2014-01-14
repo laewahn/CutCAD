@@ -114,16 +114,19 @@ public class Properties
   public void plugTo(Shape s)
   {
     unplugAll();
-    showShapeProperties(s);
-    for(int i=0; i<s.getNumberOfControls(); i++)
+    if(s.getShape().getNumberOfConnections()==0)
     {
-    	int value = s.getValue(i);
-    	sliders.get(i).plugTo(s)
-    		.setRange(s.getMinValueOfControl(i), s.getMaxValueOfControl(i))
-    		.setCaptionLabel(s.getNameOfControl(i))
-    		.setValue(value)
-    		.show();
-    }
+    	showShapeProperties(s);
+    	for(int i=0; i<s.getNumberOfControls(); i++)
+    	{
+    		int value = s.getValue(i);
+    		sliders.get(i).plugTo(s)
+    			.setRange(s.getMinValueOfControl(i), s.getMaxValueOfControl(i))
+    			.setCaptionLabel(s.getNameOfControl(i))
+    			.setValue(value)
+    			.show();
+    	}
+  	}
     setMaterial.setCaptionLabel(s.getShape().getMaterial().getMaterialName());
     setMaterial.show();
     

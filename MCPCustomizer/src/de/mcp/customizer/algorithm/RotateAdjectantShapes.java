@@ -9,7 +9,6 @@ import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.Tenon;
-
 import static java.lang.System.*;
 
 public class RotateAdjectantShapes
@@ -171,7 +170,7 @@ public class RotateAdjectantShapes
 		//    float angleResult = directionEdge.angleBetween(directionRotatingEdge, true);
 		Vec3D normalVectorSlave = directionEdge.cross(directionRotatingEdge).normalize();
 
-		float angle = virtualShape.getShape().getNormalVector().angleBetween(normalVectorSlave, true);
+		float angle = safeAngleBetween(virtualShape.getShape().getNormalVector(), normalVectorSlave);
 
 		return angle;
 	}
@@ -188,23 +187,43 @@ public class RotateAdjectantShapes
 		// master- and slaveShape will met by rotation
 		return intersectionLine1.closestLineTo(intersectionLine2).getLine().getMidPoint();
 	}
+	
+	private static float safeAngleBetween(Vec3D masterEdgeDirection,
+			Vec3D slaveEdgeDirection) {
+		float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+	    if (Float.isNaN(angle))
+		{
+	    	if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vec3D(0,0,0), 0.1f))
+	    	{
+	    		angle = (float)Math.PI;
+	    	}
+	    	else
+	    	{
+	    		angle = 0;
+	    	}
+	    }
+		return angle;
+	}
 
 	private static Line3D getIntersectionLine(Edge edge)
 	{
 		Edge virtualEdgeA = virtualShape.getShape().getEdges().get(0);
 		Edge virtualEdgeB = virtualShape.getShape().getEdges().get(1);
-		float angle = (getPointOfRotatingEdge(edge).sub(getCommonPoint(edge))).angleBetween(getNotCommonPoint(edge).sub(getCommonPoint(edge)), true);
+		Vec3D rotationAxis = getPointOfRotatingEdge(edge).sub(getCommonPoint(edge));
+		Vec3D notCommonPoint = getNotCommonPoint(edge).sub(getCommonPoint(edge));
+		float angle = safeAngleBetween(rotationAxis, notCommonPoint);
+
 		Vec3D rotated = (getNotCommonPoint(edge).sub(getCommonPoint(edge))).rotateAroundAxis(getNormalVector(virtualEdgeA, virtualEdgeB), -2*angle).add(getCommonPoint(edge));
-		if ((getPointOfRotatingEdge(edge).sub(getCommonPoint(edge))).angleBetween(rotated.sub(getCommonPoint(edge)), true) != angle)
+		if (safeAngleBetween(rotationAxis, rotated.sub(getCommonPoint(edge))) != angle)
 		{
 			rotated = (getNotCommonPoint(edge).sub(getCommonPoint(edge))).rotateAroundAxis(getNormalVector(virtualEdgeA, virtualEdgeB), 2*angle).add(getCommonPoint(edge));
 		}
-		//    out.println("Normalvec " + virtualShape.getShape().getNormalVector());
-		//    out.println("RotatingEdgePoint" + getPointOfRotatingEdge(edge));
-		//    out.println("CommonPoint" + getCommonPoint(edge));
-		//    out.println("NotCommonPoint" + getNotCommonPoint(edge));
-		//    out.println(new Line3D(getNotCommonPoint(edge), rotated));
-		//    out.println("Mod" + new Line3D(getNotCommonPoint(edge), (getNotCommonPoint(edge).sub(getCommonPoint(edge))).rotateAroundAxis(getNormalVector(virtualEdgeA, virtualEdgeB), 2*angle).add(getCommonPoint(edge))));
+//		    out.println("Normalvec " + virtualShape.getShape().getNormalVector());
+//		    out.println("RotatingEdgePoint" + getPointOfRotatingEdge(edge));
+//		    out.println("CommonPoint" + getCommonPoint(edge));
+//		    out.println("NotCommonPoint" + getNotCommonPoint(edge));
+//		    out.println(new Line3D(getNotCommonPoint(edge), rotated));
+//		    out.println("Mod" + new Line3D(getNotCommonPoint(edge), (getNotCommonPoint(edge).sub(getCommonPoint(edge))).rotateAroundAxis(getNormalVector(virtualEdgeA, virtualEdgeB), 2*angle).add(getCommonPoint(edge))));
 		return new Line3D(getNotCommonPoint(edge), rotated);
 	}
 
@@ -251,7 +270,7 @@ public class RotateAdjectantShapes
 		{
 			float newAngle = (masterAngle + (float)Math.PI/2*(int)((i-1)/2)) * (float)Math.pow(-1, i);
 			connection.connectEdges(masterEdge1, masterEdge2, newAngle);
-			//      System.out.println("Angle1" + newAngle);
+//			System.out.println("Angle1" + newAngle);
 			isCorrectAligned = tryToConnectOneEdge(connection, slaveEdge1, slaveEdge2, slaveAngle);
 			if (isCorrectAligned) return true;
 		}

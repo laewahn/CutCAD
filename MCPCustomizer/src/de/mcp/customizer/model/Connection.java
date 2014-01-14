@@ -270,15 +270,7 @@ public class Connection implements Drawable2D
   {
     Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
     Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
-    float angle;
-	if(slaveEdgeDirection.cross(masterEdgeDirection).distanceTo(new Vec3D(0,0,0)) < 0.1f)
-	{
-		angle = 0;
-	}
-	else
-	{
-		angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
-	}
+    float angle = safeAngleBetween(masterEdgeDirection, slaveEdgeDirection);
 
     Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
     while (normalVector.equals(new Vec3D(0,0,0)))
@@ -288,6 +280,23 @@ public class Connection implements Drawable2D
     slave.rotateAroundAxis(normalVector, angle);
   }
 
+private float safeAngleBetween(Vec3D masterEdgeDirection,
+		Vec3D slaveEdgeDirection) {
+	float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+    if (Float.isNaN(angle))
+	{
+    	if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vec3D(0,0,0), 0.1f))
+    	{
+    		angle = (float)Math.PI;
+    	}
+    	else
+    	{
+    		angle = 0;
+    	}
+    }
+	return angle;
+}
+
   private void alignShapes(GShape master, GShape slave, Edge masterEdge, Edge slaveEdge)
   {
     Vec3D slaveEdgeDirection = slaveEdge.getP3D2().getNormalized();
@@ -295,7 +304,7 @@ public class Connection implements Drawable2D
     float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
     slave.rotateAroundAxis(slaveEdgeDirection, angleBetweenNormals);
 
-    if (calculateAngleBetweenNormals(master, slave) > 0)
+    if (calculateAngleBetweenNormals(master, slave) > 0.001f)
     {
       slave.rotateAroundAxis(slaveEdgeDirection, (float) -2.0 * angleBetweenNormals);
     }
@@ -305,8 +314,7 @@ public class Connection implements Drawable2D
   {
     Vec3D masterNormal = master.getNormalVector();
     Vec3D slaveNormal = slave.getNormalVector();
-
-    return masterNormal.angleBetween(slaveNormal, true);
+    return safeAngleBetween(masterNormal, slaveNormal);
   }
 
   public float getAngle() {

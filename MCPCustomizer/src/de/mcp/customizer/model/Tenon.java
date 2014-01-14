@@ -15,13 +15,30 @@ public class Tenon
     edge1.setTenons(basic);
   }
 
+  private static float safeAngleBetween(Vec3D masterEdgeDirection,
+			Vec3D slaveEdgeDirection) {
+		float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+	    if (Float.isNaN(angle))
+		{
+	    	if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vec3D(0,0,0), 0.1f))
+	    	{
+	    		angle = (float)Math.PI;
+	    	}
+	    	else
+	    	{
+	    		angle = 0;
+	    	}
+	    }
+		return angle;
+	}
+  
   public static void createOutlineOfEdge(Edge edgeMaster, Edge edgeSlave)
   {
     int relationTenonLength = 4; //to determine length of a tenon corresponding to thickness of shapes
 
     Vec3D p1 = edgeMaster.getShape().get3Dperpendicular(edgeMaster.getP3D1(), edgeMaster.getP3D2());
     Vec3D p2 = edgeSlave.getShape().get3Dperpendicular(edgeSlave.getP3D1(), edgeSlave.getP3D2());
-    float angle = p1.angleBetween(p2, true);
+    float angle = safeAngleBetween(p1, p2);
 
     float edgeLength = edgeMaster.getV1().distanceTo(edgeMaster.getV2());
 
