@@ -189,7 +189,7 @@ public class MCPCustomizer extends PApplet {
 	  void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
-	    toolbar.setPosition(0, 50).setSize(150, 500).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(150, 550).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, shapes, connections, transform2D),
@@ -200,6 +200,7 @@ public class MCPCustomizer extends PApplet {
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
 	      new CutoutTool(view2DRect, properties, shapes, connections, transform2D),
+	      new CopyTool(view2DRect, properties, shapes, transform2D),
 	      new PrintTool(view2DRect, properties, transform2D, shapes)
 	    };
 	    
