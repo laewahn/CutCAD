@@ -66,6 +66,7 @@ public class MCPCustomizer extends PApplet {
 	    connections = new ArrayList<Connection>();
 
 	    new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
+	    AllMaterials.setBaseMaterial(AllMaterials.getMaterials().get(48));
 
 	    cp5 = new ControlP5(this);
 

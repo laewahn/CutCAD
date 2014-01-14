@@ -33,7 +33,7 @@ public class GShape implements Drawable2D, Drawable3D
     this.isActive = false;
     this.shape = shape;
     this.numberOfConnections = 0;
-    this.material = AllMaterials.getMaterials().get(0);
+    this.material = AllMaterials.getBaseMaterial();
 
     vertices = initVertices;
     edges = new ArrayList<Edge>();

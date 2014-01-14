@@ -10,6 +10,7 @@ public class AllMaterials extends PApplet
 	private static final long serialVersionUID = -8801211971447138231L;
 	
 	private static ArrayList<Material> materials = new ArrayList<Material>();
+	private static int baseMaterialIndex = 0;
 
 	public AllMaterials()
 	{
@@ -57,6 +58,16 @@ public class AllMaterials extends PApplet
 	public static ArrayList<Material> getMaterials()
 	{
 		return materials;
+	}
+	
+	public static void setBaseMaterial(Material material) 
+	{
+		baseMaterialIndex = materials.indexOf(material);
+	}
+	
+	public static Material getBaseMaterial()
+	{
+		return materials.get(baseMaterialIndex);
 	}
 }
 

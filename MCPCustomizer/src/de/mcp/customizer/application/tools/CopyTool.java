@@ -27,7 +27,7 @@ public class CopyTool extends Tool {
 	Shape copyShape, previewShape;
 
 	public CopyTool(Rect view, Properties properties, List<Shape> shapes, Transformation2D transform) {
-		super(view, properties, transform, "SelectTool");
+		super(view, properties, transform, "CopyTool");
 
 		this.shapes = shapes;
 		this.selected = false;
