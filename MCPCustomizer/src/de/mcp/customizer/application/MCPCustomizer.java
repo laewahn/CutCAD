@@ -9,16 +9,13 @@ import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
-//import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import de.mcp.customizer.application.tools.*;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
-import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.model.Trapezium;
 import de.mcp.customizer.view.Transformation2D;
 
 public class MCPCustomizer extends PApplet {
@@ -43,6 +40,7 @@ public class MCPCustomizer extends PApplet {
 	  int viewSizeY = 500;
 	  int view2DPosX = 150;
 	  int view2DPosY = 50;
+	  int gridWidth = 50; // 5 mm
 	  Rect view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
 
 	  int view3DPosX = 700;
@@ -69,20 +67,6 @@ public class MCPCustomizer extends PApplet {
 
 	    new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
 
-	  //Just for testing: add some shapes
-	    // shapes.add(new Rectangle(new Vec3D(50, 50, 0), 300, 300));
-	    // shapes.add(new Rectangle(new Vec3D(450, 200, 0), 300, 300));
-//	    shapes.add(new Rectangle(new Vec3D(50, 50, 0), 151, 101));
-//	    shapes.add(new Rectangle(new Vec3D(50, 200, 0), 151, 101));
-//	    shapes.add(new Rectangle(new Vec3D(400, 200, 0), 74, 101));
-//	    shapes.add(new Rectangle(new Vec3D(400, 50, 0), 74, 101));
-//	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 74, 151));
-	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 100, 155));
-	    shapes.add(new Trapezium(new Vec3D(50,50,0), 155, 70));
-	    shapes.add(new Trapezium(new Vec3D(50,200,0), 155, 70));
-	    shapes.add(new Trapezium(new Vec3D(400,200,0), 100, 70));
-	    shapes.add(new Trapezium(new Vec3D(400,50,0), 100, 70));
-
 	    cp5 = new ControlP5(this);
 
 	    createProperties();
@@ -107,6 +91,8 @@ public class MCPCustomizer extends PApplet {
 	    transform2D.transform(view2D);
 
 	    view2D.background(100);
+	    
+	    drawGrid(view2D);
 
 	    for (Shape s : shapes)
 	    {
@@ -130,6 +116,16 @@ public class MCPCustomizer extends PApplet {
 	    image(view2D, view2DPosX, view2DPosY);
 	  }
 
+	private void drawGrid(PGraphics p) {
+		for (int i = -100; i < 100; i++)
+	    {
+	    	p.strokeWeight(1);
+	    	p.stroke(120);
+	    	p.line(-100 * gridWidth, gridWidth * i, 100 * gridWidth, gridWidth * i);
+	    	p.line(gridWidth * i, -100 * gridWidth, gridWidth * i, 100 * gridWidth);
+	    }
+	}
+
 	  void draw3DView()
 	  {
 	    view3D.beginDraw();
@@ -141,6 +137,10 @@ public class MCPCustomizer extends PApplet {
 	    view3D.endCamera();
 
 	    view3D.background(100);
+	    
+	    draw3DAxes(view3D);
+	    drawGrid(view3D);
+	    
 	    for (Shape s : shapes)
 	    {
 	      s.getShape().draw3D(view3D);
@@ -151,10 +151,29 @@ public class MCPCustomizer extends PApplet {
 	    image(view3D, view3DPosX, view3DPosY);
 	  }
 
+	private void draw3DAxes(PGraphics p) {
+		p.strokeWeight(2);	   
+		p.textSize(32);
+		p.fill(color(255,0,0));
+	    p.stroke(color(255,0,0));	    
+	    p.line(0, 0, 0, 350, 0, 0);
+	    p.text("X", 350, 12, 0);
+		p.fill(color(0,255,0));
+	    p.stroke(color(0,255,0));	   
+	    p.line(0, 0, 0, 0, 350, 0);
+	    p.text("Y", -10, 385, 0);
+		p.fill(color(0,0,255));
+	    p.stroke(color(0,0,255));	   
+	    p.line(0, 0, 0, 0, 0, 350);
+	    p.text("Z", 0, 0, 350);
+	    p.stroke(color(0,0,0));	 
+	    p.strokeWeight(1);
+	}
+
 	  void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
-	    toolbar.setPosition(0, 50).setSize(150, 500).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(150, 550).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, shapes, connections, transform2D),
@@ -165,6 +184,7 @@ public class MCPCustomizer extends PApplet {
 	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
 	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
 	      new CutoutTool(view2DRect, properties, shapes, connections, transform2D),
+	      new CopyTool(view2DRect, properties, shapes, transform2D),
 	      new PrintTool(view2DRect, properties, transform2D, shapes)
 	    };
 	    

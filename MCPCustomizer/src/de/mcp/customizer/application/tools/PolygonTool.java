@@ -5,6 +5,7 @@ import java.util.List;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
+//import toxi.geom.Line2D;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
@@ -19,9 +20,9 @@ public class PolygonTool extends Tool {
 
 	private List<Shape> shapes;
 
-	private GShape previewShape;
-
 	private List<Vec2D> vertices;
+	
+	private Vec2D lastKnownMousePositon;
 
 	public PolygonTool(Rect view, Properties properties,
 			Transformation2D transform, List<Shape> shapes) {
@@ -40,19 +41,31 @@ public class PolygonTool extends Tool {
 		if (!inView(position))
 			return;
 
-		vertices.add(this.positionRelativeToView(position));
-		this.previewShape = new GShape(this.vertices, new Vec3D(), null);
-
-		if (button == PConstants.RIGHT) {
-			Shape newShape = new PolygonShape(this.previewShape);
+		if (vertices.size() > 1 && mouseOverCloseShape())
+		{
+			GShape previewShape = new GShape(this.vertices, new Vec3D(), null);
+			Shape newShape = new PolygonShape(previewShape);
 			this.shapes.add(newShape);
+			this.vertices = new ArrayList<Vec2D>();			
+		}
+		else
+		{
+			vertices.add(this.lastKnownMousePositon);			
+		}
+		if (button == PConstants.RIGHT) {
 			this.vertices = new ArrayList<Vec2D>();
 		}
 	}
-
+	
+	private boolean mouseOverCloseShape()
+	{
+		Rect closeShapeRect = new Rect(vertices.get(0).add(-5,-5), vertices.get(0).add(5,5));
+		return closeShapeRect.containsPoint(this.lastKnownMousePositon);
+	}
+	
 	@Override
 	public void mouseMoved(Vec2D position) {
-
+		this.lastKnownMousePositon = this.positionRelativeToView(position);
 	}
 
 	@Override
@@ -74,25 +87,42 @@ public class PolygonTool extends Tool {
 	}
 
 	@Override
-	public void draw2D(PGraphics p) {
-		if (this.previewShape != null) {
-			this.previewShape.draw2D(p);
+	public void draw2D(PGraphics p) {		
+		if (vertices.size() > 0)
+		{
+			drawCloseRect(p);
+			for (int i = 0; i < vertices.size() - 1; i++)
+			{
+				p.line(vertices.get(i).x(), vertices.get(i).y(), vertices.get(i+1).x(), vertices.get(i+1).y());
+			}
+			p.line(vertices.get(vertices.size()-1).x(), vertices.get(vertices.size()-1).y(), this.lastKnownMousePositon.x(), this.lastKnownMousePositon.y());
 		}
+		
 		super.draw2D(p);
+	}
+
+	private void drawCloseRect(PGraphics p) {
+		if (mouseOverCloseShape())
+		{
+			p.stroke(255,0,0);
+		}
+		else
+		{
+			p.stroke(0);
+		}
+		p.rect(vertices.get(0).x() - 5, vertices.get(0).y() - 5, 10, 10);
+		p.stroke(0);
 	}
 	
 	@Override
 	public void wasSelected() {
 		super.wasSelected();
 		this.vertices = new ArrayList<Vec2D>();
-		this.previewShape = null;
 	}
 	
 	@Override
 	public void wasUnselected() {
 		super.wasUnselected();
-		Shape newShape = new PolygonShape(this.previewShape);
-		this.shapes.add(newShape);
 	}
 
 }

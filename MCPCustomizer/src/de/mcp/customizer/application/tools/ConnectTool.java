@@ -117,4 +117,13 @@ public class ConnectTool extends Tool
         }
     }
 
+	@Override
+	public void wasUnselected() {
+		selectedFirst = false;
+		this.previewConnection = null;
+		super.wasUnselected();
+	}
+    
+    
+
 }

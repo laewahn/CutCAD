@@ -121,6 +121,76 @@ public class GShape implements Drawable2D, Drawable3D
   {
     return this.vertices;
   }
+  
+  public boolean overlapsWith(GShape s)
+  {
+      if (noLineIntersections(this.getVerticesIncludingPosition2D(), s.getVerticesIncludingPosition2D()))
+      {
+          if (this.containsAtLeastOnePointFromList(s.getVerticesIncludingPosition2D()) || s.containsAtLeastOnePointFromList(this.getVerticesIncludingPosition2D()))
+          {
+              return true;
+          }
+          else
+          {
+              return false;
+          }
+      }
+      else
+      {
+          return true;
+      }
+  }
+  
+  private boolean noLineIntersections(List<Vec2D> vectors1, List<Vec2D> vectors2)
+  {
+      List<Line2D> lines1 = createListOfLines(vectors1);
+      List<Line2D> lines2 = createListOfLines(vectors2);
+      
+      for (Line2D x : lines1)
+      {
+          for (Line2D y : lines2)
+          {
+              if (x.intersectLine(y).getType().equals(Line2D.LineIntersection.Type.valueOf("INTERSECTING")))
+              {
+                  return false;
+              }
+          }
+      }        
+      return true;
+  }
+  
+  private List<Line2D> createListOfLines(List<Vec2D> vectors)
+  {
+      ArrayList<Line2D> lines = new ArrayList<Line2D>();
+      
+      for (int i = 0; i < vectors.size() - 1; i++)
+      {
+          lines.add(new Line2D(vectors.get(i), vectors.get(i+1)));
+      }
+      lines.add(new Line2D(vectors.get(vectors.size()-1), vectors.get(0)));
+      
+      return lines;        
+  }   
+  
+  private boolean containsAtLeastOnePointFromList(List<Vec2D> points)
+  {
+      Polygon2D thisShape = new Polygon2D(this.getVerticesIncludingPosition2D());
+      for (Vec2D v : points)
+      {
+          if (thisShape.containsPoint(v)) return true;
+      }
+      return false;
+  }
+  
+  private List<Vec2D> getVerticesIncludingPosition2D()
+  {
+	  ArrayList<Vec2D> vectors = new ArrayList<Vec2D>();
+	  for (Vec2D v: this.getVertices())
+	  {
+		  vectors.add(v.add(this.position2D));
+	  }
+	  return vectors;
+  }
 
   private Vec2D correctIntersection(Edge edge)
   {
@@ -169,70 +239,133 @@ public class GShape implements Drawable2D, Drawable3D
   }
 
   public ArrayList<Vec3D> transformTo3D(boolean top, ArrayList<Vec2D> vectors2D)
-  {      
-    int offsetZ;
-    if (top)
-    {
-      offsetZ = this.getThickness()/2;
-    }
-    else
-    {
-      offsetZ = -this.getThickness()/2;
-    }
-    //we want to change the tenon structure to the (logical) 3D positon, therefor first change them to 3D vectors
-    ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
-    for (Vec2D v : vectors2D)
-    {
-    	vectors3D.add(v.to3DXY().addSelf(new Vec3D(0, 0, offsetZ)));
-    }
+	{      
+		// Use the algorithm for connecting two shapes to align logical 2D and 3D view
+		// Therefore produce a new GShape with the 2D positions (for the 3D represenation)
+		// 
+		GShape helperShape = new GShape(vertices, position3D, this.getParent());
 
-    //align first edge
-    Vec3D edge3D = edges.get(0).getP3D2().sub(edges.get(0).getP3D1());
-    Vec3D edge2D = edges.get(0).getV2().to3DXY().sub(edges.get(0).getV1().to3DXY());
+		GShape master = this;
+		GShape slave = helperShape;
+		Edge masterEdge = this.getEdges().get(0);
+		Edge slaveEdge = helperShape.getEdges().get(0);
 
-    Vec3D perpendicular3D = get3Dperpendicular(edges.get(0).getP3D1(), edges.get(0).getP3D2()).normalize();
-    Vec3D perpendicular2D = get2Dperpendicular(edges.get(0).getV1(), edges.get(0).getV2()).to3DXY().normalize();
+		Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
+		Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
 
-    Vec3D position3D = edges.get(0).getP3D1();
-    Vec3D position2D = edges.get(0).getV1().to3DXY();
+		float angleBetweenEdges = safeAngleBetween(slaveEdgeDirection,masterEdgeDirection);
 
-    Vec3D control3D2 = edges.get(1).getP3D2();
-    Vec3D control2D2 = edges.get(1).getV2().to3DXY();
+		Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
+		while (normalVector.equals(new Vec3D(0,0,0)))
+		{
+			normalVector = masterEdgeDirection.cross(new Vec3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
+		}
+		slave.rotateAroundAxis(normalVector, angleBetweenEdges);
+		
+		slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
+//		if (Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) < 0.1f)
+//		{
+//			// do nothing
+//		}
+//		else if (Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) > Math.PI - 0.1f && Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) < Math.PI + 0.1f)
+//		{
+//			angleBetweenEdges = (float)Math.PI;
+//		}
+//		else 
+//		{
+//			slave.rotateAroundAxis(normalVector, -2*angleBetweenEdges);
+//			angleBetweenEdges = -angleBetweenEdges;
+//		} 
 
-    float angleBetweenEdges = edge2D.angleBetween(edge3D, true);
+		Vec3D toOrigin = slaveEdge.getP3D1().scale(-1).copy();
 
-    Vec3D normalVector = edge2D.cross(edge3D).getNormalized();
+		slave.translate3D(toOrigin);
+
+		Vec3D rotationAxis = slaveEdge.getP3D2().getNormalized();
+
+		float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
+		slave.rotateAroundAxis(rotationAxis, angleBetweenNormals);
+
+		if (calculateAngleBetweenNormals(master, slave) > 0.001f)
+		{
+//		{
+//			// Do Nothing
+////			System.out.println("Right Angle");
+//		}
+//		else if (Math.abs(calculateAngleBetweenNormals(master, slave)) > Math.PI-0.0001f)
+//		{
+////			System.out.println("Rotate additional 180 degree");
+//			angleBetweenNormals = (float) Math.PI;
+//		}
+//		else
+//		{
+////			System.out.println("Rotate in the other direction");
+			slave.rotateAroundAxis(rotationAxis, (float) -2.0 * angleBetweenNormals);
+			angleBetweenNormals = -angleBetweenNormals;
+		}
+		
+		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
+//		slave.translate3D(toMaster);
+//		if(slave.getEdges().get(1).getP3D2().distanceTo(master.getEdges().get(1).getP3D2()) > 1f)
+//		{
+//			angleBetweenNormals = (float) (angleBetweenNormals + Math.PI);
+//		}
 
 
-    if ((normalVector.equals(new Vec3D(0, 0, 0))))  
-    {
-      normalVector = new Vec3D (0, 0, 1);
-    }
+		// Now we know everything, apply the same Translations to the outline Vec2D array
+		// Translated by thickness/2 to top or bottom
+		int offsetZ;
+		if (top)
+		{
+			offsetZ = this.getThickness()/2;
+		}
+		else
+		{
+			offsetZ = -this.getThickness()/2;
+		}
+		
+		ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
+		for (Vec2D v : vectors2D)
+		{
+			vectors3D.add(v.to3DXY().add(position3D).addSelf(new Vec3D(0, 0, offsetZ)));
+		}
+//		System.out.println("AngleEdges" + angleBetweenEdges);
+//		System.out.println("AngleNormals" + angleBetweenNormals);
+//		System.out.println("toOrigin" + toOrigin);
+//		System.out.println("toMaster" + toMaster);
+		for (int i=0; i<vectors3D.size(); i++)
+		{
+			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
+			vectors3D.set(i, vectors3D.get(i).addSelf(toOrigin));
+			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(rotationAxis, angleBetweenNormals));
+			vectors3D.set(i, vectors3D.get(i).addSelf(toMaster));
+		}
+		return vectors3D;
+	}
+  
+  	private float safeAngleBetween(Vec3D masterEdgeDirection,
+			Vec3D slaveEdgeDirection) {
+		float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
+	    if (Float.isNaN(angle))
+		{
+	    	if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vec3D(0,0,0), 0.1f))
+	    	{
+	    		angle = (float)Math.PI;
+	    	}
+	    	else
+	    	{
+	    		angle = 0;
+	    	}
+	    }
+		return angle;
+	}
 
-    perpendicular2D = perpendicular2D.rotateAroundAxis(normalVector, angleBetweenEdges);
-    position2D = position2D.rotateAroundAxis(normalVector, angleBetweenEdges);
-
-    float angleBetweenNormals = perpendicular2D.angleBetween(perpendicular3D, true);
-
-    position2D = position2D.rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals);
-    Vec3D diffPosition = position3D.sub(position2D);
-
-    control2D2.rotateAroundAxis(normalVector, angleBetweenEdges);
-    control2D2.rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals);
-    control2D2.addSelf(diffPosition);
-    if (!(control3D2.equalsWithTolerance(control2D2, 0.1f))) 
-    {
-      angleBetweenNormals = angleBetweenNormals*(-1);
-    }
-
-    for (int i=0; i<vectors3D.size(); i++)
-    {
-      vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
-      vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(edge3D.getNormalized(), angleBetweenNormals));
-      vectors3D.set(i, vectors3D.get(i).addSelf(diffPosition));
-    }
-    return vectors3D;
-  }
+	private float calculateAngleBetweenNormals(GShape master, GShape slave)
+	{
+		Vec3D masterNormal = master.getNormalVector();
+		Vec3D slaveNormal = slave.getNormalVector();
+	    return safeAngleBetween(masterNormal,slaveNormal);
+	}
 
   public Vec2D get2Dperpendicular(Vec2D v1, Vec2D v2)
   {
@@ -348,16 +481,6 @@ public class GShape implements Drawable2D, Drawable3D
 
   public void draw3D(PGraphics p) 
   {
-    // if we want to show the "Logic" shape:
-    /*
-    p.noFill();
-    p.beginShape();
-    for (Edge e : edges) {
-      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
-    }
-    p.endShape(PConstants.CLOSE);
-    */
-
     this.setFillColor(p);
     createCover3D(p,true);
     createCover3D(p, false);
@@ -366,6 +489,17 @@ public class GShape implements Drawable2D, Drawable3D
     {
     	createSides(p, cutout.getVectors());
     }
+    
+    // if we want to show the "Logic" shape:
+    ///*
+    p.noFill();
+    p.stroke(0,0,255);
+    p.beginShape();
+    for (Edge e : edges) {
+      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    }
+    p.endShape(PConstants.CLOSE);
+    //*/
     
     for (Edge e: edges) //not good... but i've no better idea...still no better version
     {

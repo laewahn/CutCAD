@@ -61,8 +61,14 @@ public class SymmetricPolygon extends Shape
 	}
 	
 	public void recalculate() {
-//		basicShape.set(1, new Vec2D(size, 0));
-//		basicShape.set(2, new Vec2D(size, sizeY));
+		float alpha = 2*(float)Math.PI/number;
+		float beta = ((float)Math.PI-alpha)/2;
+		Vec2D diameter = new Vec2D((float)(size/Math.sin(alpha)*Math.sin(beta)),0f);
+		basicShape.clear();
+		for(int i=0; i<number; i++)
+		{
+			basicShape.add((diameter.getRotated(i*alpha)).add(new Vec2D(diameter.x(), diameter.y())));
+		}
 		basic.recalculate(basicShape);
 	}
 
@@ -81,6 +87,7 @@ public class SymmetricPolygon extends Shape
 	public void setSize(Vec2D newSize)
 	{
 		this.size = (int) ((newSize.x() + newSize.y())/2);
+		recalculate();
 	}
 
 	public void setShape(GShape shape)
