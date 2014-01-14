@@ -69,20 +69,6 @@ public class MCPCustomizer extends PApplet {
 
 	    new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
 
-	  //Just for testing: add some shapes
-	    // shapes.add(new Rectangle(new Vec3D(50, 50, 0), 300, 300));
-	    // shapes.add(new Rectangle(new Vec3D(450, 200, 0), 300, 300));
-//	    shapes.add(new Rectangle(new Vec3D(50, 50, 0), 151, 101));
-//	    shapes.add(new Rectangle(new Vec3D(50, 200, 0), 151, 101));
-//	    shapes.add(new Rectangle(new Vec3D(400, 200, 0), 74, 101));
-//	    shapes.add(new Rectangle(new Vec3D(400, 50, 0), 74, 101));
-//	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 74, 151));
-	    shapes.add(new Rectangle(new Vec3D(250, 250, 0), 100, 155));
-	    shapes.add(new Trapezium(new Vec3D(50,50,0), 155, 70));
-	    shapes.add(new Trapezium(new Vec3D(50,200,0), 155, 70));
-	    shapes.add(new Trapezium(new Vec3D(400,200,0), 100, 70));
-	    shapes.add(new Trapezium(new Vec3D(400,50,0), 100, 70));
-
 	    cp5 = new ControlP5(this);
 
 	    createProperties();

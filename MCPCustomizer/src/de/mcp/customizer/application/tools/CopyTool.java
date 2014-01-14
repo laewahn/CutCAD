@@ -50,32 +50,34 @@ public class CopyTool extends Tool {
 
     public void mouseButtonPressed(Vec2D position, int button)
     {
-    	if (!selected)
-    	{
-    		for (Shape s : shapes)
+    	if (this.inView(position)) {
+    		if (!selected)
     		{
-                if (s.getShape().isSelected() && button == PConstants.LEFT)
-                {
-                	master = s.getShape();
-                	previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
-                	selected = true;                        
-                }
-            }
-    	}
-    	else
-    	{
-    		if(button == PConstants.RIGHT)
-    		{
-    			this.copyShape = null;
-    			this.selected = false;
-    			this.previewShape = null;
+    			for (Shape s : shapes)
+    			{
+    				if (s.getShape().isSelected() && button == PConstants.LEFT)
+    				{
+    					master = s.getShape();
+    					previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
+    					selected = true;                        
+    				}
+    			}
     		}
     		else
     		{
-    			this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
-    			shapes.add(this.copyShape);
+    			if(button == PConstants.RIGHT)
+    			{
+    				this.copyShape = null;
+    				this.selected = false;
+    				this.previewShape = null;
+    			}
+    			else
+    			{
+    				this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
+    				shapes.add(this.copyShape);
+    			}
     		}
-        }
+    	}
     }
 
     public void mouseButtonReleased(Vec2D position, int button)
