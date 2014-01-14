@@ -9,7 +9,6 @@ import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
-import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import de.mcp.customizer.application.tools.*;
@@ -155,13 +154,20 @@ public class MCPCustomizer extends PApplet {
 	  }
 
 	private void draw3DAxes() {
-		view3D.strokeWeight(2);	    
+		view3D.strokeWeight(2);	   
+		view3D.textSize(32);
+		view3D.fill(color(255,0,0));
 	    view3D.stroke(color(255,0,0));	    
-	    view3D.line(0, 0, 0, 500, 0, 0);
+	    view3D.line(0, 0, 0, 350, 0, 0);
+	    view3D.text("X", 350, 12, 0);
+		view3D.fill(color(0,255,0));
 	    view3D.stroke(color(0,255,0));	   
-	    view3D.line(0, 0, 0, 0, 500, 0);
+	    view3D.line(0, 0, 0, 0, 350, 0);
+	    view3D.text("Y", -10, 385, 0);
+		view3D.fill(color(0,0,255));
 	    view3D.stroke(color(0,0,255));	   
-	    view3D.line(0, 0, 0, 0, 0, 500);
+	    view3D.line(0, 0, 0, 0, 0, 350);
+	    view3D.text("Z", 0, 0, 350);
 	    view3D.stroke(color(0,0,0));	 
 	    view3D.strokeWeight(1);
 	}
