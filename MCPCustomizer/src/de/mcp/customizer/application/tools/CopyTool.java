@@ -39,10 +39,15 @@ public class CopyTool extends Tool {
 		context.noFill();
 		context.stroke(0);
 		context.strokeWeight(2);
-		context.translate(60, 10);
-		context.rotate(PApplet.radians(-45));
-		context.triangle(0, 0, -10, 30, 10, 30);
-		context.rect(-5, 30, 10, 10);
+		context.line(50, 7, 50, 36);
+		context.line(50, 7, 100, 7);
+		context.line(50, 36, 60, 36);
+		context.line(100, 7, 100, 13);
+		
+		context.line(60, 14, 60, 43);
+		context.line(60, 14, 110, 14);
+		context.line(110, 14, 110, 43);
+		context.line(60, 43, 110, 43);
 		context.endDraw();
 
 		return context;
