@@ -42,6 +42,7 @@ public class MCPCustomizer extends PApplet {
 	  int viewSizeY = 500;
 	  int view2DPosX = 150;
 	  int view2DPosY = 50;
+	  int gridWidth = 50; // 5 mm
 	  Rect view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
 
 	  int view3DPosX = 700;
@@ -106,6 +107,8 @@ public class MCPCustomizer extends PApplet {
 	    transform2D.transform(view2D);
 
 	    view2D.background(100);
+	    
+	    drawGrid(view2D);
 
 	    for (Shape s : shapes)
 	    {
@@ -129,6 +132,16 @@ public class MCPCustomizer extends PApplet {
 	    image(view2D, view2DPosX, view2DPosY);
 	  }
 
+	private void drawGrid(PGraphics p) {
+		for (int i = -100; i < 100; i++)
+	    {
+	    	p.strokeWeight(1);
+	    	p.stroke(120);
+	    	p.line(-100 * gridWidth, gridWidth * i, 100 * gridWidth, gridWidth * i);
+	    	p.line(gridWidth * i, -100 * gridWidth, gridWidth * i, 100 * gridWidth);
+	    }
+	}
+
 	  void draw3DView()
 	  {
 	    view3D.beginDraw();
@@ -141,7 +154,8 @@ public class MCPCustomizer extends PApplet {
 
 	    view3D.background(100);
 	    
-	    draw3DAxes();
+	    draw3DAxes(view3D);
+	    drawGrid(view3D);
 	    
 	    for (Shape s : shapes)
 	    {
@@ -153,23 +167,23 @@ public class MCPCustomizer extends PApplet {
 	    image(view3D, view3DPosX, view3DPosY);
 	  }
 
-	private void draw3DAxes() {
-		view3D.strokeWeight(2);	   
-		view3D.textSize(32);
-		view3D.fill(color(255,0,0));
-	    view3D.stroke(color(255,0,0));	    
-	    view3D.line(0, 0, 0, 350, 0, 0);
-	    view3D.text("X", 350, 12, 0);
-		view3D.fill(color(0,255,0));
-	    view3D.stroke(color(0,255,0));	   
-	    view3D.line(0, 0, 0, 0, 350, 0);
-	    view3D.text("Y", -10, 385, 0);
-		view3D.fill(color(0,0,255));
-	    view3D.stroke(color(0,0,255));	   
-	    view3D.line(0, 0, 0, 0, 0, 350);
-	    view3D.text("Z", 0, 0, 350);
-	    view3D.stroke(color(0,0,0));	 
-	    view3D.strokeWeight(1);
+	private void draw3DAxes(PGraphics p) {
+		p.strokeWeight(2);	   
+		p.textSize(32);
+		p.fill(color(255,0,0));
+	    p.stroke(color(255,0,0));	    
+	    p.line(0, 0, 0, 350, 0, 0);
+	    p.text("X", 350, 12, 0);
+		p.fill(color(0,255,0));
+	    p.stroke(color(0,255,0));	   
+	    p.line(0, 0, 0, 0, 350, 0);
+	    p.text("Y", -10, 385, 0);
+		p.fill(color(0,0,255));
+	    p.stroke(color(0,0,255));	   
+	    p.line(0, 0, 0, 0, 0, 350);
+	    p.text("Z", 0, 0, 350);
+	    p.stroke(color(0,0,0));	 
+	    p.strokeWeight(1);
 	}
 
 	  void createToolbar()
