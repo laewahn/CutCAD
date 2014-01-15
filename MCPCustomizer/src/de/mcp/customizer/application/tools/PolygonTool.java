@@ -14,7 +14,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.PolygonShape;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 
 public class PolygonTool extends Tool {
 
@@ -25,7 +25,7 @@ public class PolygonTool extends Tool {
 	private Vec2D lastKnownMousePositon;
 
 	public PolygonTool(Rect view, Properties properties,
-			Transformation2D transform, List<Shape> shapes) {
+			Transformation transform, List<Shape> shapes) {
 		super(view, properties, transform, "PolygonTool");
 		this.shapes = shapes;
 	}

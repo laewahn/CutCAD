@@ -6,7 +6,7 @@ import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.PrintDialog;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -15,7 +15,7 @@ public class PrintTool extends Tool {
 	
 	private List<Shape> shapes;
 	
-    public PrintTool(Rect view, Properties properties, Transformation2D transform, List<Shape> shapes) 
+    public PrintTool(Rect view, Properties properties, Transformation transform, List<Shape> shapes) 
     {
         super(view, properties, transform, "PrintTool");
         this.shapes = shapes;

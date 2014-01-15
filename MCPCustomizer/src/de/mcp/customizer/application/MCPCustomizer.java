@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -16,7 +17,7 @@ import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 
 public class MCPCustomizer extends PApplet {
 
@@ -33,8 +34,6 @@ public class MCPCustomizer extends PApplet {
 
 	  int startX = 0;
 	  int startY = 0;
-	  int endX = 0;
-	  int endY = 0;
 
 	  int viewSizeX = 500;
 	  int viewSizeY = 500;
@@ -49,7 +48,8 @@ public class MCPCustomizer extends PApplet {
 	  int cameraX = 45;
 	  int cameraY = 1000;
 
-	  Transformation2D transform2D = new Transformation2D((float) 1.0, new Vec2D(0,0));
+	  Transformation transform2D = new Transformation((float) 1.0, new Vec2D(0,0));
+	  Transformation transform3D = new Transformation((float) 1.0, new Vec2D(0,0));
 
 	  Vec3D cameraPosition;
 	  Tool tools[];
@@ -139,6 +139,9 @@ public class MCPCustomizer extends PApplet {
 
 	    view3D.background(100);
 	    
+	    float scale = transform3D.getScale();	
+	    view3D.scale(scale);
+    
 	    draw3DAxes(view3D);
 	    drawGrid(view3D);
 	    
@@ -222,7 +225,15 @@ public class MCPCustomizer extends PApplet {
 	  public void mouseDragged()
 	  {
 	    if (mouseOver3DView()) {
-	      cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX + mouseX - view3DPosX - startX));
+	    	if (mouseButton == PConstants.LEFT)
+	    	{
+	    		cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX + mouseX - view3DPosX - startX));
+	    	}	    	
+	    	else if (mouseButton == PConstants.RIGHT)
+	    	{
+	    		transform3D.scaleUp(0.001f * (mouseY - view3DPosY - startY));
+	    		startY = mouseY - view3DPosY;
+	    	}
 	    }
 
 	    toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
@@ -232,7 +243,7 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    toolbar.getSelectedTool().mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
 
-	    if (mouseOver3DView())
+	    if (mouseOver3DView() && mouseButton == PConstants.LEFT)
 	    {
 	      cameraX += mouseX - view3DPosX - startX;
 	      cameraY += 5 * (mouseY - view3DPosY - startY);

@@ -2,12 +2,12 @@ package de.mcp.customizer.view;
 import processing.core.PGraphics;
 import toxi.geom.Vec2D;
 
-public class Transformation2D
+public class Transformation
 {
     protected float scale;
     protected Vec2D translation;
 
-    public Transformation2D(float scale, Vec2D translation)
+    public Transformation(float scale, Vec2D translation)
     {
         this.scale = scale;
         this.translation = translation;
@@ -32,11 +32,13 @@ public class Transformation2D
     public void scaleUp(float amount)
     {
         this.scale += amount;
+        if (this.scale < 0) this.scale = 0;
     }
 
     public void scaleDown(float amount)
     {
         this.scale -= amount;
+        if (this.scale < 0) this.scale = 0;
     }
 
     public void translate(Vec2D v)

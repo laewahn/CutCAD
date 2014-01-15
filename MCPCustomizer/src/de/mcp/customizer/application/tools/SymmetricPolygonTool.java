@@ -6,7 +6,7 @@ import de.mcp.customizer.application.Tool;
 //import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.SymmetricPolygon;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -19,7 +19,7 @@ public class SymmetricPolygonTool extends Tool {
 	SymmetricPolygon previewRectangle;
 	List<Shape> shapes;
 
-	public SymmetricPolygonTool(Rect view, Properties properties, List<Shape> shapes, Transformation2D transform)
+	public SymmetricPolygonTool(Rect view, Properties properties, List<Shape> shapes, Transformation transform)
 	{
 		super(view, properties, transform, "SymmetricPolygonTool");
 		this.isDrawing = false;

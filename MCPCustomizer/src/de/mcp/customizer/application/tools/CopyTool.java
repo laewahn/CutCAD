@@ -15,7 +15,7 @@ import de.mcp.customizer.model.CopyShape;
 //import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 
 public class CopyTool extends Tool {
 
@@ -26,7 +26,7 @@ public class CopyTool extends Tool {
 
 	Shape copyShape, previewShape;
 
-	public CopyTool(Rect view, Properties properties, List<Shape> shapes, Transformation2D transform) {
+	public CopyTool(Rect view, Properties properties, List<Shape> shapes, Transformation transform) {
 		super(view, properties, transform, "CopyTool");
 
 		this.shapes = shapes;

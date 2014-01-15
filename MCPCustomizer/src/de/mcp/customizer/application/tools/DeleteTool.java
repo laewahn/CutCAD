@@ -7,7 +7,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
@@ -20,7 +20,7 @@ public class DeleteTool extends Tool {
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public DeleteTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform) 
+    public DeleteTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation transform) 
     {
         super(view, properties, transform, "DeleteTool");
         

@@ -6,7 +6,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
@@ -24,7 +24,7 @@ public class ConnectTool extends Tool
     List<Shape> shapes;
     
 
-    public ConnectTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform)
+    public ConnectTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation transform)
     {
         super(view, properties, transform, "ConnectTool");
         this.shapes = shapes;

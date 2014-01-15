@@ -6,7 +6,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
@@ -24,7 +24,7 @@ public class CutoutTool extends Tool {
     Vec2D relativePosition;
     Shape masterShape;
     
-    public CutoutTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation2D transform) 
+    public CutoutTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation transform) 
     {
         super(view, properties, transform, "CutoutTool");
         

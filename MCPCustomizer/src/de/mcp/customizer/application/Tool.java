@@ -1,7 +1,7 @@
 package de.mcp.customizer.application;
 
 import de.mcp.customizer.view.Drawable2D;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -10,10 +10,10 @@ public abstract class Tool implements Drawable2D {
 
     protected Properties properties;
     protected Rect view;
-    protected Transformation2D transform;
+    protected Transformation transform;
     protected String name;
 
-    public Tool(Rect view, Properties properties, Transformation2D transform, String name)
+    public Tool(Rect view, Properties properties, Transformation transform, String name)
     {
         this.view = view;
         this.properties = properties;

@@ -7,7 +7,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -22,7 +22,7 @@ public class SelectTool extends Tool {
 	Vec2D originalMousePosition;
 
 	public SelectTool(Rect view, Properties properties, List<Shape> shapes,
-			List<Connection> connections, Transformation2D transform) {
+			List<Connection> connections, Transformation transform) {
 		super(view, properties, transform, "SelectTool");
 
 		this.shapes = shapes;
