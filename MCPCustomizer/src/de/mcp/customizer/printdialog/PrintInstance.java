@@ -76,30 +76,45 @@ public class PrintInstance
   
   public void print()
   {
-   instancesPrinted = 0;
-   subInstances.get(0).print(this.material.getMaterialName() + " - " + "1");
+	  instancesPrinted = 0;
+	  if(subInstances.get(instancesPrinted).getPlacedShapes().size() > 0 && !this.material.getMaterialName().equals("Nothing 0,5 mm"))
+	  {
+		  subInstances.get(0).print(this.material.getMaterialName() + " - " + "1");
+	  } else
+	  {
+		  printNext();
+	  }
   }
   
   public void printNext()
   {
-   instancesPrinted++;
-   if(instancesPrinted < subInstances.size())
-   {
-    int name = instancesPrinted+1;
-    subInstances.get(0).print(this.material.getMaterialName() + " - " + name);
-   } else
-   {
-    this.parent.printNext(); 
-   }
+	  instancesPrinted++;
+	  if(instancesPrinted < subInstances.size())
+	  {
+		  if(subInstances.get(instancesPrinted).getPlacedShapes().size() > 0 && !this.material.getMaterialName().equals("Nothing 0,5 mm"))
+		  {
+			  int name = instancesPrinted+1;
+			  subInstances.get(instancesPrinted).print(this.material.getMaterialName() + " - " + name);
+		  } else
+		  {
+			  printNext();
+		  }
+	  } else
+	  {
+		  this.parent.printNext(); 
+	  }
   }
   
   public void printSVG()
   {
-   for(int i = 0; i < subInstances.size(); i++)
-   {
-    int name = i+1;
-    subInstances.get(i).printSVG(this.material.getMaterialName() + " - " + name);
-   } 
+	  for(int i = 0; i < subInstances.size(); i++)
+	  {
+		  if(subInstances.get(i).getPlacedShapes().size() > 0 && !this.material.getMaterialName().equals("Nothing 0,5 mm"))
+		  {
+			  int name = i+1;
+			  subInstances.get(i).printSVG(this.material.getMaterialName() + " - " + name);
+		  }
+	  } 
   }
   
   public void setParent(PrintDialogFrame parent)
