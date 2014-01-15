@@ -64,6 +64,7 @@ public class CopyTool extends Tool {
     				{
     					master = s.getShape();
     					previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
+    					previewShape.getShape().setMaterial(master.getMaterial());
     					selected = true;                        
     				}
     			}
@@ -79,6 +80,7 @@ public class CopyTool extends Tool {
     			else
     			{
     				this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
+    				copyShape.getShape().setMaterial(master.getMaterial());
     				shapes.add(this.copyShape);
     			}
     		}
