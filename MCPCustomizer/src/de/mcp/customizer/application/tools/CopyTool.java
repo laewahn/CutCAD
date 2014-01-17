@@ -81,9 +81,11 @@ public class CopyTool extends Tool {
     			}
     			else
     			{
-    				this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
-    				copyShape.getShape().setMaterial(master.getMaterial());
-    				shapes.add(this.copyShape);
+    				//this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
+    				//copyShape.getShape().setMaterial(master.getMaterial());
+    				Shape copy = master.copyCompleteStructure();
+    				copy.getShape().setPosition2D(lastMousePosition);
+    				shapes.add(copy);
     			}
     		}
     	}

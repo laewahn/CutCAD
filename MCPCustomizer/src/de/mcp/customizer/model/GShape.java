@@ -594,12 +594,35 @@ public class GShape implements Drawable2D, Drawable3D
     GShape copy = new GShape(getTenons(), new Vec3D(position3D), shape); 
     copy.setMaterial(this.material);
     copy.setName(this.getName());
+    copy.removeAllCutouts();
     for(Cutout c : this.cutouts)
     {
       copy.addCutout(new GShape(c.getVectors(), new Vec3D(0,0,0), shape));
       Cutout.getAllCutouts().remove(Cutout.getAllCutouts().size()-1);
     }
     return copy;
+  }
+  
+  public Shape copyCompleteStructure()
+  {
+	Shape copy = this.getParent().copy();
+    copy.getShape().setMaterial(this.material);
+    copy.getShape().setName("CopyOf" + this.getName());
+    copy.getShape().removeAllCutouts();
+    for(Cutout c : this.cutouts)
+    {
+      copy.getShape().addCutout(c.copyFor(copy.getShape()));
+    }
+    return copy;
+  }
+
+  private void removeAllCutouts() {
+	  this.cutouts.clear();	
+  }
+
+  public void addCutout(Cutout cutout)
+  {
+	cutouts.add(cutout);
   }
 
   public String getName() {

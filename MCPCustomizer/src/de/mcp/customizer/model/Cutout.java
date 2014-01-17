@@ -24,7 +24,26 @@ public class Cutout implements Drawable2D
 		this.isActive = false;
 		allCutouts.add(this);
 	}
-
+	
+	public Cutout copyFor(GShape newMaster) 
+	{
+		Cutout copy = new Cutout(newMaster, this.slave);
+		copy.setAngle(this.getAngle());
+		copy.setPositionXCutout(this.getPositionXCutout());
+		copy.setPositionYCutout(this.getPositionYCutout());
+		this.isSelected = false;
+		this.isActive = false;
+		return copy;
+	}
+	
+	public Shape getMasterShape() {
+		return this.master.getParent();
+	}
+	
+	public Shape getSlaveShape() {
+		return this.slave.getParent();
+	}
+	
 	public static ArrayList<Cutout> getAllCutouts()
 	{
 		return allCutouts;

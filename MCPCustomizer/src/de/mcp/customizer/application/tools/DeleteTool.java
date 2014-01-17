@@ -55,6 +55,7 @@ public class DeleteTool extends Tool {
             if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
             {
                 removeConnectionsContaining(s);
+                removeCutoutsContaining(s);
                 shapeIterator.remove();
             } 
         }
@@ -100,6 +101,22 @@ public class DeleteTool extends Tool {
             {
                 c.undoConnection();
                 connectionIterator.remove();
+            }
+        }
+    }
+    
+    private void removeCutoutsContaining(Shape s)
+    {
+        Iterator<Cutout> cutoutIterator = Cutout.getAllCutouts().iterator();
+
+        Cutout c;
+        while (cutoutIterator.hasNext())
+        {
+            c = cutoutIterator.next();
+            if (c.getMasterShape() == s || c.getSlaveShape() == s)
+            {
+            	c.removeCutout();
+                cutoutIterator.remove();
             }
         }
     }

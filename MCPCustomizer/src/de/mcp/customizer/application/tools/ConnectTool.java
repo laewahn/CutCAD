@@ -123,7 +123,10 @@ public class ConnectTool extends Tool
 	@Override
 	public void wasUnselected() {
 		selectedFirst = false;
-        this.previewConnection.getMasterEdge().setSelected(false);
+        if(this.previewConnection != null)
+        {
+        	this.previewConnection.getMasterEdge().setSelected(false);
+        }
 		this.previewConnection = null;
 		super.wasUnselected();
 	}
