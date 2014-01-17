@@ -1,5 +1,11 @@
 package de.mcp.customizer.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import toxi.geom.Vec2D;
+import toxi.geom.Vec3D;
+
 //import toxi.geom.Vec3D;
 
 public class PolygonShape extends Shape {
@@ -7,8 +13,8 @@ public class PolygonShape extends Shape {
 	private GShape shape;
 	private static int counter = 0;
 	
-	public PolygonShape(GShape shape) {
-		this.shape = shape;
+	public PolygonShape(List<Vec2D> vectors, Vec3D position) {
+		shape = new GShape(vectors, position, this);
 		this.shape.setName("PolygonShape " + counter);
 		counter++;
 	}
@@ -31,7 +37,7 @@ public class PolygonShape extends Shape {
 	@Override
 	public Shape copy() 
 	{
-		PolygonShape copy = new PolygonShape(this.shape);
+		PolygonShape copy = new PolygonShape(this.getShape().getVertices(), this.getShape().getPosition2D().to3DXY());
 		copy.setShape(this.shape.copy(copy));
 		return copy;
 	}

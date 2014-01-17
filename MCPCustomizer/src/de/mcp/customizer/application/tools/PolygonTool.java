@@ -44,8 +44,7 @@ public class PolygonTool extends Tool {
 
 		if (vertices.size() > 1 && mouseOverCloseShape())
 		{
-			GShape previewShape = new GShape(this.vertices, new Vec3D(), null);
-			Shape newShape = new PolygonShape(previewShape);
+			Shape newShape = new PolygonShape(this.vertices, new Vec3D());
 			this.shapes.add(newShape);
 			this.vertices = new ArrayList<Vec2D>();			
 		}

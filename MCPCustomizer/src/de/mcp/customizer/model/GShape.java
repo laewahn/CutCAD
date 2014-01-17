@@ -606,6 +606,7 @@ public class GShape implements Drawable2D, Drawable3D
   public Shape copyCompleteStructure()
   {
 	Shape copy = this.getParent().copy();
+	copy.getShape().recalculate(this.vertices);
     copy.getShape().setMaterial(this.material);
     copy.getShape().setName("CopyOf" + this.getName());
     copy.getShape().removeAllCutouts();
