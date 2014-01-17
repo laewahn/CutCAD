@@ -2,6 +2,7 @@ package de.mcp.customizer.application.tools;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
@@ -24,9 +25,9 @@ public class ConnectTool extends Tool
     List<Shape> shapes;
     
 
-    public ConnectTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation transform)
+    public ConnectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform)
     {
-        super(view, properties, transform, "ConnectTool");
+        super(view, properties, statusbar, transform, "ConnectTool");
         this.shapes = shapes;
         this.selectedFirst = false;
         this.connections = connections;

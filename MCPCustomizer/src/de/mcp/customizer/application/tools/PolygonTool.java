@@ -10,6 +10,7 @@ import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.PolygonShape;
@@ -24,9 +25,9 @@ public class PolygonTool extends Tool {
 	
 	private Vec2D lastKnownMousePositon;
 
-	public PolygonTool(Rect view, Properties properties,
+	public PolygonTool(Rect view, Properties properties, Statusbar statusbar,
 			Transformation transform, List<Shape> shapes) {
-		super(view, properties, transform, "PolygonTool");
+		super(view, properties, statusbar, transform, "PolygonTool");
 		this.shapes = shapes;
 	}
 

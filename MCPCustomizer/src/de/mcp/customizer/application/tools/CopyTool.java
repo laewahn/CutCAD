@@ -2,12 +2,14 @@ package de.mcp.customizer.application.tools;
 
 import java.util.List;
 
+
 //import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 //import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.CopyShape;
@@ -26,8 +28,8 @@ public class CopyTool extends Tool {
 
 	Shape copyShape, previewShape;
 
-	public CopyTool(Rect view, Properties properties, List<Shape> shapes, Transformation transform) {
-		super(view, properties, transform, "CopyTool");
+	public CopyTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform) {
+		super(view, properties, statusbar, transform, "CopyTool");
 
 		this.shapes = shapes;
 		this.selected = false;

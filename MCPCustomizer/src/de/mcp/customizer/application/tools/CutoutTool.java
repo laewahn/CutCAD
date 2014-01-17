@@ -2,6 +2,7 @@ package de.mcp.customizer.application.tools;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
@@ -24,9 +25,9 @@ public class CutoutTool extends Tool {
     Vec2D relativePosition;
     Shape masterShape;
     
-    public CutoutTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation transform) 
+    public CutoutTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
     {
-        super(view, properties, transform, "CutoutTool");
+        super(view, properties, statusbar, transform, "CutoutTool");
         
         this.shapes = shapes;
         this.connections = connections;

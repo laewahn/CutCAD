@@ -2,6 +2,7 @@ package de.mcp.customizer.application.tools;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
@@ -18,9 +19,9 @@ public class DrawTool extends Tool {
     Rectangle previewRectangle;
     List<Shape> shapes;
 
-    public DrawTool(Rect view, Properties properties, List<Shape> shapes, Transformation transform)
+    public DrawTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform)
     {
-        super(view, properties, transform, "DrawTool");
+        super(view, properties, statusbar, transform, "DrawTool");
         this.isDrawing = false;
         this.shapes = shapes;
     }

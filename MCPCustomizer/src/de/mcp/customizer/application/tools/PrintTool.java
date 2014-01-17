@@ -3,6 +3,7 @@ package de.mcp.customizer.application.tools;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.PrintDialog;
@@ -15,9 +16,9 @@ public class PrintTool extends Tool {
 	
 	private List<Shape> shapes;
 	
-    public PrintTool(Rect view, Properties properties, Transformation transform, List<Shape> shapes) 
+    public PrintTool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, List<Shape> shapes) 
     {
-        super(view, properties, transform, "PrintTool");
+        super(view, properties, statusbar, transform, "PrintTool");
         this.shapes = shapes;
     }
 

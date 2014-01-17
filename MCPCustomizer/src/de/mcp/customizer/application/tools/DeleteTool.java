@@ -3,6 +3,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
@@ -20,9 +21,9 @@ public class DeleteTool extends Tool {
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public DeleteTool(Rect view, Properties properties, List<Shape> shapes, List<Connection> connections, Transformation transform) 
+    public DeleteTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
     {
-        super(view, properties, transform, "DeleteTool");
+        super(view, properties, statusbar, transform, "DeleteTool");
         
         this.shapes = shapes;
         this.connections = connections;

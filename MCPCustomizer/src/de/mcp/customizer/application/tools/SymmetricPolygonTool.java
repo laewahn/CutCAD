@@ -2,6 +2,7 @@ package de.mcp.customizer.application.tools;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 //import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
@@ -19,9 +20,9 @@ public class SymmetricPolygonTool extends Tool {
 	SymmetricPolygon previewRectangle;
 	List<Shape> shapes;
 
-	public SymmetricPolygonTool(Rect view, Properties properties, List<Shape> shapes, Transformation transform)
+	public SymmetricPolygonTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform)
 	{
-		super(view, properties, transform, "SymmetricPolygonTool");
+		super(view, properties, statusbar, transform, "SymmetricPolygonTool");
 		this.isDrawing = false;
 		this.shapes = shapes;
 	}

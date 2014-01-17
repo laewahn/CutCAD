@@ -3,6 +3,7 @@ package de.mcp.customizer.application.tools;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
+import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
@@ -21,9 +22,9 @@ public class SelectTool extends Tool {
 	boolean dragging;
 	Vec2D originalMousePosition;
 
-	public SelectTool(Rect view, Properties properties, List<Shape> shapes,
+	public SelectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
 			List<Connection> connections, Transformation transform) {
-		super(view, properties, transform, "SelectTool");
+		super(view, properties, statusbar, transform, "SelectTool");
 
 		this.shapes = shapes;
 		this.connections = connections;

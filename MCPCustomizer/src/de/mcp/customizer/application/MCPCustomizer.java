@@ -24,6 +24,7 @@ public class MCPCustomizer extends PApplet {
 	private static final long serialVersionUID = 6945013714741954254L;
 	Toolbar toolbar;
 	  Properties properties;
+	  Statusbar statusbar;
 	  ControlP5 cp5;
 
 	  ToxiclibsSupport gfx;
@@ -71,6 +72,7 @@ public class MCPCustomizer extends PApplet {
 	    cp5 = new ControlP5(this);
 
 	    createProperties();
+	    statusbar = new Statusbar();
 	    createToolbar();
 
 	    cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX));
@@ -84,6 +86,7 @@ public class MCPCustomizer extends PApplet {
 	    draw2DView();
 	    draw3DView();
 	    properties.drawProperties(this);
+	    statusbar.drawStatusbar(this);
 	  }
 
 	  void draw2DView()
@@ -180,16 +183,16 @@ public class MCPCustomizer extends PApplet {
 	    toolbar.setPosition(0, 50).setSize(150, 550).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
-	      new SelectTool(view2DRect, properties, shapes, connections, transform2D),
-	      new DrawTool(view2DRect, properties, shapes, transform2D),
-	      new SymmetricPolygonTool(view2DRect, properties, shapes, transform2D),
-	      new TrapeziumTool(view2DRect, properties, shapes, transform2D),
-	      new PolygonTool(view2DRect, properties, transform2D, shapes),
-	      new ConnectTool(view2DRect, properties, shapes, connections, transform2D),
-	      new DeleteTool(view2DRect, properties, shapes, connections, transform2D),
-	      new CutoutTool(view2DRect, properties, shapes, connections, transform2D),
-	      new CopyTool(view2DRect, properties, shapes, transform2D),
-	      new PrintTool(view2DRect, properties, transform2D, shapes)
+	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
+	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
+	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
+	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
+	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
+	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
 	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));

@@ -9,14 +9,16 @@ import toxi.geom.Vec2D;
 public abstract class Tool implements Drawable2D {
 
     protected Properties properties;
+    protected Statusbar statusbar;
     protected Rect view;
     protected Transformation transform;
     protected String name;
 
-    public Tool(Rect view, Properties properties, Transformation transform, String name)
+    public Tool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, String name)
     {
         this.view = view;
         this.properties = properties;
+        this.statusbar = statusbar;
         this.transform = transform;
         this.name = name;
     }
@@ -37,6 +39,11 @@ public abstract class Tool implements Drawable2D {
     public String getName()
     {
         return this.name;
+    }
+    
+    public void displayErrorMessage(String message)
+    {
+    	this.statusbar.setStatus(message);
     }
     
     abstract public void mouseButtonPressed(Vec2D position, int button);
