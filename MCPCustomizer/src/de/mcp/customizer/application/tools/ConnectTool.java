@@ -52,12 +52,13 @@ public class ConnectTool extends Tool
         {
             for (Edge e : s.getShape().getEdges())
             {
-                if (e.isSelected() && button == PConstants.LEFT)
+                if (e.isHighlighted() && button == PConstants.LEFT)
                 {
                     if (!selectedFirst)
                     {
                         this.previewConnection = new Connection(connections);
                         this.previewConnection.setMasterEdge(e);
+                        e.setSelected(true);
                         selectedFirst = true;                        
                     }
                     else
@@ -68,6 +69,7 @@ public class ConnectTool extends Tool
                             this.connections.add(this.previewConnection);
                         }
                         // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
+                        this.previewConnection.getMasterEdge().setSelected(false);
                         this.previewConnection = null;
                         selectedFirst = false;
                     }
@@ -100,7 +102,7 @@ public class ConnectTool extends Tool
                 	}
                 }
                 
-                e.setSelected(canBeSelected);
+                e.setHighlighted(canBeSelected);
             }
         }
     }
@@ -120,6 +122,7 @@ public class ConnectTool extends Tool
 	@Override
 	public void wasUnselected() {
 		selectedFirst = false;
+        this.previewConnection.getMasterEdge().setSelected(false);
 		this.previewConnection = null;
 		super.wasUnselected();
 	}

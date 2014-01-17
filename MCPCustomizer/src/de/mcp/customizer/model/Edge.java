@@ -19,7 +19,7 @@ public class Edge implements Drawable2D, Drawable3D
   private Vec2D v1, v2; // 2D logic
   private ArrayList<Vec2D> tenons; // 2D representation
 
-  private boolean isSelected, isLocked;
+  private boolean isHighlighted, isLocked, isSelected;
   ArrayList<Vec2D> definingPoints; // highlighting areal for selecting an edge
 
 
@@ -31,6 +31,7 @@ public class Edge implements Drawable2D, Drawable3D
     this.v1 = v1;
     this.v2 = v2;
     Tenon.createOutlineOfEdge(this);
+    this.isHighlighted = false;
     this.isSelected = false;
   }
 
@@ -44,14 +45,22 @@ public class Edge implements Drawable2D, Drawable3D
     return shape;
   }
 
-  public boolean isSelected()
+  public boolean isHighlighted()
   {
-    return isSelected;
+    return isHighlighted;
   }
 
-  public void setSelected(boolean selected)
+  public void setHighlighted(boolean highlighted)
   {
-    this.isSelected = selected;
+    this.isHighlighted = highlighted;
+  }
+  
+  public boolean isSelected() {
+	return isSelected;
+  }
+
+  public void setSelected(boolean isSelected) {
+	this.isSelected = isSelected;
   }
 
   public Vec2D getV1()
@@ -111,7 +120,7 @@ public class Edge implements Drawable2D, Drawable3D
 
   @Override
   public void draw2D(PGraphics p) {
-	  if (this.isSelected())
+	  if (this.isHighlighted())
 	    {
 	      p.stroke(255, 0, 0);
 	      p.noFill();
@@ -126,11 +135,26 @@ public class Edge implements Drawable2D, Drawable3D
 	      p.fill(255);
 	      p.stroke(0);
 	    }
+	  else if (this.isSelected())
+	  {
+	      p.stroke(0, 255, 0);
+	      p.noFill();
+	      p.strokeWeight(2);
+	      p.beginShape();
+	      for (Vec2D vector : definingPoints)
+	      {
+	        p.vertex(vector.x()+getShape().getPosition2D().x(), vector.y()+getShape().getPosition2D().y());
+	      }
+	      p.endShape(PConstants.CLOSE);
+	      p.strokeWeight(1);
+	      p.fill(255);
+	      p.stroke(0);
+	  }
   }
 
   @Override
   public void draw3D(PGraphics p) {
-	  if (this.isSelected())
+	  if (this.isHighlighted())
 	    {
 	      Vec3D offset = this.getShape().getNormalVector().normalizeTo(this.getShape().getThickness()/2+4);
 	      p.stroke(255, 0, 0);
@@ -150,6 +174,26 @@ public class Edge implements Drawable2D, Drawable3D
 	      p.fill(255);
 	      p.stroke(0);
 	    }
+	  else if (this.isSelected())
+	  {
+	      Vec3D offset = this.getShape().getNormalVector().normalizeTo(this.getShape().getThickness()/2+4);
+	      p.stroke(0, 255, 0);
+	      p.noFill();
+	      p.strokeWeight(2);
+	      p.beginShape();
+	      Vec3D vector = p3D1.copy().add(offset);
+	      p.vertex(vector.x(), vector.y(), vector.z());
+	      vector = p3D2.copy().add(offset);
+	      p.vertex(vector.x(), vector.y(), vector.z());   
+	      vector = p3D2.copy().sub(offset);
+	      p.vertex(vector.x(), vector.y(), vector.z());  
+	      vector = p3D1.copy().sub(offset);
+	      p.vertex(vector.x(), vector.y(), vector.z());
+	      p.endShape(PConstants.CLOSE);
+	      p.strokeWeight(1);
+	      p.fill(255);
+	      p.stroke(0);		  
+	  }
   }
 
   public Vec2D getMid()
