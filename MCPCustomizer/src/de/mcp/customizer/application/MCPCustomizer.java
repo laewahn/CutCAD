@@ -1,4 +1,5 @@
 package de.mcp.customizer.application;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -180,7 +181,7 @@ public class MCPCustomizer extends PApplet {
 	  void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
-	    toolbar.setPosition(0, 50).setSize(150, 550).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(150, 600).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
@@ -192,6 +193,7 @@ public class MCPCustomizer extends PApplet {
 	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
 	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
 	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
+	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
 	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
 	    };
 	    

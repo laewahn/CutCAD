@@ -1,4 +1,4 @@
-package de.mcp.customizer.application.tools;
+ package de.mcp.customizer.application.tools;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class SelectTool extends Tool {
 
 	List<Shape> shapes;
 	List<Connection> connections;
-	boolean dragging;
+	boolean dragging, draggingCutout;
 	Vec2D originalMousePosition;
 
 	public SelectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
@@ -29,6 +29,7 @@ public class SelectTool extends Tool {
 		this.shapes = shapes;
 		this.connections = connections;
 		this.dragging = false;
+		this.draggingCutout = false;
 		this.originalMousePosition = new Vec2D(0, 0);
 	}
 
@@ -64,14 +65,21 @@ public class SelectTool extends Tool {
 				noneSelected = false;
 			}
 		}
-		for (Connection c : connections) {
+		for (Cutout c : Cutout.getAllCutouts()) {
 			if (this.inView(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
 				properties.show();
 				properties.plugTo(c);
+			} else if (this.inView(position) && c.isSelected()
+					&& button == PConstants.RIGHT) {
+				this.draggingCutout = true;
+				Vec2D currentMousePosition = this
+						.positionRelativeToView(position);
+				this.originalMousePosition.set(currentMousePosition);
+				noneSelected = false;
 			}
 		}
-		for (Cutout c : Cutout.getAllCutouts()) {
+		for (Connection c : connections) {
 			if (this.inView(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
 				properties.show();
@@ -88,6 +96,7 @@ public class SelectTool extends Tool {
 	public void mouseButtonReleased(Vec2D position, int button) {
 		if (button == PConstants.RIGHT) {
 			this.dragging = false;
+			this.draggingCutout = false;
 		}
 	}
 
@@ -96,7 +105,6 @@ public class SelectTool extends Tool {
 			Vec2D relativePosition = this.positionRelativeToView(position);
 
 			boolean noneSelected = true;
-
 			for (Shape s : shapes) {
 				s.getShape().setSelected(
 						s.getShape().mouseOver(relativePosition));
@@ -110,14 +118,23 @@ public class SelectTool extends Tool {
 					noneSelected = false;
 				}
 			}
-			for (Connection c : connections) {
+			for (Cutout c : Cutout.getAllCutouts()) {
 				c.setSelected(c.mouseOver(relativePosition));
+				if (c.isSelected())
+				{
+					c.getMasterShape().getShape().setSelected(false);
+				}
 
-				if (c.isSelected()) {
+				if (c.isSelected() && this.draggingCutout) {
+					Vec2D currentMousePosition = this
+							.positionRelativeToView(position);
+					c.translate2D(
+							currentMousePosition.sub(originalMousePosition));
+					originalMousePosition.set(currentMousePosition);
 					noneSelected = false;
 				}
 			}
-			for (Cutout c : Cutout.getAllCutouts()) {
+			for (Connection c : connections) {
 				c.setSelected(c.mouseOver(relativePosition));
 
 				if (c.isSelected()) {

@@ -24,7 +24,12 @@ public class Cutout implements Drawable2D
 		this.isActive = false;
 		allCutouts.add(this);
 	}
-	
+
+	public void translate2D(Vec2D direction)
+	{
+		this.position.addSelf(direction);
+	}
+
 	public Cutout copyFor(GShape newMaster) 
 	{
 		Cutout copy = new Cutout(newMaster, this.slave);
@@ -35,15 +40,15 @@ public class Cutout implements Drawable2D
 		this.isActive = false;
 		return copy;
 	}
-	
+
 	public Shape getMasterShape() {
 		return this.master.getParent();
 	}
-	
+
 	public Shape getSlaveShape() {
 		return this.slave.getParent();
 	}
-	
+
 	public static ArrayList<Cutout> getAllCutouts()
 	{
 		return allCutouts;
@@ -77,7 +82,7 @@ public class Cutout implements Drawable2D
 	{
 		return (int) position.x();
 	}
-	
+
 	public int getPositionYCutout() 
 	{
 		return (int) position.y();
@@ -87,7 +92,7 @@ public class Cutout implements Drawable2D
 	{
 		this.position.set(position, this.position.y());
 	}
-	
+
 	public void setPositionYCutout(int position) 
 	{
 		this.position.set(this.position.x(), position);
@@ -107,7 +112,7 @@ public class Cutout implements Drawable2D
 	public void draw2D(PGraphics p) {
 		this.drawCutout(p);
 	}
-	
+
 	private void drawCutout(PGraphics p)
 	{
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(this.position);
@@ -146,21 +151,31 @@ public class Cutout implements Drawable2D
 
 		// with the perpendicular vector, calculate the defining points of a rectangle around the connections line
 		ArrayList<Vec2D> definingPoints = new ArrayList<Vec2D>();
-		definingPoints.add(mid1.sub(perpendicularVector.getNormalizedTo(4)));
-		definingPoints.add(mid2.sub(perpendicularVector.getNormalizedTo(4)));
-		definingPoints.add(mid2.add(perpendicularVector.getNormalizedTo(4)));
-		definingPoints.add(mid1.add(perpendicularVector.getNormalizedTo(4)));
+		for (Vec2D v : getVectors())
+		{
+			definingPoints.add(v.add(master.getPosition2D()));
+		}
+
+		ArrayList<Vec2D> definingPointsLine = new ArrayList<Vec2D>();
+		definingPointsLine.add(mid1.sub(perpendicularVector.getNormalizedTo(4)));
+		definingPointsLine.add(mid2.sub(perpendicularVector.getNormalizedTo(4)));
+		definingPointsLine.add(mid2.add(perpendicularVector.getNormalizedTo(4)));
+		definingPointsLine.add(mid1.add(perpendicularVector.getNormalizedTo(4)));
 
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
-
-		// check if the mousePointer is within the created rectangle
-		return borders.containsPoint(position);
+		if (borders.containsPoint(position)) {
+			return true;
+		} else {
+			borders = new Polygon2D(definingPointsLine);
+			// check if the mousePointer is within the created rectangle
+			return borders.containsPoint(position);
+		}
 	}
 
 	public void removeCutout() {
 		master.removeCutout(this);
-		
+
 	}
 
 	public boolean isActive() {

@@ -1,7 +1,7 @@
 package de.mcp.customizer.model;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
 import processing.core.PConstants;
@@ -263,19 +263,6 @@ public class GShape implements Drawable2D, Drawable3D
 		slave.rotateAroundAxis(normalVector, angleBetweenEdges);
 		
 		slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
-//		if (Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) < 0.1f)
-//		{
-//			// do nothing
-//		}
-//		else if (Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) > Math.PI - 0.1f && Math.abs(slaveEdgeDirection.angleBetween(masterEdgeDirection, true)) < Math.PI + 0.1f)
-//		{
-//			angleBetweenEdges = (float)Math.PI;
-//		}
-//		else 
-//		{
-//			slave.rotateAroundAxis(normalVector, -2*angleBetweenEdges);
-//			angleBetweenEdges = -angleBetweenEdges;
-//		} 
 
 		Vec3D toOrigin = slaveEdge.getP3D1().scale(-1).copy();
 
@@ -288,29 +275,11 @@ public class GShape implements Drawable2D, Drawable3D
 
 		if (calculateAngleBetweenNormals(master, slave) > 0.001f)
 		{
-//		{
-//			// Do Nothing
-////			System.out.println("Right Angle");
-//		}
-//		else if (Math.abs(calculateAngleBetweenNormals(master, slave)) > Math.PI-0.0001f)
-//		{
-////			System.out.println("Rotate additional 180 degree");
-//			angleBetweenNormals = (float) Math.PI;
-//		}
-//		else
-//		{
-////			System.out.println("Rotate in the other direction");
 			slave.rotateAroundAxis(rotationAxis, (float) -2.0 * angleBetweenNormals);
 			angleBetweenNormals = -angleBetweenNormals;
 		}
 		
 		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
-//		slave.translate3D(toMaster);
-//		if(slave.getEdges().get(1).getP3D2().distanceTo(master.getEdges().get(1).getP3D2()) > 1f)
-//		{
-//			angleBetweenNormals = (float) (angleBetweenNormals + Math.PI);
-//		}
-
 
 		// Now we know everything, apply the same Translations to the outline Vec2D array
 		// Translated by thickness/2 to top or bottom
@@ -329,10 +298,6 @@ public class GShape implements Drawable2D, Drawable3D
 		{
 			vectors3D.add(v.to3DXY().add(position3D).addSelf(new Vec3D(0, 0, offsetZ)));
 		}
-//		System.out.println("AngleEdges" + angleBetweenEdges);
-//		System.out.println("AngleNormals" + angleBetweenNormals);
-//		System.out.println("toOrigin" + toOrigin);
-//		System.out.println("toMaster" + toMaster);
 		for (int i=0; i<vectors3D.size(); i++)
 		{
 			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
@@ -491,7 +456,7 @@ public class GShape implements Drawable2D, Drawable3D
     }
     
     // if we want to show the "Logic" shape:
-    ///*
+    /*
     p.noFill();
     p.stroke(0,0,255);
     p.beginShape();
@@ -499,7 +464,7 @@ public class GShape implements Drawable2D, Drawable3D
       p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
     }
     p.endShape(PConstants.CLOSE);
-    //*/
+    */
     
     for (Edge e: edges) //not good... but i've no better idea...still no better version
     {
