@@ -34,46 +34,38 @@ public class Rectangle extends Shape
 
   public int getValue(int index)
   {
-    if (index==0) return getSizeX();
-    else if (index==1) return getSizeY();
-    else return 0;
+    if (index==0) return sizeX/10;
+    else return sizeY/10;
   }
   
-  public int getMinValueOfControl(int index)
+  public int getControlType(int index)
   {
-    if (index==0) return 5;
-    else if (index==1) return 5;
-    else return 0;
-  }
-  
-  public int getMaxValueOfControl(int index)
-  {
-    if (index==0) return 600;
-    else if (index==1) return 600;
-    else return 0;
+	  return 1;
   }
   
   public String getNameOfControl(int index)
   {
     if (index==0) return "Width";
-    else if (index==1) return "Heigth";
-    else return "0";
+    else return "Heigth";
+  }
+	
+  public void recalculate() {
+    basicShape.set(1, new Vec2D(sizeX, 0));
+    basicShape.set(2, new Vec2D(sizeX, sizeY));
+    basicShape.set(3, new Vec2D(0, sizeY));
+    basic.recalculate(basicShape);
   }
 
   public void setValue0(int size)
   {
-    sizeX = size;
-    basicShape.set(1, new Vec2D(size, 0));
-    basicShape.set(2, new Vec2D(size, sizeY));
-    basic.recalculate(basicShape);
+    this.sizeX = size*10;
+    recalculate();
   }
 
   public void setValue1(int size)
   {
-    sizeY = size;
-    basicShape.set(2, new Vec2D(sizeX, size));
-    basicShape.set(3, new Vec2D(0, size));
-    basic.recalculate(basicShape);
+    this.sizeY = size*10;
+    recalculate();
   }
 
   public int getSizeX()
@@ -88,8 +80,9 @@ public class Rectangle extends Shape
 
   public void setSize(Vec2D newSize)
   {
-    this.setValue0((int)newSize.x());
-    this.setValue1((int)newSize.y());
+    this.sizeX = (int)newSize.x();
+    this.sizeY = (int)newSize.y();
+    recalculate();
   }
   
   public void setShape(GShape shape)

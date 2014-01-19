@@ -77,6 +77,47 @@ public class Cutout implements Drawable2D
 		}
 		return modifiedVectors;
 	}
+	
+	public int getNumberOfControls()
+	{
+		return 3;
+	}
+
+	public int getValue(int index)
+	{
+		if (index==0) return getPositionXCutout();
+	    else if (index==1) return getPositionXCutout();
+	    else return (int)getAngle();
+	}
+	  
+	public int getControlType(int index)
+	{
+		  if (index==0) return 1;
+		  else if (index==1) return 1;
+		  else return 0; 
+	}
+	  
+	public String getNameOfControl(int index)
+	{
+		if (index==0) return "X-PositionX";
+	    else if (index==1) return "Y-Position";
+	    else return "Angle";
+	}
+
+	public void setValue0(int size)
+	{
+		setPositionXCutout(size);
+	}
+
+	public void setValue1(int size)
+	{
+		setPositionYCutout(size);
+	}
+	  
+	public void setValue2(int size)
+	{
+		setAngle(size);
+	}
 
 	public int getPositionXCutout() 
 	{

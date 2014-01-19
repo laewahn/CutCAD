@@ -16,12 +16,12 @@ public class SymmetricPolygon extends Shape
 	public SymmetricPolygon(Vec3D position, int sizeX, int sizeY)
 	{
 		this.size = (sizeX+sizeY)/2;
-		this.number=4;
+		this.number=3;
 		basicShape = new ArrayList<Vec2D>();
 		basicShape.add(new Vec2D(0, 0));
 		basicShape.add(new Vec2D(size, 0));
 		basicShape.add(new Vec2D(size, size));
-		basicShape.add(new Vec2D(0, size));
+		//basicShape.add(new Vec2D(0, size));
 		basic = new GShape(basicShape, position, this);
 		basic.setName("SymmetricPolygon " + counter);
 		counter++;
@@ -34,33 +34,24 @@ public class SymmetricPolygon extends Shape
 
 	public int getValue(int index)
 	{
-		if (index==0) return size;
-		else if (index==1) return number;
-		else return 0;
+		if (index==0) return size/10;
+		else return number;
 	}
-
-	public int getMinValueOfControl(int index)
+	
+	public int getControlType(int index)
 	{
-		if (index==0) return 5;
-		else if (index==1) return 3;
-		else return 0;
-	}
-
-	public int getMaxValueOfControl(int index)
-	{
-		if (index==0) return 600;
-		else if (index==1) return 16;
-		else return 0;
+		if (index==0) return 1;
+		else return 2;
 	}
 
 	public String getNameOfControl(int index)
 	{
 		if (index==0) return "Length of edges";
-		else if (index==1) return "Number of edges";
-		else return "0";
+		else return "Number of edges";
 	}
 	
 	public void recalculate() {
+		if (number <3) number = 3;
 		float alpha = 2*(float)Math.PI/number;
 		float beta = ((float)Math.PI-alpha)/2;
 		Vec2D diameter = new Vec2D((float)(size/Math.sin(alpha)*Math.sin(beta)),0f);
@@ -74,7 +65,7 @@ public class SymmetricPolygon extends Shape
 
 	public void setValue0(int size)
 	{
-		this.size = size;
+		this.size = size*10;
 		recalculate();
 	}
 

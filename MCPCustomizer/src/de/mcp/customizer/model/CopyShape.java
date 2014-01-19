@@ -1,10 +1,7 @@
 package de.mcp.customizer.model;
 
-//import java.util.ArrayList;
 import java.util.List;
-
 import toxi.geom.Vec2D;
-//import toxi.geom.Vec3D;
 
 public class CopyShape extends Shape {
 	private List <Vec2D> basicShape;
@@ -33,7 +30,6 @@ public class CopyShape extends Shape {
 
 	@Override
 	public int getValue(int index) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -47,26 +43,17 @@ public class CopyShape extends Shape {
 
 	@Override
 	public int getNumberOfControls() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getMinValueOfControl(int index) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getMaxValueOfControl(int index) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public String getNameOfControl(int index) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getControlType(int index) {
+		return 0;
 	}
 
 }

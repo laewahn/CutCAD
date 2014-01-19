@@ -35,51 +35,38 @@ public class Trapezium extends Shape
 
 	public int getValue(int index)
 	{
-		if (index==0) return sizeXTop;
-		else if (index==1) return sizeXBottom;
-		else if (index==2) return sizeY;
-		else return 0;
+		if (index==0) return sizeXTop/10;
+		else if (index==1) return sizeXBottom/10;
+		else return sizeY/10;
 	}
-
-	public int getMinValueOfControl(int index)
+	  
+	public int getControlType(int index)
 	{
-		if (index==0) return 5;
-		else if (index==1) return 5;
-		else if (index==2) return 5;
-		else return 0;
-	}
-
-	public int getMaxValueOfControl(int index)
-	{
-		if (index==0) return 600;
-		else if (index==1) return 600;
-		else if (index==2) return 600;
-		else return 0;
+		return 1;
 	}
 
 	public String getNameOfControl(int index)
 	{
 		if (index==0) return "Top";
 		else if (index==1) return "Bottom";
-		else if (index==2) return "Side";
-		else return "0";
+		else return "Side";
 	}
 
 	public void setValue0(int size)
 	{
-		sizeXTop = size;
+		sizeXTop = size*10;
 		this.recalculate();
 	}
 
 	public void setValue1(int size)
 	{
-		sizeXBottom = size;
+		sizeXBottom = size*10;
 		this.recalculate();
 	}
 	
 	public void setValue2(int size)
 	{
-		sizeY = size;
+		sizeY = size*10;
 		this.recalculate();
 	}
 	

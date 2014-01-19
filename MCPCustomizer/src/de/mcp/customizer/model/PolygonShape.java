@@ -1,12 +1,8 @@
 package de.mcp.customizer.model;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
-
-//import toxi.geom.Vec3D;
 
 public class PolygonShape extends Shape {
 	
@@ -48,13 +44,9 @@ public class PolygonShape extends Shape {
 	}
 
 	@Override
-	public int getMinValueOfControl(int index) {
-		return 0;
-	}
-
-	@Override
-	public int getMaxValueOfControl(int index) {
-		return 0;
+	public int getControlType(int index)
+	{
+		return 0; 
 	}
 
 	@Override
