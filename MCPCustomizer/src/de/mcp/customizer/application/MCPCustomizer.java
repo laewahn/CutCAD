@@ -97,6 +97,7 @@ public class MCPCustomizer extends PApplet {
 
 	    view2D.background(100);
 	    
+	    draw2DAxes(view2D);
 	    drawGrid(view2D);
 
 	    for (Shape s : shapes)
@@ -174,6 +175,21 @@ public class MCPCustomizer extends PApplet {
 	    p.stroke(color(0,0,255));	   
 	    p.line(0, 0, 0, 0, 0, 350);
 	    p.text("Z", 0, 0, 350);
+	    p.stroke(color(0,0,0));	 
+	    p.strokeWeight(1);
+	}
+
+	private void draw2DAxes(PGraphics p) {
+		p.strokeWeight(2);	   
+		p.textSize(32);
+		p.fill(color(255,0,0));
+	    p.stroke(color(255,0,0));	    
+	    p.line(0, 0, 350, 0);
+	    p.text("X", 350, 12);
+		p.fill(color(0,255,0));
+	    p.stroke(color(0,255,0));	   
+	    p.line(0, 0, 0, 350);
+	    p.text("Y", -10, 385);
 	    p.stroke(color(0,0,0));	 
 	    p.strokeWeight(1);
 	}
