@@ -86,6 +86,7 @@ public class CutoutTool extends Tool {
         if (this.inView(position))
         {
             relativePosition = this.positionRelativeToView(position);
+	        this.updateMousePositon(relativePosition.scale(0.1f));
 
             for (Shape s : shapes) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));

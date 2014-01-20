@@ -74,6 +74,9 @@ public class TrapeziumTool extends Tool {
 
 	public void mouseMoved(Vec2D position)
 	{
+        Vec2D relativePosition = this.positionRelativeToView(position);
+        this.updateMousePositon(relativePosition.scale(0.1f));
+        
 		if (isDrawing){
 
 			Vec2D endCoord = this.positionRelativeToView(position);

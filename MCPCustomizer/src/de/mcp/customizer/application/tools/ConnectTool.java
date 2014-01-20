@@ -94,12 +94,13 @@ public class ConnectTool extends Tool
     public void mouseMoved(Vec2D position)
     {
         this.lastMousePosition = position;
+        Vec2D relativePosition = this.positionRelativeToView(position);
+        this.updateMousePositon(relativePosition.scale(0.1f));
     
         for (Shape s : shapes)
         {
             for (Edge e : s.getShape().getEdges())
             {
-                Vec2D relativePosition = this.positionRelativeToView(position);
                 boolean canBeSelected = e.mouseOver(relativePosition);
                 
                 if(this.previewConnection != null) {

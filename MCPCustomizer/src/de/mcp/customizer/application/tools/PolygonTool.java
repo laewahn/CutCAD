@@ -68,6 +68,7 @@ public class PolygonTool extends Tool {
 	@Override
 	public void mouseMoved(Vec2D position) {
 		this.lastKnownMousePositon = this.positionRelativeToView(position);
+        this.updateMousePositon(lastKnownMousePositon.scale(0.1f));
 	}
 
 	@Override

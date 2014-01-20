@@ -103,6 +103,7 @@ public class SelectTool extends Tool {
 	public void mouseMoved(Vec2D position) {
 		if (this.inView(position)) {
 			Vec2D relativePosition = this.positionRelativeToView(position);
+	        this.updateMousePositon(relativePosition.scale(0.1f));
 
 			boolean noneSelected = true;
 			for (Shape s : shapes) {

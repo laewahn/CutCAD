@@ -103,6 +103,7 @@ public class CopyTool extends Tool {
     {
 		if (this.inView(position)) {
 			lastMousePosition = this.positionRelativeToView(position);
+	        this.updateMousePositon(lastMousePosition.scale(0.1f));
 
 			for (Shape s : shapes) 
 			{

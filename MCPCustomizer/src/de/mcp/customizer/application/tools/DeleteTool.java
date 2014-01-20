@@ -131,6 +131,7 @@ public class DeleteTool extends Tool {
         if (this.inView(position))
         {
             Vec2D relativePosition = this.positionRelativeToView(position);
+	        this.updateMousePositon(relativePosition.scale(0.1f));
 
 
             for (Shape s : shapes) {

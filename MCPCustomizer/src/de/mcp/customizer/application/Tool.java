@@ -46,6 +46,11 @@ public abstract class Tool implements Drawable2D {
     	this.statusbar.setStatus(message);
     }
     
+    public void updateMousePositon(Vec2D position)
+    {
+    	this.statusbar.setMousePosition(position);
+    }
+    
     abstract public void mouseButtonPressed(Vec2D position, int button);
     abstract public void mouseButtonReleased(Vec2D position, int button);
     abstract public void mouseMoved(Vec2D position);
