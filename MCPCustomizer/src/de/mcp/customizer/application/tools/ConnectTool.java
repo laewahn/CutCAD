@@ -57,6 +57,7 @@ public class ConnectTool extends Tool
                 {
                     if (!selectedFirst)
                     {
+                		this.displayStatus("Select another edge to connect it to the first edge");
                         this.previewConnection = new Connection(connections);
                         this.previewConnection.setMasterEdge(e);
                         e.setSelected(true);
@@ -67,7 +68,13 @@ public class ConnectTool extends Tool
                         this.previewConnection.setSlaveEdge(e);
                         if(this.previewConnection.connect()) 
                         {
+                    		this.displayStatus("Connection created! If you want to create another connection, select another edge");
                             this.connections.add(this.previewConnection);
+                        }
+                        else
+                        {
+                        	// TODO: Find out why the connection couldn't be created and tell the user
+                    		this.displayStatus("Could not create the connection!");
                         }
                         // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
                         this.previewConnection.getMasterEdge().setSelected(false);
@@ -119,9 +126,18 @@ public class ConnectTool extends Tool
             p.stroke(0);
         }
     }
+    
+    
+
+	@Override
+	public void wasSelected() {
+		this.displayStatus("Select an edge to create a connection");
+		super.wasSelected();
+	}
 
 	@Override
 	public void wasUnselected() {
+		this.displayStatus("");
 		selectedFirst = false;
         if(this.previewConnection != null)
         {

@@ -41,7 +41,7 @@ public abstract class Tool implements Drawable2D {
         return this.name;
     }
     
-    public void displayErrorMessage(String message)
+    public void displayStatus(String message)
     {
     	this.statusbar.setStatus(message);
     }

@@ -156,4 +156,18 @@ public class DeleteTool extends Tool {
             }
         }
     }
+
+	@Override
+	public void wasSelected() {
+		this.displayStatus("Click on a shape or connection to delete it");
+		super.wasSelected();
+	}
+
+	@Override
+	public void wasUnselected() {
+		this.displayStatus("");
+		super.wasUnselected();
+	}
+    
+    
 }

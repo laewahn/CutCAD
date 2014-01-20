@@ -41,6 +41,7 @@ public class DrawTool extends Tool {
     public void mouseButtonPressed(Vec2D position, int button)
     {
         if (this.inView(position)){
+    		this.displayStatus("Use the mouse to drag the rectangle to the size that you want");
             isDrawing = true;
             
             this.startCoord = this.positionRelativeToView(position);
@@ -54,6 +55,7 @@ public class DrawTool extends Tool {
 
         if (isDrawing && this.inView(position)) {
 
+    		this.displayStatus("Rectangle created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
             Vec2D endCoord = this.positionRelativeToView(position);
             Vec2D rectSize = endCoord.sub(this.startCoord);
             
@@ -84,4 +86,18 @@ public class DrawTool extends Tool {
             this.previewRectangle.getShape().draw2D(p);
         }
     }
+
+	@Override
+	public void wasSelected() {
+		this.displayStatus("To draw a rectangle, click and hold the left mousebutton anywhere on the 2D view");
+		super.wasSelected();
+	}
+
+	@Override
+	public void wasUnselected() {
+		this.displayStatus("");
+		super.wasUnselected();
+	}
+    
+    
 }

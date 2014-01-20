@@ -44,12 +44,14 @@ public class PolygonTool extends Tool {
 
 		if (vertices.size() > 1 && mouseOverCloseShape())
 		{
+			this.displayStatus("Shape finished! If you want to create another shape, click the left mousebutton anywhere on the 2D view");
 			Shape newShape = new PolygonShape(this.vertices, new Vec3D());
 			this.shapes.add(newShape);
 			this.vertices = new ArrayList<Vec2D>();			
 		}
 		else
 		{
+			this.displayStatus("Point added! To add another point, click anywhere on the 2D view. To finish the shape, click on the first point of the shape");
 			vertices.add(this.lastKnownMousePositon);			
 		}
 		if (button == PConstants.RIGHT) {
@@ -116,12 +118,14 @@ public class PolygonTool extends Tool {
 	
 	@Override
 	public void wasSelected() {
+		this.displayStatus("To start drawing a shape, click the left mousebutton anywhere on the 2D view");
 		super.wasSelected();
 		this.vertices = new ArrayList<Vec2D>();
 	}
 	
 	@Override
 	public void wasUnselected() {
+		this.displayStatus("");
 		super.wasUnselected();
 	}
 

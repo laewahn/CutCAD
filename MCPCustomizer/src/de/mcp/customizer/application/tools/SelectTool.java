@@ -156,9 +156,18 @@ public class SelectTool extends Tool {
 			}
 		}
 	}
+	
+	
+
+	@Override
+	public void wasSelected() {
+		this.displayStatus("Click left on a shape to select it, drag a shape with the right mouse button to move it and drag anywhere on the 2D view to move the camera");
+		super.wasSelected();
+	}
 
 	@Override
 	public void wasUnselected() {
+		this.displayStatus("");
 		super.wasUnselected();
 		this.properties.hide();
 	}

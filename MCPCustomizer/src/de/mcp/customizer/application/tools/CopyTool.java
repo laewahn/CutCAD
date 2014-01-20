@@ -64,6 +64,7 @@ public class CopyTool extends Tool {
     			{
     				if (s.getShape().isSelected() && button == PConstants.LEFT)
     				{
+    					this.displayStatus("Shape selected! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     					master = s.getShape();
     					previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
     					previewShape.getShape().setMaterial(master.getMaterial());
@@ -75,12 +76,14 @@ public class CopyTool extends Tool {
     		{
     			if(button == PConstants.RIGHT)
     			{
+    				this.displayStatus("Select the shape you want to copy");
     				this.copyShape = null;
     				this.selected = false;
     				this.previewShape = null;
     			}
     			else
     			{
+    				this.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     				//this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
     				//copyShape.getShape().setMaterial(master.getMaterial());
     				Shape copy = master.copyCompleteStructure();
@@ -124,8 +127,17 @@ public class CopyTool extends Tool {
     	}
     }
     
+    
+    
+	@Override
+	public void wasSelected() {
+		this.displayStatus("Select the shape you want to copy");
+		super.wasSelected();
+	}
+
 	@Override
 	public void wasUnselected() {
+		this.displayStatus("");
 		this.copyShape = null;
 		this.selected = false;
 		this.previewShape = null;

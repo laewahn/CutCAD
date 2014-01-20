@@ -57,6 +57,7 @@ public class CutoutTool extends Tool {
             {
             	if (!selectedFirst && s.getShape().isSelected() )
             	{
+            		this.displayStatus("Now select the shape you want to add as a cutout");
             		s.getShape().setSelected(true);
             		Vec2D currentMousePosition = this.positionRelativeToView(position);
                     this.originalMousePosition.set(currentMousePosition);
@@ -65,6 +66,7 @@ public class CutoutTool extends Tool {
             	}
             	else if (selectedFirst && s.getShape().isSelected() )
             	{
+            		this.displayStatus("Cutout created! If you want to create another cutout, select the shape you want to add a cutout to");
             		masterShape.getShape().addCutout(s.getShape());
             		selectedFirst = false;
             	}
@@ -105,4 +107,19 @@ public class CutoutTool extends Tool {
             p.stroke(0);
         }
     }
+
+	@Override
+	public void wasSelected() {
+		this.displayStatus("First, select the shape you want to add a cutout to");
+		super.wasSelected();
+	}
+
+	@Override
+	public void wasUnselected() {
+		this.displayStatus("");
+		selectedFirst = false;
+		super.wasUnselected();
+	}
+    
+    
 }
