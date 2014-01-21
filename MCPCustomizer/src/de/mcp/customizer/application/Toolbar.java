@@ -17,9 +17,11 @@ class Toolbar extends ListBox
   private PApplet paplett;
   private List<Tool> tools;
   private Tool selectedTool;
+  private ControlP5 cp5;
   
   Toolbar(ControlP5 cp5, PApplet papplet) {
 	  this(cp5, "Toolbar", papplet);
+	  this.cp5 = cp5;
   }
   
   Toolbar(ControlP5 cp5, String name, PApplet papplet)
@@ -50,6 +52,8 @@ class Toolbar extends ListBox
 	  
 	  PGraphics toolIcon = theTool.getIcon(this.paplett.createGraphics(50, 50));
       this.addCustomItem(theTool.getName(), newIndex, new ShapeButton(toolIcon));
+      this.cp5.getTooltip().register(theTool.getName(), "TestToolTip");
+      this.cp5.getTooltip().setDelay(500);
       
       this.tools.add(theTool);
   }
