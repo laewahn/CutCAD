@@ -38,10 +38,10 @@ public class ConnectTool extends Tool
         context.beginDraw();
         context.noFill();
         context.stroke(0);
-        context.strokeWeight(2);
-        context.line(25, 10, 25, 40);
-        context.line(25, 25, 125, 25);
-        context.line(125, 10, 125, 40);
+        context.strokeWeight(1);
+        context.line(5, 10, 5, 40);
+        context.line(5, 25, 45, 25);
+        context.line(45, 10, 45, 40);
         context.endDraw();
 
         return context;

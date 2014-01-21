@@ -1,5 +1,7 @@
 package de.mcp.customizer.application;
+import java.awt.Color;
 import java.util.ArrayList;
+
 import processing.core.PApplet;
 import controlP5.ControlP5;
 import controlP5.Controller;
@@ -75,40 +77,50 @@ public class Properties extends PApplet
 
 		for (int i=0; i<sliders.size(); i++)
 		{
-			sliders.get(i).setPosition(100+i*200, 37)
-			//    	.setColorForeground(color(0,0,0))
-			//    	.setColorActive(color(0,0,0))
-			//    	.setColorBackground(color(255,255,255))
-			.setLabelVisible(false);
+			sliders.get(i).setPosition(50+i*200, 18)
+					.setSize(100, 20)
+			    	.setColorForeground(color(120))
+			    	.setColorActive(color(80))
+			    	.setColorBackground(color(150))
+			    	.setLabelVisible(false);
+			
 			controllers.add(sliders.get(i));
+			
 			sliders.get(i).plugTo(this);
 
 			dummySliders.get(i)
-			.setRange(0, Float.MAX_VALUE)
-			.setVisible(false);
+					.setRange(0, Float.MAX_VALUE)
+					.setVisible(false);
 
-			textfields.get(i).setPosition(120+i*200, 15)
-			.setAutoClear(false)
-			.setWidth(50)
-			//    	.setLabelVisible(false)
-			.setLabel("")
-			//    	.setColorForeground(color(0,0,0))
-			//    	.setColorActive(color(0,0,0))
-			//    	.setColorBackground(color(255,255,255));
-			.setInputFilter(ControlP5.INTEGER);
+			textfields.get(i).setPosition(152+i*200, 18)
+					.setAutoClear(false)
+					.setSize(50, 20)
+					.setCaptionLabel("")
+			    	.setColorForeground(color(0))
+			    	.setColorActive(color(0))
+			    	.setColorBackground(color(150))
+					.setInputFilter(ControlP5.INTEGER);
+			
 			controllers.add(textfields.get(i));
+			
 			textfields.get(i).plugTo(this);
 
-			controlUnits.get(i).setPosition(175+i*200, 22);
+			controlUnits.get(i).setPosition(202+i*200, 22)
+	    			.setColor(color(0));
 
-			controlNames.get(i).setPosition(120+i*200, 5);
+			controlNames.get(i)
+					.setPosition(120+i*200, 5)
+	    			.setColor(color(0));
 		}
 
 		setMaterial = cp5.addDropdownList("setMaterial")
 				.setPosition(sizeX-225, (sizeY-25)/2+25)
 				.setSize(200,400)
 				.setItemHeight(25)
-				.setBarHeight(25);
+				.setBarHeight(25)
+		    	.setColorForeground(color(0))
+		    	.setColorActive(color(0))
+		    	.setColorBackground(color(150));
 		setMaterial.getCaptionLabel().getStyle().setMarginTop(7); //should be central -> dependant on code???
 
 		for(Material m : materials) 

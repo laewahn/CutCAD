@@ -27,17 +27,17 @@ public class PrintTool extends Tool {
         context.beginDraw();
 
         context.fill(0);
-        context.textSize(30);
-        //context.text("print",40,33);
+        context.noStroke();
+        context.strokeWeight(1);
+        context.textSize(8);
+        context.text("Send to", 8, 20);
+        context.text("Lasercutter", 4, 40);
 
-        context.noFill();
-        context.stroke(0);
-        context.strokeWeight(2);
-        context.rect(85, 2, 6, 18);
-        context.line(88, 24, 88, 38);
-        context.line(10, 50, 100, 25);
-        context.line(100, 25, 120, 50);
-        context.line(20, 50, 88, 43);
+//        context.rect(85, 2, 6, 18);
+//        context.line(88, 24, 88, 38);
+//        context.line(10, 50, 100, 25);
+//        context.line(100, 25, 120, 50);
+//        context.line(20, 50, 88, 43);
 
 
         context.endDraw();

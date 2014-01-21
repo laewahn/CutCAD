@@ -36,9 +36,9 @@ public class DeleteTool extends Tool {
         context.beginDraw();
         context.noFill();
         context.stroke(0);
-        context.strokeWeight(2);
-        context.line(50, 10, 100, 40);
-        context.line(50, 40, 100, 10);
+        context.strokeWeight(1);
+        context.line(5, 5, 45, 45);
+        context.line(5, 45, 45, 5);
         context.endDraw();
 
         return context;

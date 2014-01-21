@@ -8,6 +8,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.SymmetricPolygon;
 import de.mcp.customizer.view.Transformation;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -32,11 +33,31 @@ public class SymmetricPolygonTool extends Tool {
 		context.beginDraw();
 		context.noFill();
 		context.stroke(0);
-		context.strokeWeight(2);
+		context.strokeWeight(1);
 		
-		context.line(50, 10, 100, 10);
-		context.line(50, 10, 75, 40);
-		context.line(75, 40, 100, 10);
+		context.line(5, 20, 20, 20);
+		context.line(5, 20, 12.5f, 5);
+		context.line(20, 20, 12.5f, 5);
+		
+		context.rect(27.5f,5,15,15);
+		
+		context.line(8,45,16,45);
+		context.line(8,45,4,36);
+		context.line(16,45,20,36);
+		context.line(4,36,12,27);
+		context.line(20,36,12,27);
+		
+		context.line(30, 45, 40, 45);
+		context.line(30, 45, 25, 36);
+		context.line(25, 36, 30, 27);
+		context.line(30, 27, 40, 27);
+		context.line(40, 45, 45, 36);
+		context.line(45, 36, 40, 27);
+		
+		
+//		context.line(50, 10, 100, 10);
+//		context.line(50, 10, 75, 40);
+//		context.line(75, 40, 100, 10);
 		
 		context.endDraw();
 

@@ -37,8 +37,8 @@ public class SelectTool extends Tool {
 		context.beginDraw();
 		context.noFill();
 		context.stroke(0);
-		context.strokeWeight(2);
-		context.translate(60, 10);
+		context.strokeWeight(1);
+		context.translate(10, 10);
 		context.rotate(PApplet.radians(-45));
 		context.triangle(0, 0, -10, 30, 10, 30);
 		context.rect(-5, 30, 10, 10);

@@ -31,8 +31,8 @@ public class DrawTool extends Tool {
         context.beginDraw();
         context.noFill();
         context.stroke(0);
-        context.strokeWeight(2);
-        context.rect(50, 10, 50, 30);
+        context.strokeWeight(1);
+        context.rect(5, 5, 40, 40);
         context.endDraw();
         
         return context;

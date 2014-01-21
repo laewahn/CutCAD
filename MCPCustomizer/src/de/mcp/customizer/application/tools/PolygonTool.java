@@ -76,13 +76,13 @@ public class PolygonTool extends Tool {
 		context.beginDraw();
 		context.noFill();
 		context.stroke(0);
-		context.strokeWeight(2);
-
-		context.line(50, 10, 120, 14);
-		context.line(120, 14, 110, 34);
-		context.line(110, 34, 80, 44);
-		context.line(80, 44, 50, 22);
-		context.line(50, 22, 50, 10);
+		context.strokeWeight(1);
+		
+		context.rect(5,5,4,4);
+		context.line(9, 7, 30, 7);
+		context.line(30, 7, 45, 20);
+		context.line(45, 20, 25, 45);
+		context.line(25, 45, 7, 9);
 
 		context.endDraw();
 
