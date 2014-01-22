@@ -15,6 +15,10 @@ import de.mcp.customizer.model.Shape;
 
 public class Properties extends PApplet
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Controller<?>> controllers;
 	private ArrayList<Material> materials;
 	private ArrayList<Slider> sliders;
@@ -91,7 +95,7 @@ public class Properties extends PApplet
 			.setAutoClear(false)
 			.setWidth(50)
 			//    	.setLabelVisible(false)
-			.setLabel("")
+			.setCaptionLabel("")
 			//    	.setColorForeground(color(0,0,0))
 			//    	.setColorActive(color(0,0,0))
 			//    	.setColorBackground(color(255,255,255));

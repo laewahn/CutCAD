@@ -119,8 +119,8 @@ public class PrintDialogFrame extends PApplet
     	ArrayList<Shape> unplacedShapes = printInstances.get(selectedInstance).getUnplacedShapes();
     	for(int i = 0; i < unplacedShapes.size(); i++)
     	{
-    		int displayNumber = i+1;
-    		unplacedShapesBox.addItem("object " + displayNumber, i);
+    		//int displayNumber = i+1;
+    		unplacedShapesBox.addItem(unplacedShapes.get(i).getShape().getName(), i);
     	}
     	unplacedShapesBox.updateListBoxItems();
     }
@@ -257,12 +257,14 @@ public class PrintDialogFrame extends PApplet
       objectLayout.beginDraw();
       objectLayout.background(100);
       ArrayList<Shape> drawShapes = new ArrayList<Shape>();
+      //final float scaleFactor = 3.779527559f/10;
       if(printInstances.size() > 0)
       {
     	  drawShapes = printInstances.get(selectedInstance).getPlacedShapes();
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
+    	  //drawShapes.get(i).getShape().setPosition2D(new Vec2D(drawShapes.get(i).getShape().getPosition2D().getComponent(0)*scaleFactor,drawShapes.get(i).getShape().getPosition2D().getComponent(1)*scaleFactor));
        drawShapes.get(i).getShape().draw2D(objectLayout);
       }
       objectLayout.endDraw();

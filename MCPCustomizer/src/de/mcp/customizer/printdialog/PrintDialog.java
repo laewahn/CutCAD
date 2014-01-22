@@ -22,8 +22,9 @@ public class PrintDialog
     for(int i = 0; i < shapes.size(); i++)
     {
        Shape copy = shapes.get(i).copy();
-       copy.getShape().setPosition2D(new Vec2D(10,10));
+       copy.getShape().setPosition2D(new Vec2D(100,100));
        this.shapes.add(copy);
+       this.shapes.get(i).getShape().scale2D(0.1f);
     }
     calculateInstances();
     printDialogWindow = addPrintDialogFrame(600, 650, this.printInstances);

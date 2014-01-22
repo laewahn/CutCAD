@@ -374,6 +374,24 @@ public class GShape implements Drawable2D, Drawable3D
   public void setSelected(boolean selected) {
     this.isSelected = selected;
   }
+  
+  public void scale2D(float scaleFactor) {
+	  this.position2D = this.position2D.scale(scaleFactor);
+	  ArrayList<Vec2D> newVertices = new ArrayList<Vec2D>();
+	  for(int i = 0; i < this.vertices.size(); i++)
+	  {
+		  newVertices.add(this.vertices.get(i).scale(scaleFactor));
+	  }
+	  this.vertices = newVertices;
+	  for(int i = 0; i < this.edges.size(); i++)
+	  {
+		  this.edges.get(i).scale2D(scaleFactor);
+	  }
+	  for(int i = 0; i < cutouts.size(); i++)
+	  {
+		  cutouts.get(i).scale2D(scaleFactor);
+	  }
+  }
 
   public void setPosition2D(Vec2D position)
   {

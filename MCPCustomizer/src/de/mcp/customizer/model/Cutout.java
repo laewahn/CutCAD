@@ -226,4 +226,9 @@ public class Cutout implements Drawable2D
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+	
+	public void scale2D(float scaleFactor)
+	{
+		this.slave.scale2D(scaleFactor);
+	}
 }

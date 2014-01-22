@@ -55,6 +55,8 @@ public class MCPCustomizer extends PApplet {
 
 	  Vec3D cameraPosition;
 	  Tool tools[];
+	  
+	  TriangleMesh meshSTL;
 
 	  public void setup()
 	  {
@@ -63,6 +65,9 @@ public class MCPCustomizer extends PApplet {
 
 	    view2D = createGraphics(viewSizeX, viewSizeY, P3D);
 	    view3D = createGraphics(viewSizeX, viewSizeY, P3D);
+	    
+	    gfx = new ToxiclibsSupport(this, view3D);
+	    //gfx.setGraphics(view3D);
 
 	    shapes = new ArrayList<Shape>();
 	    connections = new ArrayList<Connection>();
@@ -121,7 +126,7 @@ public class MCPCustomizer extends PApplet {
 
 	    image(view2D, view2DPosX, view2DPosY);
 	  }
-
+	  
 	private void drawGrid(PGraphics p) {
 		for (int i = -100; i < 100; i++)
 	    {
@@ -155,8 +160,15 @@ public class MCPCustomizer extends PApplet {
 	      s.getShape().draw3D(view3D);
 	    }
 
-	    view3D.endDraw();
-
+	    if(meshSTL != null)
+	    {
+	    	//gfx.origin(new Vec3D(),200);
+	    	meshSTL.center(new Vec3D(0,0,0));
+	    	gfx.mesh(meshSTL);
+	    }
+	    
+	    view3D.endDraw(); 
+	    
 	    image(view3D, view3DPosX, view3DPosY);
 	  }
 
@@ -197,7 +209,7 @@ public class MCPCustomizer extends PApplet {
 	  void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
-	    toolbar.setPosition(0, 50).setSize(150, 600).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(150, 650).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
@@ -210,6 +222,7 @@ public class MCPCustomizer extends PApplet {
 	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
 	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
 	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
+	      new ImportSTLTool(view2DRect, properties, statusbar, this, transform2D),
 	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
 	    };
 	    
@@ -297,5 +310,9 @@ public class MCPCustomizer extends PApplet {
 		    PApplet.main(new String[] { /*"--present", */"de.mcp.customizer.application.MCPCustomizer" });
 		  }
 
+	  public void setMesh(TriangleMesh stlMesh)
+	  {
+		  this.meshSTL = stlMesh;
+	  }
 
 }

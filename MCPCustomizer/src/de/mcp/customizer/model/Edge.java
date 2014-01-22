@@ -233,5 +233,23 @@ public class Edge implements Drawable2D, Drawable3D
 	  return this.getV2().distanceTo(this.getV1());
   }
   
+  public void scale2D(float scaleFactor)
+  {
+	  this.v1 = v1.scale(scaleFactor);
+	  this.v2 = v2.scale(scaleFactor);
+	  ArrayList<Vec2D> newTenons = new ArrayList<Vec2D>();
+	  for(int i = 0; i < tenons.size(); i++)
+	  {
+		  newTenons.add(this.tenons.get(i).scale(scaleFactor));
+	  }
+	  this.tenons = newTenons;
+	  /*ArrayList<Vec2D> newDefiningPoints = new ArrayList<Vec2D>();
+	  for(int i = 0; i < definingPoints.size(); i++)
+	  {
+		  newDefiningPoints.add(this.definingPoints.get(i).scale(scaleFactor));
+	  }
+	  this.definingPoints = newDefiningPoints;*/
+  }
+  
 }
 

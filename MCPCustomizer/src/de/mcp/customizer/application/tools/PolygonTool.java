@@ -12,7 +12,7 @@ import toxi.geom.Vec3D;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
-import de.mcp.customizer.model.GShape;
+//import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.PolygonShape;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
