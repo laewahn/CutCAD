@@ -38,18 +38,11 @@ public class CopyTool extends Tool {
 
 	public PGraphics getIcon(PGraphics context) {
 		context.beginDraw();
-		context.noFill();
+		context.fill(255);
 		context.stroke(0);
-		context.strokeWeight(2);
-		context.line(50, 7, 50, 36);
-		context.line(50, 7, 100, 7);
-		context.line(50, 36, 60, 36);
-		context.line(100, 7, 100, 13);
-		
-		context.line(60, 14, 60, 43);
-		context.line(60, 14, 110, 14);
-		context.line(110, 14, 110, 43);
-		context.line(60, 43, 110, 43);
+		context.strokeWeight(1);
+		context.rect(2,2,35,35);
+		context.rect(12,12,35,35);
 		context.endDraw();
 
 		return context;

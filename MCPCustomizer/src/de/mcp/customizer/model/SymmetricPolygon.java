@@ -15,7 +15,7 @@ public class SymmetricPolygon extends Shape
 
 	public SymmetricPolygon(Vec3D position, int sizeX, int sizeY)
 	{
-		this.size = (sizeX+sizeY)/2;
+		this.size = (((int)(sizeX+sizeY)/2)/10)*10;
 		this.number=3;
 		basicShape = new ArrayList<Vec2D>();
 		basicShape.add(new Vec2D(0, 0));
@@ -77,7 +77,7 @@ public class SymmetricPolygon extends Shape
 
 	public void setSize(Vec2D newSize)
 	{
-		this.size = (int) ((newSize.x() + newSize.y())/2);
+		this.size = (((int) ((newSize.x() + newSize.y())/2))/10)*10;
 		recalculate();
 	}
 

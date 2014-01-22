@@ -39,9 +39,10 @@ public class ImportSVGTool extends Tool {
 		context.beginDraw();
 		context.fill(0);
 		context.noStroke();
-		context.strokeWeight(2);
-		context.textSize(26);
-		context.text("ImportSVG", 8, 35);
+		context.strokeWeight(1);
+		context.textSize(12);
+		context.text("Import", 5, 20);
+		context.text("SVG", 12, 40);
 
 		context.endDraw();
 

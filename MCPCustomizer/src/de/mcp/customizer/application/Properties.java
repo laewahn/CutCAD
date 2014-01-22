@@ -1,5 +1,7 @@
 package de.mcp.customizer.application;
+import java.awt.Color;
 import java.util.ArrayList;
+
 import processing.core.PApplet;
 import controlP5.ControlP5;
 import controlP5.Controller;
@@ -52,42 +54,56 @@ public class Properties extends PApplet
 		sliders.add(cp5.addSlider("setSlider1"));
 		sliders.add(cp5.addSlider("setSlider2"));
 		sliders.add(cp5.addSlider("setSlider3"));
+		sliders.add(cp5.addSlider("setSlider4"));
+		sliders.add(cp5.addSlider("setSlider5"));
 
 		dummySliders = new ArrayList<Slider>();
 		dummySliders.add(cp5.addSlider("setValue0"));
 		dummySliders.add(cp5.addSlider("setValue1"));
 		dummySliders.add(cp5.addSlider("setValue2"));
 		dummySliders.add(cp5.addSlider("setValue3"));
+		dummySliders.add(cp5.addSlider("setValue4"));
+		dummySliders.add(cp5.addSlider("setValue5"));
 
 		textfields = new ArrayList<Textfield>();
 		textfields.add(cp5.addTextfield("setText0"));
 		textfields.add(cp5.addTextfield("setText1"));
 		textfields.add(cp5.addTextfield("setText2"));
 		textfields.add(cp5.addTextfield("setText3"));
+		textfields.add(cp5.addTextfield("setText4"));
+		textfields.add(cp5.addTextfield("setText5"));
 
 		controlNames = new ArrayList<Textlabel>();
 		controlNames.add(cp5.addTextlabel("setName0"));
 		controlNames.add(cp5.addTextlabel("setName1"));
 		controlNames.add(cp5.addTextlabel("setName2"));
 		controlNames.add(cp5.addTextlabel("setName3"));
+		controlNames.add(cp5.addTextlabel("setName4"));
+		controlNames.add(cp5.addTextlabel("setName5"));
 
 		controlUnits = new ArrayList<Textlabel>();
 		controlUnits.add(cp5.addTextlabel("setUnit0"));
 		controlUnits.add(cp5.addTextlabel("setUnit1"));
 		controlUnits.add(cp5.addTextlabel("setUnit2"));
 		controlUnits.add(cp5.addTextlabel("setUnit3"));
+		controlUnits.add(cp5.addTextlabel("setUnit4"));
+		controlUnits.add(cp5.addTextlabel("setUnit5"));
 
 		for (int i=0; i<sliders.size(); i++)
 		{
-			sliders.get(i).setPosition(100+i*200, 37)
-			//    	.setColorForeground(color(0,0,0))
-			//    	.setColorActive(color(0,0,0))
-			//    	.setColorBackground(color(255,255,255))
-			.setLabelVisible(false);
+			sliders.get(i).setPosition(50+i*200, 18)
+					.setSize(100, 20)
+			    	.setColorForeground(color(120))
+			    	.setColorActive(color(80))
+			    	.setColorBackground(color(150))
+			    	.setLabelVisible(false);
+			
 			controllers.add(sliders.get(i));
+			
 			sliders.get(i).plugTo(this);
 
 			dummySliders.get(i)
+<<<<<<< HEAD
 			.setRange(0, Float.MAX_VALUE)
 			.setVisible(false);
 
@@ -100,19 +116,40 @@ public class Properties extends PApplet
 			//    	.setColorActive(color(0,0,0))
 			//    	.setColorBackground(color(255,255,255));
 			.setInputFilter(ControlP5.INTEGER);
+=======
+					.setRange(0, Float.MAX_VALUE)
+					.setVisible(false);
+
+			textfields.get(i).setPosition(152+i*200, 18)
+					.setAutoClear(false)
+					.setSize(50, 20)
+					.setCaptionLabel("")
+			    	.setColorForeground(color(0))
+			    	.setColorActive(color(0))
+			    	.setColorBackground(color(150))
+					.setInputFilter(ControlP5.INTEGER);
+			
+>>>>>>> 064f030fd2b3681a974585aa171c4863f213ac20
 			controllers.add(textfields.get(i));
+			
 			textfields.get(i).plugTo(this);
 
-			controlUnits.get(i).setPosition(175+i*200, 22);
+			controlUnits.get(i).setPosition(202+i*200, 22)
+	    			.setColor(color(0));
 
-			controlNames.get(i).setPosition(120+i*200, 5);
+			controlNames.get(i)
+					.setPosition(120+i*200, 5)
+	    			.setColor(color(0));
 		}
 
 		setMaterial = cp5.addDropdownList("setMaterial")
 				.setPosition(sizeX-225, (sizeY-25)/2+25)
 				.setSize(200,400)
 				.setItemHeight(25)
-				.setBarHeight(25);
+				.setBarHeight(25)
+		    	.setColorForeground(color(0))
+		    	.setColorActive(color(0))
+		    	.setColorBackground(color(150));
 		setMaterial.getCaptionLabel().getStyle().setMarginTop(7); //should be central -> dependant on code???
 
 		for(Material m : materials) 
@@ -309,12 +346,12 @@ public class Properties extends PApplet
 
 	private float getMinimum(int type) {
 		if (type == 0) return 0;
-		else if (type == 1) return 10;
+		else if (type == 1) return 2;
 		else return 3;
 	}
 
 	private String getUnit(int type) {
-		if (type == 0) return "*10degree";
+		if (type == 0) return "degree";
 		else if (type == 1) return "mm";
 		else return "";
 	}

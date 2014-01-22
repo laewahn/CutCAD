@@ -36,16 +36,18 @@ public class MCPCustomizer extends PApplet {
 
 	  int startX = 0;
 	  int startY = 0;
-
-	  int viewSizeX = 500;
-	  int viewSizeY = 500;
-	  int view2DPosX = 150;
-	  int view2DPosY = 50;
+	  
 	  int gridWidth = 50; // 5 mm
-	  Rect view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
+	  
+	  int viewSizeX;
+	  int viewSizeY;
+	  
+	  int view2DPosX;
+	  int view2DPosY;
+	  Rect view2DRect;
 
-	  int view3DPosX = 700;
-	  int view3DPosY = 50;
+	  int view3DPosX;
+	  int view3DPosY;
 
 	  int cameraX = 45;
 	  int cameraY = 1000;
@@ -62,6 +64,14 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    size(displayWidth, displayHeight, P3D);
 	    ortho();
+	    
+	    viewSizeX = (displayWidth-50-30)/2;
+	    viewSizeY = (displayHeight-50-30);
+	    view2DPosX = 50;
+	    view2DPosY = 50;
+	    view3DPosX = view2DPosX + viewSizeX + 15;
+	    view3DPosY = 50;
+	    view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
 
 	    view2D = createGraphics(viewSizeX, viewSizeY, P3D);
 	    view3D = createGraphics(viewSizeX, viewSizeY, P3D);
@@ -86,7 +96,7 @@ public class MCPCustomizer extends PApplet {
 
 	  public void draw()
 	  {
-	    background(180);
+	    background(255);
 	    fill(0);
 
 	    draw2DView();
@@ -100,7 +110,7 @@ public class MCPCustomizer extends PApplet {
 	    view2D.beginDraw();
 	    transform2D.transform(view2D);
 
-	    view2D.background(100);
+	    view2D.background(150);
 	    
 	    draw2DAxes(view2D);
 	    drawGrid(view2D);
@@ -131,7 +141,7 @@ public class MCPCustomizer extends PApplet {
 		for (int i = -100; i < 100; i++)
 	    {
 	    	p.strokeWeight(1);
-	    	p.stroke(120);
+	    	p.stroke(220);
 	    	p.line(-100 * gridWidth, gridWidth * i, 100 * gridWidth, gridWidth * i);
 	    	p.line(gridWidth * i, -100 * gridWidth, gridWidth * i, 100 * gridWidth);
 	    }
@@ -147,7 +157,7 @@ public class MCPCustomizer extends PApplet {
 	    view3D.translate(-viewSizeX/2, -viewSizeY/2);
 	    view3D.endCamera();
 
-	    view3D.background(100);
+	    view3D.background(150);
 	    
 	    float scale = transform3D.getScale();	
 	    view3D.scale(scale);
@@ -209,7 +219,11 @@ public class MCPCustomizer extends PApplet {
 	  void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
+<<<<<<< HEAD
 	    toolbar.setPosition(0, 50).setSize(150, 650).setItemHeight(50).disableCollapse().hideBar();
+=======
+	    toolbar.setPosition(0, 50).setSize(50, 600).setItemHeight(50).disableCollapse().hideBar();
+>>>>>>> 064f030fd2b3681a974585aa171c4863f213ac20
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
@@ -308,6 +322,10 @@ public class MCPCustomizer extends PApplet {
 	
 	  public static void main(String args[]) {
 		    PApplet.main(new String[] { /*"--present", */"de.mcp.customizer.application.MCPCustomizer" });
+		  }
+	  
+	  public boolean sketchFullScreen() {
+			  return true;
 		  }
 
 	  public void setMesh(TriangleMesh stlMesh)

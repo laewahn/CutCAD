@@ -41,9 +41,9 @@ public class CutoutTool extends Tool {
         context.beginDraw();
         context.noFill();
         context.stroke(0);
-        context.strokeWeight(2);
-        context.rect(50, 10, 50, 30);
-        context.rect(75, 17, 10, 20);
+        context.strokeWeight(1);
+        context.rect(5, 5, 40, 40);
+        context.rect(20, 20, 10, 10);
         context.endDraw();
 
         return context;

@@ -31,11 +31,13 @@ public class TrapeziumTool extends Tool {
 		context.beginDraw();
 		context.noFill();
 		context.stroke(0);
-		context.strokeWeight(2);
-		context.line(50, 10, 100, 10);
-		context.line(50, 10, 60, 40);
-		context.line(100, 10, 90, 40);
-		context.line(60, 40, 90, 40);
+		context.strokeWeight(1);
+		
+		context.line(5, 40, 45, 40);
+		context.line(5, 40, 15, 10);
+		context.line(15, 10, 35, 10);
+		context.line(35, 10, 45, 40);
+		
 		context.endDraw();
 
 		return context;

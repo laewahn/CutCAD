@@ -15,9 +15,9 @@ public class Trapezium extends Shape
 
 	public Trapezium(Vec3D position, int sizeX, int sizeY)
 	{
-		this.sizeXTop = sizeX;
-		this.sizeXBottom = sizeX;
-		this.sizeY = sizeY;
+		this.sizeXTop = (sizeX/10)*10;
+		this.sizeXBottom = (sizeX/10)*10;
+		this.sizeY = (sizeY/10)*10;
 		basicShape = new ArrayList<Vec2D>();
 		basicShape.add(new Vec2D(0, 0));
 		basicShape.add(new Vec2D(sizeX, 0));
@@ -80,8 +80,8 @@ public class Trapezium extends Shape
 
 	public void setSize(Vec2D newSize)
 	{
-		this.sizeXTop = (int)newSize.x();
-		this.sizeXBottom = (int)newSize.x();
+		this.sizeXTop = ((int)newSize.x()/10)*10;
+		this.sizeXBottom = ((int)newSize.x()/10)*10;
 		this.sizeY = (int)newSize.y();
 		recalculate();
 	}

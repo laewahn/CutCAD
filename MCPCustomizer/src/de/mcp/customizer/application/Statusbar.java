@@ -31,9 +31,11 @@ public class Statusbar {
 	{
 	    if (status != null)
 	    {
-	    	p.textSize(24);
-	    	p.text(status, 10, p.height-p.height/32);
-	    	p.text("(" + (int) mousePosition.x() + "," + (int) mousePosition.y() + ")", p.width-100, p.height-p.height/32);
+	    	p.fill(0);
+	    	p.textSize(14);
+	    	p.text(status, 10, p.height-10);
+	    	int mousePositionWidth = (int) p.textWidth("(" + (int) mousePosition.x() + "," + (int) mousePosition.y() + ")");
+	    	p.text("(" + (int) mousePosition.x() + "," + (int) mousePosition.y() + ")", p.width-mousePositionWidth-10, p.height-10);
 	    }
 	}
 
