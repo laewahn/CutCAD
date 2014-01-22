@@ -50,30 +50,40 @@ public class Properties extends PApplet
 		sliders.add(cp5.addSlider("setSlider1"));
 		sliders.add(cp5.addSlider("setSlider2"));
 		sliders.add(cp5.addSlider("setSlider3"));
+		sliders.add(cp5.addSlider("setSlider4"));
+		sliders.add(cp5.addSlider("setSlider5"));
 
 		dummySliders = new ArrayList<Slider>();
 		dummySliders.add(cp5.addSlider("setValue0"));
 		dummySliders.add(cp5.addSlider("setValue1"));
 		dummySliders.add(cp5.addSlider("setValue2"));
 		dummySliders.add(cp5.addSlider("setValue3"));
+		dummySliders.add(cp5.addSlider("setValue4"));
+		dummySliders.add(cp5.addSlider("setValue5"));
 
 		textfields = new ArrayList<Textfield>();
 		textfields.add(cp5.addTextfield("setText0"));
 		textfields.add(cp5.addTextfield("setText1"));
 		textfields.add(cp5.addTextfield("setText2"));
 		textfields.add(cp5.addTextfield("setText3"));
+		textfields.add(cp5.addTextfield("setText4"));
+		textfields.add(cp5.addTextfield("setText5"));
 
 		controlNames = new ArrayList<Textlabel>();
 		controlNames.add(cp5.addTextlabel("setName0"));
 		controlNames.add(cp5.addTextlabel("setName1"));
 		controlNames.add(cp5.addTextlabel("setName2"));
 		controlNames.add(cp5.addTextlabel("setName3"));
+		controlNames.add(cp5.addTextlabel("setName4"));
+		controlNames.add(cp5.addTextlabel("setName5"));
 
 		controlUnits = new ArrayList<Textlabel>();
 		controlUnits.add(cp5.addTextlabel("setUnit0"));
 		controlUnits.add(cp5.addTextlabel("setUnit1"));
 		controlUnits.add(cp5.addTextlabel("setUnit2"));
 		controlUnits.add(cp5.addTextlabel("setUnit3"));
+		controlUnits.add(cp5.addTextlabel("setUnit4"));
+		controlUnits.add(cp5.addTextlabel("setUnit5"));
 
 		for (int i=0; i<sliders.size(); i++)
 		{
