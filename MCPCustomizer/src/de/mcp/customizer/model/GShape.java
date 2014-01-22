@@ -334,7 +334,16 @@ public class GShape implements Drawable2D, Drawable3D
 
   public Vec2D get2Dperpendicular(Vec2D v1, Vec2D v2)
   {
-    return v2.sub(v1).getPerpendicular().add(v1).normalize();
+    //return v2.sub(v1).getPerpendicular().add(v1).normalize();
+    for (Vec2D v3 : vertices)
+    {
+      if (!v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY()).isZeroVector())
+      {
+        Vec3D normal = v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY());
+        return normal.cross((v2.sub(v1)).to3DXY()).invert().add(v1.to3DXY()).normalize().to2DXY();
+      }
+    }
+    return new Vec2D (0, 1);
   }
 
   public Vec3D get3Dperpendicular(Vec3D v1, Vec3D v2)

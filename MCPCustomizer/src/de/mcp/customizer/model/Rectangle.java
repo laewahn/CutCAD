@@ -15,8 +15,8 @@ public class Rectangle extends Shape
 
   public Rectangle(Vec3D position, int sizeX, int sizeY)
   {
-    this.sizeX = sizeX;
-    this.sizeY = sizeY;
+    this.sizeX = (sizeX/10)*10;
+    this.sizeY = (sizeY/10)*10;
     basicShape = new ArrayList<Vec2D>();
     basicShape.add(new Vec2D(0, 0));
     basicShape.add(new Vec2D(sizeX, 0));
@@ -80,8 +80,8 @@ public class Rectangle extends Shape
 
   public void setSize(Vec2D newSize)
   {
-    this.sizeX = (int)newSize.x();
-    this.sizeY = (int)newSize.y();
+    this.sizeX = ((int)newSize.x()/10)*10;
+    this.sizeY = ((int)newSize.y()/10)*10;
     recalculate();
   }
   

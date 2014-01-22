@@ -67,6 +67,12 @@ public class ImportSVG extends PApplet{
 		for(int j = 0; j<pointPaths[i].length; j++){
 			path.add(new Vec2D((pointPaths[i][j].x)*scalingFactor - position.x(), (pointPaths[i][j].y)*scalingFactor - position.y()));
 		}
+		
+		while (Math.abs(path.get(path.size()-1).x() - path.get(0).x()) < 0.1f && 
+			Math.abs(path.get(path.size()-1).y() - path.get(0).y()) < 0.1f)
+			{
+				path.remove(path.size()-1);
+			}
 		Shape pathShape = new PolygonShape(path, position);
 		shapes.add(pathShape);
 	}
