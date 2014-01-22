@@ -1,5 +1,4 @@
 package de.mcp.customizer.application;
-import java.awt.Color;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -103,20 +102,6 @@ public class Properties extends PApplet
 			sliders.get(i).plugTo(this);
 
 			dummySliders.get(i)
-<<<<<<< HEAD
-			.setRange(0, Float.MAX_VALUE)
-			.setVisible(false);
-
-			textfields.get(i).setPosition(120+i*200, 15)
-			.setAutoClear(false)
-			.setWidth(50)
-			//    	.setLabelVisible(false)
-			.setCaptionLabel("")
-			//    	.setColorForeground(color(0,0,0))
-			//    	.setColorActive(color(0,0,0))
-			//    	.setColorBackground(color(255,255,255));
-			.setInputFilter(ControlP5.INTEGER);
-=======
 					.setRange(0, Float.MAX_VALUE)
 					.setVisible(false);
 
@@ -129,7 +114,6 @@ public class Properties extends PApplet
 			    	.setColorBackground(color(150))
 					.setInputFilter(ControlP5.INTEGER);
 			
->>>>>>> 064f030fd2b3681a974585aa171c4863f213ac20
 			controllers.add(textfields.get(i));
 			
 			textfields.get(i).plugTo(this);

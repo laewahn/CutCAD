@@ -8,7 +8,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.SymmetricPolygon;
 import de.mcp.customizer.view.Transformation;
-import processing.core.PApplet;
+//import processing.core.PApplet;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;

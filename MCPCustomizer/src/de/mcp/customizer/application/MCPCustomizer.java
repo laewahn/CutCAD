@@ -219,11 +219,8 @@ public class MCPCustomizer extends PApplet {
 	  void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
-<<<<<<< HEAD
-	    toolbar.setPosition(0, 50).setSize(150, 650).setItemHeight(50).disableCollapse().hideBar();
-=======
-	    toolbar.setPosition(0, 50).setSize(50, 600).setItemHeight(50).disableCollapse().hideBar();
->>>>>>> 064f030fd2b3681a974585aa171c4863f213ac20
+
+	    toolbar.setPosition(0, 50).setSize(50, 650).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
