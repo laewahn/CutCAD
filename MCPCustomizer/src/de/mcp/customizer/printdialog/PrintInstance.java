@@ -156,4 +156,32 @@ public class PrintInstance
 	  }
 	  return shapePlaced;
   }
+  
+  public String checkOverlap()
+  {
+	  boolean overlapped = false;
+	  String result = "";
+	  for(int i = 0; i < this.subInstances.size(); i++)
+	  {
+		  if(this.subInstances.get(i).checkOverlap())
+		  {
+			  overlapped = true;
+			  int name = i + 1;
+			  if(!result.equals(""))
+			  {
+				  result = result + ", overlap in " + this.material.getMaterialName() + name;
+			  } else
+			  {
+				  result = result + "overlap in " + this.material.getMaterialName() + " - " + name;
+			  }
+		  }
+	  }
+	  if(overlapped)
+	  {
+		 return result; 
+	  } else
+	  {
+		  return "no overlap";
+	  }
+  }
 }

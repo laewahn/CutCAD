@@ -135,4 +135,19 @@ public class PrintSubInstance
 		  System.out.println(e);
 	  }
   }
+  
+  public boolean checkOverlap()
+  {
+	  for(int i = 0; i < shapesPlaced.size(); i++)
+	  {
+		  for(int j = i+1; j < shapesPlaced.size(); j++)
+		  {
+			  if(shapesPlaced.get(i).getShape().overlapsWith(shapesPlaced.get(j).getShape()))
+			  {
+				  return true;
+			  }
+		  }
+	  }
+	  return false;
+  }
 }

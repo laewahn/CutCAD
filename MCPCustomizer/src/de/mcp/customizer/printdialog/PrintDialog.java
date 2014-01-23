@@ -39,21 +39,24 @@ public class PrintDialog
     printInstances = new ArrayList<PrintInstance>();
     for(int i = 0; i < this.shapes.size(); i++)
     {
-      int j = 0;
-      boolean found = false;
-      while((j < printInstances.size()) && !found)
-      {
-       if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.shapes.get(i).getShape().getMaterial().getMaterialName()))
-       {
-         this.printInstances.get(j).addShape(this.shapes.get(i));
-         found = true;
-       } 
-       j++;
-      }
-      if(!found)
-      {
-        this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getShape().getMaterial()));
-      }
+    	if(!this.shapes.get(i).getShape().getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+    	{
+    		int j = 0;
+    		boolean found = false;
+    		while((j < printInstances.size()) && !found)
+    		{
+    			if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.shapes.get(i).getShape().getMaterial().getMaterialName()))
+    			{
+    				this.printInstances.get(j).addShape(this.shapes.get(i));
+    				found = true;
+    			} 
+    			j++;
+    		}
+    		if(!found)
+			{
+				this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getShape().getMaterial()));
+			}
+    	}
     }
   }
   

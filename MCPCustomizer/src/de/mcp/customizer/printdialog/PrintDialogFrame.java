@@ -16,50 +16,55 @@ import de.mcp.customizer.model.Shape;
 
 public class PrintDialogFrame extends PApplet
 {
-  /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-  private ControlP5 cp5;
+	private ControlP5 cp5;
  
-  private int w, h;
-  private int bgColor = 255;
-  private int bedWidth, bedHeight;
-  private int selectedInstance;
-  private int printCounter = 0;
-  private int printer;
-  private int confirmLevel;
-  private boolean dragging;
-   
-  private PGraphics objectLayout;
-  private ListBox unplacedShapesBox;
-  private Textlabel statusLabel;
-  private Button confirmPrint;
-  private Button declinePrint;
+	private int w, h;
+	private int bgColor = 255;
+	private int bedWidth, bedHeight;
+	private int selectedInstance;
+	private int printCounter = 0;
+	private int printer;
+	private int confirmLevel;
+	private boolean dragging;
+    private String overlapMessage;
+	
+	private PGraphics objectLayout;
+	private ListBox unplacedShapesBox;
+	private Textlabel statusLabel;
+	private Button lasercutButton;
+	private Button exportSVGButton;
+	private Button addExtraJobButton;
+	private Button confirmPrint;
+	private Button declinePrint;
   
-  private Group instanceGroup; 
-  private ArrayList<Button> instanceButtons;
+	private Group instanceGroup; 
+	private ArrayList<Button> instanceButtons;
   
-  private ArrayList<PrintInstance> printInstances;
-  private Vec2D originalMousePosition;
-  private Rect view;
+	private ArrayList<PrintInstance> printInstances;
+	private Vec2D originalMousePosition;
+	private Rect view;
   
-  public PrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances) 
-  {
-    this.printInstances = printInstances;
-    if(printInstances.size() > 0)
-    {
-     selectedInstance = 0; 
-    }
-    this.w = theWidth;
-    this.h = theHeight;
-    this.bedWidth = 600; // These depend on the lasercutter used
-    this.bedHeight = 300;
-    this.dragging = false;
-    this.view = new Rect(0,0,bedWidth,bedHeight);
-    this.originalMousePosition = new Vec2D(0,0);
-  }
+	public PrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances) 
+	{
+		this.printInstances = printInstances;
+		if(printInstances.size() > 0)
+		{
+			selectedInstance = 0; 
+		}
+		this.w = theWidth;
+		this.h = theHeight;
+		this.bedWidth = 600; // These depend on the lasercutter used
+	    this.bedHeight = 300;
+	    this.dragging = false;
+	    this.view = new Rect(0,0,bedWidth,bedHeight);
+	    this.originalMousePosition = new Vec2D(0,0);
+	    this.overlapMessage = "";
+	}
   
   
   public void setup()
@@ -78,18 +83,18 @@ public class PrintDialogFrame extends PApplet
    unplacedShapesBox.getCaptionLabel().getStyle().marginTop = 3;
    unplacedShapesBox.getValueLabel().getStyle().marginTop = 3;
    updateListBox();
-   cp5.addButton("Start cutting")
-      .setPosition(10,h-70)
-      .setSize(100,30)
-      .setId(0);
-   cp5.addButton("Export as SVG")
-      .setPosition(120,h-70)
-      .setSize(80,30)
-      .setId(1);
-   cp5.addButton("Add extra job")
-      .setPosition(10,h-140)
-      .setSize(100,30)
-      .setId(2);
+   lasercutButton = cp5.addButton("Start cutting")
+		   			   .setPosition(10,h-70)
+		   			   .setSize(100,30)
+		   			   .setId(0);
+   exportSVGButton = cp5.addButton("Export as SVG")
+		   				.setPosition(120,h-70)
+		   				.setSize(80,30)
+		   				.setId(1);
+   addExtraJobButton = cp5.addButton("Add extra job")
+		   				  .setPosition(10,h-140)
+		   				  .setSize(100,30)
+		   				  .setId(2);
    statusLabel = cp5.addTextlabel("")
 		   			.setPosition(10,h-100)
 		   			.setSize(120,30)
@@ -119,7 +124,6 @@ public class PrintDialogFrame extends PApplet
     	ArrayList<Shape> unplacedShapes = printInstances.get(selectedInstance).getUnplacedShapes();
     	for(int i = 0; i < unplacedShapes.size(); i++)
     	{
-    		//int displayNumber = i+1;
     		unplacedShapesBox.addItem(unplacedShapes.get(i).getShape().getName(), i);
     	}
     	unplacedShapesBox.updateListBoxItems();
@@ -168,6 +172,7 @@ public class PrintDialogFrame extends PApplet
     {
     	confirmPrint.setVisible(false);
 		declinePrint.setVisible(false);
+		activateAll(true);
 		statusLabel.setText("");
     }
     else if(theEvent.isController())
@@ -238,7 +243,7 @@ public class PrintDialogFrame extends PApplet
 	       int row = (buttonNumber/4);
 	       int collumn = (buttonNumber%4);
 	       int name = j+1;
-	       Button newButton = cp5.addButton(printInstances.get(i).getMaterial().getMaterialName() + " - " + name) //replace for material name and thickness
+	       Button newButton = cp5.addButton(printInstances.get(i).getMaterial().getMaterialName() + " - " + name)
 	                             .setPosition((collumn*110),(row*50))
 	                             .setSize(100,30)
 	                             .setId(buttonNumber)
@@ -257,14 +262,12 @@ public class PrintDialogFrame extends PApplet
       objectLayout.beginDraw();
       objectLayout.background(100);
       ArrayList<Shape> drawShapes = new ArrayList<Shape>();
-      //final float scaleFactor = 3.779527559f/10;
       if(printInstances.size() > 0)
       {
     	  drawShapes = printInstances.get(selectedInstance).getPlacedShapes();
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
-    	  //drawShapes.get(i).getShape().setPosition2D(new Vec2D(drawShapes.get(i).getShape().getPosition2D().getComponent(0)*scaleFactor,drawShapes.get(i).getShape().getPosition2D().getComponent(1)*scaleFactor));
        drawShapes.get(i).getShape().draw2D(objectLayout);
       }
       objectLayout.endDraw();
@@ -347,8 +350,33 @@ public class PrintDialogFrame extends PApplet
   
   private void checkUnplacedShapes()
   {
-	  //TO DO: Dialog if user wants to continue printing if there are unplaced shapes
-	  startPrint();
+	  boolean unplacedShapesFound = false;
+	  String result = "";
+	  for(int i = 0; i < this.printInstances.size(); i++)
+	  {
+		  if(this.printInstances.get(i).getUnplacedShapes().size() > 0)
+		  {
+			  if(result.equals(""))
+			  {
+				  result = "there are unplaced shapes for material(s): " + this.printInstances.get(i).getMaterial().getMaterialName();
+			  } else
+			  {
+				  result = result + ", " + this.printInstances.get(i).getMaterial().getMaterialName();
+			  }
+			  unplacedShapesFound = true;
+		  }
+	  }
+	  if(unplacedShapesFound)
+	  {
+		  statusLabel.setText(result);
+		  confirmLevel = 1;
+		  activateAll(false);
+		  confirmPrint.setVisible(true);
+		  declinePrint.setVisible(true);
+	  } else
+	  {
+		  startPrint();
+	  }
   }
   
   private void startPrint()
@@ -366,55 +394,82 @@ public class PrintDialogFrame extends PApplet
 	  }
   }
   
-  private boolean checkOverlap()
+  private boolean checkOverlap(int printInstanceIndex)
   {
-	  //TO DO: check if there are any overlapping shapes and tell user where they are overlapping, printing is cancelled by overlap
-	  return false;
+	  boolean overLapped = false;
+	  String result = this.printInstances.get(printInstanceIndex).checkOverlap();
+	  if(!result.equals("no overlap"))
+	  {
+		  if(!this.overlapMessage.equals(""))
+		  {
+			  this.overlapMessage = this.overlapMessage + ", " + result;
+		  } else
+		  {
+			  this.overlapMessage = this.overlapMessage + result;
+		  }
+		  overLapped = true;
+	  }
+	  return overLapped;
   }
   
   private void checkPlacedShapes()
   {
 	  boolean conditionsMet = false;
 	  boolean placedShapeNoMaterial = false;
+	  boolean overLapped = false;
 	  for(int i = 0; i < printInstances.size(); i++)
 	  {
 		if(printInstances.get(i).checkPlacedShapes())
 		{
-			if(printInstances.get(i).getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+			if(!checkOverlap(i))
 			{
-				placedShapeNoMaterial = true;
+				if(printInstances.get(i).getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+				{
+					placedShapeNoMaterial = true;
+				} else
+				{
+					conditionsMet = true;
+				}
 			} else
 			{
-				conditionsMet = true;
+				overLapped = true;
+				conditionsMet = false;
 			}
 		}
 	  }
-	  if(!conditionsMet && placedShapeNoMaterial)
+	  if(!conditionsMet)
 	  {
-		  statusLabel.setText("No shape has been placed with a material assigned");
-	  }
-	  else if(!conditionsMet && !placedShapeNoMaterial)
-	  {
-		  statusLabel.setText("No shape has been placed");
-	  }
-	  else if(conditionsMet && placedShapeNoMaterial)
-	  {
-		  conditionsMet = checkOverlap();
-		  statusLabel.setText("There are object placed without material assigned, continue?");
-		  confirmLevel = 0;
-		  confirmPrint.setVisible(true);
-		  declinePrint.setVisible(true);
+		  if(overLapped)
+		  {
+			  statusLabel.setText(overlapMessage);
+		  } else if (placedShapeNoMaterial)
+		  {
+			  statusLabel.setText("No shape has been placed with a material assigned");
+		  } else
+		  {
+			  statusLabel.setText("No shape has been placed");
+		  }
 	  } else
 	  {
-		  checkUnplacedShapes();
+		  if(placedShapeNoMaterial)
+		  {
+			  statusLabel.setText("There are object placed without material assigned, continue?");
+			  confirmLevel = 0;
+			  activateAll(false);
+			  confirmPrint.setVisible(true);
+			  declinePrint.setVisible(true);
+		  } else
+		  {
+			  checkUnplacedShapes();
+		  }
 	  }
   }
   
   private void checkPrintConstraints()
   {
-	  statusLabel.setText("");
-	  boolean conditionsMet = (printInstances.size() > 0);
-	  if(!conditionsMet)
+	  this.statusLabel.setText("");
+	  this.overlapMessage = "";
+	  if(!(printInstances.size() > 0))
 	  {
 		  statusLabel.setText("There are no shapes that can be printed");
 	  } else
@@ -429,7 +484,10 @@ public class PrintDialogFrame extends PApplet
    if(printCounter < printInstances.size())
    {
      printInstances.get(printCounter).print();
-   } 
+   } else
+   {
+	   activateAll(true);
+   }
   }
   
   public void printSVG()
@@ -457,5 +515,19 @@ public class PrintDialogFrame extends PApplet
   public int getHeight()
   {
    return this.h; 
+  }
+  
+  private void activateAll(boolean state)
+  {
+	  //this.unplacedShapesBox.getController(this.unplacedShapesBox.getName()).setLock(state);
+	  //instanceGroup.getController(this.instanceGroup.getName()).setLock(state);
+	  this.lasercutButton.setLock(state);
+	  this.exportSVGButton.setLock(state);
+	  this.addExtraJobButton.setLock(state);
+		  //cp5.getController(this.unplacedShapesBox.getName()).setLock(state);
+		  //cp5.getController(this.instanceGroup.getName()).setLock(state);
+		  //cp5.getController(this.lasercutButton.getName()).setLock(state);
+		  //cp5.getController(this.exportSVGButton.getName()).setLock(state);
+		  //cp5.getController(this.addExtraJobButton.getName()).setLock(state);
   }
 }
