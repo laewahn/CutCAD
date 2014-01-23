@@ -17,6 +17,7 @@ import de.mcp.customizer.application.tools.*;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
+import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 
@@ -58,7 +59,7 @@ public class MCPCustomizer extends PApplet {
 	  Vec3D cameraPosition;
 	  Tool tools[];
 	  
-	  TriangleMesh meshSTL;
+	  STLMesh meshSTL;
 
 	  public void setup()
 	  {
@@ -77,7 +78,8 @@ public class MCPCustomizer extends PApplet {
 	    view3D = createGraphics(viewSizeX, viewSizeY, P3D);
 	    
 	    gfx = new ToxiclibsSupport(this, view3D);
-	    //gfx.setGraphics(view3D);
+	   
+	    meshSTL = new STLMesh();
 
 	    shapes = new ArrayList<Shape>();
 	    connections = new ArrayList<Connection>();
@@ -170,11 +172,19 @@ public class MCPCustomizer extends PApplet {
 	      s.getShape().draw3D(view3D);
 	    }
 
-	    if(meshSTL != null)
+	    if(meshSTL.isStlImported())
 	    {
-	    	//gfx.origin(new Vec3D(),200);
-	    	meshSTL.center(new Vec3D(0,0,0));
-	    	gfx.mesh(meshSTL);
+	    	if(meshSTL.isPosChanged())
+	    	{
+	    		meshSTL.center();
+	    		System.out.println("changed position");
+	    	}
+	    	if(meshSTL.isRotChanged())
+	    	{
+	    		meshSTL.rotate();
+	    		System.out.println("rotation changed");
+	    	}
+	    	gfx.mesh(meshSTL.getSTLMesh());
 	    }
 	    
 	    view3D.endDraw(); 
@@ -220,7 +230,7 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    toolbar = new Toolbar(cp5, this);
 
-	    toolbar.setPosition(0, 50).setSize(50, 650).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(50, 700).setItemHeight(50).disableCollapse().hideBar();
 
 	    tools = new Tool[]{
 	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
@@ -233,7 +243,8 @@ public class MCPCustomizer extends PApplet {
 	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
 	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
 	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new ImportSTLTool(view2DRect, properties, statusbar, this, transform2D),
+	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
+	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
 	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
 	    };
 	    
@@ -324,10 +335,4 @@ public class MCPCustomizer extends PApplet {
 	  public boolean sketchFullScreen() {
 			  return true;
 		  }
-
-	  public void setMesh(TriangleMesh stlMesh)
-	  {
-		  this.meshSTL = stlMesh;
-	  }
-
 }

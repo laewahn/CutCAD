@@ -12,6 +12,7 @@ import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Material;
+import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.Shape;
 
 public class Properties extends PApplet
@@ -30,6 +31,7 @@ public class Properties extends PApplet
 	private DropdownList setMaterial;
 	private Shape shapeCurrentlyPluggedTo;
 	private Cutout cutoutCurrentlyPluggedTo;
+	private STLMesh stlMeshCurrentlyPluggedTo;
 	private Connection connectionCurrentlyPluggedTo;
 	private int posX, posY, sizeX, sizeY;
 	private boolean hidden;
@@ -47,6 +49,7 @@ public class Properties extends PApplet
 		this.shapeCurrentlyPluggedTo = null;
 		this.connectionCurrentlyPluggedTo = null;
 		this.cutoutCurrentlyPluggedTo = null;
+		this.stlMeshCurrentlyPluggedTo = null;
 
 		sliders = new ArrayList<Slider>();
 		sliders.add(cp5.addSlider("setSlider0"));
@@ -161,11 +164,15 @@ public class Properties extends PApplet
 	{
 		sliders.get(3).setValue(Integer.valueOf(text));
 	}
-
-	public void setSlider0(int value)
+	
+	public void setText4(String text)
 	{
-		textfields.get(0).setText(value+"");
-		dummySliders.get(0).setValue(value);
+		sliders.get(4).setValue(Integer.valueOf(text));
+	}
+	
+	public void setText5(String text)
+	{
+		sliders.get(5).setValue(Integer.valueOf(text));
 	}
 
 	public void setSlider1(int value)
@@ -180,10 +187,28 @@ public class Properties extends PApplet
 		dummySliders.get(2).setValue(value);
 	}
 
+	public void setSlider0(int value)
+	{
+		textfields.get(0).setText(value+"");
+		dummySliders.get(0).setValue(value);
+	}
+
 	public void setSlider3(int value)
 	{
 		textfields.get(3).setText(value+"");
 		dummySliders.get(3).setValue(value);
+	}
+	
+	public void setSlider4(int value)
+	{
+		textfields.get(4).setText(value+"");
+		dummySliders.get(4).setValue(value);
+	}
+	
+	public void setSlider5(int value)
+	{
+		textfields.get(5).setText(value+"");
+		dummySliders.get(5).setValue(value);
 	}
 
 	public void changeMaterial(float eventNumber)
@@ -207,6 +232,11 @@ public class Properties extends PApplet
 		{
 			for(Slider s : dummySliders) s.unplugFrom(this.cutoutCurrentlyPluggedTo);
 			this.cutoutCurrentlyPluggedTo.setActive(false);
+		}
+		if (this.stlMeshCurrentlyPluggedTo != null)
+		{
+			for(Slider s : dummySliders) s.unplugFrom(this.stlMeshCurrentlyPluggedTo);
+			//this.stlMeshCurrentlyPluggedTo.setActive(false);
 		}
 		hideAll();
 	}
@@ -288,6 +318,28 @@ public class Properties extends PApplet
 		c.setActive(true);
 		this.cutoutCurrentlyPluggedTo = c;
 	}
+	
+	public void plugTo(STLMesh mesh) {
+		unplugAll();
+		for(int i=0; i<mesh.getNumberOfControls(); i++)
+		{
+			float value = mesh.getValue(i);
+			sliders.get(i)
+			.setRange(getMinimum(mesh.getControlType(i)), getMaximum(mesh.getControlType(i)))
+			.setCaptionLabel(mesh.getNameOfControl(i))
+			.setValue(value)
+			.show();
+			textfields.get(i)
+			.setText((int)sliders.get(i).getValue()+"")
+			.show();
+			controlUnits.get(i)
+			.setText(getUnit(mesh.getControlType(i)))
+			.show();
+			controlNames.get(i).setText(mesh.getNameOfControl(i)).show();
+			dummySliders.get(i).plugTo(mesh);
+		}
+		this.stlMeshCurrentlyPluggedTo = mesh;
+	}
 
 	private void hideAll()
 	{
@@ -325,18 +377,21 @@ public class Properties extends PApplet
 	private float getMaximum(int type) {
 		if (type == 0) return 360;
 		else if (type == 1) return 600;
+		else if (type == 2) return 300;
 		else return 16;
 	}
 
 	private float getMinimum(int type) {
 		if (type == 0) return 0;
 		else if (type == 1) return 2;
+		else if (type == 2) return -300;
 		else return 3;
 	}
 
 	private String getUnit(int type) {
 		if (type == 0) return "degree";
 		else if (type == 1) return "mm";
+		else if (type == 2) return "mm";
 		else return "";
 	}
 

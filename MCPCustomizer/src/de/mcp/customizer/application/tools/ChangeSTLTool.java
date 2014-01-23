@@ -6,15 +6,14 @@ import toxi.geom.Vec2D;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
-import de.mcp.customizer.model.ImportSTL;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.view.Transformation;
 
-public class ImportSTLTool extends Tool {
+public class ChangeSTLTool extends Tool {
 
 	private STLMesh mesh;
 
-	public ImportSTLTool(Rect view, Properties properties, Statusbar statusbar, STLMesh mesh, Transformation transform) {
+	public ChangeSTLTool(Rect view, Properties properties, Statusbar statusbar, STLMesh mesh, Transformation transform) {
 		super(view, properties, statusbar, transform, "ImportSTLTool");
 		this.mesh = mesh;
 	}
@@ -39,7 +38,7 @@ public class ImportSTLTool extends Tool {
 		context.noStroke();
 		context.strokeWeight(1);
 		context.textSize(12);
-		context.text("Import", 5, 15);
+		context.text("change", 5, 15);
 		context.text("STL", 12, 30);
 		context.text("model", 5, 45);
 		context.endDraw();
@@ -52,7 +51,11 @@ public class ImportSTLTool extends Tool {
 	
 	@Override
 	public void wasSelected() {
-		new ImportSTL(mesh);	
+		if(mesh.isStlImported())
+		{
+			properties.show();
+			properties.plugTo(mesh);
+		}
 	}
 	
 	@Override
