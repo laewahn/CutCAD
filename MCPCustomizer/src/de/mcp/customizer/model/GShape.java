@@ -482,30 +482,33 @@ public class GShape implements Drawable2D, Drawable3D
 
   public void draw3D(PGraphics p) 
   {
-    this.setFillColor(p);
-    createCover3D(p,true);
-    createCover3D(p, false);
-    createSides(p, getTenons());
-    for (Cutout cutout : cutouts)
-    {
+	  if (!this.getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+	  {
+		  this.setFillColor(p);
+		  createCover3D(p,true);
+		  createCover3D(p, false);
+		  createSides(p, getTenons());
+		  for (Cutout cutout : cutouts)
+		  {
     	createSides(p, cutout.getVectors());
-    }
+		  }
     
-    // if we want to show the "Logic" shape:
-    /*
-    p.noFill();
-    p.stroke(0,0,255);
-    p.beginShape();
-    for (Edge e : edges) {
-      p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
-    }
-    p.endShape(PConstants.CLOSE);
-    */
+		  // if we want to show the "Logic" shape:
+		  /*
+    	p.noFill();
+    	p.stroke(0,0,255);
+    	p.beginShape();
+    	for (Edge e : edges) {
+      		p.vertex(e.getP3D1().x(), e.getP3D1().y(), e.getP3D1().z());
+    	}
+    	p.endShape(PConstants.CLOSE);
+     	*/
     
-    for (Edge e: edges) //not good... but i've no better idea...still no better version
-    {
-      e.draw3D(p);
-    }
+		  for (Edge e: edges) //not good... but i've no better idea...still no better version
+    	{
+    		e.draw3D(p);
+    	}
+	  }
   }
   
   private void createSides(PGraphics p, ArrayList<Vec2D> vectors)

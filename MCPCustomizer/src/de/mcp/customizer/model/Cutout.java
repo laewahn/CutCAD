@@ -20,6 +20,7 @@ public class Cutout implements Drawable2D
 	{
 		this.master = master;
 		this.slave = slave;
+		slave.setMaterial(AllMaterials.getMaterials().get(0));
 		this.angle = 0;
 		this.position = new Vec2D(0,0);
 		this.isSelected = false;
