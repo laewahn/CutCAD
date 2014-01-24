@@ -1,4 +1,9 @@
 package de.mcp.customizer.application.tools;
+import geomerative.RG;
+import geomerative.RPoint;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
@@ -28,19 +33,40 @@ public class TrapeziumTool extends Tool {
 
 	public PGraphics getIcon(PGraphics context) 
 	{
+		float iconScaling = 1.57f;
+		RPoint[][] pointPaths;
+		
 		context.beginDraw();
-		context.noFill();
-		context.stroke(0);
+		context.fill(0);
 		context.strokeWeight(1);
-		
-		context.line(5, 40, 45, 40);
-		context.line(5, 40, 15, 10);
-		context.line(15, 10, 35, 10);
-		context.line(35, 10, 45, 40);
-		
-		context.endDraw();
 
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		pointPaths = RG.loadShape(path.getParent() + "/icons/DrawTrapezium.svg").getPointsInPaths();
+ 
+		for(int i = 0; i<pointPaths.length; i++){
+		    if (pointPaths[i] != null) {
+		    	context.beginShape();
+		      for(int j = 0; j<pointPaths[i].length; j++){
+		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
+		      }
+		      context.endShape();
+		    }
+		  }
+		context.endDraw();
 		return context;
+//		context.beginDraw();
+//		context.noFill();
+//		context.stroke(0);
+//		context.strokeWeight(1);
+//		
+//		context.line(5, 40, 45, 40);
+//		context.line(5, 40, 15, 10);
+//		context.line(15, 10, 35, 10);
+//		context.line(35, 10, 45, 40);
+//		
+//		context.endDraw();
+//
+//		return context;
 	}
 
 	public void mouseButtonPressed(Vec2D position, int button)

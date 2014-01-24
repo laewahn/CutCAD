@@ -1,73 +1,101 @@
 package de.mcp.customizer.model;
+
 import java.io.File;
 import java.util.ArrayList;
-
 import processing.core.PApplet;
 import processing.data.XML;
 
-public class AllMaterials extends PApplet
-{
+/**
+ * Load different materials from xml files in the folder materials
+ */
+public class AllMaterials extends PApplet {
 	private static final long serialVersionUID = -8801211971447138231L;
-	
 	private static ArrayList<Material> materials = new ArrayList<Material>();
 	private static int baseMaterialIndex = 0;
 
-	public AllMaterials()
-	{
-		if(materials.isEmpty()) materials.add(new Material("Nothing", 5, color(255,255,255,0), 0, 100, 0, 500));
+	/**
+	 * Useless Dummy Constructor
+	 */
+	public AllMaterials() {
 	}
 
-	public void addMaterialsFromFile(String path)
-	{
-		File[] files= new File(path).listFiles();
+	/**
+	 * import Materials from the xml files in the folder materials
+	 * 
+	 * @param path
+	 *            path to the materials folder
+	 */
+	public void addMaterialsFromFile(String path) {
+		if (materials.isEmpty())
+			materials.add(new Material("Nothing", 5, color(255, 255, 255, 0),
+					0, 100, 0, 500));
+		File[] files = new File(path).listFiles();
 
-		//make sure load only xml
-		for(int i=0; i<files.length; i++) 
-		{
+		// ToDo: make sure load only xml-files
+		for (int i = 0; i < files.length; i++) {
 			XML material = loadXML(path + "/" + files[i].getName());
 
 			XML identity = material.getChild("identity");
-			String      name = identity.getContent();
+			String name = identity.getContent();
 
-			int     redColor = identity.getInt("red");
-			int    blueColor = identity.getInt("green");
-			int   greenColor = identity.getInt("blue");
+			int redColor = identity.getInt("red");
+			int blueColor = identity.getInt("green");
+			int greenColor = identity.getInt("blue");
 			int alphaChannel = identity.getInt("alpha");
-			int materialColor = color(redColor, blueColor, greenColor, alphaChannel);
+			int materialColor = color(redColor, blueColor, greenColor,
+					alphaChannel);
 
 			XML[] differentThickness = material.getChildren("thickness");
 
-			for (int j=0; j<differentThickness.length; j++)
-			{
-				int thickness = (int)(differentThickness[j].getInt("value")/10);
-				int     power = differentThickness[j].getChild("cut").getChild("power").getIntContent();
-				int     speed = differentThickness[j].getChild("cut").getChild("speed").getIntContent();
-				int     focus = differentThickness[j].getChild("cut").getChild("focus").getIntContent();
-				int frequency = differentThickness[j].getChild("cut").getChild("frequency").getIntContent();
+			for (int j = 0; j < differentThickness.length; j++) {
+				int thickness = (int) (differentThickness[j].getInt("value") / 10);
+				int power = differentThickness[j].getChild("cut")
+						.getChild("power").getIntContent();
+				int speed = differentThickness[j].getChild("cut")
+						.getChild("speed").getIntContent();
+				int focus = differentThickness[j].getChild("cut")
+						.getChild("focus").getIntContent();
+				int frequency = differentThickness[j].getChild("cut")
+						.getChild("frequency").getIntContent();
 
-				materials.add(new Material(name, thickness, materialColor, power, speed, focus, frequency));
+				materials.add(new Material(name, thickness, materialColor,
+						power, speed, focus, frequency));
 			}
 		}
 	}
 
-	public void addMaterialsFromVisicutFile()
-	{
-		//TODO: get the material file from visicut and add them to materials
+	/**
+	 * ToDo: import materials from the normal visicut material files (not
+	 * implemented yet)
+	 */
+	public void addMaterialsFromVisicutFile() {
+		// TODO: get the material file from visicut and add them to materials
 	}
 
-	public static ArrayList<Material> getMaterials()
-	{
+	/**
+	 * Get a list of all possible materials
+	 * 
+	 * @return all Materials
+	 */
+	public static ArrayList<Material> getMaterials() {
 		return materials;
 	}
-	
-	public static void setBaseMaterial(Material material) 
-	{
+
+	/**
+	 * Set standard material (which is used for new created shapes)
+	 * 
+	 * @param material
+	 */
+	public static void setBaseMaterial(Material material) {
 		baseMaterialIndex = materials.indexOf(material);
 	}
-	
-	public static Material getBaseMaterial()
-	{
+
+	/**
+	 * get a standard material (which is used for new created shapes)
+	 * 
+	 * @return material
+	 */
+	public static Material getBaseMaterial() {
 		return materials.get(baseMaterialIndex);
 	}
 }
-

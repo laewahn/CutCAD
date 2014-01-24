@@ -1,4 +1,9 @@
 package de.mcp.customizer.application.tools;
+import geomerative.RG;
+import geomerative.RPoint;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
@@ -30,38 +35,59 @@ public class SymmetricPolygonTool extends Tool {
 
 	public PGraphics getIcon(PGraphics context) 
 	{
+		float iconScaling = 1.57f;
+		RPoint[][] pointPaths;
+		
 		context.beginDraw();
-		context.noFill();
-		context.stroke(0);
+		context.fill(0);
 		context.strokeWeight(1);
-		
-		context.line(5, 20, 20, 20);
-		context.line(5, 20, 12.5f, 5);
-		context.line(20, 20, 12.5f, 5);
-		
-		context.rect(27.5f,5,15,15);
-		
-		context.line(8,45,16,45);
-		context.line(8,45,4,36);
-		context.line(16,45,20,36);
-		context.line(4,36,12,27);
-		context.line(20,36,12,27);
-		
-		context.line(30, 45, 40, 45);
-		context.line(30, 45, 25, 36);
-		context.line(25, 36, 30, 27);
-		context.line(30, 27, 40, 27);
-		context.line(40, 45, 45, 36);
-		context.line(45, 36, 40, 27);
-		
-		
-//		context.line(50, 10, 100, 10);
-//		context.line(50, 10, 75, 40);
-//		context.line(75, 40, 100, 10);
-		
-		context.endDraw();
 
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		pointPaths = RG.loadShape(path.getParent() + "/icons/DrawSymmetricPolygon.svg").getPointsInPaths();
+ 
+		for(int i = 0; i<pointPaths.length; i++){
+		    if (pointPaths[i] != null) {
+		    	context.beginShape();
+		      for(int j = 0; j<pointPaths[i].length; j++){
+		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
+		      }
+		      context.endShape();
+		    }
+		  }
+		context.endDraw();
 		return context;
+//		context.beginDraw();
+//		context.noFill();
+//		context.stroke(0);
+//		context.strokeWeight(1);
+//		
+//		context.line(5, 20, 20, 20);
+//		context.line(5, 20, 12.5f, 5);
+//		context.line(20, 20, 12.5f, 5);
+//		
+//		context.rect(27.5f,5,15,15);
+//		
+//		context.line(8,45,16,45);
+//		context.line(8,45,4,36);
+//		context.line(16,45,20,36);
+//		context.line(4,36,12,27);
+//		context.line(20,36,12,27);
+//		
+//		context.line(30, 45, 40, 45);
+//		context.line(30, 45, 25, 36);
+//		context.line(25, 36, 30, 27);
+//		context.line(30, 27, 40, 27);
+//		context.line(40, 45, 45, 36);
+//		context.line(45, 36, 40, 27);
+//		
+//		
+////		context.line(50, 10, 100, 10);
+////		context.line(50, 10, 75, 40);
+////		context.line(75, 40, 100, 10);
+//		
+//		context.endDraw();
+//
+//		return context;
 	}
 
 	public void mouseButtonPressed(Vec2D position, int button)

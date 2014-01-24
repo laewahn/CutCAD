@@ -15,7 +15,7 @@ public class Transformation
 
     public void transform(PGraphics view)
     {
-        view.scale(this.scale);
+        //view.scale(this.scale);
         view.translate(-this.translation.x(), -this.translation.y());
     }
 

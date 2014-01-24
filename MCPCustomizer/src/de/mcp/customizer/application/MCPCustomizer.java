@@ -1,5 +1,7 @@
 package de.mcp.customizer.application;
 
+import geomerative.RG;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -78,6 +80,10 @@ public class MCPCustomizer extends PApplet {
 	    view3D = createGraphics(viewSizeX, viewSizeY, P3D);
 	    
 	    gfx = new ToxiclibsSupport(this, view3D);
+		RG.init(this);
+		RG.ignoreStyles(false);
+
+		RG.setPolygonizer(RG.ADAPTATIVE);
 	   
 	    meshSTL = new STLMesh();
 
@@ -85,7 +91,7 @@ public class MCPCustomizer extends PApplet {
 	    connections = new ArrayList<Connection>();
 
 	    new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
-	    AllMaterials.setBaseMaterial(AllMaterials.getMaterials().get(48));
+	    AllMaterials.setBaseMaterial(AllMaterials.getMaterials().get(40));
 
 	    cp5 = new ControlP5(this);
 

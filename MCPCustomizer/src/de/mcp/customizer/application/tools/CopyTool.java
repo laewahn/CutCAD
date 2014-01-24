@@ -1,6 +1,12 @@
 package de.mcp.customizer.application.tools;
 
+import geomerative.RG;
+import geomerative.RPoint;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+
 
 
 //import processing.core.PApplet;
@@ -37,15 +43,36 @@ public class CopyTool extends Tool {
 	}
 
 	public PGraphics getIcon(PGraphics context) {
+		float iconScaling = 1.57f;
+		RPoint[][] pointPaths;
+		
 		context.beginDraw();
-		context.fill(255);
-		context.stroke(0);
+		context.fill(0);
 		context.strokeWeight(1);
-		context.rect(2,2,35,35);
-		context.rect(12,12,35,35);
-		context.endDraw();
 
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		pointPaths = RG.loadShape(path.getParent() + "/icons/Copy.svg").getPointsInPaths();
+ 
+		for(int i = 0; i<pointPaths.length; i++){
+		    if (pointPaths[i] != null) {
+		    	context.beginShape();
+		      for(int j = 0; j<pointPaths[i].length; j++){
+		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
+		      }
+		      context.endShape();
+		    }
+		  }
+		context.endDraw();
 		return context;
+//		context.beginDraw();
+//		context.fill(255);
+//		context.stroke(0);
+//		context.strokeWeight(1);
+//		context.rect(2,2,35,35);
+//		context.rect(12,12,35,35);
+//		context.endDraw();
+//
+//		return context;
 	}
 
     public void mouseButtonPressed(Vec2D position, int button)

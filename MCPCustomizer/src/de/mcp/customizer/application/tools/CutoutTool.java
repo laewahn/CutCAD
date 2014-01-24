@@ -1,4 +1,9 @@
 package de.mcp.customizer.application.tools;
+import geomerative.RG;
+import geomerative.RPoint;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
@@ -39,15 +44,36 @@ public class CutoutTool extends Tool {
 
     public PGraphics getIcon(PGraphics context)
     {
-        context.beginDraw();
-        context.noFill();
-        context.stroke(0);
-        context.strokeWeight(1);
-        context.rect(5, 5, 40, 40);
-        context.rect(20, 20, 10, 10);
-        context.endDraw();
+		float iconScaling = 1.57f;
+		RPoint[][] pointPaths;
+		
+		context.beginDraw();
+		context.fill(0);
+		context.strokeWeight(1);
 
-        return context;
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		pointPaths = RG.loadShape(path.getParent() + "/icons/Cutout.svg").getPointsInPaths();
+ 
+		for(int i = 0; i<pointPaths.length; i++){
+		    if (pointPaths[i] != null) {
+		    	context.beginShape();
+		      for(int j = 0; j<pointPaths[i].length; j++){
+		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
+		      }
+		      context.endShape();
+		    }
+		  }
+		context.endDraw();
+		return context;
+//        context.beginDraw();
+//        context.noFill();
+//        context.stroke(0);
+//        context.strokeWeight(1);
+//        context.rect(5, 5, 40, 40);
+//        context.rect(20, 20, 10, 10);
+//        context.endDraw();
+//
+//        return context;
     }
 
     public void mouseButtonPressed(Vec2D position, int button)

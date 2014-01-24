@@ -1,5 +1,10 @@
 package de.mcp.customizer.application.tools;
 
+import geomerative.RG;
+import geomerative.RPoint;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import de.mcp.customizer.application.Properties;
@@ -24,24 +29,45 @@ public class PrintTool extends Tool {
 
     public PGraphics getIcon(PGraphics context)
     {
-        context.beginDraw();
+		float iconScaling = 1.57f;
+		RPoint[][] pointPaths;
+		
+		context.beginDraw();
+		context.fill(0);
+		context.strokeWeight(1);
 
-        context.fill(0);
-        context.noStroke();
-        context.strokeWeight(1);
-        context.textSize(10);
-        context.text("LaserCut", 4, 30);
-
-//        context.rect(85, 2, 6, 18);
-//        context.line(88, 24, 88, 38);
-//        context.line(10, 50, 100, 25);
-//        context.line(100, 25, 120, 50);
-//        context.line(20, 50, 88, 43);
-
-
-        context.endDraw();
-
-        return context;
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		pointPaths = RG.loadShape(path.getParent() + "/icons/Print.svg").getPointsInPaths();
+ 
+		for(int i = 0; i<pointPaths.length; i++){
+		    if (pointPaths[i] != null) {
+		    	context.beginShape();
+		      for(int j = 0; j<pointPaths[i].length; j++){
+		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
+		      }
+		      context.endShape();
+		    }
+		  }
+		context.endDraw();
+		return context;
+//        context.beginDraw();
+//
+//        context.fill(0);
+//        context.noStroke();
+//        context.strokeWeight(1);
+//        context.textSize(10);
+//        context.text("LaserCut", 4, 30);
+//
+////        context.rect(85, 2, 6, 18);
+////        context.line(88, 24, 88, 38);
+////        context.line(10, 50, 100, 25);
+////        context.line(100, 25, 120, 50);
+////        context.line(20, 50, 88, 43);
+//
+//
+//        context.endDraw();
+//
+//        return context;
     }
 
     public void mouseButtonPressed(Vec2D position, int button)
