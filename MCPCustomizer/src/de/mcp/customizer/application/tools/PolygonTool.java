@@ -24,6 +24,8 @@ public class PolygonTool extends Tool {
 	private List<Vec2D> vertices;
 	
 	private Vec2D lastKnownMousePositon;
+	private float scalingFactor = 0.5f;
+	private float boundingBoxSize = 4/scalingFactor;
 
 	public PolygonTool(Rect view, Properties properties, Statusbar statusbar,
 			Transformation transform, List<Shape> shapes) {
@@ -61,7 +63,7 @@ public class PolygonTool extends Tool {
 	
 	private boolean mouseOverCloseShape()
 	{
-		Rect closeShapeRect = new Rect(vertices.get(0).add(-5,-5), vertices.get(0).add(5,5));
+		Rect closeShapeRect = new Rect(vertices.get(0).add(-boundingBoxSize,-boundingBoxSize), vertices.get(0).add(boundingBoxSize,boundingBoxSize));
 		return closeShapeRect.containsPoint(this.lastKnownMousePositon);
 	}
 	
@@ -96,9 +98,9 @@ public class PolygonTool extends Tool {
 			drawCloseRect(p);
 			for (int i = 0; i < vertices.size() - 1; i++)
 			{
-				p.line(vertices.get(i).x(), vertices.get(i).y(), vertices.get(i+1).x(), vertices.get(i+1).y());
+				p.line(vertices.get(i).scale(scalingFactor).x(), vertices.get(i).scale(scalingFactor).y(), vertices.get(i+1).scale(scalingFactor).x(), vertices.get(i+1).scale(scalingFactor).y());
 			}
-			p.line(vertices.get(vertices.size()-1).x(), vertices.get(vertices.size()-1).y(), this.lastKnownMousePositon.x(), this.lastKnownMousePositon.y());
+			p.line(vertices.get(vertices.size()-1).scale(scalingFactor).x(), vertices.get(vertices.size()-1).scale(scalingFactor).y(), this.lastKnownMousePositon.scale(scalingFactor).x(), this.lastKnownMousePositon.scale(scalingFactor).y());
 		}
 		
 		super.draw2D(p);
@@ -113,7 +115,8 @@ public class PolygonTool extends Tool {
 		{
 			p.stroke(0);
 		}
-		p.rect(vertices.get(0).x() - 5, vertices.get(0).y() - 5, 10, 10);
+		p.noFill();
+		p.rect(vertices.get(0).scale(scalingFactor).x() - boundingBoxSize, vertices.get(0).scale(scalingFactor).y() - boundingBoxSize, 10, 10);
 		p.stroke(0);
 	}
 	
