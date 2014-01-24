@@ -207,7 +207,7 @@ public class Cutout implements Drawable2D
 
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
-		if (borders.containsPoint(mousePosition.scale(scalingFactor))) {
+		if (borders.containsPoint(mousePosition)) {
 			return true;
 		} else {
 			borders = new Polygon2D(definingPointsLine);

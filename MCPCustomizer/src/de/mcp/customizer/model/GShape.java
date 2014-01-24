@@ -546,6 +546,16 @@ public class GShape implements Drawable2D, Drawable3D
 	  p.endContour();
 	}
 	p.endShape(PConstants.CLOSE);
+	p.beginShape();
+	for(Cutout cutout : cutouts)
+	{
+		p.fill(cutout.getSlaveShape().getShape().getMaterial().getMaterialColor());
+	  for(Vec3D vector : transformTo3D(b, cutout.getVectors()))
+	  {
+	    p.vertex(vector.x(), vector.y(), vector.z());
+	  }
+	}
+	p.endShape(PConstants.CLOSE);
   }
 
   private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors, Vec2D position)
