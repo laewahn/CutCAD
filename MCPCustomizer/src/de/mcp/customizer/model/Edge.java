@@ -2,9 +2,9 @@ package de.mcp.customizer.model;
 
 import java.util.ArrayList;
 
+import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
-
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
@@ -30,7 +30,7 @@ public class Edge implements Drawable2D, Drawable3D
     this.p3D2 = p3D2;
     this.v1 = v1;
     this.v2 = v2;
-    Tenon.createOutlineOfEdge(this);
+    CreateTenons.createOutlineOfEdge(this);
     this.isHighlighted = false;
     this.isSelected = false;
   }

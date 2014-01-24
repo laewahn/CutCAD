@@ -5,6 +5,7 @@ import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
 import de.mcp.customizer.view.Drawable2D;
 import processing.core.PGraphics;
@@ -120,8 +121,8 @@ public class Connection implements Drawable2D
 	public void undoConnection()
 	{
 		// remove Tenons
-		Tenon.createOutlineOfEdge(masterEdge);
-		Tenon.createOutlineOfEdge(slaveEdge);
+		CreateTenons.createOutlineOfEdge(masterEdge);
+		CreateTenons.createOutlineOfEdge(slaveEdge);
 
 		// Edges are not locked anymore
 		lockConnection(false);
@@ -202,7 +203,7 @@ public class Connection implements Drawable2D
 		}
 		else if (isEqualEdge(masterEdge, slaveEdge))
 		{
-			Tenon.createOutlineOfEdge(masterEdge, slaveEdge);
+			CreateTenons.createOutlineOfEdge(masterEdge, slaveEdge);
 			// tenons are symmetric, the different orientation didn't do something wrong (at least i hope so)
 			lockConnection(true);
 			return true;
@@ -263,7 +264,7 @@ public class Connection implements Drawable2D
 		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
 		slave.translate3D(toMaster);
 
-		Tenon.createOutlineOfEdge(masterEdge, slaveEdge);
+		CreateTenons.createOutlineOfEdge(masterEdge, slaveEdge);
 	}
 
 	private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)

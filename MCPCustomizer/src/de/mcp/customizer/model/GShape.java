@@ -2,6 +2,8 @@ package de.mcp.customizer.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
 import processing.core.PConstants;
@@ -373,8 +375,8 @@ public class GShape implements Drawable2D, Drawable3D
        {
          for (Connection c : Connection.getConnections())
          {
-           if(c.getMasterEdge() == e) Tenon.createOutlineOfEdge(c.getSlaveEdge(), e);
-           else if (c.getSlaveEdge() == e) Tenon.createOutlineOfEdge(c.getMasterEdge(), e);
+           if(c.getMasterEdge() == e) CreateTenons.createOutlineOfEdge(c.getSlaveEdge(), e);
+           else if (c.getSlaveEdge() == e) CreateTenons.createOutlineOfEdge(c.getMasterEdge(), e);
          }
        }
     }
