@@ -7,6 +7,7 @@ import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
+import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PApplet;
@@ -107,6 +108,13 @@ public class SelectTool extends Tool {
 
 			boolean noneSelected = true;
 			for (Shape s : shapes) {
+				for (Edge e : s.getShape().getEdges())
+				{
+					if (e.mouseOver(relativePosition))
+					{
+						this.displayStatus("Length of this edge: " + e.getLength()/10 + " mm");
+					}
+				}
 				s.getShape().setSelected(
 						s.getShape().mouseOver(relativePosition));
 

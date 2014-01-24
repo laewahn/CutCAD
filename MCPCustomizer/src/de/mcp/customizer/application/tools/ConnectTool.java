@@ -67,7 +67,8 @@ public class ConnectTool extends Tool
                     else
                     {
                         this.previewConnection.setSlaveEdge(e);
-                        if(this.previewConnection.connect()) 
+                        String connectMessage = this.previewConnection.connect();
+                        if(connectMessage == "Connection created!") 
                         {
                     		this.displayStatus("Connection created! If you want to create another connection, select another edge");
                             this.connections.add(this.previewConnection);
@@ -76,6 +77,7 @@ public class ConnectTool extends Tool
                         {
                         	// TODO: Find out why the connection couldn't be created and tell the user
                     		this.displayStatus("Could not create the connection!");
+                    		this.displayStatus(connectMessage);
                         }
                         // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
                         this.previewConnection.getMasterEdge().setSelected(false);

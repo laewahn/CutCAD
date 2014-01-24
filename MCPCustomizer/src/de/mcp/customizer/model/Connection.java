@@ -169,46 +169,43 @@ public class Connection implements Drawable2D
 		}
 	}
 
-	public boolean connect()
+	public String connect()
 	{
 		if (masterEdge.getShape() == slaveEdge.getShape())
 		{
 			// no connection allowed between two sides of the same shape
 			// (until we use flexible materals :-)
-			out.println("Do not connect two sides of the same shape!");
-			return false;
+			return "Do not connect two sides of the same shape!";
 		}
 		else if (masterEdge.isLocked() || slaveEdge.isLocked())
 		{
 			// do not connect edges which already have a connection
-			out.println("At least one edge is already connected!");
-			return false;
+			return "At least one edge is already connected!";
 		}
 		else if (Math.abs(masterEdge.getLength()-slaveEdge.getLength())>tolerance)
 		{
 			// no connection between edges of different length (problem: not exacty same length...)
-			out.println("Edges have different length!");
-			return false;
+			return "Edges have different length!";
 		}
 		else if (slaveEdge.getShape().getNumberOfConnections() == 0)
 		{
 			connectEdges(masterEdge, slaveEdge, (float) Math.PI);
 			lockConnection(true);
-			return true;
+			return "Connection created!";
 
 		}
 		else if (masterEdge.getShape().getNumberOfConnections() == 0)
 		{
 			connectEdges(slaveEdge, masterEdge, (float) Math.PI);
 			lockConnection(true);
-			return true;
+			return "Connection created!";
 		}
 		else if (isEqualEdge(masterEdge, slaveEdge))
 		{
 			CreateTenons.createOutlineOfEdge(masterEdge, slaveEdge);
 			// tenons are symmetric, the different orientation didn't do something wrong (at least i hope so)
 			lockConnection(true);
-			return true;
+			return "Connection created!";
 		}
 		else if(((masterEdge.getShape().getNumberOfConnections() == 1) || (slaveEdge.getShape().getNumberOfConnections() == 1))
 				&& (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
@@ -216,10 +213,17 @@ public class Connection implements Drawable2D
 						masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
 						masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), tolerance)))
 		{
-			return RotateAdjectantShapes.rotateBothShapes(this, masterEdge, slaveEdge);
+			if (RotateAdjectantShapes.rotateBothShapes(this, masterEdge, slaveEdge))
+			{
+				return "Connection created!";
+			}
+			else 
+			{
+				return "Couldn't rotate the shapes until both edges are at the same position";
+			}
 
 		}
-		return false;
+		return "I'm sorry,... I'm afraid I can't do that.";
 	}
 
 	private boolean isEqualEdge(Edge masterEdge, Edge slaveEdge)
