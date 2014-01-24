@@ -6,11 +6,20 @@ import de.mcp.customizer.model.Edge;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
+/**
+ * @brief Static class to calculate the outline (tenon structure) of an edge
+ * 
+ *        Can be used either for unconnected edges (one edge) or two connected
+ *        edges so far. Uses the normal vectors of the shape, to whom these
+ *        edges belong, from the edges themselves the 2D coordinates as well as
+ *        their Array of Vec2D, in which the outcome of the function (outline of
+ *        the edge) is stored.
+ */
 public class CreateTenons {
 	private static float tolerance = 0.1f;
 	// factor to calculate the length of a tenon depending on the thickness
 	// of the shapes:
-	private static int relationTenonToEdge = 4; 
+	private static int relationTenonToEdge = 4;
 
 	/**
 	 * @brief Calculates the outline of one (unconnected) edge
@@ -93,7 +102,7 @@ public class CreateTenons {
 
 		// Calculate the number of tenons on the edges with a preliminary length
 		// of these tenons
-		int numberOfTenons = (int) ((2 * edgeLength) / (relationTenonToEdge  * (thicknessMaster + thicknessSlave)));
+		int numberOfTenons = (int) ((2 * edgeLength) / (relationTenonToEdge * (thicknessMaster + thicknessSlave)));
 
 		// The total number of tenons of a side should be always an odd number,
 		// minimum 1

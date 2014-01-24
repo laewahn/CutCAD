@@ -10,10 +10,20 @@ import de.mcp.customizer.model.Rectangle;
 import de.mcp.customizer.model.Shape;
 import static java.lang.System.*;
 
+/**
+ * @brief Rotates two shapes until two edges of them are at the same position
+ * 
+ * Rotates two shapes until two edges are at the same position - the edges need
+ * to have a common point and both of them are already connected. The already
+ * conencted edges need to have at least one common point (same as the edges,
+ * which should be rotated) and one of them has to have only one connection
+ * (such that a rotation is still possible)
+ * 
+ */
 public class RotateAdjectantShapes {
 	private static float bigTolerance = 5f;
 	private static float smallTolerance = 1f;
-	
+
 	private static Shape virtualShape = new Rectangle(new Vec3D(0, 0, 0), 1, 1);
 	private static Edge edgeA = new Edge(virtualShape.getShape(), new Vec3D(1,
 			1, 1), new Vec3D(1, 1, 1), new Vec2D(1, 1), new Vec2D(1, 1));
@@ -352,7 +362,7 @@ public class RotateAdjectantShapes {
 		// perpendicul/parallel to the base shapes
 		Line3D rotationAxis = new Line3D(getPointOfRotatingEdge(edge),
 				getCommonPoint(edge)).toRay3D().toLine3DWithPointAtDistance(
-						10000);
+				10000);
 		Vec3D intersectionWithRotationAxis = getIntersectionLine(edge)
 				.closestLineTo(rotationAxis).getLine().getMidPoint();
 		double lengthIntersectionToAxisMaster = intersectionWithRotationAxis
@@ -406,8 +416,8 @@ public class RotateAdjectantShapes {
 			connection.connectEdges(masterEdge, slaveEdge, newAngle);
 
 			if ((edgeA.getP3D1().equalsWithTolerance(edgeB.getP3D1(),
-					smallTolerance) && edgeA.getP3D2()
-					.equalsWithTolerance(edgeB.getP3D2(), bigTolerance))
+					smallTolerance) && edgeA.getP3D2().equalsWithTolerance(
+					edgeB.getP3D2(), bigTolerance))
 					|| (edgeA.getP3D1().equalsWithTolerance(edgeB.getP3D2(),
 							smallTolerance) && edgeA.getP3D2()
 							.equalsWithTolerance(edgeB.getP3D1(), bigTolerance))) {
@@ -420,8 +430,8 @@ public class RotateAdjectantShapes {
 			connection.connectEdges(masterEdge, slaveEdge, newAngle);
 
 			if ((edgeA.getP3D1().equalsWithTolerance(edgeB.getP3D1(),
-					smallTolerance) && edgeA.getP3D2()
-					.equalsWithTolerance(edgeB.getP3D2(), bigTolerance))
+					smallTolerance) && edgeA.getP3D2().equalsWithTolerance(
+					edgeB.getP3D2(), bigTolerance))
 					|| (edgeA.getP3D1().equalsWithTolerance(edgeB.getP3D2(),
 							smallTolerance) && edgeA.getP3D2()
 							.equalsWithTolerance(edgeB.getP3D1(), bigTolerance))) {

@@ -378,20 +378,23 @@ public class Properties extends PApplet
 		if (type == 0) return 360;
 		else if (type == 1) return 600;
 		else if (type == 2) return 300;
-		else return 16;
+		else if (type == 3) return 16;
+		else return 0;
 	}
 
 	private float getMinimum(int type) {
 		if (type == 0) return 0;
 		else if (type == 1) return 2;
 		else if (type == 2) return -300;
-		else return 3;
+		else if (type == 3) return 3;
+		else return 0;
 	}
 
 	private String getUnit(int type) {
 		if (type == 0) return "degree";
 		else if (type == 1) return "mm";
 		else if (type == 2) return "mm";
+		else if (type == 3) return "";
 		else return "";
 	}
 
