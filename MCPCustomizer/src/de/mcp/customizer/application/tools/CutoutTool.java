@@ -24,6 +24,7 @@ public class CutoutTool extends Tool {
     Vec2D originalMousePosition;
     Vec2D relativePosition;
     Shape masterShape;
+    private float scalingFactor = 0.5f;
     
     public CutoutTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
     {
@@ -102,8 +103,8 @@ public class CutoutTool extends Tool {
     		Vec2D center = findCenter.getCentroid();
             Vec2D mid = center.add(masterShape.getShape().getPosition2D());
             p.stroke(255,0,0);
-            Vec2D lineStart = mid;
-            Vec2D lineEnd = this.relativePosition;
+            Vec2D lineStart = mid.scale(scalingFactor);
+            Vec2D lineEnd = this.relativePosition.scale(scalingFactor);
             p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
             p.stroke(0);
         }

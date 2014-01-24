@@ -77,10 +77,9 @@ public class CopyTool extends Tool {
     			else
     			{
     				this.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
-    				//this.copyShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
-    				//copyShape.getShape().setMaterial(master.getMaterial());
     				Shape copy = master.copyCompleteStructure();
     				copy.getShape().setPosition2D(lastMousePosition);
+    				copy.getShape().recalculate(copy.copy().getShape().getVertices());
     				shapes.add(copy);
     			}
     		}

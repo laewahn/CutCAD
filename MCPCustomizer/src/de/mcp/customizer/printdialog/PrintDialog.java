@@ -23,6 +23,7 @@ public class PrintDialog
     {
        Shape copy = shapes.get(i).copy();
        copy.getShape().setPosition2D(new Vec2D(100,100));
+       copy.getShape().setScalingFactor(1);
        this.shapes.add(copy);
        this.shapes.get(i).getShape().scale2D(0.1f);
     }

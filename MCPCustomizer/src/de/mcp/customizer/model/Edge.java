@@ -18,6 +18,8 @@ public class Edge implements Drawable2D, Drawable3D
   private Vec3D p3D1, p3D2; // 3D logic
   private Vec2D v1, v2; // 2D logic
   private ArrayList<Vec2D> tenons; // 2D representation
+  private float scalingFactor = 0.5f;
+  private float boundingBoxSize = 4/scalingFactor;
 
   private boolean isHighlighted, isLocked, isSelected;
   ArrayList<Vec2D> definingPoints; // highlighting areal for selecting an edge
@@ -128,7 +130,7 @@ public class Edge implements Drawable2D, Drawable3D
 	      p.beginShape();
 	      for (Vec2D vector : definingPoints)
 	      {
-	        p.vertex(vector.x()+getShape().getPosition2D().x(), vector.y()+getShape().getPosition2D().y());
+	        p.vertex(vector.x(), vector.y());
 	      }
 	      p.endShape(PConstants.CLOSE);
 	      p.strokeWeight(1);
@@ -143,7 +145,7 @@ public class Edge implements Drawable2D, Drawable3D
 	      p.beginShape();
 	      for (Vec2D vector : definingPoints)
 	      {
-	        p.vertex(vector.x()+getShape().getPosition2D().x(), vector.y()+getShape().getPosition2D().y());
+	        p.vertex(vector.x(), vector.y());
 	      }
 	      p.endShape(PConstants.CLOSE);
 	      p.strokeWeight(1);
@@ -161,13 +163,13 @@ public class Edge implements Drawable2D, Drawable3D
 	      p.noFill();
 	      p.strokeWeight(2);
 	      p.beginShape();
-	      Vec3D vector = p3D1.copy().add(offset);
+	      Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());
-	      vector = p3D2.copy().add(offset);
+	      vector = p3D2.copy().add(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());   
-	      vector = p3D2.copy().sub(offset);
+	      vector = p3D2.copy().sub(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());  
-	      vector = p3D1.copy().sub(offset);
+	      vector = p3D1.copy().sub(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());
 	      p.endShape(PConstants.CLOSE);
 	      p.strokeWeight(1);
@@ -181,13 +183,13 @@ public class Edge implements Drawable2D, Drawable3D
 	      p.noFill();
 	      p.strokeWeight(2);
 	      p.beginShape();
-	      Vec3D vector = p3D1.copy().add(offset);
+	      Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());
-	      vector = p3D2.copy().add(offset);
+	      vector = p3D2.copy().add(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());   
-	      vector = p3D2.copy().sub(offset);
+	      vector = p3D2.copy().sub(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());  
-	      vector = p3D1.copy().sub(offset);
+	      vector = p3D1.copy().sub(offset).scale(scalingFactor);
 	      p.vertex(vector.x(), vector.y(), vector.z());
 	      p.endShape(PConstants.CLOSE);
 	      p.strokeWeight(1);
@@ -204,30 +206,30 @@ public class Edge implements Drawable2D, Drawable3D
   // Checks whether the mousepointer is within a certain area around the edge
   // only checking if the mousepointer is ON the edge would result in bad usability
   // since the user would have to precisely point to a line that is one pixel wide.
-  public boolean mouseOver(Vec2D position)
+  public boolean mouseOver(Vec2D mousePosition)
   {
     // create a vector that is perpendicular to the edge
-    Vec2D perpendicularVector = this.getV2().sub(this.getV1()).perpendicular();
+    Vec2D perpendicularVector = this.getV2().sub(this.getV1()).perpendicular().getNormalizedTo(boundingBoxSize);
 
     // with the perpendicular vector, calculate the defining points of a rectangle around the edge
     definingPoints = new ArrayList<Vec2D>();
-    definingPoints.add(this.getV1().sub(perpendicularVector.getNormalizedTo(4)));
-    definingPoints.add(this.getV2().sub(perpendicularVector.getNormalizedTo(4)));
-    definingPoints.add(this.getV2().add(perpendicularVector.getNormalizedTo(4)));
-    definingPoints.add(this.getV1().add(perpendicularVector.getNormalizedTo(4)));
+    definingPoints.add(this.getV1().sub(perpendicularVector).add(getShape().getPosition2D()).scale(scalingFactor));
+    definingPoints.add(this.getV2().sub(perpendicularVector).add(getShape().getPosition2D()).scale(scalingFactor));
+    definingPoints.add(this.getV2().add(perpendicularVector).add(getShape().getPosition2D()).scale(scalingFactor));
+    definingPoints.add(this.getV1().add(perpendicularVector).add(getShape().getPosition2D()).scale(scalingFactor));
 
     // create a rectangle around the edge
     Polygon2D borders = new Polygon2D(definingPoints);
 
     // check if the mousePointer is within the created rectangle
-    return borders.containsPoint(position.sub(this.shape.getPosition2D()));
+    return borders.containsPoint(mousePosition.scale(scalingFactor));
   }
 
-  public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
-  {
-    Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-shape.getPosition2D().x(), mouseY-view2DPosY-shape.getPosition2D().y());
-    return this.mouseOver(mousePointer);
-  }
+//  public boolean mouseOver(int mouseX, int mouseY, int view2DPosX, int view2DPosY)
+//  {
+//    Vec2D mousePointer = new Vec2D(mouseX-view2DPosX-shape.getPosition2D().x(), mouseY-view2DPosY-shape.getPosition2D().y());
+//    return this.mouseOver(mousePointer);
+//  }
   
   public float getLength() {
 	  return this.getV2().distanceTo(this.getV1());

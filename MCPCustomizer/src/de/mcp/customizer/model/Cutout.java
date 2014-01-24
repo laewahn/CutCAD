@@ -11,6 +11,8 @@ public class Cutout implements Drawable2D
 	private float angle;
 	private GShape master, slave;
 	private boolean isSelected, isActive;
+	private float scalingFactor = 0.5f;
+	  private float boundingBoxSize = 4/scalingFactor;
 
 	private static ArrayList<Cutout> allCutouts = new ArrayList<Cutout>();
 
@@ -156,8 +158,8 @@ public class Cutout implements Drawable2D
 
 	private void drawCutout(PGraphics p)
 	{
-		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(this.position);
-		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D());
+		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(this.position).scale(scalingFactor);
+		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D()).scale(scalingFactor);
 		if (this.isSelected)
 		{
 			p.stroke(255, 0, 0);
@@ -182,13 +184,13 @@ public class Cutout implements Drawable2D
 		return center;
 	}
 
-	public boolean mouseOver(Vec2D position)
+	public boolean mouseOver(Vec2D mousePosition)
 	{
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(this.position);
 		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D());
 
 		// create a vector that is perpendicular to the connections line
-		Vec2D perpendicularVector = mid1.sub(mid2).perpendicular().getNormalized();
+		Vec2D perpendicularVector = mid1.sub(mid2).perpendicular().getNormalizedTo(boundingBoxSize);
 
 		// with the perpendicular vector, calculate the defining points of a rectangle around the connections line
 		ArrayList<Vec2D> definingPoints = new ArrayList<Vec2D>();
@@ -198,19 +200,19 @@ public class Cutout implements Drawable2D
 		}
 
 		ArrayList<Vec2D> definingPointsLine = new ArrayList<Vec2D>();
-		definingPointsLine.add(mid1.sub(perpendicularVector.getNormalizedTo(4)));
-		definingPointsLine.add(mid2.sub(perpendicularVector.getNormalizedTo(4)));
-		definingPointsLine.add(mid2.add(perpendicularVector.getNormalizedTo(4)));
-		definingPointsLine.add(mid1.add(perpendicularVector.getNormalizedTo(4)));
+		definingPointsLine.add(mid1.sub(perpendicularVector).scale(scalingFactor));
+		definingPointsLine.add(mid2.sub(perpendicularVector).scale(scalingFactor));
+		definingPointsLine.add(mid2.add(perpendicularVector).scale(scalingFactor));
+		definingPointsLine.add(mid1.add(perpendicularVector).scale(scalingFactor));
 
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
-		if (borders.containsPoint(position)) {
+		if (borders.containsPoint(mousePosition.scale(scalingFactor))) {
 			return true;
 		} else {
 			borders = new Polygon2D(definingPointsLine);
 			// check if the mousePointer is within the created rectangle
-			return borders.containsPoint(position);
+			return borders.containsPoint(mousePosition.scale(scalingFactor));
 		}
 	}
 

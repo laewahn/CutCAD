@@ -13,6 +13,8 @@ public abstract class Tool implements Drawable2D {
     protected Rect view;
     protected Transformation transform;
     protected String name;
+    
+    private float scalingFactor = 0.5f;
 
     public Tool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, String name)
     {
@@ -28,6 +30,7 @@ public abstract class Tool implements Drawable2D {
         Vec2D newPos = inPosition.sub(this.view.getTopLeft());
         newPos.set(newPos.x()/transform.getScale(), newPos.y()/transform.getScale());
         newPos.addSelf(transform.getTranslation());
+        newPos = newPos.scale(1/scalingFactor);
         return newPos;
     }
 

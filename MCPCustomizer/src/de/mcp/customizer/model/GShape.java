@@ -26,6 +26,8 @@ public class GShape implements Drawable2D, Drawable3D
   private Shape shape;
   private Material material;
   private String name;
+  private float scalingFactor = 0.5f;
+  private float scalingFactor3D = 0.5f;
 
   public GShape(List<Vec2D> initVertices, Vec3D position, Shape shape)
   {
@@ -49,6 +51,11 @@ public class GShape implements Drawable2D, Drawable3D
     {
       edges.add(new Edge(this, vertices3D.get(i), vertices3D.get((i+1)%(vertices.size())), vertices.get(i), vertices.get((i+1)%(vertices.size()))));
     }
+  }
+  
+  public void setScalingFactor(float factor)
+  {
+	  scalingFactor = factor;
   }
   
   public void recalculate(List<Vec2D> basicShape)
@@ -305,7 +312,7 @@ public class GShape implements Drawable2D, Drawable3D
 			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(normalVector, angleBetweenEdges));
 			vectors3D.set(i, vectors3D.get(i).addSelf(toOrigin));
 			vectors3D.set(i, vectors3D.get(i).rotateAroundAxis(rotationAxis, angleBetweenNormals));
-			vectors3D.set(i, vectors3D.get(i).addSelf(toMaster));
+			vectors3D.set(i, vectors3D.get(i).addSelf(toMaster).scale(scalingFactor3D));
 		}
 		return vectors3D;
 	}
@@ -546,7 +553,8 @@ public class GShape implements Drawable2D, Drawable3D
     this.setFillColor(p);
     p.beginShape();
     for (Vec2D vector : getTenons()) {
-      p.vertex(vector.x()+getPosition2D().x(), vector.y()+getPosition2D().y());
+    	Vec2D scaledPosition = vector.add(getPosition2D()).scale(scalingFactor);
+      p.vertex(scaledPosition.x(), scaledPosition.y());
     }
     
     for(Cutout cutout : cutouts)
@@ -554,7 +562,8 @@ public class GShape implements Drawable2D, Drawable3D
       p.beginContour();
       for(Vec2D vector : cutout.getVectors())
       {
-    	p.vertex(vector.x()+getPosition2D().x(), vector.y()+getPosition2D().y());
+      	Vec2D scaledPosition = vector.add(getPosition2D()).scale(scalingFactor);
+        p.vertex(scaledPosition.x(), scaledPosition.y());
       }
       p.endContour();
     }

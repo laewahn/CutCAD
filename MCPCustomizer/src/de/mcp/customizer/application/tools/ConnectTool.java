@@ -23,6 +23,7 @@ public class ConnectTool extends Tool
     List<Connection> connections;
 
     List<Shape> shapes;
+    private float scalingFactor = 0.5f;
     
 
     public ConnectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform)
@@ -121,8 +122,8 @@ public class ConnectTool extends Tool
         if (selectedFirst) {
             Vec2D mid = previewConnection.getMasterEdge().getMid().add(previewConnection.getMasterEdge().getShape().getPosition2D());
             p.stroke(255,0,0);
-            Vec2D lineStart = mid;
-            Vec2D lineEnd = this.positionRelativeToView(this.lastMousePosition);
+            Vec2D lineStart = mid.scale(scalingFactor);
+            Vec2D lineEnd = this.positionRelativeToView(this.lastMousePosition).scale(scalingFactor);
             p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
             p.stroke(0);
         }
