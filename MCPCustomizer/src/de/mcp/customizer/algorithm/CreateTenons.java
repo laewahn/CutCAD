@@ -7,6 +7,10 @@ import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
 public class CreateTenons {
+	private static float tolerance = 0.1f;
+	// factor to calculate the length of a tenon depending on the thickness
+	// of the shapes:
+	private static int relationTenonToEdge = 4; 
 
 	/**
 	 * @brief Calculates the outline of one (unconnected) edge
@@ -40,7 +44,7 @@ public class CreateTenons {
 				.angleBetween(masterEdgeDirection, true);
 		if (Float.isNaN(angle)) {
 			if (slaveEdgeDirection.add(masterEdgeDirection)
-					.equalsWithTolerance(new Vec3D(0, 0, 0), Constants.MINIMALTOLERANCE)) {
+					.equalsWithTolerance(new Vec3D(0, 0, 0), tolerance)) {
 				angle = (float) Math.PI;
 			} else {
 				angle = 0;
@@ -75,9 +79,6 @@ public class CreateTenons {
 	 *            ends.
 	 */
 	public static void createOutlineOfEdge(Edge masterEdge, Edge slaveEdge) {
-		// factor to calculate the length of a tenon depending on the thickness
-		// of the shapes:
-		int relationTenonLength = 4;
 
 		Vec3D p1 = masterEdge.getShape().get3Dperpendicular(
 				masterEdge.getP3D1(), masterEdge.getP3D2());
@@ -92,7 +93,7 @@ public class CreateTenons {
 
 		// Calculate the number of tenons on the edges with a preliminary length
 		// of these tenons
-		int numberOfTenons = (int) ((2 * edgeLength) / (Constants.RELATIONTENONTOLENGTH * (thicknessMaster + thicknessSlave)));
+		int numberOfTenons = (int) ((2 * edgeLength) / (relationTenonToEdge  * (thicknessMaster + thicknessSlave)));
 
 		// The total number of tenons of a side should be always an odd number,
 		// minimum 1
