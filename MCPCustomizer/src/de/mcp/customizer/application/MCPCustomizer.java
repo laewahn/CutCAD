@@ -139,7 +139,7 @@ public class MCPCustomizer extends PApplet {
 	      s.getShape().draw2D(view2D);
 	    }
 	    
-	    for (Connection c : connections)
+	    for (Connection c : this.container.allConnections())
 	    {
 	      c.draw2D(view2D);
 	    }
