@@ -13,7 +13,7 @@ public class Cutout implements Drawable2D {
 	private float scalingFactor = 0.5f;
 	private float boundingBoxSize = 4 / scalingFactor;
 
-	private static ArrayList<Cutout> allCutouts = new ArrayList<Cutout>();
+//	private static ArrayList<Cutout> allCutouts = new ArrayList<Cutout>();
 
 	public Cutout(GShape master, GShape slave) {
 		this.master = master;
@@ -23,7 +23,7 @@ public class Cutout implements Drawable2D {
 		this.position = new Vec2D(0, 0);
 		this.isSelected = false;
 		this.isActive = false;
-		allCutouts.add(this);
+//		allCutouts.add(this);
 	}
 
 	public void translate2D(Vec2D direction) {
@@ -48,9 +48,9 @@ public class Cutout implements Drawable2D {
 		return this.slave.getParent();
 	}
 
-	public static ArrayList<Cutout> getAllCutouts() {
-		return allCutouts;
-	}
+//	public static ArrayList<Cutout> getAllCutouts() {
+//		return allCutouts;
+//	}
 
 	public void setSelected(boolean b) {
 		this.isSelected = b;

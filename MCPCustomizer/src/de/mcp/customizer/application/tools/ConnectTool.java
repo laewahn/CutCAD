@@ -1,188 +1,131 @@
 package de.mcp.customizer.application.tools;
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
-import java.util.List;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import toxi.geom.Rect;
 import toxi.geom.Vec2D;
-import de.mcp.customizer.application.Properties;
-import de.mcp.customizer.application.Statusbar;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
-import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation;
+import de.mcp.customizer.model.ObjectContainer;
 
-public class ConnectTool extends Tool
-{
+public class ConnectTool extends Tool {
 
-    boolean selectedFirst;
-    Vec2D lastMousePosition;
+	boolean selectedFirst;
+	Vec2D lastMousePosition;
 
-    Connection previewConnection;
-    List<Connection> connections;
+	Connection previewConnection;
 
-    List<Shape> shapes;
-    private float scalingFactor = 0.5f;
+	private float scalingFactor = 0.5f;
 	private String lastMessage;
-    
 
-    public ConnectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform)
-    {
-        super(view, properties, statusbar, transform, "ConnectTool");
-        this.shapes = shapes;
-        this.selectedFirst = false;
-        this.connections = connections;
-    }
+	public ConnectTool(MCPCustomizer mcpCustomizer, ObjectContainer container) {
+		super(mcpCustomizer, container, "Connect.svg");
 
-    public PGraphics getIcon(PGraphics context) 
-    {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
+		this.selectedFirst = false;
+	}
 
-		pointPaths = RG.loadShape("icons" + File.separator + "Connect.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//        context.beginDraw();
-//        context.noFill();
-//        context.stroke(0);
-//        context.strokeWeight(1);
-//        context.line(5, 10, 5, 40);
-//        context.line(5, 25, 45, 25);
-//        context.line(45, 10, 45, 40);
-//        context.endDraw();
-//
-//        return context;
-    }
+	public void mouseButtonPressed(Vec2D position, int button) {
+		for (Edge e : this.objectContainer.allEdges()) {
+			if (e.isHighlighted() && button == PConstants.LEFT) {
+				if (!selectedFirst) {
+					this.customizer.displayStatus("Select another edge to connect it to the first edge");
+					this.lastMessage = "Select another edge to connect it to the first edge";
+					this.previewConnection = new Connection(
+							this.objectContainer.allConnections());
+					this.previewConnection.setMasterEdge(e);
+					e.setSelected(true);
+					selectedFirst = true;
+				} else {
+					this.previewConnection.setSlaveEdge(e);
+					String connectMessage = this.previewConnection.connect();
+					if (connectMessage == "Connection created!") {
+						this.customizer.displayStatus("Connection created! If you want to create another connection, select another edge");
+						this.lastMessage = "Connection created! If you want to create another connection, select another edge";
+						// this.connections.add(this.previewConnection);
+						this.objectContainer
+								.addConnection(this.previewConnection);
+					} else {
+						// TODO: Find out why the connection couldn't be created
+						// and tell the user
+						this.customizer.displayStatus("Could not create the connection!");
+						this.customizer.displayStatus(connectMessage);
+						this.lastMessage = connectMessage;
+					}
+					// println("Added Connection between " +
+					// this.previewConnection.getEdge1() + " and " +
+					// this.previewConnection.getEdge2());
+					this.previewConnection.getMasterEdge().setSelected(false);
+					this.previewConnection = null;
+					selectedFirst = false;
+				}
+			}
+		}
+	}
 
-    public void mouseButtonPressed(Vec2D position, int button)
-    {
-        for (Shape s : shapes)
-        {
-            for (Edge e : s.getShape().getEdges())
-            {
-                if (e.isHighlighted() && button == PConstants.LEFT)
-                {
-                    if (!selectedFirst)
-                    {
-                		this.displayStatus("Select another edge to connect it to the first edge");
-                		this.lastMessage = "Select another edge to connect it to the first edge";
-                        this.previewConnection = new Connection(connections);
-                        this.previewConnection.setMasterEdge(e);
-                        e.setSelected(true);
-                        selectedFirst = true;                        
-                    }
-                    else
-                    {
-                        this.previewConnection.setSlaveEdge(e);
-                        String connectMessage = this.previewConnection.connect();
-                        if(connectMessage == "Connection created!") 
-                        {
-                    		this.displayStatus("Connection created! If you want to create another connection, select another edge");
-                    		this.lastMessage = "Connection created! If you want to create another connection, select another edge";
-                            this.connections.add(this.previewConnection);
-                        }
-                        else
-                        {
-                        	// TODO: Find out why the connection couldn't be created and tell the user
-                    		this.displayStatus("Could not create the connection!");
-                    		this.displayStatus(connectMessage);
-                    		this.lastMessage = connectMessage;
-                        }
-                        // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
-                        this.previewConnection.getMasterEdge().setSelected(false);
-                        this.previewConnection = null;
-                        selectedFirst = false;
-                    }
-                }
-            }
-        }
-    }
+	public void mouseButtonReleased(Vec2D position, int button) {
+		// no actions required
+	}
 
-    public void mouseButtonReleased(Vec2D position, int button)
-    {
-        // no actions required
-    }   
-    
-    public void mouseMoved(Vec2D position)
-    {
-    	this.displayStatus(this.lastMessage);
-        this.lastMousePosition = position;
-        Vec2D relativePosition = this.positionRelativeToView(position);
-        this.updateMousePositon(relativePosition.scale(0.1f));
-    
-        for (Shape s : shapes)
-        {
-            for (Edge e : s.getShape().getEdges())
-            {
-                if (e.mouseOver(relativePosition)) this.displayStatus("Length of this edge: " + e.getLength()/10 + " mm");
-                boolean canBeSelected = e.mouseOver(relativePosition);
-                
-                if(this.previewConnection != null) {
-                	Edge firstEdge = this.previewConnection.getMasterEdge(); 
-                	if(firstEdge != null) {
-                		//canBeSelected = canBeSelected && (firstEdge.getLength() == e.getLength());
-                		canBeSelected = canBeSelected && (Math.abs(firstEdge.getLength()-e.getLength()) < 5f);
-                	}
-                }
-                
-                e.setHighlighted(canBeSelected);
-            }
-        }
-    }
+	public void mouseMoved(Vec2D position) {
+		this.customizer.displayStatus(this.lastMessage);
+		this.lastMousePosition = position;
+		Vec2D relativePosition = this.positionRelativeToView(position);
+		this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
-    public void draw2D(PGraphics p)
-    {
-        if (selectedFirst) {
-            Vec2D mid = previewConnection.getMasterEdge().getMid().add(previewConnection.getMasterEdge().getShape().getPosition2D());
-            p.stroke(255,0,0);
-            Vec2D lineStart = mid.scale(scalingFactor);
-            Vec2D lineEnd = this.positionRelativeToView(this.lastMousePosition).scale(scalingFactor);
-            p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
-            p.stroke(0);
-        }
-    }
-    
-    
+		for (Edge e : this.objectContainer.allEdges()) {
+			if (e.mouseOver(relativePosition))
+				this.customizer.displayStatus("Length of this edge: " + e.getLength() / 10
+						+ " mm");
+			boolean canBeSelected = e.mouseOver(relativePosition);
+
+			if (this.previewConnection != null) {
+				Edge firstEdge = this.previewConnection.getMasterEdge();
+				if (firstEdge != null) {
+					// canBeSelected = canBeSelected && (firstEdge.getLength()
+					// == e.getLength());
+					canBeSelected = canBeSelected
+							&& (Math.abs(firstEdge.getLength() - e.getLength()) < 5f);
+				}
+			}
+
+			e.setHighlighted(canBeSelected);
+		}
+	}
+
+	public void draw2D(PGraphics p) {
+		if (selectedFirst) {
+			Vec2D mid = previewConnection
+					.getMasterEdge()
+					.getMid()
+					.add(previewConnection.getMasterEdge().getShape()
+							.getPosition2D());
+			p.stroke(255, 0, 0);
+			Vec2D lineStart = mid.scale(scalingFactor);
+			Vec2D lineEnd = this.positionRelativeToView(this.lastMousePosition)
+					.scale(scalingFactor);
+			p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
+			p.stroke(0);
+		}
+	}
 
 	@Override
 	public void wasSelected() {
-		this.displayStatus("Select an edge to create a connection");
+		this.customizer.displayStatus("Select an edge to create a connection");
 		this.lastMessage = "Select an edge to create a connection";
 		super.wasSelected();
 	}
 
 	@Override
 	public void wasUnselected() {
-		this.displayStatus("");
+		this.customizer.displayStatus("");
 		this.lastMessage = "";
 		selectedFirst = false;
-        if(this.previewConnection != null)
-        {
-        	this.previewConnection.getMasterEdge().setSelected(false);
-        }
+		if (this.previewConnection != null) {
+			this.previewConnection.getMasterEdge().setSelected(false);
+		}
 		this.previewConnection = null;
 		super.wasUnselected();
 	}
-    
-    
 
 }

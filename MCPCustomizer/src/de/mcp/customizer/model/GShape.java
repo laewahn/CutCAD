@@ -21,7 +21,7 @@ public class GShape implements Drawable2D, Drawable3D
   private boolean isSelected, isActive;
   private List<Vec2D> vertices;
   private List<Vec3D> vertices3D;
-  private List<Cutout> cutouts = new ArrayList<Cutout>();
+  public List<Cutout> cutouts = new ArrayList<Cutout>();
   private List<Edge> edges;
   private Shape shape;
   private Material material;
@@ -614,7 +614,7 @@ public class GShape implements Drawable2D, Drawable3D
     for(Cutout c : this.cutouts)
     {
       copy.addCutout(new GShape(c.getVectors(), new Vec3D(0,0,0), shape));
-      Cutout.getAllCutouts().remove(Cutout.getAllCutouts().size()-1);
+//      Cutout.getAllCutouts().remove(Cutout.getAllCutouts().size()-1);
     }
     return copy;
   }

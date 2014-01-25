@@ -20,6 +20,7 @@ import de.mcp.customizer.application.tools.*;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
@@ -28,14 +29,18 @@ public class MCPCustomizer extends PApplet {
 
 	private static final long serialVersionUID = 6945013714741954254L;
 	Toolbar toolbar;
-	  Properties properties;
+	  
+	public Properties properties;
 	  Statusbar statusbar;
 	  ControlP5 cp5;
 
 	  ToxiclibsSupport gfx;
 	  PGraphics view2D, view3D;
-	  ArrayList<Shape> shapes;
-	  ArrayList<Connection> connections;
+
+	  ObjectContainer container = new ObjectContainer();
+	  
+	  public ArrayList<Shape> shapes;
+	  public ArrayList<Connection> connections;
 	  TriangleMesh mesh;
 
 	  int startX = 0;
@@ -56,7 +61,7 @@ public class MCPCustomizer extends PApplet {
 	  int cameraX = 45;
 	  int cameraY = 1000;
 
-	  Transformation transform2D = new Transformation((float) 1.0, new Vec2D(0,0));
+	  public Transformation transform2D = new Transformation((float) 1.0, new Vec2D(0,0));
 	  Transformation transform3D = new Transformation((float) 1.0, new Vec2D(0,0));
 	  
 	  Grid grid3D, grid2D;
@@ -64,7 +69,7 @@ public class MCPCustomizer extends PApplet {
 	  Vec3D cameraPosition;
 	  Tool tools[];
 	  
-	  STLMesh meshSTL;
+	  public STLMesh meshSTL;
 
 	  public void setup()
 	  {
@@ -129,17 +134,17 @@ public class MCPCustomizer extends PApplet {
 	    draw2DAxes(view2D);
 	    grid2D.drawGrid();
 
-	    for (Shape s : shapes)
+	    for (Shape s : this.container.allShapes())
 	    {
 	      s.getShape().draw2D(view2D);
 	    }
 	    
-	    for (Connection c : connections)
+	    for (Connection c : this.container.allConnections())
 	    {
 	      c.draw2D(view2D);
 	    }
 	    
-	    for (Cutout c : Cutout.getAllCutouts())
+	    for(Cutout c : this.container.allCutouts())
 	    {
 	      c.draw2D(view2D);
 	    }
@@ -169,7 +174,7 @@ public class MCPCustomizer extends PApplet {
 	    draw3DAxes(view3D);
 	    grid3D.drawGrid();
 	    
-	    for (Shape s : shapes)
+	    for (Shape s : container.allShapes())
 	    {
 	      s.getShape().draw3D(view3D);
 	    }
@@ -233,22 +238,22 @@ public class MCPCustomizer extends PApplet {
 	    toolbar = new Toolbar(cp5, this);
 
 	    toolbar.setPosition(0, 50).setSize(50, 700).setItemHeight(50).disableCollapse().hideBar();
-
+	    
 	    tools = new Tool[]{
-	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
-	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
-	    };
+	  	      new SelectTool(this, container),
+	  	      new DrawTool(this, container),
+	  	      new SymmetricPolygonTool(this, container),
+	  	      new TrapeziumTool(this, container),
+	  	      new PolygonTool(this, container),
+	  	      new ConnectTool(this, container),
+	  	      new DeleteTool(this, container),
+	  	      new CutoutTool(this, container),
+	  	      new CopyTool(this, container),
+	  	      new ImportSVGTool(this, container),
+	  	      new ImportSTLTool(this, container),
+	  	      new ChangeSTLTool(this, container),
+	  	      new PrintTool(this, container)
+	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));
 	    toolbar.setSelectedTool(tools[0]);
@@ -258,6 +263,14 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    properties = new Properties(cp5, 0, 0, width, 50);
 	    properties.hide();
+	  }
+	  
+	  public void displayStatus(String status) {
+		  this.statusbar.setStatus(status);
+	  }
+	  
+	  public void displayMousePosition(Vec2D position) {
+		  this.statusbar.setMousePosition(position);
 	  }
 	  
 	  public void controlEvent(ControlEvent theEvent)
