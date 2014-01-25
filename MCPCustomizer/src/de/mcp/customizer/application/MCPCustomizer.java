@@ -265,6 +265,14 @@ public class MCPCustomizer extends PApplet {
 	    properties.hide();
 	  }
 	  
+	  public void displayStatus(String status) {
+		  this.statusbar.setStatus(status);
+	  }
+	  
+	  public void displayMousePosition(Vec2D position) {
+		  this.statusbar.setMousePosition(position);
+	  }
+	  
 	  public void controlEvent(ControlEvent theEvent)
 	  {
 		  if (theEvent.isGroup() && theEvent.getGroup().getName() == "setMaterial")
