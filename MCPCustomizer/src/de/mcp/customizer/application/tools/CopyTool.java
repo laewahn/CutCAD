@@ -46,7 +46,7 @@ public class CopyTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		pointPaths = RG.loadShape("/icons/Copy.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("icons/Copy.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {
