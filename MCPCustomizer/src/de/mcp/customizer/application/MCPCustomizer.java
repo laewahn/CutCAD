@@ -29,7 +29,8 @@ public class MCPCustomizer extends PApplet {
 
 	private static final long serialVersionUID = 6945013714741954254L;
 	Toolbar toolbar;
-	  Properties properties;
+	  
+	public Properties properties;
 	  Statusbar statusbar;
 	  ControlP5 cp5;
 
@@ -60,7 +61,7 @@ public class MCPCustomizer extends PApplet {
 	  int cameraX = 45;
 	  int cameraY = 1000;
 
-	  Transformation transform2D = new Transformation((float) 1.0, new Vec2D(0,0));
+	  public Transformation transform2D = new Transformation((float) 1.0, new Vec2D(0,0));
 	  Transformation transform3D = new Transformation((float) 1.0, new Vec2D(0,0));
 	  
 	  Grid grid3D, grid2D;
@@ -133,7 +134,6 @@ public class MCPCustomizer extends PApplet {
 	    draw2DAxes(view2D);
 	    grid2D.drawGrid();
 
-//	    for (Shape s : shapes)
 	    for (Shape s : this.container.allShapes())
 	    {
 	      s.getShape().draw2D(view2D);
@@ -144,7 +144,6 @@ public class MCPCustomizer extends PApplet {
 	      c.draw2D(view2D);
 	    }
 	    
-//	    for (Cutout c : Cutout.getAllCutouts())
 	    for(Cutout c : this.container.allCutouts())
 	    {
 	      c.draw2D(view2D);
@@ -175,7 +174,6 @@ public class MCPCustomizer extends PApplet {
 	    draw3DAxes(view3D);
 	    grid3D.drawGrid();
 	    
-//	    for (Shape s : shapes)
 	    for (Shape s : container.allShapes())
 	    {
 	      s.getShape().draw3D(view3D);
@@ -240,22 +238,6 @@ public class MCPCustomizer extends PApplet {
 	    toolbar = new Toolbar(cp5, this);
 
 	    toolbar.setPosition(0, 50).setSize(50, 700).setItemHeight(50).disableCollapse().hideBar();
-
-//	    tools = new Tool[]{
-//	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-//	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
-//	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
-//	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
-//	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
-//	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-//	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-//	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-//	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
-//	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
-//	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-//	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-//	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
-//	    };
 	    
 	    tools = new Tool[]{
 	  	      new SelectTool(this, container),

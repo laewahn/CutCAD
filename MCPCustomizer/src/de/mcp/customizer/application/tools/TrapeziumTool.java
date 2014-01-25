@@ -3,19 +3,14 @@ import geomerative.RG;
 import geomerative.RPoint;
 
 import java.io.File;
-import java.util.List;
 
 import processing.core.PGraphics;
-import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+
 import de.mcp.customizer.application.MCPCustomizer;
-import de.mcp.customizer.application.Properties;
-import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.Trapezium;
-import de.mcp.customizer.view.Transformation;
 
 public class TrapeziumTool extends Tool {
 

@@ -4,17 +4,15 @@ import java.io.File;
 
 import geomerative.RG;
 import geomerative.RPoint;
+
 import processing.core.PGraphics;
-import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+
 import de.mcp.customizer.application.MCPCustomizer;
-import de.mcp.customizer.application.Properties;
-import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ImportSTL;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.view.Transformation;
 
 public class ImportSTLTool extends Tool {
 

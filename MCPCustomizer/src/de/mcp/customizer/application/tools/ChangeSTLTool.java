@@ -4,16 +4,14 @@ import java.io.File;
 
 import geomerative.RG;
 import geomerative.RPoint;
+
 import processing.core.PGraphics;
-import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+
 import de.mcp.customizer.application.MCPCustomizer;
-import de.mcp.customizer.application.Properties;
-import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.view.Transformation;
 
 public class ChangeSTLTool extends Tool {
 
@@ -84,8 +82,8 @@ public class ChangeSTLTool extends Tool {
 	public void wasSelected() {
 		if(mesh.isStlImported())
 		{
-			properties.show();
-			properties.plugTo(mesh);
+			this.customizer.properties.show();
+			this.customizer.properties.plugTo(mesh);
 		}
 	}
 	

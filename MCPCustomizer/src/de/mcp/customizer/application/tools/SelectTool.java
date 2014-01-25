@@ -4,21 +4,18 @@ import geomerative.RG;
 import geomerative.RPoint;
 
 import java.io.File;
-import java.util.List;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import toxi.geom.Rect;
+
 import toxi.geom.Vec2D;
+
 import de.mcp.customizer.application.MCPCustomizer;
-import de.mcp.customizer.application.Properties;
-import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.view.Transformation;
 
 public class SelectTool extends Tool {
 
@@ -85,8 +82,8 @@ public class SelectTool extends Tool {
 		for (Shape s : this.objectContainer.allShapes()) {
 			if (this.inView(position) && s.getShape().isSelected()
 					&& button == PConstants.LEFT) {
-				properties.show();
-				properties.plugTo(s);
+				this.customizer.properties.show();
+				this.customizer.properties.plugTo(s);
 			} else if (this.inView(position) && s.getShape().isSelected()
 					&& button == PConstants.RIGHT) {
 				this.dragging = true;
@@ -101,8 +98,8 @@ public class SelectTool extends Tool {
 		for (Cutout c : this.objectContainer.allCutouts()) {
 			if (this.inView(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
-				properties.show();
-				properties.plugTo(c);
+				this.customizer.properties.show();
+				this.customizer.properties.plugTo(c);
 			} else if (this.inView(position) && c.isSelected()
 					&& button == PConstants.RIGHT) {
 				this.draggingCutout = true;
@@ -115,8 +112,8 @@ public class SelectTool extends Tool {
 		for (Connection c : this.objectContainer.allConnections()) {
 			if (this.inView(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
-				properties.show();
-				properties.plugTo(c);
+				this.customizer.properties.show();
+				this.customizer.properties.plugTo(c);
 			}
 		}
 		if (this.inView(position) && button == PConstants.RIGHT && noneSelected) {
@@ -179,7 +176,7 @@ public class SelectTool extends Tool {
 				Vec2D currentMousePosition = this
 						.positionRelativeToView(position);
 
-				transform.translate(currentMousePosition
+				this.customizer.transform2D.translate(currentMousePosition
 						.sub(originalMousePosition));
 				originalMousePosition
 						.set(this.positionRelativeToView(position));
@@ -203,6 +200,6 @@ public class SelectTool extends Tool {
 	public void wasUnselected() {
 		this.displayStatus("");
 		super.wasUnselected();
-		this.properties.hide();
+		this.customizer.properties.hide();
 	}
 }

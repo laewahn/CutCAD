@@ -7,13 +7,11 @@ public class ObjectContainer {
 
 	private List<Shape> shapes;
 	private List<Connection> connections;
-	private List<Cutout> cutouts;
 	
 	
 	public ObjectContainer() {
 		this.shapes = new ArrayList<Shape>();
 		this.connections = new ArrayList<Connection>();
-		this.cutouts = new ArrayList<Cutout>();
 	}
 	
 	
