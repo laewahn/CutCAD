@@ -20,6 +20,7 @@ import de.mcp.customizer.application.tools.*;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
@@ -34,8 +35,11 @@ public class MCPCustomizer extends PApplet {
 
 	  ToxiclibsSupport gfx;
 	  PGraphics view2D, view3D;
-	  ArrayList<Shape> shapes;
-	  ArrayList<Connection> connections;
+
+	  ObjectContainer container = new ObjectContainer();
+	  
+	  public ArrayList<Shape> shapes;
+	  public ArrayList<Connection> connections;
 	  TriangleMesh mesh;
 
 	  int startX = 0;
@@ -234,21 +238,37 @@ public class MCPCustomizer extends PApplet {
 
 	    toolbar.setPosition(0, 50).setSize(50, 700).setItemHeight(50).disableCollapse().hideBar();
 
+//	    tools = new Tool[]{
+//	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+//	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
+//	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
+//	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
+//	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
+//	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+//	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+//	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+//	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
+//	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
+//	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
+//	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
+//	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
+//	    };
+	    
 	    tools = new Tool[]{
-	      new SelectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
-	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
-	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
-	    };
+	  	      new SelectTool(this, container),
+	  	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
+	  	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
+	  	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
+	  	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
+	  	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	  	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	  	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	  	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
+	  	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
+	  	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
+	  	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
+	  	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
+	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));
 	    toolbar.setSelectedTool(tools[0]);
