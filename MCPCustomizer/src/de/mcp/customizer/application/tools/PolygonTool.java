@@ -13,9 +13,11 @@ import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.model.ObjectContainer;
 //import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.PolygonShape;
 import de.mcp.customizer.model.Shape;
@@ -23,7 +25,7 @@ import de.mcp.customizer.view.Transformation;
 
 public class PolygonTool extends Tool {
 
-	private List<Shape> shapes;
+//	private List<Shape> shapes;
 
 	private List<Vec2D> vertices;
 	
@@ -31,11 +33,15 @@ public class PolygonTool extends Tool {
 	private float scalingFactor = 0.5f;
 	private float boundingBoxSize = 4/scalingFactor;
 
-	public PolygonTool(Rect view, Properties properties, Statusbar statusbar,
-			Transformation transform, List<Shape> shapes) {
-		super(view, properties, statusbar, transform, "PolygonTool");
-		this.shapes = shapes;
+	public PolygonTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "PolygonTool");
 	}
+	
+//	public PolygonTool(Rect view, Properties properties, Statusbar statusbar,
+//			Transformation transform, List<Shape> shapes) {
+//		super(view, properties, statusbar, transform, "PolygonTool");
+//		this.shapes = shapes;
+//	}
 
 	@Override
 	public void mouseButtonPressed(Vec2D position, int button) {
@@ -52,7 +58,7 @@ public class PolygonTool extends Tool {
 		{
 			this.displayStatus("Shape finished! If you want to create another shape, click the left mousebutton anywhere on the 2D view");
 			Shape newShape = new PolygonShape(this.vertices, new Vec3D());
-			this.shapes.add(newShape);
+			this.objectContainer.addShape(newShape);
 			this.vertices = new ArrayList<Vec2D>();			
 		}
 		else

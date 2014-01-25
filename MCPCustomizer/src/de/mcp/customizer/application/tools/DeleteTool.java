@@ -10,30 +10,39 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 
 public class DeleteTool extends Tool {
     
-    List<Shape> shapes;
-    List<Connection> connections;
+//    List<Shape> shapes;
+//    List<Connection> connections;
     boolean dragging;
     Vec2D originalMousePosition;
     
-    public DeleteTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
-    {
-        super(view, properties, statusbar, transform, "DeleteTool");
-        
-        this.shapes = shapes;
-        this.connections = connections;
+    public DeleteTool(MCPCustomizer customizer, ObjectContainer container) {
+    	super(customizer, container, "DeleteTool");
+    	
         this.dragging = false;
         this.originalMousePosition = new Vec2D(0,0);
     }
+    
+//    public DeleteTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
+//    {
+//        super(view, properties, statusbar, transform, "DeleteTool");
+//        
+//        this.shapes = shapes;
+//        this.connections = connections;
+//        this.dragging = false;
+//        this.originalMousePosition = new Vec2D(0,0);
+//    }
 
     public PGraphics getIcon(PGraphics context)
     {
@@ -70,79 +79,125 @@ public class DeleteTool extends Tool {
 
     public void mouseButtonPressed(Vec2D position, int button)
     {
-        Iterator<Shape> shapeIterator = shapes.iterator();
-
-        Shape s;
-        while(shapeIterator.hasNext())
-        {
-            s = shapeIterator.next();
-            if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
+        for(Shape s : this.objectContainer.allShapes()) {
+        	if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
             {
                 removeConnectionsContaining(s);
                 removeCutoutsContaining(s);
-                shapeIterator.remove();
-            } 
-        }
-
-        Iterator<Connection> connectionIterator = connections.iterator();
-
-        Connection c;
-        while (connectionIterator.hasNext())
-        {
-            c = connectionIterator.next();
-            if (this.inView(position) && c.isSelected() && button == PConstants.LEFT)
-            {
-                c.undoConnection();
-                connectionIterator.remove();
+                this.objectContainer.removeShape(s);
             }
         }
         
-        Iterator<Cutout> cutoutIterator = Cutout.getAllCutouts().iterator();
-
-        Cutout o;
-        while (cutoutIterator.hasNext())
-        {
-            o = cutoutIterator.next();
-            if (this.inView(position) && o.isSelected() && button == PConstants.LEFT)
+//      Iterator<Shape> shapeIterator = shapes.iterator();        
+//      Shape s;        
+//        while(shapeIterator.hasNext())
+//        {
+//            s = shapeIterator.next();
+//            if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
+//            {
+//                removeConnectionsContaining(s);
+//                removeCutoutsContaining(s);
+//                shapeIterator.remove();
+//            } 
+//        }
+        
+        for(Connection c : this.objectContainer.allConnections()) {
+        	if (this.inView(position) && c.isSelected() && button == PConstants.LEFT)
             {
-                o.removeCutout();
-                cutoutIterator.remove();
+                c.undoConnection();
+//                connectionIterator.remove();
+                this.objectContainer.removeConnection(c);
             }
         }
+
+//        Iterator<Connection> connectionIterator = connections.iterator();
+//
+//        Connection c;
+//        while (connectionIterator.hasNext())
+//        {
+//            c = connectionIterator.next();
+//            if (this.inView(position) && c.isSelected() && button == PConstants.LEFT)
+//            {
+//                c.undoConnection();
+//                connectionIterator.remove();
+//            }
+//        }
+        
+        for(Cutout o : this.objectContainer.allCutouts()) {
+        	if (this.inView(position) && o.isSelected() && button == PConstants.LEFT)
+            {
+                o.removeCutout();
+//                cutoutIterator.remove();
+//                this.objectContainer.removeCutout(o);
+            }
+        }
+        
+//        Iterator<Cutout> cutoutIterator = Cutout.getAllCutouts().iterator();
+//
+//        Cutout o;
+//        while (cutoutIterator.hasNext())
+//        {
+//            o = cutoutIterator.next();
+//            if (this.inView(position) && o.isSelected() && button == PConstants.LEFT)
+//            {
+//                o.removeCutout();
+//                cutoutIterator.remove();
+//            }
+//        }
     }
 
     private void removeConnectionsContaining(Shape s)
     {
-        Iterator<Connection> connectionIterator = connections.iterator();
-
-        Connection c;
-        while (connectionIterator.hasNext())
-        {
-            c = connectionIterator.next();
-            boolean shapeIsParentOfMasterEdge = c.getMasterEdge().getShape().getParent().equals(s);
+    	for(Connection c : this.objectContainer.allConnections()) {
+    		boolean shapeIsParentOfMasterEdge = c.getMasterEdge().getShape().getParent().equals(s);
             boolean shapeIsParentOfSlaveEdge = c.getSlaveEdge().getShape().getParent().equals(s);
             if (shapeIsParentOfMasterEdge || shapeIsParentOfSlaveEdge)
             {
                 c.undoConnection();
-                connectionIterator.remove();
+//                connectionIterator.remove();
+                this.objectContainer.removeConnection(c);
             }
-        }
+    	}
+    	
+//        Iterator<Connection> connectionIterator = connections.iterator();
+//
+//        Connection c;
+//        while (connectionIterator.hasNext())
+//        {
+//            c = connectionIterator.next();
+//            boolean shapeIsParentOfMasterEdge = c.getMasterEdge().getShape().getParent().equals(s);
+//            boolean shapeIsParentOfSlaveEdge = c.getSlaveEdge().getShape().getParent().equals(s);
+//            if (shapeIsParentOfMasterEdge || shapeIsParentOfSlaveEdge)
+//            {
+//                c.undoConnection();
+//                connectionIterator.remove();
+//            }
+//        }
     }
     
     private void removeCutoutsContaining(Shape s)
     {
-        Iterator<Cutout> cutoutIterator = Cutout.getAllCutouts().iterator();
-
-        Cutout c;
-        while (cutoutIterator.hasNext())
-        {
-            c = cutoutIterator.next();
-            if (c.getMasterShape() == s || c.getSlaveShape() == s)
+    	for(Cutout c : this.objectContainer.allCutouts()) {
+    		if (c.getMasterShape() == s || c.getSlaveShape() == s)
             {
             	c.removeCutout();
-                cutoutIterator.remove();
+//                cutoutIterator.remove();
+//            	this.objectContainer.removeCutout(c);
             }
-        }
+    	}
+        
+//    	Iterator<Cutout> cutoutIterator = Cutout.getAllCutouts().iterator();
+//
+//        Cutout c;
+//        while (cutoutIterator.hasNext())
+//        {
+//            c = cutoutIterator.next();
+//            if (c.getMasterShape() == s || c.getSlaveShape() == s)
+//            {
+//            	c.removeCutout();
+//                cutoutIterator.remove();
+//            }
+//        }
     }
 
     public void mouseButtonReleased(Vec2D position, int button)
@@ -158,28 +213,28 @@ public class DeleteTool extends Tool {
 	        this.updateMousePositon(relativePosition.scale(0.1f));
 
 
-            for (Shape s : shapes) {
+            for (Shape s : this.objectContainer.allShapes()) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
             }
-            for (Connection c : connections) {
+            for (Connection c : this.objectContainer.allConnections()) {
                 c.setSelected(c.mouseOver(relativePosition));
             }
-            for (Cutout c : Cutout.getAllCutouts()) {
+            for (Cutout c : this.objectContainer.allCutouts()) {
                 c.setSelected(c.mouseOver(relativePosition));
             }
         }
-        else
-        {
-            for (Shape s : shapes) {
-                s.getShape().setSelected(false);
-            }
-            for (Connection c : connections) {
-                c.setSelected(false);
-            }
-            for (Cutout c : Cutout.getAllCutouts()) {
-                c.setSelected(false);
-            }
-        }
+//        else
+//        {
+//            for (Shape s : shapes) {
+//                s.getShape().setSelected(false);
+//            }
+//            for (Connection c : connections) {
+//                c.setSelected(false);
+//            }
+//            for (Cutout c : Cutout.getAllCutouts()) {
+//                c.setSelected(false);
+//            }
+//        }
     }
 
 	@Override

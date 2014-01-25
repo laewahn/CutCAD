@@ -64,14 +64,20 @@ public class ObjectContainer {
 	
 	
 	public List<Cutout> allCutouts() {
-		return new ArrayList<Cutout>(this.cutouts);
+		List<Cutout> cutouts = new ArrayList<Cutout>();
+		
+		for(Shape s : this.shapes) {
+			cutouts.addAll(s.getShape().cutouts);
+		}
+		
+		return cutouts;
 	}
 	
-	public void addCutout(Cutout cutout) {
-		this.cutouts.add(cutout);
-	}
-	
-	public void removeCutout(Cutout cutout) {
-		this.cutouts.remove(cutout);
-	}
+//	public void addCutout(Cutout cutout) {
+//		this.cutouts.add(cutout);
+//	}
+//	
+//	public void removeCutout(Cutout cutout) {
+//		this.cutouts.remove(cutout);
+//	}
 }

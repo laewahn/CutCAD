@@ -10,31 +10,41 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 
 public class SelectTool extends Tool {
 
-	List<Shape> shapes;
-	List<Connection> connections;
+//	List<Shape> shapes;
+//	List<Connection> connections;
 	boolean dragging, draggingCutout;
 	Vec2D originalMousePosition;
 
-	public SelectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
-			List<Connection> connections, Transformation transform) {
-		super(view, properties, statusbar, transform, "SelectTool");
-
-		this.shapes = shapes;
-		this.connections = connections;
+	public SelectTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "SelectTool");
+		
 		this.dragging = false;
 		this.draggingCutout = false;
 		this.originalMousePosition = new Vec2D(0, 0);
 	}
+	
+//	public SelectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
+//			List<Connection> connections, Transformation transform) {
+//		super(view, properties, statusbar, transform, "SelectTool");
+//
+//		this.shapes = shapes;
+//		this.connections = connections;
+//		this.dragging = false;
+//		this.draggingCutout = false;
+//		this.originalMousePosition = new Vec2D(0, 0);
+//	}
 
 	public PGraphics getIcon(PGraphics context) {
 		float iconScaling = 1.57f;
@@ -72,7 +82,7 @@ public class SelectTool extends Tool {
 
 	public void mouseButtonPressed(Vec2D position, int button) {
 		boolean noneSelected = true;
-		for (Shape s : shapes) {
+		for (Shape s : this.objectContainer.allShapes()) {
 			if (this.inView(position) && s.getShape().isSelected()
 					&& button == PConstants.LEFT) {
 				properties.show();
@@ -88,7 +98,7 @@ public class SelectTool extends Tool {
 				noneSelected = false;
 			}
 		}
-		for (Cutout c : Cutout.getAllCutouts()) {
+		for (Cutout c : this.objectContainer.allCutouts()) {
 			if (this.inView(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
 				properties.show();
@@ -102,7 +112,7 @@ public class SelectTool extends Tool {
 				noneSelected = false;
 			}
 		}
-		for (Connection c : connections) {
+		for (Connection c : this.objectContainer.allConnections()) {
 			if (this.inView(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
 				properties.show();
@@ -129,7 +139,7 @@ public class SelectTool extends Tool {
 	        this.updateMousePositon(relativePosition.scale(0.1f));
 
 			boolean noneSelected = true;
-			for (Shape s : shapes) {
+			for (Shape s : this.objectContainer.allShapes()) {
 				s.getShape().setSelected(
 						s.getShape().mouseOver(relativePosition));
 
@@ -142,7 +152,7 @@ public class SelectTool extends Tool {
 					noneSelected = false;
 				}
 			}
-			for (Cutout c : Cutout.getAllCutouts()) {
+			for (Cutout c : this.objectContainer.allCutouts()) {
 				c.setSelected(c.mouseOver(relativePosition));
 				if (c.isSelected())
 				{
@@ -158,7 +168,7 @@ public class SelectTool extends Tool {
 					noneSelected = false;
 				}
 			}
-			for (Connection c : connections) {
+			for (Connection c : this.objectContainer.allConnections()) {
 				c.setSelected(c.mouseOver(relativePosition));
 
 				if (c.isSelected()) {
@@ -175,7 +185,7 @@ public class SelectTool extends Tool {
 						.set(this.positionRelativeToView(position));
 			}
 		} else {
-			for (Shape s : shapes) {
+			for (Shape s : this.objectContainer.allShapes()) {
 				s.getShape().setSelected(false);
 			}
 		}

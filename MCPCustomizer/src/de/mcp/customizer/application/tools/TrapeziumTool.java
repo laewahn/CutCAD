@@ -8,9 +8,11 @@ import java.util.List;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.model.Trapezium;
 import de.mcp.customizer.view.Transformation;
@@ -21,14 +23,20 @@ public class TrapeziumTool extends Tool {
 
 	Vec2D startCoord;
 	Trapezium previewRectangle;
-	List<Shape> shapes;
+//	List<Shape> shapes;
 
-	public TrapeziumTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform)
-	{
-		super(view, properties, statusbar, transform, "TrapeziumTool");
+	public TrapeziumTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "TrapeziumTool");
+		
 		this.isDrawing = false;
-		this.shapes = shapes;
 	}
+	
+//	public TrapeziumTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform)
+//	{
+//		super(view, properties, statusbar, transform, "TrapeziumTool");
+//		this.isDrawing = false;
+//		this.shapes = shapes;
+//	}
 
 	public PGraphics getIcon(PGraphics context) 
 	{
@@ -91,7 +99,7 @@ public class TrapeziumTool extends Tool {
 
 			this.previewRectangle.setSize(rectSize);
 
-			shapes.add(this.previewRectangle);
+			this.objectContainer.addShape(this.previewRectangle);
 			this.previewRectangle = null;
 
 			isDrawing = false;

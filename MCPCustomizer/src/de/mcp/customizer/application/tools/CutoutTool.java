@@ -10,19 +10,21 @@ import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 
 
 public class CutoutTool extends Tool {
 
-    List<Shape> shapes;
-    List<Connection> connections;
+//    List<Shape> shapes;
+//    List<Connection> connections;
     boolean dragging;
     boolean selectedFirst;
     Vec2D originalMousePosition;
@@ -30,16 +32,24 @@ public class CutoutTool extends Tool {
     Shape masterShape;
     private float scalingFactor = 0.5f;
     
-    public CutoutTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
-    {
-        super(view, properties, statusbar, transform, "CutoutTool");
-        
-        this.shapes = shapes;
-        this.connections = connections;
-        this.dragging = false;
+    public CutoutTool(MCPCustomizer customizer, ObjectContainer container) {
+    	super(customizer, container, "CutoutTool");
+    	
+    	this.dragging = false;
         this.selectedFirst = false;
         this.originalMousePosition = new Vec2D(0,0);
     }
+    
+//    public CutoutTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
+//    {
+//        super(view, properties, statusbar, transform, "CutoutTool");
+//        
+//        this.shapes = shapes;
+//        this.connections = connections;
+//        this.dragging = false;
+//        this.selectedFirst = false;
+//        this.originalMousePosition = new Vec2D(0,0);
+//    }
 
     public PGraphics getIcon(PGraphics context)
     {
@@ -76,7 +86,7 @@ public class CutoutTool extends Tool {
 
     public void mouseButtonPressed(Vec2D position, int button)
     {
-        for (Shape s : shapes)
+        for (Shape s : this.objectContainer.allShapes())
         {
             if (this.inView(position) && button == PConstants.LEFT)
             {
@@ -113,7 +123,7 @@ public class CutoutTool extends Tool {
             relativePosition = this.positionRelativeToView(position);
 	        this.updateMousePositon(relativePosition.scale(0.1f));
 
-            for (Shape s : shapes) {
+            for (Shape s : this.objectContainer.allShapes()) {
                 s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
             }
         }

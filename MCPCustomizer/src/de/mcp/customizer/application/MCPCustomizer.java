@@ -133,7 +133,8 @@ public class MCPCustomizer extends PApplet {
 	    draw2DAxes(view2D);
 	    grid2D.drawGrid();
 
-	    for (Shape s : shapes)
+//	    for (Shape s : shapes)
+	    for (Shape s : this.container.allShapes())
 	    {
 	      s.getShape().draw2D(view2D);
 	    }
@@ -143,7 +144,8 @@ public class MCPCustomizer extends PApplet {
 	      c.draw2D(view2D);
 	    }
 	    
-	    for (Cutout c : Cutout.getAllCutouts())
+//	    for (Cutout c : Cutout.getAllCutouts())
+	    for(Cutout c : this.container.allCutouts())
 	    {
 	      c.draw2D(view2D);
 	    }
@@ -173,7 +175,8 @@ public class MCPCustomizer extends PApplet {
 	    draw3DAxes(view3D);
 	    grid3D.drawGrid();
 	    
-	    for (Shape s : shapes)
+//	    for (Shape s : shapes)
+	    for (Shape s : container.allShapes())
 	    {
 	      s.getShape().draw3D(view3D);
 	    }
@@ -256,13 +259,13 @@ public class MCPCustomizer extends PApplet {
 	    
 	    tools = new Tool[]{
 	  	      new SelectTool(this, container),
-	  	      new DrawTool(view2DRect, properties, statusbar, shapes, transform2D),
-	  	      new SymmetricPolygonTool(view2DRect, properties, statusbar, shapes, transform2D),
-	  	      new TrapeziumTool(view2DRect, properties, statusbar, shapes, transform2D),
-	  	      new PolygonTool(view2DRect, properties, statusbar, transform2D, shapes),
-	  	      new ConnectTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	  	      new DeleteTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
-	  	      new CutoutTool(view2DRect, properties, statusbar, shapes, connections, transform2D),
+	  	      new DrawTool(this, container),
+	  	      new SymmetricPolygonTool(this, container),
+	  	      new TrapeziumTool(this, container),
+	  	      new PolygonTool(this, container),
+	  	      new ConnectTool(this, container),
+	  	      new DeleteTool(this, container),
+	  	      new CutoutTool(this, container),
 	  	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
 	  	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
 	  	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
