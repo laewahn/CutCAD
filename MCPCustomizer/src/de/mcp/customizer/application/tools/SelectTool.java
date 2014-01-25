@@ -3,23 +3,19 @@
 import geomerative.RG;
 import geomerative.RPoint;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
+import processing.core.PConstants;
+import processing.core.PGraphics;
+import toxi.geom.Rect;
+import toxi.geom.Vec2D;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Cutout;
-import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
-import processing.core.PApplet;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import toxi.geom.Rect;
-import toxi.geom.Vec2D;
 
 public class SelectTool extends Tool {
 
@@ -47,8 +43,7 @@ public class SelectTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("file:/",""));
-		pointPaths = RG.loadShape(path.getParent() + "/icons/Select.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("/icons/Select.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {

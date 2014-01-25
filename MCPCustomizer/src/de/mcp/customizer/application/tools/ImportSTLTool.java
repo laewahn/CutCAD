@@ -2,10 +2,6 @@ package de.mcp.customizer.application.tools;
 
 import geomerative.RG;
 import geomerative.RPoint;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
@@ -47,8 +43,7 @@ public class ImportSTLTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("file:/",""));
-		pointPaths = RG.loadShape(path.getParent() + "/icons/LoadSTL.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("/icons/LoadSTL.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {
