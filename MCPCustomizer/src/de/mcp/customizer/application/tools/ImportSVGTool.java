@@ -9,22 +9,28 @@ import java.util.List;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ImportSVG;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 
 public class ImportSVGTool extends Tool {
 
-	private List<Shape> shapes;
+//	private List<Shape> shapes;
 
-	public ImportSVGTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
-			Transformation transform) {
-		super(view, properties, statusbar, transform, "ImportSVGTool");
-		this.shapes = shapes;
+	public ImportSVGTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "ImportSVGTool");
 	}
+	
+//	public ImportSVGTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
+//			Transformation transform) {
+//		super(view, properties, statusbar, transform, "ImportSVGTool");
+//		this.shapes = shapes;
+//	}
 
 	@Override
 	public void mouseButtonPressed(Vec2D position, int button) {
@@ -72,7 +78,7 @@ public class ImportSVGTool extends Tool {
 	
 	@Override
 	public void wasSelected() {
-		new ImportSVG(shapes);	
+		new ImportSVG(this.objectContainer.allShapes());	
 	}
 	
 	@Override

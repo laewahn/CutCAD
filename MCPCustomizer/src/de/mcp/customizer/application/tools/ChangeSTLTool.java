@@ -7,9 +7,11 @@ import geomerative.RPoint;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.view.Transformation;
 
@@ -17,10 +19,15 @@ public class ChangeSTLTool extends Tool {
 
 	private STLMesh mesh;
 
-	public ChangeSTLTool(Rect view, Properties properties, Statusbar statusbar, STLMesh mesh, Transformation transform) {
-		super(view, properties, statusbar, transform, "ImportSTLTool");
-		this.mesh = mesh;
+	public ChangeSTLTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "ChangeSTLTool");
+		this.mesh = customizer.meshSTL;
 	}
+	
+//	public ChangeSTLTool(Rect view, Properties properties, Statusbar statusbar, STLMesh mesh, Transformation transform) {
+//		super(view, properties, statusbar, transform, "ImportSTLTool");
+//		this.mesh = mesh;
+//	}
 
 	@Override
 	public void mouseButtonPressed(Vec2D position, int button) {

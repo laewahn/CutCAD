@@ -9,22 +9,28 @@ import java.util.List;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.PrintDialog;
 import de.mcp.customizer.view.Transformation;
 
 public class PrintTool extends Tool {
 	
-	private List<Shape> shapes;
+//	private List<Shape> shapes;
 	
-    public PrintTool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, List<Shape> shapes) 
-    {
-        super(view, properties, statusbar, transform, "PrintTool");
-        this.shapes = shapes;
-    }
+	public PrintTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "PrintTool");
+	}
+	
+//    public PrintTool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, List<Shape> shapes) 
+//    {
+//        super(view, properties, statusbar, transform, "PrintTool");
+//        this.shapes = shapes;
+//    }
 
     public PGraphics getIcon(PGraphics context)
     {
@@ -83,6 +89,6 @@ public class PrintTool extends Tool {
     @Override
     public void wasSelected() {
     	super.wasSelected();
-    	new PrintDialog(shapes);
+    	new PrintDialog(this.objectContainer.allShapes());
     }
 }

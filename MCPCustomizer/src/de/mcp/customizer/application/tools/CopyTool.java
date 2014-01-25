@@ -7,11 +7,14 @@ import java.io.File;
 import java.util.List;
 
 
+
+
 //import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
+import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Properties;
 import de.mcp.customizer.application.Statusbar;
 import de.mcp.customizer.application.Tool;
@@ -20,25 +23,33 @@ import de.mcp.customizer.model.CopyShape;
 //import de.mcp.customizer.model.Cutout;
 //import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.GShape;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Transformation;
 
 public class CopyTool extends Tool {
 
-	List<Shape> shapes;
+//	List<Shape> shapes;
 	GShape master;
 	Vec2D lastMousePosition;
 	boolean selected;
 
 	Shape copyShape, previewShape;
 
-	public CopyTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform) {
-		super(view, properties, statusbar, transform, "CopyTool");
-
-		this.shapes = shapes;
+	public CopyTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "CopyTool");
+		
 		this.selected = false;
 		this.lastMousePosition = new Vec2D(0, 0);
 	}
+	
+//	public CopyTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform) {
+//		super(view, properties, statusbar, transform, "CopyTool");
+//
+//		this.shapes = shapes;
+//		this.selected = false;
+//		this.lastMousePosition = new Vec2D(0, 0);
+//	}
 
 	public PGraphics getIcon(PGraphics context) {
 		float iconScaling = 1.57f;
@@ -77,7 +88,7 @@ public class CopyTool extends Tool {
     	if (this.inView(position)) {
     		if (!selected)
     		{
-    			for (Shape s : shapes)
+    			for (Shape s : this.objectContainer.allShapes())
     			{
     				if (s.getShape().isSelected() && button == PConstants.LEFT)
     				{
@@ -104,7 +115,8 @@ public class CopyTool extends Tool {
     				Shape copy = master.copyCompleteStructure();
     				copy.getShape().setPosition2D(lastMousePosition);
     				copy.getShape().recalculate(copy.copy().getShape().getVertices());
-    				shapes.add(copy);
+//    				shapes.add(copy);
+    				this.objectContainer.addShape(copy);
     			}
     		}
     	}
@@ -121,14 +133,14 @@ public class CopyTool extends Tool {
 			lastMousePosition = this.positionRelativeToView(position);
 	        this.updateMousePositon(lastMousePosition.scale(0.1f));
 
-			for (Shape s : shapes) 
+			for (Shape s : this.objectContainer.allShapes()) 
 			{
 				s.getShape().setSelected(s.getShape().mouseOver(lastMousePosition));
 			}
 		} 
 		else 
 		{
-			for (Shape s : shapes) 
+			for (Shape s : this.objectContainer.allShapes()) 
 			{
 				s.getShape().setSelected(false);
 			}

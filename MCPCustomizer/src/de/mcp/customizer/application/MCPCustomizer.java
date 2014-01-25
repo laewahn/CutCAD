@@ -68,7 +68,7 @@ public class MCPCustomizer extends PApplet {
 	  Vec3D cameraPosition;
 	  Tool tools[];
 	  
-	  STLMesh meshSTL;
+	  public STLMesh meshSTL;
 
 	  public void setup()
 	  {
@@ -266,11 +266,11 @@ public class MCPCustomizer extends PApplet {
 	  	      new ConnectTool(this, container),
 	  	      new DeleteTool(this, container),
 	  	      new CutoutTool(this, container),
-	  	      new CopyTool(view2DRect, properties, statusbar, shapes, transform2D),
-	  	      new ImportSVGTool(view2DRect, properties, statusbar, shapes, transform2D),
-	  	      new ImportSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-	  	      new ChangeSTLTool(view2DRect, properties, statusbar, meshSTL, transform2D),
-	  	      new PrintTool(view2DRect, properties, statusbar, transform2D, shapes)
+	  	      new CopyTool(this, container),
+	  	      new ImportSVGTool(this, container),
+	  	      new ImportSTLTool(this, container),
+	  	      new ChangeSTLTool(this, container),
+	  	      new PrintTool(this, container)
 	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));
