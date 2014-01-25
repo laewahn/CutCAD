@@ -150,16 +150,6 @@ public class MCPCustomizer extends PApplet {
 
 	    image(view2D, view2DPosX, view2DPosY);
 	  }
-	  
-	private void drawGrid(PGraphics p) {
-		for (int i = -100; i < 100; i++)
-	    {
-	    	p.strokeWeight(1);
-	    	p.stroke(220);
-	    	p.line(-100 * gridWidth, gridWidth * i, 100 * gridWidth, gridWidth * i);
-	    	p.line(gridWidth * i, -100 * gridWidth, gridWidth * i, 100 * gridWidth);
-	    }
-	}
 
 	  void draw3DView()
 	  {
