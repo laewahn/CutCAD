@@ -133,7 +133,7 @@ public class SelectTool extends Tool {
 	public void mouseMoved(Vec2D position) {
 		if (this.inView(position)) {
 			Vec2D relativePosition = this.positionRelativeToView(position);
-	        this.updateMousePositon(relativePosition.scale(0.1f));
+	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 			boolean noneSelected = true;
 			for (Shape s : this.objectContainer.allShapes()) {
@@ -192,13 +192,13 @@ public class SelectTool extends Tool {
 
 	@Override
 	public void wasSelected() {
-		this.displayStatus("Click left on a shape to select it, drag a shape with the right mouse button to move it and drag anywhere on the 2D view to move the camera");
+		this.customizer.displayStatus("Click left on a shape to select it, drag a shape with the right mouse button to move it and drag anywhere on the 2D view to move the camera");
 		super.wasSelected();
 	}
 
 	@Override
 	public void wasUnselected() {
-		this.displayStatus("");
+		this.customizer.displayStatus("");
 		super.wasUnselected();
 		this.customizer.properties.hide();
 	}

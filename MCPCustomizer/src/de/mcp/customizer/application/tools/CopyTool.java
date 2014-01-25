@@ -83,7 +83,7 @@ public class CopyTool extends Tool {
     			{
     				if (s.getShape().isSelected() && button == PConstants.LEFT)
     				{
-    					this.displayStatus("Shape selected! Use the left mouse button to create copies or use the right mouse button to clear the selection");
+    					this.customizer.displayStatus("Shape selected! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     					master = s.getShape();
     					previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
     					previewShape.getShape().setMaterial(master.getMaterial());
@@ -95,14 +95,14 @@ public class CopyTool extends Tool {
     		{
     			if(button == PConstants.RIGHT)
     			{
-    				this.displayStatus("Select the shape you want to copy");
+    				this.customizer.displayStatus("Select the shape you want to copy");
     				this.copyShape = null;
     				this.selected = false;
     				this.previewShape = null;
     			}
     			else
     			{
-    				this.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
+    				this.customizer.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     				Shape copy = master.copyCompleteStructure();
     				copy.getShape().setPosition2D(lastMousePosition);
     				copy.getShape().recalculate(copy.copy().getShape().getVertices());
@@ -122,7 +122,7 @@ public class CopyTool extends Tool {
     {
 		if (this.inView(position)) {
 			lastMousePosition = this.positionRelativeToView(position);
-	        this.updateMousePositon(lastMousePosition.scale(0.1f));
+	        this.customizer.displayMousePosition(lastMousePosition.scale(0.1f));
 
 			for (Shape s : this.objectContainer.allShapes()) 
 			{
@@ -151,13 +151,13 @@ public class CopyTool extends Tool {
     
 	@Override
 	public void wasSelected() {
-		this.displayStatus("Select the shape you want to copy");
+		this.customizer.displayStatus("Select the shape you want to copy");
 		super.wasSelected();
 	}
 
 	@Override
 	public void wasUnselected() {
-		this.displayStatus("");
+		this.customizer.displayStatus("");
 		this.copyShape = null;
 		this.selected = false;
 		this.previewShape = null;

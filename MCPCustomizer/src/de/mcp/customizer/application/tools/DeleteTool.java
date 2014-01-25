@@ -206,7 +206,7 @@ public class DeleteTool extends Tool {
         if (this.inView(position))
         {
             Vec2D relativePosition = this.positionRelativeToView(position);
-	        this.updateMousePositon(relativePosition.scale(0.1f));
+	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 
             for (Shape s : this.objectContainer.allShapes()) {
@@ -235,13 +235,13 @@ public class DeleteTool extends Tool {
 
 	@Override
 	public void wasSelected() {
-		this.displayStatus("Click on a shape or connection to delete it");
+		this.customizer.displayStatus("Click on a shape or connection to delete it");
 		super.wasSelected();
 	}
 
 	@Override
 	public void wasUnselected() {
-		this.displayStatus("");
+		this.customizer.displayStatus("");
 		super.wasUnselected();
 	}
     

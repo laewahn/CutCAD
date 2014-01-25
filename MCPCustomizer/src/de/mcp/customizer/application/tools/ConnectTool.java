@@ -81,7 +81,7 @@ public class ConnectTool extends Tool {
 		for (Edge e : this.objectContainer.allEdges()) {
 			if (e.isHighlighted() && button == PConstants.LEFT) {
 				if (!selectedFirst) {
-					this.displayStatus("Select another edge to connect it to the first edge");
+					this.customizer.displayStatus("Select another edge to connect it to the first edge");
 					this.lastMessage = "Select another edge to connect it to the first edge";
 					this.previewConnection = new Connection(
 							this.objectContainer.allConnections());
@@ -92,7 +92,7 @@ public class ConnectTool extends Tool {
 					this.previewConnection.setSlaveEdge(e);
 					String connectMessage = this.previewConnection.connect();
 					if (connectMessage == "Connection created!") {
-						this.displayStatus("Connection created! If you want to create another connection, select another edge");
+						this.customizer.displayStatus("Connection created! If you want to create another connection, select another edge");
 						this.lastMessage = "Connection created! If you want to create another connection, select another edge";
 						// this.connections.add(this.previewConnection);
 						this.objectContainer
@@ -100,8 +100,8 @@ public class ConnectTool extends Tool {
 					} else {
 						// TODO: Find out why the connection couldn't be created
 						// and tell the user
-						this.displayStatus("Could not create the connection!");
-						this.displayStatus(connectMessage);
+						this.customizer.displayStatus("Could not create the connection!");
+						this.customizer.displayStatus(connectMessage);
 						this.lastMessage = connectMessage;
 					}
 					// println("Added Connection between " +
@@ -120,14 +120,14 @@ public class ConnectTool extends Tool {
 	}
 
 	public void mouseMoved(Vec2D position) {
-		this.displayStatus(this.lastMessage);
+		this.customizer.displayStatus(this.lastMessage);
 		this.lastMousePosition = position;
 		Vec2D relativePosition = this.positionRelativeToView(position);
-		this.updateMousePositon(relativePosition.scale(0.1f));
+		this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 		for (Edge e : this.objectContainer.allEdges()) {
 			if (e.mouseOver(relativePosition))
-				this.displayStatus("Length of this edge: " + e.getLength() / 10
+				this.customizer.displayStatus("Length of this edge: " + e.getLength() / 10
 						+ " mm");
 			boolean canBeSelected = e.mouseOver(relativePosition);
 
@@ -163,14 +163,14 @@ public class ConnectTool extends Tool {
 
 	@Override
 	public void wasSelected() {
-		this.displayStatus("Select an edge to create a connection");
+		this.customizer.displayStatus("Select an edge to create a connection");
 		this.lastMessage = "Select an edge to create a connection";
 		super.wasSelected();
 	}
 
 	@Override
 	public void wasUnselected() {
-		this.displayStatus("");
+		this.customizer.displayStatus("");
 		this.lastMessage = "";
 		selectedFirst = false;
 		if (this.previewConnection != null) {
