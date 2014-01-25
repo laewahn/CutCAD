@@ -1,5 +1,7 @@
 package de.mcp.customizer.application.tools;
 
+import java.io.File;
+
 import geomerative.RG;
 import geomerative.RPoint;
 import processing.core.PGraphics;
@@ -42,7 +44,7 @@ public class ChangeSTLTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		pointPaths = RG.loadShape("icons/MoveSTL.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("icons" + File.separator + "MoveSTL.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {

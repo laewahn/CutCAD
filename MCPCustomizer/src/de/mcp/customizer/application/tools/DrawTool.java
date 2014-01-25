@@ -2,6 +2,7 @@ package de.mcp.customizer.application.tools;
 import geomerative.RG;
 import geomerative.RPoint;
 
+import java.io.File;
 import java.util.List;
 
 import processing.core.PGraphics;
@@ -38,7 +39,7 @@ public class DrawTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		pointPaths = RG.loadShape("icons/DrawRectangle.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("icons" + File.separator + "DrawRectangle.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {

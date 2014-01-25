@@ -1,5 +1,7 @@
 package de.mcp.customizer.application.tools;
 
+import java.io.File;
+
 import geomerative.RG;
 import geomerative.RPoint;
 import processing.core.PGraphics;
@@ -43,7 +45,7 @@ public class ImportSTLTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		pointPaths = RG.loadShape("icons/LoadSTL.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("icons" + File.separator + "LoadSTL.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {

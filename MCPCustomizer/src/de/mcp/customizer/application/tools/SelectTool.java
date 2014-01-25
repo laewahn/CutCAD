@@ -3,6 +3,7 @@
 import geomerative.RG;
 import geomerative.RPoint;
 
+import java.io.File;
 import java.util.List;
 
 import processing.core.PConstants;
@@ -43,7 +44,7 @@ public class SelectTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		pointPaths = RG.loadShape("icons/Select.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("icons" + File.separator + "Select.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {

@@ -3,7 +3,9 @@ package de.mcp.customizer.application.tools;
 import geomerative.RG;
 import geomerative.RPoint;
 
+import java.io.File;
 import java.util.List;
+
 
 //import processing.core.PApplet;
 import processing.core.PConstants;
@@ -46,7 +48,7 @@ public class CopyTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		pointPaths = RG.loadShape("icons/Copy.svg").getPointsInPaths();
+		pointPaths = RG.loadShape("icons" + File.separator + "Copy.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
 		    if (pointPaths[i] != null) {
