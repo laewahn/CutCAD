@@ -8,6 +8,7 @@ import java.util.Arrays;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.event.MouseEvent;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
@@ -298,8 +299,7 @@ public class MCPCustomizer extends PApplet {
 	    	}	    	
 	    	else if (mouseButton == PConstants.RIGHT)
 	    	{
-	    		transform3D.scaleUp(0.001f * (mouseY - view3DPosY - startY));
-	    		startY = mouseY - view3DPosY;
+	    		// do nothing... later: translate 3D view. This is problematic due to the way the camera is handled.
 	    	}
 	    }
 
@@ -322,6 +322,11 @@ public class MCPCustomizer extends PApplet {
 	      toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
 	  }
 
+	  boolean mouseOver2DView()
+	  {
+	    return mouseX > view2DPosX && mouseX <= view2DPosX + viewSizeX && mouseY > view2DPosY && mouseY <= view2DPosY + viewSizeY;
+	  }
+
 	  boolean mouseOver3DView()
 	  {
 	    return mouseX > view3DPosX && mouseX <= view3DPosX + viewSizeX && mouseY > view3DPosY && mouseY <= view3DPosY + viewSizeY;
@@ -331,12 +336,39 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    if (key == '+')
 	    {
-	      transform2D.scaleUp((float) 0.01);
+	    	if (mouseOver2DView())
+			  {
+				  transform2D.scaleUp(0.01f);
+			  }
+			  if (mouseOver3DView())
+			  {
+				  transform3D.scaleUp(0.01f);
+			  }
 	    }
 	    if (key == '-')
 	    {
-	      transform2D.scaleDown((float) 0.01);
+	    	if (mouseOver2DView())
+			  {
+				  transform2D.scaleDown(0.01f);
+			  }
+			  if (mouseOver3DView())
+			  {
+				  transform3D.scaleDown(0.01f);
+			  }
 	    }
+	  }
+	  
+	  @SuppressWarnings("deprecation")
+	public void mouseWheel(MouseEvent event)
+	  {
+		  if (mouseOver2DView())
+		  {
+			  transform2D.scaleUp((float) (0.01 * -event.getAmount()));
+		  }
+		  if (mouseOver3DView())
+		  {
+			  transform3D.scaleUp((float) (0.01 * -event.getAmount()));
+		  }
 	  }
 	
 	  public static void main(String args[]) {
