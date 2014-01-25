@@ -1,8 +1,4 @@
 package de.mcp.customizer.application.tools;
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec2D;
@@ -18,58 +14,13 @@ public class TrapeziumTool extends Tool {
 
 	Vec2D startCoord;
 	Trapezium previewRectangle;
-//	List<Shape> shapes;
 
 	public TrapeziumTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "TrapeziumTool");
+		super(customizer, container, "DrawTrapezium.svg");
 		
 		this.isDrawing = false;
 	}
 	
-//	public TrapeziumTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform)
-//	{
-//		super(view, properties, statusbar, transform, "TrapeziumTool");
-//		this.isDrawing = false;
-//		this.shapes = shapes;
-//	}
-
-	public PGraphics getIcon(PGraphics context) 
-	{
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "DrawTrapezium.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//		context.beginDraw();
-//		context.noFill();
-//		context.stroke(0);
-//		context.strokeWeight(1);
-//		
-//		context.line(5, 40, 45, 40);
-//		context.line(5, 40, 15, 10);
-//		context.line(15, 10, 35, 10);
-//		context.line(35, 10, 45, 40);
-//		
-//		context.endDraw();
-//
-//		return context;
-	}
-
 	public void mouseButtonPressed(Vec2D position, int button)
 	{
 		if (this.inView(position)){

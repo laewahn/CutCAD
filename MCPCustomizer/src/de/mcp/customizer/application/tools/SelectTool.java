@@ -1,12 +1,6 @@
  package de.mcp.customizer.application.tools;
 
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
-
 import processing.core.PConstants;
-import processing.core.PGraphics;
 
 import toxi.geom.Vec2D;
 
@@ -19,64 +13,18 @@ import de.mcp.customizer.model.Shape;
 
 public class SelectTool extends Tool {
 
-//	List<Shape> shapes;
-//	List<Connection> connections;
 	boolean dragging, draggingCutout;
 	Vec2D originalMousePosition;
 
 	public SelectTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "SelectTool");
+		super(customizer, container, "Select.svg");
 		
 		this.dragging = false;
 		this.draggingCutout = false;
 		this.originalMousePosition = new Vec2D(0, 0);
 	}
 	
-//	public SelectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes,
-//			List<Connection> connections, Transformation transform) {
-//		super(view, properties, statusbar, transform, "SelectTool");
-//
-//		this.shapes = shapes;
-//		this.connections = connections;
-//		this.dragging = false;
-//		this.draggingCutout = false;
-//		this.originalMousePosition = new Vec2D(0, 0);
-//	}
-
-	public PGraphics getIcon(PGraphics context) {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "Select.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//		context.beginDraw();
-//		context.noFill();
-//		context.stroke(0);
-//		context.strokeWeight(1);
-//		context.translate(10, 10);
-//		context.rotate(PApplet.radians(-45));
-//		context.triangle(0, 0, -10, 30, 10, 30);
-//		context.rect(-5, 30, 10, 10);
-//		context.endDraw();
-//
-//		return context;
-	}
-
+	
 	public void mouseButtonPressed(Vec2D position, int button) {
 		boolean noneSelected = true;
 		for (Shape s : this.objectContainer.allShapes()) {

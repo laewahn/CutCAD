@@ -1,9 +1,5 @@
 package de.mcp.customizer.application.tools;
 
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +17,7 @@ import de.mcp.customizer.model.PolygonShape;
 import de.mcp.customizer.model.Shape;
 
 public class PolygonTool extends Tool {
-
-//	private List<Shape> shapes;
-
+	
 	private List<Vec2D> vertices;
 	
 	private Vec2D lastKnownMousePositon;
@@ -31,15 +25,9 @@ public class PolygonTool extends Tool {
 	private float boundingBoxSize = 4/scalingFactor;
 
 	public PolygonTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "PolygonTool");
+		super(customizer, container, "DrawPolygon.svg");
 	}
 	
-//	public PolygonTool(Rect view, Properties properties, Statusbar statusbar,
-//			Transformation transform, List<Shape> shapes) {
-//		super(view, properties, statusbar, transform, "PolygonTool");
-//		this.shapes = shapes;
-//	}
-
 	@Override
 	public void mouseButtonPressed(Vec2D position, int button) {
 
@@ -78,44 +66,6 @@ public class PolygonTool extends Tool {
 	public void mouseMoved(Vec2D position) {
 		this.lastKnownMousePositon = this.positionRelativeToView(position);
         this.customizer.displayMousePosition(lastKnownMousePositon.scale(0.1f));
-	}
-
-	@Override
-	public PGraphics getIcon(PGraphics context) {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "DrawPolygon.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//		context.beginDraw();
-//		context.noFill();
-//		context.stroke(0);
-//		context.strokeWeight(1);
-//		
-//		context.rect(5,5,4,4);
-//		context.line(9, 7, 30, 7);
-//		context.line(30, 7, 45, 20);
-//		context.line(45, 20, 25, 45);
-//		context.line(25, 45, 7, 9);
-//
-//		context.endDraw();
-//
-//		return context;
 	}
 
 	@Override

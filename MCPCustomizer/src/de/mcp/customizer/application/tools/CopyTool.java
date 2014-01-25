@@ -1,26 +1,17 @@
 package de.mcp.customizer.application.tools;
 
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
-
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Vec2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
-//import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.CopyShape;
-//import de.mcp.customizer.model.Cutout;
-//import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 
 public class CopyTool extends Tool {
 
-//	List<Shape> shapes;
 	GShape master;
 	Vec2D lastMousePosition;
 	boolean selected;
@@ -28,50 +19,10 @@ public class CopyTool extends Tool {
 	Shape copyShape, previewShape;
 
 	public CopyTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "CopyTool");
+		super(customizer, container, "Copy.svg");
 		
 		this.selected = false;
 		this.lastMousePosition = new Vec2D(0, 0);
-	}
-	
-//	public CopyTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform) {
-//		super(view, properties, statusbar, transform, "CopyTool");
-//
-//		this.shapes = shapes;
-//		this.selected = false;
-//		this.lastMousePosition = new Vec2D(0, 0);
-//	}
-
-	public PGraphics getIcon(PGraphics context) {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "Copy.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//		context.beginDraw();
-//		context.fill(255);
-//		context.stroke(0);
-//		context.strokeWeight(1);
-//		context.rect(2,2,35,35);
-//		context.rect(12,12,35,35);
-//		context.endDraw();
-//
-//		return context;
 	}
 
     public void mouseButtonPressed(Vec2D position, int button)
@@ -106,7 +57,6 @@ public class CopyTool extends Tool {
     				Shape copy = master.copyCompleteStructure();
     				copy.getShape().setPosition2D(lastMousePosition);
     				copy.getShape().recalculate(copy.copy().getShape().getVertices());
-//    				shapes.add(copy);
     				this.objectContainer.addShape(copy);
     			}
     		}

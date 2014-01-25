@@ -1,8 +1,4 @@
 package de.mcp.customizer.application.tools;
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -19,8 +15,6 @@ import de.mcp.customizer.model.Shape;
 
 public class CutoutTool extends Tool {
 
-//    List<Shape> shapes;
-//    List<Connection> connections;
     boolean dragging;
     boolean selectedFirst;
     Vec2D originalMousePosition;
@@ -29,57 +23,13 @@ public class CutoutTool extends Tool {
     private float scalingFactor = 0.5f;
     
     public CutoutTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container, "CutoutTool");
+    	super(customizer, container, "Cutout.svg");
     	
     	this.dragging = false;
         this.selectedFirst = false;
         this.originalMousePosition = new Vec2D(0,0);
     }
     
-//    public CutoutTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform) 
-//    {
-//        super(view, properties, statusbar, transform, "CutoutTool");
-//        
-//        this.shapes = shapes;
-//        this.connections = connections;
-//        this.dragging = false;
-//        this.selectedFirst = false;
-//        this.originalMousePosition = new Vec2D(0,0);
-//    }
-
-    public PGraphics getIcon(PGraphics context)
-    {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "Cutout.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//        context.beginDraw();
-//        context.noFill();
-//        context.stroke(0);
-//        context.strokeWeight(1);
-//        context.rect(5, 5, 40, 40);
-//        context.rect(20, 20, 10, 10);
-//        context.endDraw();
-//
-//        return context;
-    }
-
     public void mouseButtonPressed(Vec2D position, int button)
     {
         for (Shape s : this.objectContainer.allShapes())

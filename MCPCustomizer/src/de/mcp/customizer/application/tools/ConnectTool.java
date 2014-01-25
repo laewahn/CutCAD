@@ -1,10 +1,5 @@
 package de.mcp.customizer.application.tools;
 
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
-
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Vec2D;
@@ -20,61 +15,14 @@ public class ConnectTool extends Tool {
 	Vec2D lastMousePosition;
 
 	Connection previewConnection;
-	// List<Connection> connections;
 
-	// List<Shape> shapes;
 	private float scalingFactor = 0.5f;
 	private String lastMessage;
 
-	// public ConnectTool(Rect view, Properties properties, Statusbar statusbar,
-	// List<Shape> shapes, List<Connection> connections, Transformation
-	// transform)
-	// {
-	// super(view, properties, statusbar, transform, "ConnectTool");
-	// this.shapes = shapes;
-	// this.selectedFirst = false;
-	// this.connections = connections;
-	// }
-
 	public ConnectTool(MCPCustomizer mcpCustomizer, ObjectContainer container) {
-		super(mcpCustomizer, container, "ConnectTool");
+		super(mcpCustomizer, container, "Connect.svg");
 
 		this.selectedFirst = false;
-	}
-
-	public PGraphics getIcon(PGraphics context) {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "Connect.svg")
-				.getPointsInPaths();
-
-		for (int i = 0; i < pointPaths.length; i++) {
-			if (pointPaths[i] != null) {
-				context.beginShape();
-				for (int j = 0; j < pointPaths[i].length; j++) {
-					context.vertex(pointPaths[i][j].x * iconScaling,
-							pointPaths[i][j].y * iconScaling);
-				}
-				context.endShape();
-			}
-		}
-		context.endDraw();
-		return context;
-		// context.beginDraw();
-		// context.noFill();
-		// context.stroke(0);
-		// context.strokeWeight(1);
-		// context.line(5, 10, 5, 40);
-		// context.line(5, 25, 45, 25);
-		// context.line(45, 10, 45, 40);
-		// context.endDraw();
-		//
-		// return context;
 	}
 
 	public void mouseButtonPressed(Vec2D position, int button) {

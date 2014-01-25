@@ -1,8 +1,4 @@
 package de.mcp.customizer.application.tools;
-import geomerative.RG;
-import geomerative.RPoint;
-
-import java.io.File;
 
 import processing.core.PGraphics;
 
@@ -19,50 +15,10 @@ public class DrawTool extends Tool {
 
     Vec2D startCoord;
     Rectangle previewRectangle;
-//    List<Shape> shapes;
 
     public DrawTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container, "DrawTool");
+    	super(customizer, container, "DrawRectangle.svg");
     	this.isDrawing = false;
-    }
-    
-//    public DrawTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, Transformation transform)
-//    {
-//        super(view, properties, statusbar, transform, "DrawTool");
-//        this.isDrawing = false;
-//        this.shapes = shapes;
-//    }
-
-    public PGraphics getIcon(PGraphics context) 
-    {
-		float iconScaling = 1.57f;
-		RPoint[][] pointPaths;
-		
-		context.beginDraw();
-		context.fill(0);
-		context.strokeWeight(1);
-
-		pointPaths = RG.loadShape("icons" + File.separator + "DrawRectangle.svg").getPointsInPaths();
- 
-		for(int i = 0; i<pointPaths.length; i++){
-		    if (pointPaths[i] != null) {
-		    	context.beginShape();
-		      for(int j = 0; j<pointPaths[i].length; j++){
-		    	  context.vertex(pointPaths[i][j].x*iconScaling, pointPaths[i][j].y*iconScaling);
-		      }
-		      context.endShape();
-		    }
-		  }
-		context.endDraw();
-		return context;
-//        context.beginDraw();
-//        context.noFill();
-//        context.stroke(0);
-//        context.strokeWeight(1);
-//        context.rect(5, 5, 40, 40);
-//        context.endDraw();
-//        
-//        return context;
     }
 
     public void mouseButtonPressed(Vec2D position, int button)
@@ -88,7 +44,6 @@ public class DrawTool extends Tool {
             
             this.previewRectangle.setSize(rectSize);
 
-//            shapes.add(this.previewRectangle);
             this.objectContainer.addShape(this.previewRectangle);
             this.previewRectangle = null;
 

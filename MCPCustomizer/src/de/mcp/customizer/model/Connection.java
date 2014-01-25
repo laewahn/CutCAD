@@ -1,7 +1,5 @@
 package de.mcp.customizer.model;
 
-import static java.lang.System.out;
-
 import java.util.ArrayList;
 import java.util.List;
 

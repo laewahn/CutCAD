@@ -51,8 +51,8 @@ class Toolbar extends ListBox
 	  int newIndex = buttons.size();
 	  
 	  PGraphics toolIcon = theTool.getIcon(this.paplett.createGraphics(50, 50));
-      this.addCustomItem(theTool.getName(), newIndex, new ShapeButton(toolIcon));
-      this.cp5.getTooltip().register(theTool.getName(), "TestToolTip");
+      this.addCustomItem(theTool.getIconName(), newIndex, new ShapeButton(toolIcon));
+      this.cp5.getTooltip().register(theTool.getIconName(), "TestToolTip");
       this.cp5.getTooltip().setDelay(500);
       
       this.tools.add(theTool);
