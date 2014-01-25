@@ -47,7 +47,7 @@ public class SelectTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("file:/",""));
 		pointPaths = RG.loadShape(path.getParent() + "/icons/Select.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
@@ -134,13 +134,6 @@ public class SelectTool extends Tool {
 
 			boolean noneSelected = true;
 			for (Shape s : shapes) {
-				for (Edge e : s.getShape().getEdges())
-				{
-					if (e.mouseOver(relativePosition))
-					{
-						this.displayStatus("Length of this edge: " + e.getLength()/10 + " mm");
-					}
-				}
 				s.getShape().setSelected(
 						s.getShape().mouseOver(relativePosition));
 

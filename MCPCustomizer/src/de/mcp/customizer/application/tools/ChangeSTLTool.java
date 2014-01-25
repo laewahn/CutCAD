@@ -46,7 +46,7 @@ public class ChangeSTLTool extends Tool {
 		context.fill(0);
 		context.strokeWeight(1);
 
-		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("file:/",""));
 		pointPaths = RG.loadShape(path.getParent() + "/icons/MoveSTL.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){

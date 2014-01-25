@@ -29,6 +29,7 @@ public class ConnectTool extends Tool
 
     List<Shape> shapes;
     private float scalingFactor = 0.5f;
+	private String lastMessage;
     
 
     public ConnectTool(Rect view, Properties properties, Statusbar statusbar, List<Shape> shapes, List<Connection> connections, Transformation transform)
@@ -48,7 +49,7 @@ public class ConnectTool extends Tool
 		context.fill(0);
 		context.strokeWeight(1);
 
-		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString());
+		Path path = Paths.get(ImportSVGTool.class.getProtectionDomain().getCodeSource().getLocation().toString().replace("file:/",""));
 		pointPaths = RG.loadShape(path.getParent() + "/icons/Connect.svg").getPointsInPaths();
  
 		for(int i = 0; i<pointPaths.length; i++){
@@ -85,6 +86,7 @@ public class ConnectTool extends Tool
                     if (!selectedFirst)
                     {
                 		this.displayStatus("Select another edge to connect it to the first edge");
+                		this.lastMessage = "Select another edge to connect it to the first edge";
                         this.previewConnection = new Connection(connections);
                         this.previewConnection.setMasterEdge(e);
                         e.setSelected(true);
@@ -97,6 +99,7 @@ public class ConnectTool extends Tool
                         if(connectMessage == "Connection created!") 
                         {
                     		this.displayStatus("Connection created! If you want to create another connection, select another edge");
+                    		this.lastMessage = "Connection created! If you want to create another connection, select another edge";
                             this.connections.add(this.previewConnection);
                         }
                         else
@@ -104,6 +107,7 @@ public class ConnectTool extends Tool
                         	// TODO: Find out why the connection couldn't be created and tell the user
                     		this.displayStatus("Could not create the connection!");
                     		this.displayStatus(connectMessage);
+                    		this.lastMessage = connectMessage;
                         }
                         // println("Added Connection between " + this.previewConnection.getEdge1() + " and " + this.previewConnection.getEdge2());
                         this.previewConnection.getMasterEdge().setSelected(false);
@@ -122,6 +126,7 @@ public class ConnectTool extends Tool
     
     public void mouseMoved(Vec2D position)
     {
+    	this.displayStatus(this.lastMessage);
         this.lastMousePosition = position;
         Vec2D relativePosition = this.positionRelativeToView(position);
         this.updateMousePositon(relativePosition.scale(0.1f));
@@ -130,6 +135,7 @@ public class ConnectTool extends Tool
         {
             for (Edge e : s.getShape().getEdges())
             {
+                if (e.mouseOver(relativePosition)) this.displayStatus("Length of this edge: " + e.getLength()/10 + " mm");
                 boolean canBeSelected = e.mouseOver(relativePosition);
                 
                 if(this.previewConnection != null) {
@@ -162,12 +168,14 @@ public class ConnectTool extends Tool
 	@Override
 	public void wasSelected() {
 		this.displayStatus("Select an edge to create a connection");
+		this.lastMessage = "Select an edge to create a connection";
 		super.wasSelected();
 	}
 
 	@Override
 	public void wasUnselected() {
 		this.displayStatus("");
+		this.lastMessage = "";
 		selectedFirst = false;
         if(this.previewConnection != null)
         {

@@ -57,6 +57,8 @@ public class MCPCustomizer extends PApplet {
 
 	  Transformation transform2D = new Transformation((float) 1.0, new Vec2D(0,0));
 	  Transformation transform3D = new Transformation((float) 1.0, new Vec2D(0,0));
+	  
+	  Grid grid3D, grid2D;
 
 	  Vec3D cameraPosition;
 	  Tool tools[];
@@ -78,6 +80,9 @@ public class MCPCustomizer extends PApplet {
 
 	    view2D = createGraphics(viewSizeX, viewSizeY, P3D);
 	    view3D = createGraphics(viewSizeX, viewSizeY, P3D);
+	    
+	    grid2D = new Grid(transform2D, view2D);
+	    grid3D = new Grid(transform3D, view3D);
 	    
 	    gfx = new ToxiclibsSupport(this, view3D);
 		RG.init(this);
@@ -121,7 +126,7 @@ public class MCPCustomizer extends PApplet {
 	    view2D.background(150);
 	    
 	    draw2DAxes(view2D);
-	    drawGrid(view2D);
+	    grid2D.drawGrid();
 
 	    for (Shape s : shapes)
 	    {
@@ -171,7 +176,7 @@ public class MCPCustomizer extends PApplet {
 	    view3D.scale(scale);
     
 	    draw3DAxes(view3D);
-	    drawGrid(view3D);
+	    grid3D.drawGrid();
 	    
 	    for (Shape s : shapes)
 	    {
