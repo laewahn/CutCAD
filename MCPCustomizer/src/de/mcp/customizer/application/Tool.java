@@ -1,5 +1,6 @@
 package de.mcp.customizer.application;
 
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
@@ -14,8 +15,17 @@ public abstract class Tool implements Drawable2D {
     protected Transformation transform;
     protected String name;
     
+    protected MCPCustomizer customizer;
+    protected ObjectContainer objectContainer;
+    
     private float scalingFactor = 0.5f;
 
+    public Tool(MCPCustomizer customizer, ObjectContainer container, String name) {
+    	this(customizer.view2DRect, customizer.properties, customizer.statusbar, customizer.transform2D, name);
+    	this.customizer = customizer;
+    	this.objectContainer = container;
+    }
+    
     public Tool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, String name)
     {
         this.view = view;

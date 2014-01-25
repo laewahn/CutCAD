@@ -7,29 +7,71 @@ public class ObjectContainer {
 
 	private List<Shape> shapes;
 	private List<Connection> connections;
+	private List<Cutout> cutouts;
+	
 	
 	public ObjectContainer() {
 		this.shapes = new ArrayList<Shape>();
 		this.connections = new ArrayList<Connection>();
+		this.cutouts = new ArrayList<Cutout>();
 	}
 	
+	
+	
+	
+	
 	public List<Shape> allShapes() {
-		return this.allShapes();
+		return new ArrayList<Shape>(this.shapes);
 	}
 	
 	public void addShape(Shape shape) {
 		this.shapes.add(shape);
 	}
 	
-	public List<Edge> allEdges() {
-		return null;
+	public void removeShape(Shape shape) {
+		this.shapes.remove(shape);
 	}
 	
+	
+	
+	
+	public List<Edge> allEdges() {
+		List<Edge> edges = new ArrayList<Edge>();
+		
+		for(Shape shape : this.shapes) {
+			edges.addAll(shape.getShape().getEdges());
+		}
+		
+		return edges;
+	}
+	
+	
+	
+	
 	public List<Connection> allConnections() {
-		return this.connections;
+		return new ArrayList<Connection>(this.connections);
 	}
 	
 	public void addConnection(Connection connection) {
 		this.connections.add(connection);
+	}
+	
+	public void removeConnection(Connection connection) {
+		this.connections.remove(connection);
+	}
+	
+	
+	
+	
+	public List<Cutout> allCutouts() {
+		return new ArrayList<Cutout>(this.cutouts);
+	}
+	
+	public void addCutout(Cutout cutout) {
+		this.cutouts.add(cutout);
+	}
+	
+	public void removeCutout(Cutout cutout) {
+		this.cutouts.remove(cutout);
 	}
 }
