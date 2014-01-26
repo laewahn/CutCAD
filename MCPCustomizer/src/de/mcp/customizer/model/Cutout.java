@@ -69,18 +69,14 @@ public class Cutout implements Drawable2D {
 	}
 
 	/**
-	 * Returns the shape, where the cut-out is placed
-	 * 
-	 * @return
+	 * @return the shape, where the cut-out is placed
 	 */
 	public Shape getMasterShape() {
 		return this.master.getParent();
 	}
 
 	/**
-	 * Returns the shape, which is used as a cut-out form
-	 * 
-	 * @return
+	 * @return the shape, which is used as a cut-out form
 	 */
 	public Shape getSlaveShape() {
 		return this.slave.getParent();
@@ -96,18 +92,14 @@ public class Cutout implements Drawable2D {
 //	}
 
 	/**
-	 * Set corresponding to mouse over cut-out or not
-	 * 
 	 * @param b
-	 *            true, if mouse is over cut-out
+	 *            set true, if mouse is over cut-out
 	 */
 	public void setSelected(boolean b) {
 		this.isSelected = b;
 	}
 
 	/**
-	 * Check if, mouse is over cut-out
-	 * 
 	 * @return true, if mouse over cut-out
 	 */
 	public boolean isSelected() {
@@ -115,9 +107,7 @@ public class Cutout implements Drawable2D {
 	}
 
 	/**
-	 * form of the cut-out (modified by angle and position)
-	 * 
-	 * @return List of Vec2D, which form the cut-out
+	 * @return List of Vec2D, which determine the form the cut-out (modified by angle and position)
 	 */
 	public ArrayList<Vec2D> getVectors() {
 		ArrayList<Vec2D> modifiedVectors = new ArrayList<Vec2D>();
@@ -266,7 +256,7 @@ public class Cutout implements Drawable2D {
 	 * check if mouse is over cut-out or the corresponding connecting line
 	 * 
 	 * @param mousePosition
-	 * @return True, if mouse is above cut-out/line
+	 * @return true, if mouse is above cut-out/line
 	 */
 	public boolean mouseOver(Vec2D mousePosition) {
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(
@@ -322,19 +312,15 @@ public class Cutout implements Drawable2D {
 	}
 
 	/**
-	 * set cut-out active
-	 * 
 	 * @param isActive
-	 *            true, if mouse pressed when mouse is over cut-out
+	 *            set true, if mouse is pressed when mouse is over cut-out
 	 */
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
 
 	/**
-	 * scale cut-out for printing
-	 * 
-	 * @param scaleFactor
+	 * @param scaleFactor scale cut-out for printing
 	 */
 	public void scale2D(float scaleFactor) {
 		this.slave.scale2D(scaleFactor);

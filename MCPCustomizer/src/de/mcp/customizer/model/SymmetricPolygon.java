@@ -24,11 +24,11 @@ public class SymmetricPolygon extends Shape {
 	 *        instances
 	 * 
 	 * @param position
-	 *            Position within the coordinate system
+	 *            Position within the coordinate system (0.1mm)
 	 * @param sizeX
 	 *            together with
 	 * @param sizeY
-	 *            determines the length of one side (average)
+	 *            determines the length of one side (average) (0.1mm)
 	 */
 	public SymmetricPolygon(Vec3D position, int sizeX, int sizeY) {
 		this.size = (((int) (sizeX + sizeY) / 2) / 10) * 10;
@@ -122,7 +122,7 @@ public class SymmetricPolygon extends Shape {
 	 * Change Parameter 1
 	 * 
 	 * @param size
-	 *            Length of a side of the symmetric polygon
+	 *            Length of a side of the symmetric polygon (0.1mm)
 	 */
 	public void setValue0(int size) {
 		this.size = size * 10;
@@ -146,7 +146,7 @@ public class SymmetricPolygon extends Shape {
 	 * use the average of the x and y size as length of a side)
 	 * 
 	 * @param newSize
-	 *            average of its coordinates as length
+	 *            average of its coordinates as length (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
 		this.size = (((int) ((newSize.x() + newSize.y()) / 2)) / 10) * 10;
@@ -156,8 +156,7 @@ public class SymmetricPolygon extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the
-	 *            corresponding GShape
+	 * @param the corresponding GShape
 	 */
 	public void setShape(GShape shape) {
 		this.basic = shape;
@@ -177,7 +176,7 @@ public class SymmetricPolygon extends Shape {
 	 * 
 	 * @param mousePosition
 	 *            position of the mouse
-	 * @return mouse is over shape
+	 * @return true, if mouse is over shape
 	 */
 	public boolean mouseOver(Vec2D mousePosition) {
 		return this.basic.mouseOver(mousePosition);

@@ -23,9 +23,9 @@ public class Rectangle extends Shape {
 	 * @param position
 	 *            Position within the coordinate system
 	 * @param sizeX
-	 *            Width of the rectangle
+	 *            Width of the rectangle (0.1mm)
 	 * @param sizeY
-	 *            Length of the rectangle
+	 *            Length of the rectangle (0.1mm)
 	 */
 	public Rectangle(Vec3D position, int sizeX, int sizeY) {
 		this.sizeX = (sizeX / 10) * 10;
@@ -108,7 +108,7 @@ public class Rectangle extends Shape {
 	 * Change Parameter 1
 	 * 
 	 * @param size
-	 *            Width of the rectangle
+	 *            Width of the rectangle (0.1mm)
 	 */
 	public void setValue0(int size) {
 		this.sizeX = size * 10;
@@ -119,7 +119,7 @@ public class Rectangle extends Shape {
 	 * Change Parameter 2
 	 * 
 	 * @param size
-	 *            Height of the rectangle
+	 *            Height of the rectangle (0.1mm)
 	 */
 	public void setValue1(int size) {
 		this.sizeY = size * 10;
@@ -138,7 +138,7 @@ public class Rectangle extends Shape {
 	 * Changes sizes of the rectangle
 	 * 
 	 * @param newSize
-	 *            Length & Height of the rectangle
+	 *            Length & Height of the rectangle (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
 		this.sizeX = ((int) newSize.x() / 10) * 10;
@@ -149,8 +149,7 @@ public class Rectangle extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the
-	 *            corresponding GShape
+	 * @param the corresponding GShape
 	 */
 	public void setShape(GShape shape) {
 		this.basic = shape;
@@ -170,7 +169,7 @@ public class Rectangle extends Shape {
 	 * 
 	 * @param mousePosition
 	 *            position of the mouse
-	 * @return mouse is over shape
+	 * @return true, if mouse is over shape
 	 */
 	public boolean mouseOver(Vec2D mousePosition) {
 		return this.basic.mouseOver(mousePosition);

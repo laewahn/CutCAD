@@ -33,13 +33,13 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * @param shape
 	 *            Form to which this edge belong
 	 * @param p3D1
-	 *            start point in 3D
+	 *            start point in 3D (0.1mm)
 	 * @param p3D2
-	 *            end point in 3D
+	 *            end point in 3D (0.1mm)
 	 * @param v1
-	 *            start point in 2D
+	 *            start point in 2D (0.1mm)
 	 * @param v2
-	 *            end point in 2D
+	 *            end point in 2D (0.1mm)
 	 */
 	public Edge(GShape shape, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2) {
 		this.shape = shape;
@@ -53,27 +53,21 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * True if edge already is connected
-	 * 
-	 * @return
+	 * @return true if edge already is connected
 	 */
 	public boolean isLocked() {
 		return isLocked;
 	}
 
 	/**
-	 * Form, to which this edge belong
-	 * 
-	 * @return
+	 * @return Form, to which this edge belong
 	 */
 	public GShape getShape() {
 		return shape;
 	}
 
 	/**
-	 * True if edge should be highlighted
-	 * 
-	 * @return
+	 * @return true if edge should be highlighted
 	 */
 	public boolean isHighlighted() {
 		return isHighlighted;
@@ -90,27 +84,21 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * True, if mouse is over edge
-	 * 
-	 * @return
+	 * @return true, if mouse is over edge
 	 */
 	public boolean isSelected() {
 		return isSelected;
 	}
 
 	/**
-	 * Set true if mouse over edge
-	 * 
-	 * @param isSelected
+	 * @param isSelected set true if mouse over edge
 	 */
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
 	}
 
 	/**
-	 * Get start point of the edge (in the 2D view)
-	 * 
-	 * @return
+	 * @return Get start point of the edge (in the 2D view) (0.1mm)
 	 */
 	public Vec2D getV1() {
 		return this.v1;
@@ -144,54 +132,42 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * Get outline of the edge as a List of Vec2D
-	 * 
-	 * @return
+	 * @return Get outline of the edge as a List of Vec2D
 	 */
 	public ArrayList<Vec2D> getTenons() {
 		return tenons;
 	}
 
 	/**
-	 * Set true, if the edge is connected with another edge
-	 * 
-	 * @param locked
+	 * @param locked set true, if the edge is connected with another edge
 	 */
 	public void setLocked(boolean locked) {
 		this.isLocked = locked;
 	}
 
 	/**
-	 * Set start point of the edge (in the 3D view)
-	 * 
-	 * @param v
+	 * @param v set start point of the edge (in the 3D view)
 	 */
 	public void setP3D1(Vec3D v) {
 		this.p3D1 = v;
 	}
 
 	/**
-	 * Set end point of the edge (in the 3D view)
-	 * 
-	 * @param v
+	 * @param v set end point of the edge (in the 3D view)
 	 */
 	public void setP3D2(Vec3D v) {
 		this.p3D2 = v;
 	}
 
 	/**
-	 * Set start point of the edge (in the 2D view)
-	 * 
-	 * @param v
+	 * @param v set start point of the edge (in the 2D view)
 	 */
 	public void setV1(Vec2D v) {
 		this.getV1().set(v);
 	}
 
 	/**
-	 * Set end point of the edge (in the 2D view)
-	 * 
-	 * @param v
+	 * @param v set end point of the edge (in the 2D view)
 	 */
 	public void setV2(Vec2D v) {
 		this.getV2().set(v);
@@ -286,9 +262,7 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * Get mid point of the edge
-	 * 
-	 * @return
+	 * @return mid point of the edge
 	 */
 	public Vec2D getMid() {
 		return new Vec2D((this.getV1().x() + this.getV2().x()) / 2, (this
@@ -332,18 +306,14 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * Get length of a edge
-	 * 
-	 * @return length(0.1mm)
+	 * @return length of an edge (0.1mm)
 	 */
 	public float getLength() {
 		return this.getV2().distanceTo(this.getV1());
 	}
 
 	/**
-	 * scale cut-out for printing
-	 * 
-	 * @param scaleFactor
+	 * @param scaleFactor scale cut-out for printing
 	 */
 	public void scale2D(float scaleFactor) {
 		this.v1 = v1.scale(scaleFactor);

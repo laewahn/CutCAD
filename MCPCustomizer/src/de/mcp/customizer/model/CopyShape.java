@@ -36,8 +36,6 @@ public class CopyShape extends Shape {
 	}
 
 	/**
-	 * Get the corresponding GShape
-	 * 
 	 * @return the corresponding GShape
 	 */
 	public GShape getShape() {
@@ -47,8 +45,7 @@ public class CopyShape extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the
-	 *            corresponding GShape
+	 * @param the corresponding GShape
 	 */
 	public void setShape(GShape shape) {
 		this.basic = shape;

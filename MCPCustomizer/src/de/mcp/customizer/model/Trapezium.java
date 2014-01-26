@@ -23,11 +23,11 @@ public class Trapezium extends Shape {
 	 *            of all instances
 	 * 
 	 * @param position
-	 *            Position within the coordinate system
+	 *            Position within the coordinate system(0.1mm)
 	 * @param sizeX
-	 *            length of upper and lower side of the trapezium
+	 *            length of upper and lower side of the trapezium (0.1mm)
 	 * @param sizeY
-	 *            length of the side of the trapezium
+	 *            length of the side of the trapezium (0.1mm)
 	 */
 	public Trapezium(Vec3D position, int sizeX, int sizeY) {
 		this.sizeXTop = (sizeX / 10) * 10;
@@ -104,7 +104,7 @@ public class Trapezium extends Shape {
 	 * Change Parameter 1
 	 * 
 	 * @param size
-	 *            Length of the top of the trapezium
+	 *            Length of the top of the trapezium (0.1mm)
 	 */
 	public void setValue0(int size) {
 		sizeXTop = size * 10;
@@ -115,7 +115,7 @@ public class Trapezium extends Shape {
 	 * Change Parameter 2
 	 * 
 	 * @param size
-	 *            Length of the bottom of the trapezium
+	 *            Length of the bottom of the trapezium (0.1mm)
 	 */
 	public void setValue1(int size) {
 		sizeXBottom = size * 10;
@@ -126,7 +126,7 @@ public class Trapezium extends Shape {
 	 * Change Parameter 3
 	 * 
 	 * @param size
-	 *            Length of the sides of the trapezium
+	 *            Length of the sides of the trapezium (0.1mm)
 	 */
 	public void setValue2(int size) {
 		sizeY = size * 10;
@@ -155,7 +155,7 @@ public class Trapezium extends Shape {
 	 * Changes sizes of the trapezium to a basic rectangle form with
 	 * 
 	 * @param newSize
-	 *            Length & Height of the trapezium
+	 *            Length & Height of the trapezium (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
 		this.sizeXTop = ((int) newSize.x() / 10) * 10;
@@ -167,8 +167,7 @@ public class Trapezium extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the
-	 *            corresponding GShape
+	 * @param the corresponding GShape
 	 */
 	public void setShape(GShape gshape) {
 		this.basic = gshape;
@@ -188,7 +187,7 @@ public class Trapezium extends Shape {
 	 * 
 	 * @param mousePosition
 	 *            position of the mouse
-	 * @return mouse is over shape
+	 * @return true, if mouse is over shape
 	 */
 	public boolean mouseOver(Vec2D mousePosition) {
 		return this.basic.mouseOver(mousePosition);

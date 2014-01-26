@@ -73,27 +73,21 @@ public class AllMaterials extends PApplet {
 	}
 
 	/**
-	 * Get a list of all possible materials
-	 * 
-	 * @return all Materials
+	 * @return list of all materials
 	 */
 	public static ArrayList<Material> getMaterials() {
 		return materials;
 	}
 
 	/**
-	 * Set standard material (which is used for new created shapes)
-	 * 
-	 * @param material
+	 * @param material to be used as a standard material (which is used for new created shapes)
 	 */
 	public static void setBaseMaterial(Material material) {
 		baseMaterialIndex = materials.indexOf(material);
 	}
 
 	/**
-	 * get a standard material (which is used for new created shapes)
-	 * 
-	 * @return material
+	 * @return the material, which is used as a standard material (which is used for new created shapes)
 	 */
 	public static Material getBaseMaterial() {
 		return materials.get(baseMaterialIndex);
