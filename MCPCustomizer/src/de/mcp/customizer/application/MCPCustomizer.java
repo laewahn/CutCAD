@@ -198,33 +198,33 @@ public class MCPCustomizer extends PApplet {
 		statusbar.drawStatusbar(this);
 	}
 
-	void draw2DView() {
-		view2D.beginDraw();
-		transform2D.transform(view2D);
-
-		view2D.background(150);
-
-		draw2DAxes(view2D);
-		grid2D.drawGrid();
-
-		for (Shape s : this.container.allShapes()) {
-			s.getShape().draw2D(view2D);
-		}
-
-		for (Connection c : this.container.allConnections()) {
-			c.draw2D(view2D);
-		}
-
-		for (Cutout c : this.container.allCutouts()) {
-			c.draw2D(view2D);
-		}
-
-		this.toolbar.getSelectedTool().draw2D(view2D);
-
-		view2D.endDraw();
-
-		image(view2D, view2DPosX, view2DPosY);
-	}
+//	void draw2DView() {
+//		view2D.beginDraw();
+//		transform2D.transform(view2D);
+//
+//		view2D.background(150);
+//
+//		draw2DAxes(view2D);
+//		grid2D.drawGrid();
+//
+//		for (Shape s : this.container.allShapes()) {
+//			s.getShape().draw2D(view2D);
+//		}
+//
+//		for (Connection c : this.container.allConnections()) {
+//			c.draw2D(view2D);
+//		}
+//
+//		for (Cutout c : this.container.allCutouts()) {
+//			c.draw2D(view2D);
+//		}
+//
+//		this.toolbar.getSelectedTool().draw2D(view2D);
+//
+//		view2D.endDraw();
+//
+//		image(view2D, view2DPosX, view2DPosY);
+//	}
 
 	void draw3DView() {
 		view3D.beginDraw();
