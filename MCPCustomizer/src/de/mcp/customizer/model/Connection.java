@@ -3,13 +3,13 @@ package de.mcp.customizer.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mcp.customizer.algorithm.CreateTenons;
-import de.mcp.customizer.algorithm.RotateAdjectantShapes;
-import de.mcp.customizer.view.Drawable2D;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
+import de.mcp.customizer.algorithm.CreateTenons;
+import de.mcp.customizer.algorithm.RotateAdjectantShapes;
+import de.mcp.customizer.view.Drawable2D;
 
 public class Connection implements Drawable2D
 {
@@ -21,6 +21,13 @@ public class Connection implements Drawable2D
 	private float scalingFactor = 0.5f;
 	  private float boundingBoxSize = 4/scalingFactor;
 
+	/** 
+	 * Constructor
+	 * 
+	 * Creates a basic connection-object without specifying the two edges to be connected.
+	 * 
+	 * @param connections The list of existing connections
+	 */
 	public Connection(List<Connection> connections)
 	{
 		Connection.connections = connections;
@@ -28,6 +35,15 @@ public class Connection implements Drawable2D
 		this.isActive = false;
 	}
 
+	/**
+	 * Constructor 
+	 * 
+	 * Creates a connection-object, specifying the two edges to be connected.
+	 * 
+	 * @param masterEdge The edge contained by the shape considered to be master (will not be moved when connecting the two shapes)
+	 * @param slaveEdge The edge contained by the shape considered to be slave (will be moved/rotated when connecting the two shapes)
+	 * @param connections The list of existing connections
+	 */
 	public Connection(Edge masterEdge, Edge slaveEdge, List<Connection> connections)
 	{
 		this.masterEdge = masterEdge;
@@ -36,26 +52,41 @@ public class Connection implements Drawable2D
 		this.isSelected = false;
 	}
 
+	/**
+	 * @return The list of all existing connections
+	 */
 	public static List<Connection> getConnections()
 	{
 		return connections;
 	}
 
+	/**
+	 * @return The masterEdge of the connection
+	 */
 	public Edge getMasterEdge()
 	{
 		return this.masterEdge;
 	}
 
+	/**
+	 * @return The slaveEdge of the connection
+	 */
 	public Edge getSlaveEdge()
 	{
 		return this.slaveEdge;
 	}
 
+	/**
+	 * @param e The masterEdge of the connection
+	 */
 	public void setMasterEdge(Edge e)
 	{
 		this.masterEdge = e;
 	}
 
+	/**
+	 * @param e The slaveEdge of the connection
+	 */
 	public void setSlaveEdge(Edge e)
 	{
 		this.slaveEdge = e;
@@ -65,7 +96,7 @@ public class Connection implements Drawable2D
 	public void draw2D(PGraphics p) {
 		this.drawConnection(p);
 	}
-
+	
 	private void drawConnection(PGraphics p)
 	{
 		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D()).scale(scalingFactor);
@@ -86,16 +117,30 @@ public class Connection implements Drawable2D
 		p.stroke(0);
 	}
 
+	/**
+	 * Sets the selection-status of the connection to b
+	 * 
+	 * @param b The new selection-status of the connection
+	 */
 	public void setSelected(boolean b)
 	{
 		this.isSelected = b;
 	}
 
+	/**
+	 * @return The current selection-status of the connection
+	 */
 	public boolean isSelected()
 	{
 		return this.isSelected;
 	}
 
+	/**
+	 * Creates a rectangle around the representation of the connection and checks if the given mousePosition is within this rectangle
+	 * 
+	 * @param mousePosition The position of the mouse
+	 * @return true if the given mousePosition is within the rectangle created around the connection
+	 */
 	public boolean mouseOver(Vec2D mousePosition)
 	{
 		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
@@ -118,6 +163,10 @@ public class Connection implements Drawable2D
 		return borders.containsPoint(mousePosition.scale(scalingFactor));
 	}
 
+	/**
+	 * Undos a connection between two edges. Removes the tenons from the edges, 
+	 * unlocks the edges and sets the number of connections of the connected shapes to the correct number.
+	 */
 	public void undoConnection()
 	{
 		// remove Tenons
@@ -167,6 +216,13 @@ public class Connection implements Drawable2D
 		}
 	}
 
+	/**
+	 * Connects the two edges of the connection if possible and returns a success/error-message 
+	 * based on whether or not the connection could be made.
+	 * 
+	 * @return A message that either reports success or contains a description of the problem
+	 * encountered when trying to connect the edges
+	 */
 	public String connect()
 	{
 		if (masterEdge.getShape() == slaveEdge.getShape())
@@ -231,6 +287,11 @@ public class Connection implements Drawable2D
 		return false;
 	}
 
+	/**
+	 * Sets the locked-variable of the two edges of the connection to the given boolean value.
+	 * 
+	 * @param locked The value the locked-variable of the two edges is set to
+	 */
 	public void lockConnection(boolean locked)
 	{
 		int addNumber = locked ? 1 : -1;
@@ -240,6 +301,11 @@ public class Connection implements Drawable2D
 		masterEdge.setLocked(locked);
 	}
 
+	/**
+	 * Sets the angle between the two shapes that are connected.
+	 * 
+	 * @param angle the angle between the two shapes connected by this connection in degrees
+	 */
 	public void setAngle(float angle)
 	{
 		if (!(this.slaveEdge.getShape().getNumberOfConnections() > 1))
@@ -249,6 +315,14 @@ public class Connection implements Drawable2D
 		}
 	}
 
+	/**
+	 * 
+	 * Aligns and connects two given edges and their shapes in 3D-space at a given angle.
+	 * 
+	 * @param masterEdge the edge of the shape that is considered master (will not be moved during this operation)
+	 * @param slaveEdge the edge of the shape that is considered slave (will be moved/rotated to the master)
+	 * @param angle the angle between master and slave
+	 */
 	public void connectEdges(Edge masterEdge, Edge slaveEdge, float angle) {
 		GShape master = masterEdge.getShape();
 		GShape slave = slaveEdge.getShape();
@@ -322,6 +396,9 @@ public class Connection implements Drawable2D
 		return safeAngleBetween(masterNormal, slaveNormal);
 	}
 
+	/**
+	 * @return The current angle between the two shapes connected by this connection
+	 */
 	public float getAngle() {
 		if (angle == 400) angle = (float) Math.toDegrees(calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape()));
 		return angle;
@@ -335,11 +412,14 @@ public class Connection implements Drawable2D
 		this.isActive = isActive;
 	}
 
+	/**
+	 * @return The number of control-elements needed to set the properties of this object
+	 */
 	public int getNumberOfControls()
 	{
 		return 1;
 	}
-
+	
 	public int getValue(int index)
 	{
 		return (int)getAngle();
