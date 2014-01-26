@@ -1,9 +1,10 @@
 package de.mcp.customizer.application;
 
+import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 
-public class Grid {
+public class Grid implements Drawable2D {
 	private int gridWidth;
 	private Transformation transformation;
 	private PGraphics view;
@@ -15,16 +16,21 @@ public class Grid {
 		this.view = view;
 	}
 	
-	public void drawGrid()
-	{		
+	@Override
+	public void draw2D(PGraphics context) {
 		int scaledGridWidth = getScaledGridWidth();
 		for (int i = -100; i < 100; i++)
 	    {
-			view.strokeWeight(getScaleFactor(this.transformation.getScale()));
-			view.stroke(220);
-			view.line(-100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth, scaledGridWidth * i);
-			view.line(scaledGridWidth * i, -100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth);
+			context.strokeWeight(getScaleFactor(this.transformation.getScale()));
+			context.stroke(220);
+			context.line(-100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth, scaledGridWidth * i);
+			context.line(scaledGridWidth * i, -100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth);
 	    }
+	}
+	
+	public void drawGrid()
+	{		
+		this.draw2D(this.view);
 	}
 
 	private float getScaleFactor(float scale) {
