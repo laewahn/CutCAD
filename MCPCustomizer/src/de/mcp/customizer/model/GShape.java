@@ -484,7 +484,6 @@ public class GShape implements Drawable2D, Drawable3D
   {
 	  if (!this.getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
 	  {
-		  this.setFillColor(p);
 		  createCover3D(p,true);
 		  createCover3D(p, false);
 		  createSides(p, getTenons());
@@ -513,6 +512,7 @@ public class GShape implements Drawable2D, Drawable3D
   
   private void createSides(PGraphics p, ArrayList<Vec2D> vectors)
   {
+	  this.setFillColor(p);
     ArrayList<Vec3D> top = transformTo3D(true, vectors);
 	ArrayList<Vec3D> bottom = transformTo3D(false, vectors);
 
@@ -534,6 +534,7 @@ public class GShape implements Drawable2D, Drawable3D
 
   private void createCover3D(PGraphics p, boolean b) 
   {
+	  this.setFillColor(p);
 	p.beginShape();
 	for (Vec3D vector : transformTo3D(b, getTenons())) {
 	  p.vertex(vector.x(), vector.y(), vector.z());
