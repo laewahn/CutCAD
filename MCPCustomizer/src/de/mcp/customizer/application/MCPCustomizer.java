@@ -2,8 +2,6 @@ package de.mcp.customizer.application;
 
 import geomerative.RG;
 
-import java.awt.Frame;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,12 +40,14 @@ public class MCPCustomizer extends PApplet {
 		
 		private Transformation transform;
 		private Grid grid;
-		private Drawable2D axes;
+		private Drawable2D axes = new Axes2D();
 		
-		public CustomizerView(PGraphics context, CustomizerFrame frame, Grid grid) {
+		public CustomizerView(PGraphics context, CustomizerFrame frame, Grid grid, Transformation transform) {
 			this.context = context;
 			this.frame = frame;
 			this.grid = grid;
+			
+			this.transform = transform;
 		}
 		
 		public void applyTransformation(Transformation transform) {
@@ -60,18 +60,14 @@ public class MCPCustomizer extends PApplet {
 			context.background(150);
 			
 			applyTransformation(this.transform);
-			
+ 
 			drawables.add(axes);
-			drawables.add(grid);
+			drawables.add((Drawable2D) grid);
+			drawables.add(toolbar.getSelectedTool());
 			
-//			axes.draw2D(context);
-//			grid.draw2D(context);
-
 			for(Drawable2D d : drawables) {
 				d.draw2D(context);
 			}
-			
-//			toolbar.getSelectedTool().draw2D(context);
 
 			context.endDraw();
 
@@ -153,6 +149,7 @@ public class MCPCustomizer extends PApplet {
 		view2DPosY = 50;
 		view3DPosX = view2DPosX + viewSizeX + 15;
 		view3DPosY = 50;
+		
 		view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
 
 		view2D = createGraphics(viewSizeX, viewSizeY, P3D);
@@ -164,7 +161,7 @@ public class MCPCustomizer extends PApplet {
 		CustomizerFrame theFrame = new CustomizerFrame();
 		theFrame.origin = new Vec2D(view2DPosX, view2DPosY);
 		theFrame.size = new Vec2D(viewSizeX, viewSizeY);
-		customizerView2D = new CustomizerView(view2D, null, grid2D);
+		customizerView2D = new CustomizerView(view2D, theFrame, grid2D, transform2D);
 		
 		gfx = new ToxiclibsSupport(this, view3D);
 		RG.init(this);
@@ -192,6 +189,7 @@ public class MCPCustomizer extends PApplet {
 		background(255);
 		fill(0);
 
+		customizerView2D.draw(container.allDrawables());
 //		draw2DView();
 		
 		draw3DView();
