@@ -42,7 +42,7 @@ public class GShape implements Drawable2D, Drawable3D
     vertices = initVertices;
     edges = new ArrayList<Edge>();
     vertices3D = new ArrayList<Vec3D>();
-    
+ 
     for (Vec2D v : vertices)
     {
       vertices3D.add(v.add(position2D).to3DXY());
@@ -56,6 +56,21 @@ public class GShape implements Drawable2D, Drawable3D
   public void setScalingFactor(float factor)
   {
 	  scalingFactor = factor;
+  }
+  
+  public float getScalingFactor()
+  {
+	  return scalingFactor;
+  }
+  
+  public void setScalingFactor3D(float factor)
+  {
+	  scalingFactor3D = factor;
+  }
+  
+  public float getScalingFactor3D()
+  {
+	  return scalingFactor3D;
   }
   
   public void recalculate(List<Vec2D> basicShape)
@@ -553,11 +568,14 @@ public class GShape implements Drawable2D, Drawable3D
 	p.beginShape();
 	for(Cutout cutout : cutouts)
 	{
-		p.fill(cutout.getSlaveShape().getShape().getMaterial().getMaterialColor());
-	  for(Vec3D vector : transformTo3D(b, cutout.getVectors()))
-	  {
-	    p.vertex(vector.x(), vector.y(), vector.z());
-	  }
+		if (!cutout.getSlaveShape().getShape().getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+		{
+			p.fill(cutout.getSlaveShape().getShape().getMaterial().getMaterialColor());
+			for(Vec3D vector : transformTo3D(b, cutout.getVectors()))
+			{
+				p.vertex(vector.x(), vector.y(), vector.z());
+			}
+		}
 	}
 	p.endShape(PConstants.CLOSE);
   }

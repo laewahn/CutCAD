@@ -18,8 +18,7 @@ public class Connection implements Drawable2D
 	private boolean isSelected, isActive;
 	private static List<Connection> connections; // wrong place???
 	private float tolerance = 5f;
-	private float scalingFactor = 0.5f;
-	  private float boundingBoxSize = 4/scalingFactor;
+	private float scalingFactor, boundingBoxSize;
 
 	/** 
 	 * Constructor
@@ -92,13 +91,10 @@ public class Connection implements Drawable2D
 		this.slaveEdge = e;
 	}
 
-	@Override
 	public void draw2D(PGraphics p) {
-		this.drawConnection(p);
-	}
-	
-	private void drawConnection(PGraphics p)
-	{
+		scalingFactor = masterEdge.getShape().getScalingFactor();
+		boundingBoxSize = 4 / scalingFactor;
+		
 		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D()).scale(scalingFactor);
 		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D()).scale(scalingFactor);
 		if (this.isSelected)

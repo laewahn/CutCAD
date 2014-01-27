@@ -21,8 +21,8 @@ public class PolygonTool extends Tool {
 	private List<Vec2D> vertices;
 	
 	private Vec2D lastKnownMousePositon;
-	private float scalingFactor = 0.5f;
-	private float boundingBoxSize = 4/scalingFactor;
+	private float scalingFactor, boundingBoxSize;
+
 
 	public PolygonTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "DrawPolygon.svg");
@@ -69,7 +69,9 @@ public class PolygonTool extends Tool {
 	}
 
 	@Override
-	public void draw2D(PGraphics p) {		
+	public void draw2D(PGraphics p) {	
+		scalingFactor = super.getScalingFactor();
+		boundingBoxSize = 4/scalingFactor;
 		if (vertices.size() > 0)
 		{
 			drawCloseRect(p);

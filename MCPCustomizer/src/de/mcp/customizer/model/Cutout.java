@@ -13,8 +13,7 @@ public class Cutout implements Drawable2D {
 	private float angle;
 	private GShape master, slave;
 	private boolean isSelected, isActive;
-	private float scalingFactor = 0.5f;
-	private float boundingBoxSize = 4 / scalingFactor;
+	private float scalingFactor, boundingBoxSize;
 //	private static ArrayList<Cutout> allCutouts = new ArrayList<Cutout>();
 
 	/**
@@ -222,6 +221,9 @@ public class Cutout implements Drawable2D {
 	 * Draw cut-out
 	 */
 	public void draw2D(PGraphics p) {
+		scalingFactor = master.getScalingFactor();
+		boundingBoxSize = 4 / scalingFactor;
+
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D())
 				.add(this.position).scale(scalingFactor);
 		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D()).scale(

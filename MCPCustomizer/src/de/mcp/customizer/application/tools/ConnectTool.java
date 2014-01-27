@@ -16,7 +16,7 @@ public class ConnectTool extends Tool {
 
 	Connection previewConnection;
 
-	private float scalingFactor = 0.5f;
+	private float scalingFactor;
 	private String lastMessage;
 
 	public ConnectTool(MCPCustomizer mcpCustomizer, ObjectContainer container) {
@@ -94,6 +94,7 @@ public class ConnectTool extends Tool {
 	}
 
 	public void draw2D(PGraphics p) {
+		scalingFactor = super.getScalingFactor();
 		if (selectedFirst) {
 			Vec2D mid = previewConnection
 					.getMasterEdge()

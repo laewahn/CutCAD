@@ -20,7 +20,7 @@ public class CutoutTool extends Tool {
     Vec2D originalMousePosition;
     Vec2D relativePosition;
     Shape masterShape;
-    private float scalingFactor = 0.5f;
+    private float scalingFactor;
     
     public CutoutTool(MCPCustomizer customizer, ObjectContainer container) {
     	super(customizer, container, "Cutout.svg");
@@ -77,6 +77,7 @@ public class CutoutTool extends Tool {
     
     public void draw2D(PGraphics p)
     {
+        scalingFactor = super.getScalingFactor();
         if (selectedFirst) {	
     		Polygon2D findCenter = new Polygon2D();
     		for (Edge e : masterShape.getShape().getEdges()) findCenter.add(e.getV1().copy());

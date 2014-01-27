@@ -16,7 +16,7 @@ public class ImportSVG extends PApplet {
 	private RPoint[][] pointPaths;
 	private List<Shape> shapes;
 	// ToDO: scalingFactor only correct for inkscape, illustrator needs another
-	private float scalingFactor = 2.82222229120988f; // ->Preferences (SVG
+	private float scalingInkscape = 2.82222229120988f; // ->Preferences (SVG
 	// Resolution)
 
 	/**
@@ -78,11 +78,11 @@ public class ImportSVG extends PApplet {
 			MinX = ((pointPaths[i][j].x < MinX) ? pointPaths[i][j].x : MinX);
 			MinY = ((pointPaths[i][j].y < MinY) ? pointPaths[i][j].y : MinY);
 		}
-		Vec3D position = new Vec3D(MinX * scalingFactor, MinY * scalingFactor,
+		Vec3D position = new Vec3D(MinX * scalingInkscape, MinY * scalingInkscape,
 				0);
 		for (int j = 0; j < pointPaths[i].length; j++) {
-			path.add(new Vec2D((pointPaths[i][j].x) * scalingFactor
-					- position.x(), (pointPaths[i][j].y) * scalingFactor
+			path.add(new Vec2D((pointPaths[i][j].x) * scalingInkscape
+					- position.x(), (pointPaths[i][j].y) * scalingInkscape
 					- position.y()));
 		}
 

@@ -18,6 +18,14 @@ public abstract class Tool implements Drawable2D {
     protected ObjectContainer objectContainer;
     
     private float scalingFactor = 0.5f;
+    
+    public float getScalingFactor() {
+    	return scalingFactor;
+    }
+    
+    public void setScalingFactor(float factor) {
+    	scalingFactor = factor;
+    }
 
     public Tool(MCPCustomizer customizer, ObjectContainer container, String iconName) {
     	this(customizer.view2DRect, customizer.properties, customizer.statusbar, customizer.transform2D, iconName);

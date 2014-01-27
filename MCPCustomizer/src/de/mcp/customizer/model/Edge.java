@@ -19,8 +19,7 @@ public class Edge implements Drawable2D, Drawable3D {
 	private Vec3D p3D1, p3D2; // 3D logic
 	private Vec2D v1, v2; // 2D logic
 	private ArrayList<Vec2D> tenons; // 2D representation
-	private float scalingFactor = 0.5f;
-	private float boundingBoxSize = 4 / scalingFactor;
+	private float scalingFactor, boundingBoxSize;
 	private boolean isHighlighted, isLocked, isSelected;
 	ArrayList<Vec2D> definingPoints; // highlighting area for selecting an edge
 
@@ -188,6 +187,9 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * or selected
 	 */
 	public void draw2D(PGraphics p) {
+		scalingFactor = getShape().getScalingFactor();
+		boundingBoxSize = 4 / scalingFactor;
+		
 		if (this.isHighlighted()) {
 			p.stroke(255, 0, 0);
 			p.noFill();
