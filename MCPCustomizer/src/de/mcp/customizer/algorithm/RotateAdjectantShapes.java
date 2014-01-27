@@ -25,9 +25,9 @@ public class RotateAdjectantShapes {
 	private static float smallTolerance = 1f;
 
 	private static Shape virtualShape = new Rectangle(new Vec3D(0, 0, 0), 1, 1);
-	private static Edge edgeA = new Edge(virtualShape.getShape(), new Vec3D(1,
+	private static Edge edgeA = new Edge(virtualShape.getGShape(), new Vec3D(1,
 			1, 1), new Vec3D(1, 1, 1), new Vec2D(1, 1), new Vec2D(1, 1));
-	private static Edge edgeB = new Edge(virtualShape.getShape(), new Vec3D(1,
+	private static Edge edgeB = new Edge(virtualShape.getGShape(), new Vec3D(1,
 			1, 1), new Vec3D(1, 1, 1), new Vec2D(1, 1), new Vec2D(1, 1));
 	private static Vec3D intersectionPoint = new Vec3D(0, 0, 0);
 
@@ -83,12 +83,12 @@ public class RotateAdjectantShapes {
 		// virtual shape for the alignment
 		initialiseVirtualShape(masterEdge, slaveEdge);
 
-		Edge rotateEdgeSlaveOfConnectingShape = virtualShape.getShape()
+		Edge rotateEdgeSlaveOfConnectingShape = virtualShape.getGShape()
 				.getEdges().get(1); // the Vec3D of the slave-
-		Edge rotateEdgeMasterOfConnectingShape = virtualShape.getShape()
+		Edge rotateEdgeMasterOfConnectingShape = virtualShape.getGShape()
 				.getEdges().get(0); // and the masterEdge are stored here
 
-		if (masterEdge.getShape().getNumberOfConnections() > 1) {
+		if (masterEdge.getGShape().getNumberOfConnections() > 1) {
 			connection.connectEdges(rotateEdgeSlaveOfConnectingShape,
 					rotatingEdgeSlave, (float) Math.PI); // align the other
 			// shape planar with
@@ -108,7 +108,7 @@ public class RotateAdjectantShapes {
 			CreateTenons.createOutlineOfEdge(masterEdge, slaveEdge);
 			connection.lockConnection(true);
 			return true;
-		} else if (slaveEdge.getShape().getNumberOfConnections() > 1) {
+		} else if (slaveEdge.getGShape().getNumberOfConnections() > 1) {
 			// the equivalent as above for the other edge
 			connection.connectEdges(rotateEdgeMasterOfConnectingShape,
 					rotatingEdgeMaster, (float) Math.PI);
@@ -194,7 +194,7 @@ public class RotateAdjectantShapes {
 	 * Find the edge, around which a shape may rotate and returns it
 	 */
 	private static Edge getRotatingEdge(Edge edge) {
-		List<Edge> edges = edge.getShape().getEdges();
+		List<Edge> edges = edge.getGShape().getEdges();
 		int numberOfEdges = edges.size();
 		if (compareEdges(edge, getOtherEdge(edge))) {
 			return edges.get((edges.indexOf(edge) + numberOfEdges - 1)
@@ -230,7 +230,7 @@ public class RotateAdjectantShapes {
 	 * Initializes virtual shape is made out of the two rotating edges
 	 */
 	private static void initialiseVirtualShape(Edge masterEdge, Edge slaveEdge) {
-		List<Edge> edges = virtualShape.getShape().getEdges();
+		List<Edge> edges = virtualShape.getGShape().getEdges();
 
 		edges.get(0).setP3D1(getRotatingEdge(masterEdge).getP3D1().copy());
 		edges.get(0).setP3D2(getRotatingEdge(masterEdge).getP3D2().copy());
@@ -260,7 +260,7 @@ public class RotateAdjectantShapes {
 		Vec3D normalVectorSlave = directionEdge.cross(directionRotatingEdge)
 				.normalize();
 
-		float angle = safeAngleBetween(virtualShape.getShape()
+		float angle = safeAngleBetween(virtualShape.getGShape()
 				.getNormalVector(), normalVectorSlave);
 
 		return angle;
@@ -318,8 +318,8 @@ public class RotateAdjectantShapes {
 	 * the edge around the axis on the virtual shape plane.
 	 */
 	private static Line3D getIntersectionLine(Edge edge) {
-		Edge virtualEdgeA = virtualShape.getShape().getEdges().get(0);
-		Edge virtualEdgeB = virtualShape.getShape().getEdges().get(1);
+		Edge virtualEdgeA = virtualShape.getGShape().getEdges().get(0);
+		Edge virtualEdgeB = virtualShape.getGShape().getEdges().get(1);
 		Vec3D rotationAxis = getPointOfRotatingEdge(edge).sub(
 				getCommonPoint(edge));
 		Vec3D notCommonPoint = getNotCommonPoint(edge)

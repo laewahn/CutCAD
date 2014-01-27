@@ -36,19 +36,19 @@ public class CutoutTool extends Tool {
         {
             if (this.inView(position) && button == PConstants.LEFT)
             {
-            	if (!selectedFirst && s.getShape().isSelected() )
+            	if (!selectedFirst && s.getGShape().isSelected() )
             	{
             		this.customizer.displayStatus("Now select the shape you want to add as a cutout");
-            		s.getShape().setSelected(true);
+            		s.getGShape().setSelected(true);
             		Vec2D currentMousePosition = this.positionRelativeToView(position);
                     this.originalMousePosition.set(currentMousePosition);
             		masterShape = s;
             		selectedFirst = true;
             	}
-            	else if (selectedFirst && s.getShape().isSelected() )
+            	else if (selectedFirst && s.getGShape().isSelected() )
             	{
             		this.customizer.displayStatus("Cutout created! If you want to create another cutout, select the shape you want to add a cutout to");
-            		masterShape.getShape().addCutout(s.getShape());
+            		masterShape.getGShape().addCutout(s.getGShape());
             		selectedFirst = false;
             	}
             }
@@ -70,7 +70,7 @@ public class CutoutTool extends Tool {
 	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
             for (Shape s : this.objectContainer.allShapes()) {
-                s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
+                s.getGShape().setSelected(s.getGShape().mouseOver(relativePosition));
             }
         }
     }
@@ -80,9 +80,9 @@ public class CutoutTool extends Tool {
         scalingFactor = super.getScalingFactor();
         if (selectedFirst) {	
     		Polygon2D findCenter = new Polygon2D();
-    		for (Edge e : masterShape.getShape().getEdges()) findCenter.add(e.getV1().copy());
+    		for (Edge e : masterShape.getGShape().getEdges()) findCenter.add(e.getV1().copy());
     		Vec2D center = findCenter.getCentroid();
-            Vec2D mid = center.add(masterShape.getShape().getPosition2D());
+            Vec2D mid = center.add(masterShape.getGShape().getPosition2D());
             p.stroke(255,0,0);
             Vec2D lineStart = mid.scale(scalingFactor);
             Vec2D lineEnd = this.relativePosition.scale(scalingFactor);

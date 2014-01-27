@@ -99,7 +99,7 @@ public class ConnectTool extends Tool {
 			Vec2D mid = previewConnection
 					.getMasterEdge()
 					.getMid()
-					.add(previewConnection.getMasterEdge().getShape()
+					.add(previewConnection.getMasterEdge().getGShape()
 							.getPosition2D());
 			p.stroke(255, 0, 0);
 			Vec2D lineStart = mid.scale(scalingFactor);

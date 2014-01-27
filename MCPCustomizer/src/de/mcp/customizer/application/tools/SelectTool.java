@@ -28,11 +28,11 @@ public class SelectTool extends Tool {
 	public void mouseButtonPressed(Vec2D position, int button) {
 		boolean noneSelected = true;
 		for (Shape s : this.objectContainer.allShapes()) {
-			if (this.inView(position) && s.getShape().isSelected()
+			if (this.inView(position) && s.getGShape().isSelected()
 					&& button == PConstants.LEFT) {
 				this.customizer.properties.show();
 				this.customizer.properties.plugTo(s);
-			} else if (this.inView(position) && s.getShape().isSelected()
+			} else if (this.inView(position) && s.getGShape().isSelected()
 					&& button == PConstants.RIGHT) {
 				this.dragging = true;
 				// this.originalMousePosition.set(position.sub(new
@@ -85,13 +85,13 @@ public class SelectTool extends Tool {
 
 			boolean noneSelected = true;
 			for (Shape s : this.objectContainer.allShapes()) {
-				s.getShape().setSelected(
-						s.getShape().mouseOver(relativePosition));
+				s.getGShape().setSelected(
+						s.getGShape().mouseOver(relativePosition));
 
-				if (s.getShape().isSelected() && this.dragging) {
+				if (s.getGShape().isSelected() && this.dragging) {
 					Vec2D currentMousePosition = this
 							.positionRelativeToView(position);
-					s.getShape().translate2D(
+					s.getGShape().translate2D(
 							currentMousePosition.sub(originalMousePosition));
 					originalMousePosition.set(currentMousePosition);
 					noneSelected = false;
@@ -101,7 +101,7 @@ public class SelectTool extends Tool {
 				c.setSelected(c.mouseOver(relativePosition));
 				if (c.isSelected())
 				{
-					c.getMasterShape().getShape().setSelected(false);
+					c.getMasterShape().getGShape().setSelected(false);
 				}
 
 				if (c.isSelected() && this.draggingCutout) {
@@ -131,7 +131,7 @@ public class SelectTool extends Tool {
 			}
 		} else {
 			for (Shape s : this.objectContainer.allShapes()) {
-				s.getShape().setSelected(false);
+				s.getGShape().setSelected(false);
 			}
 		}
 	}

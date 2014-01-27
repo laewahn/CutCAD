@@ -26,7 +26,7 @@ public class DeleteTool extends Tool {
     public void mouseButtonPressed(Vec2D position, int button)
     {
         for(Shape s : this.objectContainer.allShapes()) {
-        	if (this.inView(position) && s.getShape().isSelected() && button == PConstants.LEFT)
+        	if (this.inView(position) && s.getGShape().isSelected() && button == PConstants.LEFT)
             {
                 removeConnectionsContaining(s);
                 removeCutoutsContaining(s);
@@ -53,8 +53,8 @@ public class DeleteTool extends Tool {
     private void removeConnectionsContaining(Shape s)
     {
     	for(Connection c : this.objectContainer.allConnections()) {
-    		boolean shapeIsParentOfMasterEdge = c.getMasterEdge().getShape().getParent().equals(s);
-            boolean shapeIsParentOfSlaveEdge = c.getSlaveEdge().getShape().getParent().equals(s);
+    		boolean shapeIsParentOfMasterEdge = c.getMasterEdge().getGShape().getShape().equals(s);
+            boolean shapeIsParentOfSlaveEdge = c.getSlaveEdge().getGShape().getShape().equals(s);
             if (shapeIsParentOfMasterEdge || shapeIsParentOfSlaveEdge)
             {
                 c.undoConnection();
@@ -87,7 +87,7 @@ public class DeleteTool extends Tool {
 
 
             for (Shape s : this.objectContainer.allShapes()) {
-                s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
+                s.getGShape().setSelected(s.getGShape().mouseOver(relativePosition));
             }
             for (Connection c : this.objectContainer.allConnections()) {
                 c.setSelected(c.mouseOver(relativePosition));

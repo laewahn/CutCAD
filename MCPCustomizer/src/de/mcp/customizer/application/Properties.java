@@ -213,7 +213,7 @@ public class Properties extends PApplet
 
 	public void changeMaterial(float eventNumber)
 	{
-		shapeCurrentlyPluggedTo.getShape().setMaterial(materials.get((int)eventNumber));
+		shapeCurrentlyPluggedTo.getGShape().setMaterial(materials.get((int)eventNumber));
 	}
 
 	public void unplugAll()
@@ -221,7 +221,7 @@ public class Properties extends PApplet
 		if (this.shapeCurrentlyPluggedTo != null)
 		{
 			for(Slider s : dummySliders) s.unplugFrom(this.shapeCurrentlyPluggedTo);
-			this.shapeCurrentlyPluggedTo.getShape().setActive(false);
+			this.shapeCurrentlyPluggedTo.getGShape().setActive(false);
 		}
 		if (this.connectionCurrentlyPluggedTo != null)
 		{
@@ -268,7 +268,7 @@ public class Properties extends PApplet
 	public void plugTo(Shape s)
 	{
 		unplugAll();
-		if(s.getShape().getNumberOfConnections()==0)
+		if(s.getGShape().getNumberOfConnections()==0)
 		{
 			for(int i=0; i<s.getNumberOfControls(); i++)
 			{
@@ -288,10 +288,10 @@ public class Properties extends PApplet
 				dummySliders.get(i).plugTo(s);
 			}
 		}
-		setMaterial.setCaptionLabel(s.getShape().getMaterial().getMaterialName());
+		setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
 		setMaterial.show();
 
-		s.getShape().setActive(true);
+		s.getGShape().setActive(true);
 		this.shapeCurrentlyPluggedTo = s;
 	}
 

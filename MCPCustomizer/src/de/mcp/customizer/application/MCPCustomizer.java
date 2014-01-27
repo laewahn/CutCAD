@@ -136,7 +136,7 @@ public class MCPCustomizer extends PApplet {
 
 	    for (Shape s : this.container.allShapes())
 	    {
-	      s.getShape().draw2D(view2D);
+	      s.getGShape().draw2D(view2D);
 	    }
 	    
 	    for (Connection c : this.container.allConnections())
@@ -176,7 +176,7 @@ public class MCPCustomizer extends PApplet {
 	    
 	    for (Shape s : container.allShapes())
 	    {
-	      s.getShape().draw3D(view3D);
+	      s.getGShape().draw3D(view3D);
 	    }
 
 	    if(meshSTL.isStlImported())

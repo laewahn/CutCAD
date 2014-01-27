@@ -92,11 +92,11 @@ public class Connection implements Drawable2D
 	}
 
 	public void draw2D(PGraphics p) {
-		scalingFactor = masterEdge.getShape().getScalingFactor();
+		scalingFactor = masterEdge.getGShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		
-		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D()).scale(scalingFactor);
-		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D()).scale(scalingFactor);
+		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D()).scale(scalingFactor);
+		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getGShape().getPosition2D()).scale(scalingFactor);
 		if (this.isSelected)
 		{
 			p.stroke(255, 0, 0);
@@ -139,8 +139,8 @@ public class Connection implements Drawable2D
 	 */
 	public boolean mouseOver(Vec2D mousePosition)
 	{
-		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getShape().getPosition2D());
-		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getShape().getPosition2D());
+		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D());
+		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getGShape().getPosition2D());
 
 		// create a vector that is perpendicular to the connections line
 		Vec2D perpendicularVector = mid1.sub(mid2).perpendicular().getNormalizedTo(boundingBoxSize);
@@ -172,19 +172,19 @@ public class Connection implements Drawable2D
 		// Edges are not locked anymore
 		lockConnection(false);
 		// Maybe in the future, this should also rotate the 3D-Shape back to its original position
-		if(masterEdge.getShape().getNumberOfConnections() == 0) 
+		if(masterEdge.getGShape().getNumberOfConnections() == 0) 
 		{
-			masterEdge.getShape().recalculate(masterEdge.getShape().getVertices());
+			masterEdge.getGShape().recalculate(masterEdge.getGShape().getVertices());
 		}
-		if(slaveEdge.getShape().getNumberOfConnections() == 0)
+		if(slaveEdge.getGShape().getNumberOfConnections() == 0)
 		{
-			slaveEdge.getShape().recalculate(slaveEdge.getShape().getVertices());
+			slaveEdge.getGShape().recalculate(slaveEdge.getGShape().getVertices());
 		}
-		if(masterEdge.getShape().getNumberOfConnections() == 1) // Do weird stuff: lockup this connection and realign, maybe not necessary
+		if(masterEdge.getGShape().getNumberOfConnections() == 1) // Do weird stuff: lockup this connection and realign, maybe not necessary
 		{
 			recalculateConnectedEdge(masterEdge);
 		}
-		if(slaveEdge.getShape().getNumberOfConnections() == 1)
+		if(slaveEdge.getGShape().getNumberOfConnections() == 1)
 		{
 			recalculateConnectedEdge(slaveEdge);
 		}  
@@ -192,7 +192,7 @@ public class Connection implements Drawable2D
 
 	private void recalculateConnectedEdge(Edge edge)
 	{
-		GShape shape = edge.getShape();
+		GShape shape = edge.getGShape();
 		for (Edge e : shape.getEdges())
 		{
 			for (Connection c : Connection.getConnections())
@@ -221,7 +221,7 @@ public class Connection implements Drawable2D
 	 */
 	public String connect()
 	{
-		if (masterEdge.getShape() == slaveEdge.getShape())
+		if (masterEdge.getGShape() == slaveEdge.getGShape())
 		{
 			// no connection allowed between two sides of the same shape
 			// (until we use flexible materals :-)
@@ -237,14 +237,14 @@ public class Connection implements Drawable2D
 			// no connection between edges of different length (problem: not exacty same length...)
 			return "Edges have different length!";
 		}
-		else if (slaveEdge.getShape().getNumberOfConnections() == 0)
+		else if (slaveEdge.getGShape().getNumberOfConnections() == 0)
 		{
 			connectEdges(masterEdge, slaveEdge, (float) Math.PI);
 			lockConnection(true);
 			return "Connection created!";
 
 		}
-		else if (masterEdge.getShape().getNumberOfConnections() == 0)
+		else if (masterEdge.getGShape().getNumberOfConnections() == 0)
 		{
 			connectEdges(slaveEdge, masterEdge, (float) Math.PI);
 			lockConnection(true);
@@ -257,7 +257,7 @@ public class Connection implements Drawable2D
 			lockConnection(true);
 			return "Connection created!";
 		}
-		else if(((masterEdge.getShape().getNumberOfConnections() == 1) || (slaveEdge.getShape().getNumberOfConnections() == 1))
+		else if(((masterEdge.getGShape().getNumberOfConnections() == 1) || (slaveEdge.getGShape().getNumberOfConnections() == 1))
 				&& (masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
 						masterEdge.getP3D1().equalsWithTolerance(slaveEdge.getP3D2(), tolerance) || 
 						masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
@@ -291,8 +291,8 @@ public class Connection implements Drawable2D
 	public void lockConnection(boolean locked)
 	{
 		int addNumber = locked ? 1 : -1;
-		slaveEdge.getShape().addNumberOfConnections(addNumber);
-		masterEdge.getShape().addNumberOfConnections(addNumber);
+		slaveEdge.getGShape().addNumberOfConnections(addNumber);
+		masterEdge.getGShape().addNumberOfConnections(addNumber);
 		slaveEdge.setLocked(locked);
 		masterEdge.setLocked(locked);
 	}
@@ -304,7 +304,7 @@ public class Connection implements Drawable2D
 	 */
 	public void setAngle(float angle)
 	{
-		if (!(this.slaveEdge.getShape().getNumberOfConnections() > 1))
+		if (!(this.slaveEdge.getGShape().getNumberOfConnections() > 1))
 		{
 			this.angle = angle;
 			connectEdges(this.masterEdge, this.slaveEdge, (float) Math.toRadians(angle));
@@ -320,8 +320,8 @@ public class Connection implements Drawable2D
 	 * @param angle the angle between master and slave
 	 */
 	public void connectEdges(Edge masterEdge, Edge slaveEdge, float angle) {
-		GShape master = masterEdge.getShape();
-		GShape slave = slaveEdge.getShape();
+		GShape master = masterEdge.getGShape();
+		GShape slave = slaveEdge.getGShape();
 
 		alignEdges(slave, masterEdge, slaveEdge);
 
@@ -396,7 +396,7 @@ public class Connection implements Drawable2D
 	 * @return The current angle between the two shapes connected by this connection
 	 */
 	public float getAngle() {
-		if (angle == 400) angle = (float) Math.toDegrees(calculateAngleBetweenNormals(masterEdge.getShape(), slaveEdge.getShape()));
+		if (angle == 400) angle = (float) Math.toDegrees(calculateAngleBetweenNormals(masterEdge.getGShape(), slaveEdge.getGShape()));
 		return angle;
 	}
 

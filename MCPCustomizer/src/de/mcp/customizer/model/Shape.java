@@ -1,7 +1,7 @@
 package de.mcp.customizer.model;
 public abstract class Shape
 {
-  public abstract GShape getShape();
+  public abstract GShape getGShape();
   public abstract int getValue(int index);
   public abstract Shape copy();
   public abstract int getNumberOfControls();

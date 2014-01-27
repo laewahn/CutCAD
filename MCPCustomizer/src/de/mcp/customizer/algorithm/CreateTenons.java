@@ -89,16 +89,16 @@ public class CreateTenons {
 	 */
 	public static void createOutlineOfEdge(Edge masterEdge, Edge slaveEdge) {
 
-		Vec3D p1 = masterEdge.getShape().get3Dperpendicular(
+		Vec3D p1 = masterEdge.getGShape().get3Dperpendicular(
 				masterEdge.getP3D1(), masterEdge.getP3D2());
-		Vec3D p2 = slaveEdge.getShape().get3Dperpendicular(slaveEdge.getP3D1(),
+		Vec3D p2 = slaveEdge.getGShape().get3Dperpendicular(slaveEdge.getP3D1(),
 				slaveEdge.getP3D2());
 		float angle = safeAngleBetween(p1, p2);
 
 		float edgeLength = masterEdge.getV1().distanceTo(masterEdge.getV2());
 
-		int thicknessMaster = masterEdge.getShape().getThickness();
-		int thicknessSlave = slaveEdge.getShape().getThickness();
+		int thicknessMaster = masterEdge.getGShape().getThickness();
+		int thicknessSlave = slaveEdge.getGShape().getThickness();
 
 		// Calculate the number of tenons on the edges with a preliminary length
 		// of these tenons
@@ -217,7 +217,7 @@ public class CreateTenons {
 			float lengthOfATenon, float tenonHeight, float tenonDepth,
 			int numberOfTenons, boolean beginWithExtrusion) {
 		Vec2D edgeDirection = edge.getV2().sub(edge.getV1()).getNormalized();
-		Vec2D tenonDirection = edge.getShape().get2Dperpendicular(edge.getV2(),
+		Vec2D tenonDirection = edge.getGShape().get2Dperpendicular(edge.getV2(),
 				edge.getV1());
 
 		ArrayList<Vec2D> listTenons = new ArrayList<Vec2D>();

@@ -16,7 +16,7 @@ public class PolygonShape extends Shape {
 	}
 	
 	@Override
-	public GShape getShape() {
+	public GShape getGShape() {
 		return this.shape;
 	}
 
@@ -33,7 +33,7 @@ public class PolygonShape extends Shape {
 	@Override
 	public Shape copy() 
 	{
-		PolygonShape copy = new PolygonShape(this.getShape().getVertices(), this.getShape().getPosition2D().to3DXY());
+		PolygonShape copy = new PolygonShape(this.getGShape().getVertices(), this.getGShape().getPosition2D().to3DXY());
 		copy.setShape(this.shape.copy(copy));
 		return copy;
 	}

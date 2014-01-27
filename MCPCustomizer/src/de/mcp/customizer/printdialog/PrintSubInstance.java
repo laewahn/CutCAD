@@ -57,13 +57,13 @@ public class PrintSubInstance
 	  final float scaleFactor = 19.6850393700787f;
 	  for(int i = 0; i < shapesPlaced.size(); i++)
 	  {
-		  List<Vec2D> vertices = shapesPlaced.get(i).getShape().getVertices();
+		  List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
 		  List<Vec2D> newVertices = new ArrayList<Vec2D>();
 		  for(int j = 0; j < vertices.size(); j++)
 		  {
 			  newVertices.add(new Vec2D(vertices.get(j)));
 		  }
-		  Vec2D position = shapesPlaced.get(i).getShape().getPosition2D();
+		  Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
 		  for(int j = 0; j < newVertices.size(); j++)
 		  {
 			  newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
@@ -111,8 +111,8 @@ public class PrintSubInstance
 	  String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" + widthInPx + "mm\" height=\"" + heightInPx + "mm\">";
 	  for(int i = 0; i < shapesPlaced.size(); i++)
 	  {
-		  List<Vec2D> vertices = shapesPlaced.get(i).getShape().getVertices();
-		  Vec2D position = shapesPlaced.get(i).getShape().getPosition2D();
+		  List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
+		  Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
 		  for(int j = 0; j < vertices.size(); j++)
 		  {
 			  if(j == (vertices.size()-1))
@@ -142,7 +142,7 @@ public class PrintSubInstance
 	  {
 		  for(int j = i+1; j < shapesPlaced.size(); j++)
 		  {
-			  if(shapesPlaced.get(i).getShape().overlapsWith(shapesPlaced.get(j).getShape()))
+			  if(shapesPlaced.get(i).getGShape().overlapsWith(shapesPlaced.get(j).getGShape()))
 			  {
 				  return true;
 			  }

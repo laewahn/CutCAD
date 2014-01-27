@@ -32,12 +32,12 @@ public class CopyTool extends Tool {
     		{
     			for (Shape s : this.objectContainer.allShapes())
     			{
-    				if (s.getShape().isSelected() && button == PConstants.LEFT)
+    				if (s.getGShape().isSelected() && button == PConstants.LEFT)
     				{
     					this.customizer.displayStatus("Shape selected! Use the left mouse button to create copies or use the right mouse button to clear the selection");
-    					master = s.getShape();
+    					master = s.getGShape();
     					previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
-    					previewShape.getShape().setMaterial(master.getMaterial());
+    					previewShape.getGShape().setMaterial(master.getMaterial());
     					selected = true;                        
     				}
     			}
@@ -55,7 +55,7 @@ public class CopyTool extends Tool {
     			{
     				this.customizer.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     				Shape copy = master.copyCompleteStructure();
-    				copy.getShape().setPosition2D(lastMousePosition);
+    				copy.getGShape().setPosition2D(lastMousePosition);
     				copy.recalculate();
     				this.objectContainer.addShape(copy);
     			}
@@ -76,14 +76,14 @@ public class CopyTool extends Tool {
 
 			for (Shape s : this.objectContainer.allShapes()) 
 			{
-				s.getShape().setSelected(s.getShape().mouseOver(lastMousePosition));
+				s.getGShape().setSelected(s.getGShape().mouseOver(lastMousePosition));
 			}
 		} 
 		else 
 		{
 			for (Shape s : this.objectContainer.allShapes()) 
 			{
-				s.getShape().setSelected(false);
+				s.getGShape().setSelected(false);
 			}
 		}
 	}
@@ -92,8 +92,8 @@ public class CopyTool extends Tool {
     {
     	if(selected)
     	{
-    		previewShape.getShape().setPosition2D(lastMousePosition);
-    		previewShape.getShape().draw2D(p);
+    		previewShape.getGShape().setPosition2D(lastMousePosition);
+    		previewShape.getGShape().draw2D(p);
     	}
     }
     

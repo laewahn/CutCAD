@@ -150,9 +150,9 @@ public class GShape implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * @return the parent
+	 * @return the parent shape
 	 */
-	public Shape getParent() {
+	public Shape getShape() {
 		return this.shape;
 	}
 
@@ -342,7 +342,7 @@ public class GShape implements Drawable2D, Drawable3D {
 		// Therefore produce a new GShape with the 2D positions (for the 3D
 		// representation)
 		//
-		GShape helperShape = new GShape(vertices, position3D, this.getParent());
+		GShape helperShape = new GShape(vertices, position3D, this.getShape());
 
 		GShape master = this;
 		GShape slave = helperShape;
@@ -683,9 +683,9 @@ public class GShape implements Drawable2D, Drawable3D {
 		p.endShape(PConstants.CLOSE);
 		p.beginShape();
 		for (Cutout cutout : cutouts) {
-			if (!cutout.getSlaveShape().getShape().getMaterial()
+			if (!cutout.getSlaveShape().getGShape().getMaterial()
 					.getMaterialName().equals("Nothing 0,5 mm")) {
-				p.fill(cutout.getSlaveShape().getShape().getMaterial()
+				p.fill(cutout.getSlaveShape().getGShape().getMaterial()
 						.getMaterialColor());
 				for (Vec3D vector : transformTo3D(isTop, cutout.getVectors())) {
 					p.vertex(vector.x(), vector.y(), vector.z());
@@ -776,13 +776,13 @@ public class GShape implements Drawable2D, Drawable3D {
 	 * @return a copy of this form
 	 */
 	public Shape copyCompleteStructure() {
-		Shape copy = this.getParent().copy();
-		copy.getShape().recalculate(this.vertices);
-		copy.getShape().setMaterial(this.material);
-		copy.getShape().setName("CopyOf" + this.getName());
-		copy.getShape().removeAllCutouts();
+		Shape copy = this.getShape().copy();
+		copy.getGShape().recalculate(this.vertices);
+		copy.getGShape().setMaterial(this.material);
+		copy.getGShape().setName("CopyOf" + this.getName());
+		copy.getGShape().removeAllCutouts();
 		for (Cutout c : this.cutouts) {
-			copy.getShape().addCutout(c.copyFor(copy.getShape()));
+			copy.getGShape().addCutout(c.copyFor(copy.getGShape()));
 		}
 		return copy;
 	}

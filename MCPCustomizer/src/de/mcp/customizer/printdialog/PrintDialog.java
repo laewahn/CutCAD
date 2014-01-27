@@ -22,10 +22,10 @@ public class PrintDialog
     for(int i = 0; i < shapes.size(); i++)
     {
        Shape copy = shapes.get(i).copy();
-       copy.getShape().setPosition2D(new Vec2D(100,100));
-       copy.getShape().setScalingFactor(1);
+       copy.getGShape().setPosition2D(new Vec2D(100,100));
+       copy.getGShape().setScalingFactor(1);
        this.shapes.add(copy);
-       this.shapes.get(i).getShape().scale2D(0.1f);
+       this.shapes.get(i).getGShape().scale2D(0.1f);
     }
     calculateInstances();
     printDialogWindow = addPrintDialogFrame(600, 650, this.printInstances);
@@ -40,13 +40,13 @@ public class PrintDialog
     printInstances = new ArrayList<PrintInstance>();
     for(int i = 0; i < this.shapes.size(); i++)
     {
-    	if(!this.shapes.get(i).getShape().getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+    	if(!this.shapes.get(i).getGShape().getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
     	{
     		int j = 0;
     		boolean found = false;
     		while((j < printInstances.size()) && !found)
     		{
-    			if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.shapes.get(i).getShape().getMaterial().getMaterialName()))
+    			if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.shapes.get(i).getGShape().getMaterial().getMaterialName()))
     			{
     				this.printInstances.get(j).addShape(this.shapes.get(i));
     				found = true;
@@ -55,7 +55,7 @@ public class PrintDialog
     		}
     		if(!found)
 			{
-				this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getShape().getMaterial()));
+				this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getGShape().getMaterial()));
 			}
     	}
     }

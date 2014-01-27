@@ -37,7 +37,7 @@ public class ObjectContainer {
 		List<Edge> edges = new ArrayList<Edge>();
 		
 		for(Shape shape : this.shapes) {
-			edges.addAll(shape.getShape().getEdges());
+			edges.addAll(shape.getGShape().getEdges());
 		}
 		
 		return edges;
@@ -65,7 +65,7 @@ public class ObjectContainer {
 		List<Cutout> cutouts = new ArrayList<Cutout>();
 		
 		for(Shape s : this.shapes) {
-			cutouts.addAll(s.getShape().getCutouts());
+			cutouts.addAll(s.getGShape().getCutouts());
 		}
 		
 		return cutouts;

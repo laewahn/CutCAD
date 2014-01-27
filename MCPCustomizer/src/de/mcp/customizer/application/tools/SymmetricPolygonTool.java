@@ -68,7 +68,7 @@ public class SymmetricPolygonTool extends Tool {
 	public void draw2D(PGraphics p)
 	{
 		if (this.previewRectangle != null) {
-			this.previewRectangle.getShape().draw2D(p);
+			this.previewRectangle.getGShape().draw2D(p);
 		}
 	}
 

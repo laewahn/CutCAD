@@ -167,7 +167,7 @@ public class SymmetricPolygon extends Shape {
 	 * 
 	 * @return the corresponding GShape
 	 */
-	public GShape getShape() {
+	public GShape getGShape() {
 		return basic;
 	}
 

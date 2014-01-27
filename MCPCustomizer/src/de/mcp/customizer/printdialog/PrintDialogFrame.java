@@ -124,7 +124,7 @@ public class PrintDialogFrame extends PApplet
     	ArrayList<Shape> unplacedShapes = printInstances.get(selectedInstance).getUnplacedShapes();
     	for(int i = 0; i < unplacedShapes.size(); i++)
     	{
-    		unplacedShapesBox.addItem(unplacedShapes.get(i).getShape().getName(), i);
+    		unplacedShapesBox.addItem(unplacedShapes.get(i).getGShape().getName(), i);
     	}
     	unplacedShapesBox.updateListBoxItems();
     }
@@ -268,7 +268,7 @@ public class PrintDialogFrame extends PApplet
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
-       drawShapes.get(i).getShape().draw2D(objectLayout);
+       drawShapes.get(i).getGShape().draw2D(objectLayout);
       }
       objectLayout.endDraw();
       image(objectLayout, 0, 0);
@@ -282,7 +282,7 @@ public class PrintDialogFrame extends PApplet
         Vec2D relativePosition = this.positionRelativeToView(position);
 
         for (Shape s : printInstances.get(selectedInstance).getPlacedShapes()) {
-            s.getShape().setSelected(s.getShape().mouseOver(relativePosition));
+            s.getGShape().setSelected(s.getGShape().mouseOver(relativePosition));
         }
 	  }
   }
@@ -292,11 +292,11 @@ public class PrintDialogFrame extends PApplet
     	if(printInstances.size() > 0)
   	  	{
     		for (Shape s : printInstances.get(selectedInstance).getPlacedShapes()) {
-	            if (s.getShape().isSelected() && this.dragging)
+	            if (s.getGShape().isSelected() && this.dragging)
 	            {
 	                Vec2D position = new Vec2D(mouseX, mouseY);
 	                Vec2D currentMousePosition = this.positionRelativeToView(position);
-	                s.getShape().translate2D(currentMousePosition.sub(originalMousePosition));
+	                s.getGShape().translate2D(currentMousePosition.sub(originalMousePosition));
 	                originalMousePosition.set(currentMousePosition);
 	            }
     		}
@@ -316,12 +316,12 @@ public class PrintDialogFrame extends PApplet
 	      }
 	      for (Shape s : shapes)
 	      {
-	            if (s.getShape().isSelected() && mouseButton == PConstants.LEFT)
+	            if (s.getGShape().isSelected() && mouseButton == PConstants.LEFT)
 	            {
 	                this.dragging = true;
 	                Vec2D currentMousePosition = this.positionRelativeToView(mousePosition);
 	                this.originalMousePosition.set(currentMousePosition);
-	            } else if (s.getShape().isSelected() && mouseButton == PConstants.RIGHT){
+	            } else if (s.getGShape().isSelected() && mouseButton == PConstants.RIGHT){
 	               printInstances.get(selectedInstance).unplaceShape(s);
 	               updateListBox();
 	            }

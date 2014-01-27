@@ -14,7 +14,6 @@ public class Cutout implements Drawable2D {
 	private GShape master, slave;
 	private boolean isSelected, isActive;
 	private float scalingFactor, boundingBoxSize;
-//	private static ArrayList<Cutout> allCutouts = new ArrayList<Cutout>();
 
 	/**
 	 * @brief Constructor
@@ -71,24 +70,15 @@ public class Cutout implements Drawable2D {
 	 * @return the shape, where the cut-out is placed
 	 */
 	public Shape getMasterShape() {
-		return this.master.getParent();
+		return this.master.getShape();
 	}
 
 	/**
 	 * @return the shape, which is used as a cut-out form
 	 */
 	public Shape getSlaveShape() {
-		return this.slave.getParent();
+		return this.slave.getShape();
 	}
-
-//	/**
-//	 * get a list of all cut-outs
-//	 * 
-//	 * @return list of all cut-outs
-//	 */
-//	public static ArrayList<Cutout> getAllCutouts() {
-//		return allCutouts;
-//	}
 
 	/**
 	 * @param b

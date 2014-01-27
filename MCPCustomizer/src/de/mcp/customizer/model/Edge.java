@@ -15,7 +15,7 @@ import toxi.geom.Vec3D;
  * in 2D and 3D, and a representation of the (real) outline in 2D
  */
 public class Edge implements Drawable2D, Drawable3D {
-	private GShape shape; // know parent
+	private GShape gShape; // know parent
 	private Vec3D p3D1, p3D2; // 3D logic
 	private Vec2D v1, v2; // 2D logic
 	private ArrayList<Vec2D> tenons; // 2D representation
@@ -40,8 +40,8 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * @param v2
 	 *            end point in 2D (0.1mm)
 	 */
-	public Edge(GShape shape, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2) {
-		this.shape = shape;
+	public Edge(GShape gShape, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2) {
+		this.gShape = gShape;
 		this.p3D1 = p3D1;
 		this.p3D2 = p3D2;
 		this.v1 = v1;
@@ -61,8 +61,8 @@ public class Edge implements Drawable2D, Drawable3D {
 	/**
 	 * @return Form, to which this edge belong
 	 */
-	public GShape getShape() {
-		return shape;
+	public GShape getGShape() {
+		return gShape;
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * or selected
 	 */
 	public void draw2D(PGraphics p) {
-		scalingFactor = getShape().getScalingFactor();
+		scalingFactor = getGShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		
 		if (this.isHighlighted()) {
@@ -215,8 +215,8 @@ public class Edge implements Drawable2D, Drawable3D {
 	 */
 	public void draw3D(PGraphics p) {
 		if (this.isHighlighted()) {
-			Vec3D offset = this.getShape().getNormalVector()
-					.normalizeTo(this.getShape().getThickness() / 2 + 4);
+			Vec3D offset = this.getGShape().getNormalVector()
+					.normalizeTo(this.getGShape().getThickness() / 2 + 4);
 			p.stroke(255, 0, 0);
 			p.noFill();
 			p.strokeWeight(2);
@@ -234,8 +234,8 @@ public class Edge implements Drawable2D, Drawable3D {
 			p.fill(255);
 			p.stroke(0);
 		} else if (this.isSelected()) {
-			Vec3D offset = this.getShape().getNormalVector()
-					.normalizeTo(this.getShape().getThickness() / 2 + 4);
+			Vec3D offset = this.getGShape().getNormalVector()
+					.normalizeTo(this.getGShape().getThickness() / 2 + 4);
 			p.stroke(0, 255, 0);
 			p.noFill();
 			p.strokeWeight(2);
@@ -284,13 +284,13 @@ public class Edge implements Drawable2D, Drawable3D {
 		// rectangle around the edge
 		definingPoints = new ArrayList<Vec2D>();
 		definingPoints.add(this.getV1().sub(perpendicularVector)
-				.add(getShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor));
 		definingPoints.add(this.getV2().sub(perpendicularVector)
-				.add(getShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor));
 		definingPoints.add(this.getV2().add(perpendicularVector)
-				.add(getShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor));
 		definingPoints.add(this.getV1().add(perpendicularVector)
-				.add(getShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor));
 
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
