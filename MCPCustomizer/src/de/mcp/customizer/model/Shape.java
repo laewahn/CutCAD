@@ -7,4 +7,5 @@ public abstract class Shape
   public abstract int getNumberOfControls();
   public abstract int getControlType(int index);
   public abstract String getNameOfControl(int index);
+  public abstract void recalculate();
 }

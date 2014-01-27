@@ -88,4 +88,9 @@ public class CopyShape extends Shape {
 		return 0;
 	}
 
+	/**
+	 * Dummy - Nothing to recalculate
+	 */
+	public void recalculate() {
+	}
 }

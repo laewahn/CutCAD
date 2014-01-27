@@ -53,4 +53,10 @@ public class PolygonShape extends Shape {
 	public String getNameOfControl(int index) {
 		return null;
 	}
+	
+	/**
+	 * Dummy - Nothing to recalculate
+	 */
+	public void recalculate() {
+	}
 }
