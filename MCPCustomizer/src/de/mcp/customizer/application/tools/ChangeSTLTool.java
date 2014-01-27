@@ -15,8 +15,6 @@ public class ChangeSTLTool extends Tool {
 	private STLMesh mesh;
 
 	/**
-	 * Constructor
-	 * 
 	 * Creates a ChangeSTLTool
 	 * 
 	 * @param customizer the main class of the project

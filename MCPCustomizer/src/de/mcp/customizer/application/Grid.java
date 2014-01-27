@@ -12,8 +12,6 @@ public class Grid {
 	private PGraphics view;
 	
 	/**
-	 * Constructor
-	 * 
 	 * Creates a Grid that gets drawn on the passed PGraphics-object view and will be scaled depending on the Transformation-object t
 	 * 
 	 * @param t the transformation-object for the view

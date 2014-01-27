@@ -14,8 +14,6 @@ public class ShapeButton implements ControllerView<Button> {
   private PGraphics icon;
 
   /**
-  * Constructor
-  * 
   * Creates a ShapeButton
   * 
   * @param icon the icon to be displayed instead of the standard-button

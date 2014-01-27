@@ -20,8 +20,6 @@ public class ImportSVG extends PApplet {
 	// Resolution)
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Open standard file dialog for selecting a file
 	 * 
 	 * @param shapes

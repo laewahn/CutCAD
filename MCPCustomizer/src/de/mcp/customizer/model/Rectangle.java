@@ -15,8 +15,6 @@ public class Rectangle extends Shape {
 	private ArrayList<Vec2D> basicShape;
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Creates a rectangle. Automatic generation of a individual name by
 	 *        a static counter of all instances
 	 * 

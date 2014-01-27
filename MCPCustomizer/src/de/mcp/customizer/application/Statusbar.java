@@ -14,8 +14,6 @@ public class Statusbar {
 	private Vec2D mousePosition;
 
 	/**
-	 * Constructor
-	 * 
 	 * Creates a Statusbar.
 	 */
 	public Statusbar() {

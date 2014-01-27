@@ -33,8 +33,6 @@ public class GShape implements Drawable2D, Drawable3D {
 	private float scalingFactor3D = 0.5f;
 
 	/**
-	 * @brief Constructor
-	 * 
 	 * Creates edges with the 3D and 2D representation of this form (one edge between each pair of vertices)
 	 * Uses a standard material. 2D position is just a XY-Projection of the 3D position (where the z-component is 0)
 	 * 

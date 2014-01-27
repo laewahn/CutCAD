@@ -16,8 +16,6 @@ public class Cutout implements Drawable2D {
 	private float scalingFactor, boundingBoxSize;
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Creates a new Cut-out object, where both shapes are stored and a
 	 *        new position and angle is created for the positioning of the
 	 *        cut-out form on the master shape. The material of the cut-out

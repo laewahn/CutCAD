@@ -21,8 +21,6 @@ public class Connection implements Drawable2D
 	private float scalingFactor, boundingBoxSize;
 
 	/** 
-	 * Constructor
-	 * 
 	 * Creates a basic connection-object without specifying the two edges to be connected.
 	 * 
 	 * @param connections The list of existing connections
@@ -35,8 +33,6 @@ public class Connection implements Drawable2D
 	}
 
 	/**
-	 * Constructor 
-	 * 
 	 * Creates a connection-object, specifying the two edges to be connected.
 	 * 
 	 * @param masterEdge The edge contained by the shape considered to be master (will not be moved when connecting the two shapes)

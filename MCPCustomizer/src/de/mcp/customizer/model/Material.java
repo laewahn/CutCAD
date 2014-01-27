@@ -13,8 +13,6 @@ public class Material {
 	private int frequency;
 
 	/**
-	 * Constructor
-	 * 
 	 * @param materialName
 	 *            (Name of material)
 	 * @param thickness

@@ -42,8 +42,6 @@ public class Properties extends PApplet
 	private boolean hidden;
 
 	/**
-	 * Constructor
-	 * 
 	 * Creates a properties bar at (posX, posY) with sizeX, sizeY.
 	 * 
 	 * @param cp5 the ControlP5 object

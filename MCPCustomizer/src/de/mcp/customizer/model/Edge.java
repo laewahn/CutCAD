@@ -24,8 +24,6 @@ public class Edge implements Drawable2D, Drawable3D {
 	ArrayList<Vec2D> definingPoints; // highlighting area for selecting an edge
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Create a edge - the outline (Arraylist of Vec2D) is automatically
 	 *        build (at the beginning just the start- and end-point in 2D)
 	 * 

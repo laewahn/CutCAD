@@ -15,8 +15,6 @@ public class SymmetricPolygon extends Shape {
 	private ArrayList<Vec2D> basicShape;
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Creates a symmetric Polygon. For the basic shape The basic shape
 	 *        has three edges (the minimum). Length of the side is the average
 	 *        of sizeX and sizeY (because of mouse dragging). Automatic

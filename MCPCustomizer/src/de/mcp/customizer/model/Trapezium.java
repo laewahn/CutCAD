@@ -15,8 +15,6 @@ public class Trapezium extends Shape {
 	private ArrayList<Vec2D> basicShape;
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Creates a trapezium. For the basic shape both upper and lower side
 	 *        have the same dimension, which result in a rectangle as special
 	 *        trapezium. Automatic generation of a individual name by a static counter

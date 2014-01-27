@@ -13,8 +13,6 @@ public class CopyShape extends Shape {
 	private static int counter = 0;
 
 	/**
-	 * @brief Constructor
-	 * 
 	 *        Creates a copy of an existing shape - Set parameter corresponding
 	 *        to the original shape
 	 * 
