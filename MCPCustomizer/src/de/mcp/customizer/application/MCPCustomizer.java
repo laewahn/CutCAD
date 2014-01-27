@@ -71,7 +71,10 @@ public class MCPCustomizer extends PApplet {
 	  
 	  public STLMesh meshSTL;
 
-	  public void setup()
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#setup()
+	 */
+	public void setup()
 	  {
 	    size(displayWidth, displayHeight, P3D);
 	    ortho();
@@ -113,7 +116,10 @@ public class MCPCustomizer extends PApplet {
 	    cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX));
 	  }
 
-	  public void draw()
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#draw()
+	 */
+	public void draw()
 	  {
 	    background(255);
 	    fill(0);
@@ -124,7 +130,7 @@ public class MCPCustomizer extends PApplet {
 	    statusbar.drawStatusbar(this);
 	  }
 
-	  void draw2DView()
+	  private void draw2DView()
 	  {
 	    view2D.beginDraw();
 	    transform2D.transform(view2D);
@@ -156,7 +162,7 @@ public class MCPCustomizer extends PApplet {
 	    image(view2D, view2DPosX, view2DPosY);
 	  }
 
-	  void draw3DView()
+	  private void draw3DView()
 	  {
 	    view3D.beginDraw();
 
@@ -233,7 +239,7 @@ public class MCPCustomizer extends PApplet {
 	    p.strokeWeight(1);
 	}
 
-	  void createToolbar()
+	  private void createToolbar()
 	  {
 	    toolbar = new Toolbar(cp5, this);
 
@@ -259,20 +265,36 @@ public class MCPCustomizer extends PApplet {
 	    toolbar.setSelectedTool(tools[0]);
 	  }
 
-	  void createProperties()
+	  private void createProperties()
 	  {
 	    properties = new Properties(cp5, 0, 0, width, 50);
 	    properties.hide();
 	  }
 	  
+	 /**
+	 * 
+	 * Sets the status of the statusbar to status.
+	 * 
+	 * @param status the message that should be displayed on the statusbar
+	 */
 	  public void displayStatus(String status) {
 		  this.statusbar.setStatus(status);
 	  }
 	  
+	  /**
+	  * Sets the mouse position to be displayed on the statusbar
+	  * @param position the mouse position to be displayed on the statusbar
+	  */
 	  public void displayMousePosition(Vec2D position) {
 		  this.statusbar.setMousePosition(position);
 	  }
 	  
+	  
+	  /**
+	  * Responds to ControlEvents from controlP5
+	  * 
+	  * @param theEvent the ControlEvent that has been passed by controlP5
+	  */
 	  public void controlEvent(ControlEvent theEvent)
 	  {
 		  if (theEvent.isGroup() && theEvent.getGroup().getName() == "setMaterial")
@@ -281,7 +303,10 @@ public class MCPCustomizer extends PApplet {
 		  }
 	  } 
 
-	  public void mousePressed()
+	/* (non-Javadoc)
+	 * @see processing.core.PApplet#mousePressed()
+	 */
+	public void mousePressed()
 	  {   
 	      if (mouseOver3DView())
 	      {
@@ -293,7 +318,10 @@ public class MCPCustomizer extends PApplet {
 	      toolbar.getSelectedTool().mouseButtonPressed(mousePosition, mouseButton);
 	  }
 
-	  public void mouseDragged()
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#mouseDragged()
+	 */
+	public void mouseDragged()
 	  {
 	    if (mouseOver3DView()) {
 	    	if (mouseButton == PConstants.LEFT)
@@ -309,7 +337,10 @@ public class MCPCustomizer extends PApplet {
 	    toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
 	  }
 
-	  public void mouseReleased()
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#mouseReleased()
+	 */
+	public void mouseReleased()
 	  {
 	    toolbar.getSelectedTool().mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
 
@@ -320,22 +351,28 @@ public class MCPCustomizer extends PApplet {
 	    }
 	  }
 
-	  public void mouseMoved() 
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#mouseMoved()
+	 */
+	public void mouseMoved() 
 	  {
 	      toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
 	  }
 
-	  boolean mouseOver2DView()
+	  private boolean mouseOver2DView()
 	  {
 	    return mouseX > view2DPosX && mouseX <= view2DPosX + viewSizeX && mouseY > view2DPosY && mouseY <= view2DPosY + viewSizeY;
 	  }
 
-	  boolean mouseOver3DView()
+	  private boolean mouseOver3DView()
 	  {
 	    return mouseX > view3DPosX && mouseX <= view3DPosX + viewSizeX && mouseY > view3DPosY && mouseY <= view3DPosY + viewSizeY;
 	  }
 
-	  public void keyPressed()
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#keyPressed()
+	 */
+	public void keyPressed()
 	  {
 	    if (key == '+')
 	    {
@@ -361,7 +398,10 @@ public class MCPCustomizer extends PApplet {
 	    }
 	  }
 	  
-	  @SuppressWarnings("deprecation")
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#mouseWheel(processing.event.MouseEvent)
+	 */
+	@SuppressWarnings("deprecation")
 	public void mouseWheel(MouseEvent event)
 	  {
 		  if (mouseOver2DView())
@@ -374,11 +414,14 @@ public class MCPCustomizer extends PApplet {
 		  }
 	  }
 	
-	  public static void main(String args[]) {
+	public static void main(String args[]) {
 		    PApplet.main(new String[] { /*"--present", */"de.mcp.customizer.application.MCPCustomizer" });
 		  }
 	  
-	  public boolean sketchFullScreen() {
+	  /* (non-Javadoc)
+	 * @see processing.core.PApplet#sketchFullScreen()
+	 */
+	public boolean sketchFullScreen() {
 			  return true;
 		  }
 }
