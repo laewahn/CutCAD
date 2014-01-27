@@ -8,8 +8,15 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ImportSVG;
 import de.mcp.customizer.model.ObjectContainer;
 
+/**
+ * The ImportSVGTool is used to import Shapes from SVG-Files.
+ */
 public class ImportSVGTool extends Tool {
 
+	/**
+	 * @param customizer the main class of the project
+	 * @param container the currently loaded ObjectContainer
+	 */
 	public ImportSVGTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "LoadSVG.svg");
 	}

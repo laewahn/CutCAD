@@ -9,10 +9,19 @@ import de.mcp.customizer.model.ImportSTL;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 
+/**
+ * The ImportSTLTool is used to import an STL-mesh into the 3D-view.
+ * Once imported, the STL-mesh can be moved and rotated with the ChangeSTLTool.
+ * Only one STL-mesh can be loaded at a time.
+ */
 public class ImportSTLTool extends Tool {
 
 	private STLMesh mesh;
 
+	/**
+	 * @param customizer the main class of the project
+	 * @param container the currently loaded ObjectContainer
+	 */
 	public ImportSTLTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "LoadSTL.svg");
 		this.mesh = customizer.meshSTL;

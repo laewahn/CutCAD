@@ -6,17 +6,30 @@ import processing.core.PGraphics;
 import controlP5.Button;
 import controlP5.ControllerView;
 
+/**
+ * A simple extension of the ControlP5-button that displays a predefined icon instead of the standard-button *
+ */
 public class ShapeButton implements ControllerView<Button> {
 
   private PGraphics icon;
 
+  /**
+  * Constructor
+  * 
+  * Creates a ShapeButton
+  * 
+  * @param icon the icon to be displayed instead of the standard-button
+  */
   public ShapeButton(PGraphics icon)
   {
     super();
     this.icon = icon;
   }
 
-  public void display(PApplet theApplet, Button theButton) 
+  /* (non-Javadoc)
+ * @see controlP5.ControllerView#display(processing.core.PApplet, java.lang.Object)
+ */
+public void display(PApplet theApplet, Button theButton) 
   {
     theApplet.fill(255);
     if (theButton.isInside()) 

@@ -15,6 +15,11 @@ import de.mcp.customizer.model.Material;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.Shape;
 
+/**
+ * A property-bar that handles up to 6 sliders that can control parameters of
+ * Shapes, Connections, Cutouts and STLMeshes.
+ *
+ */
 public class Properties extends PApplet
 {
 	/**
@@ -36,6 +41,17 @@ public class Properties extends PApplet
 	private int posX, posY, sizeX, sizeY;
 	private boolean hidden;
 
+	/**
+	 * Constructor
+	 * 
+	 * Creates a properties bar at (posX, posY) with sizeX, sizeY.
+	 * 
+	 * @param cp5 the ControlP5 object
+	 * @param posX the x position the properties bar will be created at
+	 * @param posY the y position the properties bar will be created at
+	 * @param sizeX the size of the properties bar on the x axis 
+	 * @param sizeY the size of the properties bar on the y axis 
+	 */
 	public Properties(ControlP5 cp5, int posX, int posY, int sizeX, int sizeY)
 	{
 		this.posX = posX;
@@ -145,77 +161,119 @@ public class Properties extends PApplet
 		}
 	}
 
+	/**
+	 * @param text the textlabel for the first slider
+	 */
 	public void setText0(String text)
 	{
 		sliders.get(0).setValue(Integer.valueOf(text));
 	}
 
+	/**
+	 * @param text the textlabel for the second slider
+	 */
 	public void setText1(String text)
 	{
 		sliders.get(1).setValue(Integer.valueOf(text));
 	}
 
+	/**
+	 * @param text the textlabel for the third slider
+	 */
 	public void setText2(String text)
 	{
 		sliders.get(2).setValue(Integer.valueOf(text));
 	}
 
+	/**
+	 * @param text the textlabel for the fourth slider
+	 */
 	public void setText3(String text)
 	{
 		sliders.get(3).setValue(Integer.valueOf(text));
 	}
-	
+
+	/**
+	 * @param text the textlabel for the fifth slider
+	 */
 	public void setText4(String text)
 	{
 		sliders.get(4).setValue(Integer.valueOf(text));
 	}
-	
+
+	/**
+	 * @param text the textlabel for the sixth slider
+	 */
 	public void setText5(String text)
 	{
 		sliders.get(5).setValue(Integer.valueOf(text));
 	}
 
+	/**
+	 * @param value the value the first slider will be set to
+	 */
 	public void setSlider1(int value)
 	{
 		textfields.get(1).setText(value+"");
 		dummySliders.get(1).setValue(value);
 	}
 
+	/**
+	 * @param value the value the second slider will be set to
+	 */
 	public void setSlider2(int value)
 	{
 		textfields.get(2).setText(value+"");
 		dummySliders.get(2).setValue(value);
 	}
 
+	/**
+	 * @param value the value the third slider will be set to
+	 */
 	public void setSlider0(int value)
 	{
 		textfields.get(0).setText(value+"");
 		dummySliders.get(0).setValue(value);
 	}
 
+	/**
+	 * @param value the value the fourth slider will be set to
+	 */
 	public void setSlider3(int value)
 	{
 		textfields.get(3).setText(value+"");
 		dummySliders.get(3).setValue(value);
 	}
-	
+
+	/**
+	 * @param value the value the fifth slider will be set to
+	 */
 	public void setSlider4(int value)
 	{
 		textfields.get(4).setText(value+"");
 		dummySliders.get(4).setValue(value);
 	}
-	
+
+	/**
+	 * @param value the value the sixth slider will be set to
+	 */
 	public void setSlider5(int value)
 	{
 		textfields.get(5).setText(value+"");
 		dummySliders.get(5).setValue(value);
 	}
 
-	public void changeMaterial(float eventNumber)
+	/**
+	 * @param materialNumber number of the Material the shape currently plugged to the properties bar will be set to
+	 */
+	public void changeMaterial(float materialNumber)
 	{
-		shapeCurrentlyPluggedTo.getGShape().setMaterial(materials.get((int)eventNumber));
+		shapeCurrentlyPluggedTo.getGShape().setMaterial(materials.get((int)materialNumber));
 	}
 
+	/**
+	 * Unplugs all controls from the object
+	 */
 	public void unplugAll()
 	{
 		if (this.shapeCurrentlyPluggedTo != null)
@@ -241,6 +299,11 @@ public class Properties extends PApplet
 		hideAll();
 	}
 
+	/**
+	 * Plugs the property-bars controls to the specified connection
+	 * 
+	 * @param c the connection the properties bars controls will be plugged to
+	 */
 	public void plugTo(Connection c)
 	{
 		unplugAll();
@@ -265,6 +328,11 @@ public class Properties extends PApplet
 		this.connectionCurrentlyPluggedTo = c;
 	}
 
+	/**
+	 * Plugs the property-bars controls to the specified shape
+	 * 
+	 * @param s the shape the properties bars controls will be plugged to
+	 */
 	public void plugTo(Shape s)
 	{
 		unplugAll();
@@ -295,6 +363,11 @@ public class Properties extends PApplet
 		this.shapeCurrentlyPluggedTo = s;
 	}
 
+	/**
+	 * Plugs the property-bars controls to the specified cutout
+	 * 
+	 * @param c the cutout the properties bars controls will be plugged to
+	 */
 	public void plugTo(Cutout c)
 	{
 		unplugAll();
@@ -318,7 +391,12 @@ public class Properties extends PApplet
 		c.setActive(true);
 		this.cutoutCurrentlyPluggedTo = c;
 	}
-	
+
+	/**
+	 * Plugs the property-bars controls to the specified STLmesh
+	 * 
+	 * @param mesh the STLmesh the properties bars controls will be plugged to
+	 */
 	public void plugTo(STLMesh mesh) {
 		unplugAll();
 		for(int i=0; i<mesh.getNumberOfControls(); i++)
@@ -340,7 +418,7 @@ public class Properties extends PApplet
 		}
 		this.stlMeshCurrentlyPluggedTo = mesh;
 	}
-
+	
 	private void hideAll()
 	{
 		setMaterial.hide();
@@ -349,7 +427,7 @@ public class Properties extends PApplet
 		for(Textlabel t : controlUnits) t.hide();
 		for(Textlabel t : controlNames) t.hide();
 	} 
-
+	
 	public void hide()
 	{
 		for (Controller<?> c : controllers)
@@ -398,6 +476,11 @@ public class Properties extends PApplet
 		else return "";
 	}
 
+	/**
+	 * Draws the property-bar to the specified applet
+	 * 
+	 * @param p the applet the property-bar will be drawn on
+	 */
 	public void drawProperties(PApplet p)
 	{
 		p.fill(180);

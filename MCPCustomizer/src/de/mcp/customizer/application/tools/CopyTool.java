@@ -10,6 +10,9 @@ import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 
+/**
+ * The CopyTool is used to create a copy of a Shape.
+ */
 public class CopyTool extends Tool {
 
 	GShape master;
@@ -18,6 +21,10 @@ public class CopyTool extends Tool {
 
 	Shape copyShape, previewShape;
 
+	/**
+	 * @param customizer the main class of the project
+	 * @param container the currently loaded ObjectContainer
+	 */
 	public CopyTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "Copy.svg");
 		
@@ -66,7 +73,7 @@ public class CopyTool extends Tool {
     public void mouseButtonReleased(Vec2D position, int button)
     {
         // no actions required
-    }   
+    } 
     
     public void mouseMoved(Vec2D position)
     {
@@ -96,8 +103,6 @@ public class CopyTool extends Tool {
     		previewShape.getGShape().draw2D(p);
     	}
     }
-    
-    
     
 	@Override
 	public void wasSelected() {

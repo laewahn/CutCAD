@@ -9,6 +9,9 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Rectangle;
 
+/**
+ * The DrawTool is used to draw a rectangle-shape.
+ */
 public class DrawTool extends Tool {
     
     boolean isDrawing;
@@ -16,6 +19,10 @@ public class DrawTool extends Tool {
     Vec2D startCoord;
     Rectangle previewRectangle;
 
+    /**
+     * @param customizer the main class of the project
+     * @param container the currently loaded ObjectContainer
+     */
     public DrawTool(MCPCustomizer customizer, ObjectContainer container) {
     	super(customizer, container, "DrawRectangle.svg");
     	this.isDrawing = false;

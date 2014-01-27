@@ -9,6 +9,9 @@ import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.ObjectContainer;
 
+/**
+ * The ConnectTool is used to create a connection between two edges.
+ */
 public class ConnectTool extends Tool {
 
 	boolean selectedFirst;
@@ -19,6 +22,10 @@ public class ConnectTool extends Tool {
 	private float scalingFactor;
 	private String lastMessage;
 
+	/**
+	 * @param mcpCustomizer the main class of the project
+	 * @param container the currently loaded ObjectContainer
+	 */
 	public ConnectTool(MCPCustomizer mcpCustomizer, ObjectContainer container) {
 		super(mcpCustomizer, container, "Connect.svg");
 

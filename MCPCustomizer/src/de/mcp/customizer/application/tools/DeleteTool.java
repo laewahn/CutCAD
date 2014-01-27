@@ -11,11 +11,18 @@ import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 
+/**
+ * The DeleteTool is used to Delete a Shape, Connection or Cutout
+ */
 public class DeleteTool extends Tool {
     
     boolean dragging;
     Vec2D originalMousePosition;
     
+    /**
+     * @param customizer the main class of the project
+     * @param container the currently loaded ObjectContainer
+     */
     public DeleteTool(MCPCustomizer customizer, ObjectContainer container) {
     	super(customizer, container, "Delete.svg");
     	

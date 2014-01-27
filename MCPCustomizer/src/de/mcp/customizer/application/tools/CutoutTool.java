@@ -13,6 +13,9 @@ import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
 
 
+/**
+ * The CutoutTool is used to set a Shape to be cut out from another Shape
+ */
 public class CutoutTool extends Tool {
 
     boolean dragging;
@@ -22,6 +25,10 @@ public class CutoutTool extends Tool {
     Shape masterShape;
     private float scalingFactor;
     
+    /**
+     * @param customizer the main class of the project
+     * @param container the currently loaded ObjectContainer
+     */
     public CutoutTool(MCPCustomizer customizer, ObjectContainer container) {
     	super(customizer, container, "Cutout.svg");
     	

@@ -7,10 +7,21 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 
+/**
+ * The ChangeSTLTool is used to move and rotate an imported STL mesh in the 3D-view
+ */
 public class ChangeSTLTool extends Tool {
 
 	private STLMesh mesh;
 
+	/**
+	 * Constructor
+	 * 
+	 * Creates a ChangeSTLTool
+	 * 
+	 * @param customizer the main class of the project
+	 * @param container the currently loaded ObjectContainer
+	 */
 	public ChangeSTLTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "MoveSTL.svg");
 		this.mesh = customizer.meshSTL;
