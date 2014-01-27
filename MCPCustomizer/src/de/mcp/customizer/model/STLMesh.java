@@ -86,17 +86,17 @@ public class STLMesh {
 	
 	public void setValue3(int size)
 	{
-		setRotX((float)(size*10));
+		setRotX((float)(size));
 	}
 	
 	public void setValue4(int size)
 	{
-		setRotY((float)(size*10));
+		setRotY((float)(size));
 	}
 	
 	public void setValue5(int size)
 	{
-		setRotZ((float)(size*10));
+		setRotZ((float)(size));
 	}
 	
 	public boolean isPosChanged() {
@@ -172,9 +172,9 @@ public class STLMesh {
 	
 	public void rotate()
 	{
-		STLMesh.rotateX(rotDelX);
-		STLMesh.rotateX(rotDelY);
-		STLMesh.rotateX(rotDelZ);
+		STLMesh.rotateX((float)Math.toRadians(rotDelX));
+		STLMesh.rotateY((float)Math.toRadians(rotDelY));
+		STLMesh.rotateZ((float)Math.toRadians(rotDelZ));
 		rotDelX = 0;
 		rotDelY = 0;
 		rotDelZ = 0;

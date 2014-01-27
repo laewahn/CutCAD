@@ -57,7 +57,7 @@ public class RotateAdjectantShapes {
 	 *            The first edge which should be connected with the
 	 * @param slaveEdge
 	 *            , the second edge
-	 * @return
+	 * @return true if the shapes could be rotated until both edges are at the same position
 	 */
 	public static boolean rotateBothShapes(Connection connection,
 			Edge masterEdge, Edge slaveEdge) {

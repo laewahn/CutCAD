@@ -25,7 +25,7 @@ public class Material {
 	 *            (%)
 	 * @param speed
 	 *            (%)
-	 * @param focus
+	 * @param focus (whatever)
 	 * @param frequency
 	 *            (Hz)
 	 */

@@ -155,7 +155,7 @@ public class Trapezium extends Shape {
 	 * Changes sizes of the trapezium to a basic rectangle form with
 	 * 
 	 * @param newSize
-	 *            Length & Height of the trapezium (0.1mm)
+	 *            Length and Height of the trapezium (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
 		this.sizeXTop = ((int) newSize.x() / 10) * 10;
@@ -167,7 +167,7 @@ public class Trapezium extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the corresponding GShape
+	 * @param gshape the corresponding GShape
 	 */
 	public void setShape(GShape gshape) {
 		this.basic = gshape;
@@ -195,6 +195,8 @@ public class Trapezium extends Shape {
 
 	/**
 	 * Not used
+	 * 
+	 * @return null
 	 */
 	public Rect getBoundingBox() {
 		return null;

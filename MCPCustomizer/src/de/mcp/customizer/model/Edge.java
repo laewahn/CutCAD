@@ -73,10 +73,8 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * Set highlighted true, if the edge should be highlighted (e.g. selected as
+	 * @param highlighted set true, if the edge should be highlighted (e.g. selected as
 	 * a first edge for a connection)
-	 * 
-	 * @param highlighted
 	 */
 	public void setHighlighted(boolean highlighted) {
 		this.isHighlighted = highlighted;
@@ -104,34 +102,28 @@ public class Edge implements Drawable2D, Drawable3D {
 	}
 
 	/**
-	 * Get end point of the edge (in the 2D view)
-	 * 
-	 * @return
+	 * @return get end point of the edge (in the 2D view)
 	 */
 	public Vec2D getV2() {
 		return this.v2;
 	}
 
 	/**
-	 * Get start point of the edge (in the 3D view)
-	 * 
-	 * @return
+	 * @return get start point of the edge (in the 3D view)
 	 */
 	public Vec3D getP3D1() {
 		return p3D1;
 	}
 
 	/**
-	 * Get end point of the edge (in the 3D view)
-	 * 
-	 * @return
+	 * @return get end point of the edge (in the 3D view)
 	 */
 	public Vec3D getP3D2() {
 		return p3D2;
 	}
 
 	/**
-	 * @return Get outline of the edge as a List of Vec2D
+	 * @return get outline of the edge as a List of Vec2D
 	 */
 	public ArrayList<Vec2D> getTenons() {
 		return tenons;

@@ -65,7 +65,7 @@ public class ObjectContainer {
 		List<Cutout> cutouts = new ArrayList<Cutout>();
 		
 		for(Shape s : this.shapes) {
-			cutouts.addAll(s.getShape().cutouts);
+			cutouts.addAll(s.getShape().getCutouts());
 		}
 		
 		return cutouts;

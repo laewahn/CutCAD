@@ -209,7 +209,7 @@ public class Cutout implements Drawable2D {
 	/**
 	 * Change Parameter 3
 	 * 
-	 * @param size
+	 * @param angle
 	 *            Angle(degree)
 	 */
 	public void setValue2(int angle) {
@@ -257,7 +257,7 @@ public class Cutout implements Drawable2D {
 	/**
 	 * check if mouse is over cut-out or the corresponding connecting line
 	 * 
-	 * @param mousePosition
+	 * @param mousePosition the current position of the mouse
 	 * @return true, if mouse is above cut-out/line
 	 */
 	public boolean mouseOver(Vec2D mousePosition) {

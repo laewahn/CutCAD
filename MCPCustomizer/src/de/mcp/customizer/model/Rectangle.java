@@ -138,7 +138,7 @@ public class Rectangle extends Shape {
 	 * Changes sizes of the rectangle
 	 * 
 	 * @param newSize
-	 *            Length & Height of the rectangle (0.1mm)
+	 *            Length and Height of the rectangle (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
 		this.sizeX = ((int) newSize.x() / 10) * 10;
@@ -149,7 +149,7 @@ public class Rectangle extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the corresponding GShape
+	 * @param shape the corresponding GShape
 	 */
 	public void setShape(GShape shape) {
 		this.basic = shape;
@@ -177,6 +177,8 @@ public class Rectangle extends Shape {
 
 	/**
 	 * Not used
+	 * 
+	 * @return null
 	 */
 	public Rect getBoundingBox() {
 		return null;

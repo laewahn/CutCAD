@@ -156,7 +156,7 @@ public class SymmetricPolygon extends Shape {
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param the corresponding GShape
+	 * @param shape the corresponding GShape
 	 */
 	public void setShape(GShape shape) {
 		this.basic = shape;
@@ -184,6 +184,8 @@ public class SymmetricPolygon extends Shape {
 
 	/**
 	 * Not used
+	 * 
+	 * @return null
 	 */
 	public Rect getBoundingBox() {
 		return null;
