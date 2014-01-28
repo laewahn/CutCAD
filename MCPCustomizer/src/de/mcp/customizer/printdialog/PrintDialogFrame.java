@@ -11,6 +11,7 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Group;
 import controlP5.ListBox;
+import controlP5.Textfield;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
@@ -35,6 +36,7 @@ public class PrintDialogFrame extends PApplet
     private String overlapMessage;
     
     private LaserCutter selectedCutter;
+    private Textfield cutterAddress;
 	
 	private PGraphics objectLayout;
 	private ListBox unplacedShapesBox;
@@ -126,7 +128,11 @@ public class PrintDialogFrame extends PApplet
    cutterBox.getCaptionLabel().getStyle().marginTop = 3;
    cutterBox.getValueLabel().getStyle().marginTop = 3;
    updateCutters();
-   setLaserCutter(); // should be removed for dropdownlist and textfield for ip
+   cutterAddress = cp5.addTextfield("cutterAddress")
+		   			  .setPosition(w-140,160)
+		   			  .setSize(120,30)
+		   			  .setCaptionLabel("address of cutter");
+   //setLaserCutter(); // should be removed for dropdownlist and textfield for ip
   }
   
   private void updateCutters()
@@ -559,7 +565,7 @@ public class PrintDialogFrame extends PApplet
   {
 	  for(int i = 0; i < printInstances.size(); i++)
 	  {
-		  printInstances.get(i).setLaserCutter(new LaserCutter("epilogZing"),"127.0.0.1");
+		  printInstances.get(i).setLaserCutter(selectedCutter,"127.0.0.1");
 	  }
   }
 }
