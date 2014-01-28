@@ -334,41 +334,38 @@ public class Properties extends PApplet
 	public void plugTo(Shape s)
 	{
 		unplugAll();
-//		if(s.getGShape().getNumberOfConnections()==0)
-//		{
-			for(int i=0; i<s.getNumberOfControls(); i++)
-			{
-				int value = s.getValue(i);
-				sliders.get(i)
-				.setRange(getMinimum(s.getControlType(i)), getMaximum(s.getControlType(i)))
-				.setCaptionLabel(s.getNameOfControl(i))
-				.setValue(value)
-				.show();
-				textfields.get(i)
-				.setText((int)sliders.get(i).getValue()+"")
-				.show();
-				controlUnits.get(i)
-				.setText(getUnit(s.getControlType(i)))
-				.show();
-				controlNames.get(i).setText(s.getNameOfControl(i)).show();
-				dummySliders.get(i).plugTo(s);
+		for(int i=0; i<s.getNumberOfControls(); i++)
+		{
+			int value = s.getValue(i);
+			sliders.get(i)
+			.setRange(getMinimum(s.getControlType(i)), getMaximum(s.getControlType(i)))
+			.setCaptionLabel(s.getNameOfControl(i))
+			.setValue(value)
+			.show();
+			textfields.get(i)
+			.setText((int)sliders.get(i).getValue()+"")
+			.show();
+			controlUnits.get(i)
+			.setText(getUnit(s.getControlType(i)))
+			.show();
+			controlNames.get(i).setText(s.getNameOfControl(i)).show();
+			dummySliders.get(i).plugTo(s);
 
-				if(s.getGShape().getNumberOfConnections()>0)
-				{
-					sliders.get(i).lock();
-					textfields.get(i).lock();
-					controlUnits.get(i).lock();
-					dummySliders.get(i).lock();
-				}
-				else
-				{
-					sliders.get(i).unlock();
-					textfields.get(i).unlock();
-					controlUnits.get(i).unlock();
-					dummySliders.get(i).unlock();
-				}
+			if(s.getGShape().getNumberOfConnections()>0)
+			{
+				sliders.get(i).lock();
+				textfields.get(i).lock();
+				controlUnits.get(i).lock();
+				dummySliders.get(i).lock();
 			}
-//		}
+			else
+			{
+				sliders.get(i).unlock();
+				textfields.get(i).unlock();
+				controlUnits.get(i).unlock();
+				dummySliders.get(i).unlock();
+			}
+		}
 		setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
 		setMaterial.show();
 
