@@ -10,6 +10,12 @@ import com.t_oster.liblasercut.RasterPart;
 import com.t_oster.liblasercut.VectorPart;
 import com.t_oster.liblasercut.drivers.EpilogZing;
 
+/**
+ * 
+ * 
+ * @author Pierre
+ *
+ */
 public class LaserJobCreator
 {
   private EpilogZing epilogZing = null;
@@ -17,11 +23,6 @@ public class LaserJobCreator
   private RasterPart rp = null;
   private VectorPart vp = null;
   private int DPI;
-  
-  public LaserJobCreator()
-  {
-    
-  }
   
   public void setLaserCutter(String device, String ipAddress)
   {
@@ -66,7 +67,7 @@ public class LaserJobCreator
   
   public void sendLaserjob()
   {
-    LaserJob job = new LaserJob("Processing", "123", "username");//title, name, user
+    LaserJob job = new LaserJob("Processing", "123", "MCPCustomizer");//title, name, user
     if (rp != null)
     {
       job.addPart(rp);

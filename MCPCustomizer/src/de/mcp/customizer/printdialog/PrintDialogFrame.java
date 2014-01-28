@@ -49,7 +49,7 @@ public class PrintDialogFrame extends PApplet
 	private Vec2D originalMousePosition;
 	private Rect view;
   
-	public PrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances) 
+	public PrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances)
 	{
 		this.printInstances = printInstances;
 		if(printInstances.size() > 0)

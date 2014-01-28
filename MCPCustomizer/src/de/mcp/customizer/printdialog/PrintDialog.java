@@ -8,81 +8,147 @@ import java.util.List;
 import de.mcp.customizer.model.Shape;
 import toxi.geom.Vec2D;
 
+/**
+ * Prepares the print dialog. Preparation consists of making a new window and processing applet.
+ * Furthermore, the shapes should be copied to be free of side effects while working with them
+ * in the print dialog. Another step needed for preparation is the calculation of the print instances
+ */
 public class PrintDialog
 { 
-  private ArrayList<Shape> shapes;
-  private ArrayList<PrintInstance> printInstances;
+	/**
+	 * Contains the shapes that have to be copied and altered to be compatible with the print dialog
+	 */
+  private List<Shape> shapes; 
+  /**
+	 * Contains the shapes that are suitable to be used in the print dialog. 
+	 */
+  private ArrayList<Shape> preparedShapes; 
+  /**
+ 	 * Contains the print instances to be used in the print dialog
+ 	 */
+  private ArrayList<PrintInstance> printInstances;  
   
-  private PrintDialogFrame printDialogWindow;
-  private Frame f;
+  /**
+	 * Contains the object that manages the print dialog window
+	 */
+  private PrintDialogFrame printDialogWindow; 
+  /**
+	 * Contains the frame of the print dialog window
+	 */
+  private Frame printDialogFrame; 
   
+  /** 
+	 * Creates an object that initialises a print dialog and calculates the objects
+	 * which are necessary for the print dialog
+	 * 
+	 * @param shapes
+	 * Contains all the shapes which should be printed
+	 */
   public PrintDialog(List<Shape> shapes)
   {
-    this.shapes = new ArrayList<Shape>();
-    for(int i = 0; i < shapes.size(); i++)
-    {
-       Shape copy = shapes.get(i).copy();
-       copy.getGShape().setPosition2D(new Vec2D(100,100));
-       copy.getGShape().setScalingFactor(1);
-       this.shapes.add(copy);
-       this.shapes.get(i).getGShape().scale2D(0.1f);
-    }
-    calculateInstances();
-    printDialogWindow = addPrintDialogFrame(600, 650, this.printInstances);
-    for(int i = 0; i < printInstances.size(); i++)
-    {
-     printInstances.get(i).setParent(printDialogWindow);
-    }
+    this.shapes = shapes;
   }
   
+  /** 
+	 * Prepares the print dialog. It copies the shapes such that no side effects
+	 * can occur with the original shapes. Some properties of the shapes are altered
+	 * to be able to use them in the print dialog. The window of the print dialog is
+	 * created here. 
+	 */
+  public void preparePrintDialog()
+  {
+	  copyShapes();
+	  calculateInstances();
+	  this.printDialogWindow = addPrintDialogFrame(600, 650, this.printInstances);
+	  for(int i = 0; i < this.printInstances.size(); i++)
+	  {
+	     this.printInstances.get(i).setParent(this.printDialogWindow);
+	  }
+  }
+  
+  /** 
+	 * This method copies the shapes stored in shapes and stores the copies in preparedShapes.
+	 * It furthermore alters the position to the upper left corner and sets the scalingfactor 
+	 * to be compatible with the print dialog. Lastly, the shape is scaled such that it size 
+	 * is correctly displayed in the print dialog. 
+	 */
+  private void copyShapes()
+  {
+	  this.preparedShapes = new ArrayList<Shape>();
+	  for(int i = 0; i < this.shapes.size(); i++)
+	  {
+	       Shape copy = this.shapes.get(i).copy();
+	       copy.getGShape().setPosition2D(new Vec2D(100,100));
+	       copy.getGShape().scale2D(0.1f);
+	       copy.getGShape().setScalingFactor(1);
+	       this.preparedShapes.add(copy);
+	  }
+  }
+  
+  /** 
+	 * Determines the print instances. They depend on the materials used by the shapes.
+	 * Every material type and thickness has its own print instance. The calculated instances
+	 * are stored in printInstances.
+	 */
   private void calculateInstances()
   {
     printInstances = new ArrayList<PrintInstance>();
-    for(int i = 0; i < this.shapes.size(); i++)
+    for(int i = 0; i < this.preparedShapes.size(); i++)
     {
-    	if(!this.shapes.get(i).getGShape().getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
+    	if(!this.preparedShapes.get(i).getGShape().getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
     	{
     		int j = 0;
     		boolean found = false;
     		while((j < printInstances.size()) && !found)
     		{
-    			if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.shapes.get(i).getGShape().getMaterial().getMaterialName()))
+    			if(this.printInstances.get(j).getMaterial().getMaterialName().equals(this.preparedShapes.get(i).getGShape().getMaterial().getMaterialName()))
     			{
-    				this.printInstances.get(j).addShape(this.shapes.get(i));
+    				this.printInstances.get(j).addShape(this.preparedShapes.get(i));
     				found = true;
     			} 
     			j++;
     		}
     		if(!found)
 			{
-				this.printInstances.add(new PrintInstance(this.shapes.get(i),this.shapes.get(i).getGShape().getMaterial()));
+				this.printInstances.add(new PrintInstance(this.preparedShapes.get(i),this.preparedShapes.get(i).getGShape().getMaterial()));
 			}
     	}
     }
   }
   
+  /** 
+ 	* Creates a new frame and registers a new PrintDialogFrame with it.
+ 	* The PrintDialogFrame is a processing applet that handles the print dialog UI
+ 	* @param theWidth
+ 	* Sets the width of the print dialog window in Px
+ 	* 
+ 	* @param theHeight
+ 	* Sets the height of the print dialog window in Px
+ 	* 
+ 	* @param printInstances
+ 	* The printInstances to be used for the print dialog
+ 	 */
   private PrintDialogFrame addPrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances)
   {
-    f = new Frame("Print dialog");
-    PrintDialogFrame p = new PrintDialogFrame(/*this, */theWidth, theHeight, printInstances);
-    f.add(p);
-    p.init();
-    p.setSize(theWidth,theHeight);
-    f.setTitle("Print dialog");
-    f.setSize(p.getWidth(), p.getHeight());
-    f.setLocation(100, 100);
-    f.setResizable(false);
-    f.setVisible(true);
-    f.addWindowListener(new WindowAdapter() 
+    this.printDialogFrame = new Frame("Print dialog");
+    PrintDialogFrame tempPrintDialogWindow = new PrintDialogFrame(theWidth, theHeight, printInstances);
+    this.printDialogFrame.add(tempPrintDialogWindow);
+    tempPrintDialogWindow.init();
+    tempPrintDialogWindow.setSize(theWidth,theHeight);
+    this.printDialogFrame.setTitle("Print dialog");
+    this.printDialogFrame.setSize(tempPrintDialogWindow.getWidth(), tempPrintDialogWindow.getHeight());
+    this.printDialogFrame.setLocation(100, 100);
+    this.printDialogFrame.setResizable(false);
+    this.printDialogFrame.setVisible(true);
+    this.printDialogFrame.addWindowListener(new WindowAdapter() 
     {
       public void windowClosing(WindowEvent evt) 
       {
-        // exit the application
         printDialogWindow.destroy();
-        f.setVisible(false);
+        printDialogFrame.setVisible(false);
       }
     });
-    return p;
+    return tempPrintDialogWindow;
   }
   
 }

@@ -28,7 +28,7 @@ public class PrintSubInstance
     laserJob = new LaserJobCreator();
     laserJob.setLaserCutter("epilogZing", "137.226.56.228"); // replace by more lasercutter now only epilogzing supported
     laserJob.setPsffProperty(this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
-    laserJob.setDPI(500); // replace by material parameter
+    laserJob.setDPI(500); 
     laserJob.newVectorPart();
   }
   
