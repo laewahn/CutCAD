@@ -13,24 +13,19 @@ public abstract class Tool implements Drawable2D {
     protected Rect view;
     protected Transformation transform;
     protected String iconName;
+    protected ShapeButton button;
     
     protected MCPCustomizer customizer;
     protected ObjectContainer objectContainer;
     
     private float scalingFactor = 0.5f;
-    
-    public float getScalingFactor() {
-    	return scalingFactor;
-    }
-    
-    public void setScalingFactor(float factor) {
-    	scalingFactor = factor;
-    }
 
     public Tool(MCPCustomizer customizer, ObjectContainer container, String iconName) {
     	this(customizer.view2DRect, customizer.properties, customizer.statusbar, customizer.transform2D, iconName);
     	this.customizer = customizer;
     	this.objectContainer = container;
+		PGraphics p = this.customizer.createGraphics(50, 50);
+		this.button = new ShapeButton(this.getIcon(), p);
     }
     
     public Tool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, String iconName)
@@ -38,6 +33,14 @@ public abstract class Tool implements Drawable2D {
         this.view = view;
         this.transform = transform;
         this.iconName = iconName;
+    }
+    
+    public float getScalingFactor() {
+    	return scalingFactor;
+    }
+    
+    public void setScalingFactor(float factor) {
+    	scalingFactor = factor;
     }
 
     protected Vec2D positionRelativeToView(Vec2D inPosition) 
@@ -63,17 +66,27 @@ public abstract class Tool implements Drawable2D {
     abstract public void mouseButtonReleased(Vec2D position, int button);
     abstract public void mouseMoved(Vec2D position);
 
-    public PGraphics getIcon(PGraphics context) {
+    public SVGIcon getIcon() {
     	
     	float iconScaling = 1.57f;
-		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
-		icon.draw2D(context);
-		
-		return context;
+		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);		
+		return icon;
     }
     
-    public void wasSelected(){};
-    public void wasUnselected(){};
+    public ShapeButton getButton()
+    {
+    	return this.button;
+    }
+    
+    public void wasSelected()
+    {
+    	this.button.setSelected(true);
+    }
+    
+    public void wasUnselected()
+    {
+    	this.button.setSelected(false);
+    }
     
     public void draw2D(PGraphics p) {};
 

@@ -49,6 +49,7 @@ public class ChangeSTLTool extends Tool {
 			this.customizer.properties.show();
 			this.customizer.properties.plugTo(mesh);
 		}
+		super.wasSelected();
 	}
 	
 	@Override

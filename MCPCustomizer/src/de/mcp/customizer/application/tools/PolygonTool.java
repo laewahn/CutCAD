@@ -102,8 +102,8 @@ public class PolygonTool extends Tool {
 	@Override
 	public void wasSelected() {
 		this.customizer.displayStatus("To start drawing a shape, click the left mousebutton anywhere on the 2D view");
-		super.wasSelected();
 		this.vertices = new ArrayList<Vec2D>();
+		super.wasSelected();
 	}
 	
 	@Override

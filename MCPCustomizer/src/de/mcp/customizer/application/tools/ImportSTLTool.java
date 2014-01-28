@@ -47,6 +47,7 @@ public class ImportSTLTool extends Tool {
 	@Override
 	public void wasSelected() {
 		new ImportSTL(mesh);	
+		super.wasSelected();
 	}
 	
 	@Override

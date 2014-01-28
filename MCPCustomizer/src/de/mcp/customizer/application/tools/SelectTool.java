@@ -147,7 +147,7 @@ public class SelectTool extends Tool {
 	@Override
 	public void wasUnselected() {
 		this.customizer.displayStatus("");
-		super.wasUnselected();
 		this.customizer.properties.hide();
+		super.wasUnselected();
 	}
 }

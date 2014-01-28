@@ -14,7 +14,7 @@ import controlP5.ListBox;
 class Toolbar extends ListBox
 {
 	
-  private PApplet paplett;
+  private PApplet pApplet;
   private List<Tool> tools;
   private Tool selectedTool;
   private ControlP5 cp5;
@@ -28,7 +28,7 @@ class Toolbar extends ListBox
   {
     super(cp5, cp5.getTab("default"), name, 0, 0, 100, 10);
     
-    this.paplett = papplet;
+    this.pApplet = papplet;
     this.tools = new ArrayList<Tool>();
   }
 
@@ -50,11 +50,7 @@ class Toolbar extends ListBox
   {
 	  int newIndex = buttons.size();
 	  
-	  PGraphics toolIcon = theTool.getIcon(this.paplett.createGraphics(50, 50));
-      this.addCustomItem(theTool.getIconName(), newIndex, new ShapeButton(toolIcon));
-      this.cp5.getTooltip().register(theTool.getIconName(), "TestToolTip");
-      this.cp5.getTooltip().setDelay(500);
-      
+      this.addCustomItem(theTool.getIconName(), newIndex, theTool.getButton());      
       this.tools.add(theTool);
   }
 
