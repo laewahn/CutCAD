@@ -45,6 +45,7 @@ public class PrintDialog {
 	 */
   public PrintDialog(List<Shape> shapes) {
     this.shapes = shapes;
+    preparePrintDialog();
   }
   
   /** 
