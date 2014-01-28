@@ -188,7 +188,8 @@ public class Rectangle extends Shape {
 	public Shape copy() {
 		Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()),
 				this.sizeX, this.sizeY);
-		copy.setShape(this.basic.copy(copy));
+		copy.setValue0(this.getValue(0));
+		copy.setValue1(this.getValue(1));
 		return copy;
 
 	}

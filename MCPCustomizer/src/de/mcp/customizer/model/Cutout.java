@@ -1,6 +1,7 @@
 package de.mcp.customizer.model;
 
 import java.util.ArrayList;
+
 import de.mcp.customizer.view.Drawable2D;
 import processing.core.PGraphics;
 import toxi.geom.*;
@@ -32,7 +33,11 @@ public class Cutout implements Drawable2D {
 		this.slave = slave;
 		slave.setMaterial(AllMaterials.getMaterials().get(0));
 		this.angle = 0;
-		this.position = new Vec2D(findCenter(master).sub(findCenter(slave)));
+		if (!master.overlapsWith(slave)) {
+			this.position = new Vec2D(findCenter(master).sub(findCenter(slave)));
+		} else {
+			this.position = slave.getPosition2D().sub(master.getPosition2D());
+		}
 		this.isSelected = false;
 		this.isActive = false;
 //		allCutouts.add(this);
@@ -206,7 +211,7 @@ public class Cutout implements Drawable2D {
 
 	
 	/**
-	 * Draw cut-out
+	 * Draw cut-out line
 	 */
 	public void draw2D(PGraphics p) {
 		scalingFactor = master.getScalingFactor();

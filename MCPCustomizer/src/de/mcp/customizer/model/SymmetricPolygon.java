@@ -195,7 +195,8 @@ public class SymmetricPolygon extends Shape {
 	public Shape copy() {
 		SymmetricPolygon copy = new SymmetricPolygon(new Vec3D(
 				this.basic.getPosition3D()), this.size, this.size);
-		copy.setShape(this.basic.copy(copy));
+		copy.setValue0(this.getValue(0));
+		copy.setValue1(this.getValue(1));
 		return copy;
 
 	}

@@ -40,7 +40,7 @@ public class ImportSVGTool extends Tool {
 	
 	@Override
 	public void wasSelected() {
-		new ImportSVG(this.objectContainer.allShapes());	
+		new ImportSVG(this.objectContainer);		
 		super.wasSelected();
 	}
 	

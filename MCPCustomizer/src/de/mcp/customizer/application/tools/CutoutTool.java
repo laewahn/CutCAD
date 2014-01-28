@@ -52,7 +52,7 @@ public class CutoutTool extends Tool {
             		masterShape = s;
             		selectedFirst = true;
             	}
-            	else if (selectedFirst && s.getGShape().isSelected() )
+            	else if (selectedFirst && s.getGShape().isSelected() && s != masterShape )
             	{
             		this.customizer.displayStatus("Cutout created! If you want to create another cutout, select the shape you want to add a cutout to");
             		masterShape.getGShape().addCutout(s.getGShape());
