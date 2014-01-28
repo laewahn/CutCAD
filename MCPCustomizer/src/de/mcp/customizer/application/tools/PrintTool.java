@@ -28,6 +28,7 @@ public class PrintTool extends Tool {
     @Override
     public void wasSelected() {
     	super.wasSelected();
-    	new PrintDialog(this.objectContainer.allShapes());
+    	PrintDialog printDialog = new PrintDialog(this.objectContainer.allShapes());
+    	printDialog.preparePrintDialog();
     }
 }

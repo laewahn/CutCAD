@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import de.mcp.customizer.model.Material;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 
 public class PrintInstance
 {
@@ -182,6 +183,14 @@ public class PrintInstance
 	  } else
 	  {
 		  return "no overlap";
+	  }
+  }
+  
+  public void setLaserCutter(LaserCutter cutter, String ipAddress)
+  {
+	  for(int i = 0; i < subInstances.size(); i++)
+	  {
+		  subInstances.get(i).setLaserCutter(cutter,ipAddress);
 	  }
   }
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
 import processing.data.XML;
 import toxi.geom.Vec2D;
@@ -26,10 +27,13 @@ public class PrintSubInstance
     this.parent = parent;
     shapesPlaced = new ArrayList<Shape>();
     laserJob = new LaserJobCreator();
-    laserJob.setLaserCutter("epilogZing", "137.226.56.228"); // replace by more lasercutter now only epilogzing supported
-    laserJob.setPsffProperty(this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
-    laserJob.setDPI(500); 
-    laserJob.newVectorPart();
+    //laserJob.setLaserCutter(new LaserCutter("epilogZing"),"127.1.1.1");
+    laserJob.newVectorPart(500, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
+  }
+  
+  public void setLaserCutter(LaserCutter cutter, String ipAddress)
+  {
+	  laserJob.setLaserCutter(cutter, ipAddress);
   }
   
   public void placeShape(Shape shape)
@@ -71,7 +75,7 @@ public class PrintSubInstance
 		  }
 		  laserJob.addVerticesToVectorPart(newVertices);
 	  }
-	  laserJob.sendLaserjob();
+	  laserJob.sendLaserjob(this.parent.getMaterial().getMaterialName());
   }
   
   public void nextJob()
@@ -106,8 +110,8 @@ public class PrintSubInstance
   
   public void printSVG(String printJobName)
   {
-	  final double widthInPx = 600/**3.779527559*/;
-	  final double heightInPx = 300/**3.779527559*/;
+	  final double widthInPx = 600;
+	  final double heightInPx = 300;
 	  String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" + widthInPx + "mm\" height=\"" + heightInPx + "mm\">";
 	  for(int i = 0; i < shapesPlaced.size(); i++)
 	  {
