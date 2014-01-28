@@ -32,7 +32,8 @@ public class Grid {
 		int scaledGridWidth = getScaledGridWidth();
 		for (int i = -100; i < 100; i++)
 	    {
-			view.strokeWeight(getScaleFactor(this.transformation.getScale()));
+			view.strokeWeight(1);
+//			view.strokeWeight(getScaleFactor(this.transformation.getScale()));
 			view.stroke(220);
 			view.line(-100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth, scaledGridWidth * i);
 			view.line(scaledGridWidth * i, -100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth);

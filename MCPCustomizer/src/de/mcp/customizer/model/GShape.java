@@ -2,9 +2,11 @@ package de.mcp.customizer.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Line2D;
@@ -29,8 +31,7 @@ public class GShape implements Drawable2D, Drawable3D {
 	private Shape shape;
 	private Material material;
 	private String name;
-	private float scalingFactor = 0.5f;
-	private float scalingFactor3D = 0.5f;
+	private float scalingFactor, scalingFactor3D;
 
 	/**
 	 * Creates edges with the 3D and 2D representation of this form (one edge between each pair of vertices)
@@ -591,12 +592,13 @@ public class GShape implements Drawable2D, Drawable3D {
 	 * 
 	 * @param p where to draw
 	 */
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation t) {
+		scalingFactor = t.getScale();
 		this.createCover2D(p, getTenons(), position2D);
 
 		for (Edge e : edges) // not good... but i've no better idea
 		{
-			e.draw2D(p);
+			e.draw2D(p, t);
 		}
 	}
 
@@ -605,7 +607,8 @@ public class GShape implements Drawable2D, Drawable3D {
 	 * 
 	 * @param p where to draw
 	 */
-	public void draw3D(PGraphics p) {
+	public void draw3D(PGraphics p, Transformation t) {
+		scalingFactor3D = t.getScale();
 		if (!this.getMaterial().getMaterialName().equals("Nothing 0,5 mm")) {
 			createCover3D(p, true);
 			createCover3D(p, false);
@@ -623,7 +626,7 @@ public class GShape implements Drawable2D, Drawable3D {
 
 			for (Edge e : edges)
 			{
-				e.draw3D(p);
+				e.draw3D(p, t);
 			}
 		}
 	}
@@ -729,6 +732,7 @@ public class GShape implements Drawable2D, Drawable3D {
 	 * @param p the corresponding graphic object, for which this should be valid
 	 */
 	private void setFillColor(PGraphics p) {
+		p.strokeWeight(1);
 		if (this.isSelected()) {
 			p.stroke(255, 0, 0);
 		} else if (this.isActive) {
@@ -774,7 +778,7 @@ public class GShape implements Drawable2D, Drawable3D {
 	 * @return a copy of this form
 	 */
 	public Shape copyCompleteStructure() {
-		Shape copy = this.getShape().copy();
+		Shape copy = this.getShape().copyBaseForm();
 		copy.getGShape().recalculate(this.vertices);
 		copy.getGShape().setMaterial(this.material);
 		copy.getGShape().setName("CopyOf" + this.getName());

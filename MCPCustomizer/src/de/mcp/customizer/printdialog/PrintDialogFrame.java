@@ -11,10 +11,9 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Group;
 import controlP5.ListBox;
-import controlP5.Textfield;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.Shape;
-import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
+import de.mcp.customizer.view.Transformation;
 
 public class PrintDialogFrame extends PApplet
 {
@@ -34,13 +33,9 @@ public class PrintDialogFrame extends PApplet
 	private int confirmLevel;
 	private boolean dragging;
     private String overlapMessage;
-    
-    private LaserCutter selectedCutter;
-    private Textfield cutterAddress;
 	
 	private PGraphics objectLayout;
 	private ListBox unplacedShapesBox;
-	private ListBox cutterBox;
 	private Textlabel statusLabel;
 	private Button lasercutButton;
 	private Button exportSVGButton;
@@ -75,7 +70,7 @@ public class PrintDialogFrame extends PApplet
   
   public void setup()
   {
-    size(h,w);
+    size(w, h);
     frameRate(25);
     cp5 = new ControlP5(this);
     objectLayout = createGraphics(bedWidth, bedHeight);
@@ -84,9 +79,10 @@ public class PrintDialogFrame extends PApplet
                          .setSize(120, 120)
                          .setItemHeight(15)
                          .setBarHeight(15)
-                         .setCaptionLabel("Choose an object");
-    unplacedShapesBox.getCaptionLabel().getStyle().marginTop = 3;
-    unplacedShapesBox.getValueLabel().getStyle().marginTop = 3;
+                         ;
+   unplacedShapesBox.setCaptionLabel("Choose an object");
+   unplacedShapesBox.getCaptionLabel().getStyle().marginTop = 3;
+   unplacedShapesBox.getValueLabel().getStyle().marginTop = 3;
    updateListBox();
    lasercutButton = cp5.addButton("Start cutting")
 		   			   .setPosition(10,h-70)
@@ -109,7 +105,7 @@ public class PrintDialogFrame extends PApplet
    instanceGroup = cp5.addGroup("Jobs")
                       .setPosition(140,bedHeight+20)
                       .setColorBackground(0x00000000)
-                      .setWidth(630);			  
+                      .setWidth(450);			  
    createButtons();
    confirmPrint = cp5.addButton("yes")
    					 .setPosition(420,h-110)
@@ -119,38 +115,6 @@ public class PrintDialogFrame extends PApplet
    					 .setPosition(460,h-110)
    					 .setSize(30,30)
    					 .setVisible(false);
-   cutterBox = cp5.addListBox("cutterBox")
-           		  .setPosition(w-140, 30)
-           		  .setSize(120, 120)
-           		  .setItemHeight(15)
-           		  .setBarHeight(15)
-           		  .setCaptionLabel("Choose an cutter");
-   cutterBox.getCaptionLabel().getStyle().marginTop = 3;
-   cutterBox.getValueLabel().getStyle().marginTop = 3;
-   updateCutters();
-   cutterAddress = cp5.addTextfield("cutterAddress")
-		   			  .setPosition(w-140,160)
-		   			  .setSize(120,30)
-		   			  .setCaptionLabel("address of cutter");
-   //setLaserCutter(); // should be removed for dropdownlist and textfield for ip
-  }
-  
-  private void updateCutters()
-  {
-	  cutterBox.clear();
-	  boolean done = false;
-	  int counter = 0;
-	  while(!done)
-	  {
-		  LaserCutter cutter = new LaserCutter();
-		  cutter.setDevice(counter);
-		  if(!cutter.returnDevice().equals("no selected")) {
-			  cutterBox.addItem(cutter.returnDevice(), counter);
-		  } else {
-			  done = true;
-		  }
-		  counter++;
-	  }
   }
   
   private void updateListBox()
@@ -281,8 +245,8 @@ public class PrintDialogFrame extends PApplet
 	       int collumn = (buttonNumber%4);
 	       int name = j+1;
 	       Button newButton = cp5.addButton(printInstances.get(i).getMaterial().getMaterialName() + " - " + name)
-	                             .setPosition((collumn*160),(row*50))
-	                             .setSize(150,30)
+	                             .setPosition((collumn*110),(row*50))
+	                             .setSize(100,30)
 	                             .setId(buttonNumber)
 	                             .setColorBackground(0x00000000)
 	                             .setGroup(instanceGroup); 
@@ -299,13 +263,14 @@ public class PrintDialogFrame extends PApplet
       objectLayout.beginDraw();
       objectLayout.background(100);
       ArrayList<Shape> drawShapes = new ArrayList<Shape>();
+      Transformation t = new Transformation(1, new Vec2D(0,0));
       if(printInstances.size() > 0)
       {
     	  drawShapes = printInstances.get(selectedInstance).getPlacedShapes();
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
-       drawShapes.get(i).getGShape().draw2D(objectLayout);
+       drawShapes.get(i).getGShape().draw2D(objectLayout, t);
       }
       objectLayout.endDraw();
       image(objectLayout, 0, 0);
@@ -556,16 +521,15 @@ public class PrintDialogFrame extends PApplet
   
   private void activateAll(boolean state)
   {
-	  this.lasercutButton.setVisible(state);
-	  this.exportSVGButton.setVisible(state);
-	  this.addExtraJobButton.setVisible(state);
-  }
-  
-  private void setLaserCutter()
-  {
-	  for(int i = 0; i < printInstances.size(); i++)
-	  {
-		  printInstances.get(i).setLaserCutter(selectedCutter,"127.0.0.1");
-	  }
+	  //this.unplacedShapesBox.getController(this.unplacedShapesBox.getName()).setLock(state);
+	  //instanceGroup.getController(this.instanceGroup.getName()).setLock(state);
+	  this.lasercutButton.setLock(state);
+	  this.exportSVGButton.setLock(state);
+	  this.addExtraJobButton.setLock(state);
+		  //cp5.getController(this.unplacedShapesBox.getName()).setLock(state);
+		  //cp5.getController(this.instanceGroup.getName()).setLock(state);
+		  //cp5.getController(this.lasercutButton.getName()).setLock(state);
+		  //cp5.getController(this.exportSVGButton.getName()).setLock(state);
+		  //cp5.getController(this.addExtraJobButton.getName()).setLock(state);
   }
 }

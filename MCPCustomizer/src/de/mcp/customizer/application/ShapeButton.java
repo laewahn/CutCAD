@@ -5,6 +5,7 @@ import processing.core.PGraphics;
 import controlP5.Button;
 import controlP5.ControllerView;
 import de.mcp.customizer.view.SVGIcon;
+import de.mcp.customizer.view.Transformation;
 
 /**
  * A simple extension of the ControlP5-button that displays a predefined icon instead of the standard-button *
@@ -14,18 +15,20 @@ public class ShapeButton implements ControllerView<Button> {
   private SVGIcon icon;
   private boolean isSelected;
   private PGraphics graphics;
+  private Transformation transform;
 
   /**
   * Creates a ShapeButton
   * 
   * @param icon the icon to be displayed instead of the standard-button
   */
-  public ShapeButton(SVGIcon icon, PGraphics graphics)
+  public ShapeButton(SVGIcon icon, PGraphics graphics, Transformation transform)
   {
     super();
     this.graphics = graphics;
     this.icon = icon;
     this.isSelected = false; 
+    this.transform = transform;
   }
 
   /* (non-Javadoc)
@@ -43,7 +46,7 @@ public void display(PApplet theApplet, Button theButton)
     {
     	graphics.stroke(0,0,255);
     }
-	icon.draw2D(graphics);
+	icon.draw2D(graphics, transform);
     theApplet.image(graphics, 0, 0);
   }
 

@@ -1,6 +1,7 @@
 package de.mcp.customizer.model;
 
 import java.util.ArrayList;
+
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
@@ -207,10 +208,18 @@ public class Trapezium extends Shape {
 		Trapezium copy = new Trapezium(new Vec3D(this.basic.getPosition3D()),
 				this.sizeXTop, this.sizeY);
 		copy.setShape(this.basic.copy(copy));
+		return copy;
+	}
+	
+	/**
+	 * Creates a copy of this shape with the basic values
+	 */
+	public Shape copyBaseForm() {
+		Trapezium copy = new Trapezium(new Vec3D(
+				this.basic.getPosition3D()), this.sizeXTop, this.sizeY);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));
 		copy.setValue2(this.getValue(2));
 		return copy;
-
 	}
 }

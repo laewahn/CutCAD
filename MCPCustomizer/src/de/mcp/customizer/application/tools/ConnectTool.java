@@ -8,6 +8,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.ObjectContainer;
+import de.mcp.customizer.view.Transformation;
 
 /**
  * The ConnectTool is used to create a connection between two edges.
@@ -100,8 +101,9 @@ public class ConnectTool extends Tool {
 		}
 	}
 
-	public void draw2D(PGraphics p) {
-		scalingFactor = super.getScalingFactor();
+	public void draw2D(PGraphics p, Transformation t) {
+		scalingFactor = t.getScale();
+//		scalingFactor = super.getScalingFactor();
 		if (selectedFirst) {
 			Vec2D mid = previewConnection
 					.getMasterEdge()

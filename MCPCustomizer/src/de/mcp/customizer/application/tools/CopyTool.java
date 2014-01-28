@@ -9,6 +9,7 @@ import de.mcp.customizer.model.CopyShape;
 import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.view.Transformation;
 
 /**
  * The CopyTool is used to create a copy of a Shape.
@@ -95,12 +96,12 @@ public class CopyTool extends Tool {
 		}
 	}
 
-    public void draw2D(PGraphics p)
+    public void draw2D(PGraphics p, Transformation t)
     {
     	if(selected)
     	{
     		previewShape.getGShape().setPosition2D(lastMousePosition);
-    		previewShape.getGShape().draw2D(p);
+    		previewShape.getGShape().draw2D(p, t);
     	}
     }
     

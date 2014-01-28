@@ -10,6 +10,7 @@ import toxi.geom.Vec3D;
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
 import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.Transformation;
 
 public class Connection implements Drawable2D
 {
@@ -87,8 +88,9 @@ public class Connection implements Drawable2D
 		this.slaveEdge = e;
 	}
 
-	public void draw2D(PGraphics p) {
-		scalingFactor = masterEdge.getGShape().getScalingFactor();
+	public void draw2D(PGraphics p, Transformation t) {
+		scalingFactor = t.getScale();
+//		scalingFactor = masterEdge.getGShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		
 		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D()).scale(scalingFactor);
