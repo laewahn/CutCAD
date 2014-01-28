@@ -360,6 +360,13 @@ public class Properties extends PApplet
 					controlUnits.get(i).lock();
 					dummySliders.get(i).lock();
 				}
+				else
+				{
+					sliders.get(i).unlock();
+					textfields.get(i).unlock();
+					controlUnits.get(i).unlock();
+					dummySliders.get(i).unlock();
+				}
 			}
 //		}
 		setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
