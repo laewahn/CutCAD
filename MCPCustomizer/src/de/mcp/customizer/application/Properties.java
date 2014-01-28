@@ -334,8 +334,8 @@ public class Properties extends PApplet
 	public void plugTo(Shape s)
 	{
 		unplugAll();
-		if(s.getGShape().getNumberOfConnections()==0)
-		{
+//		if(s.getGShape().getNumberOfConnections()==0)
+//		{
 			for(int i=0; i<s.getNumberOfControls(); i++)
 			{
 				int value = s.getValue(i);
@@ -352,8 +352,16 @@ public class Properties extends PApplet
 				.show();
 				controlNames.get(i).setText(s.getNameOfControl(i)).show();
 				dummySliders.get(i).plugTo(s);
+
+				if(s.getGShape().getNumberOfConnections()>0)
+				{
+					sliders.get(i).lock();
+					textfields.get(i).lock();
+					controlUnits.get(i).lock();
+					dummySliders.get(i).lock();
+				}
 			}
-		}
+//		}
 		setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
 		setMaterial.show();
 
@@ -485,9 +493,6 @@ public class Properties extends PApplet
 		// p.rect(posX, posY, sizeX, sizeY); // overwrites drop-down menu, move to show & if(hidden) branch????
 		if (this.hidden)
 		{
-			p.textSize(24);
-			p.fill(255);
-			p.text("No Object selected", p.width/2-125, 30);
 			unplugAll();
 		}
 	}
