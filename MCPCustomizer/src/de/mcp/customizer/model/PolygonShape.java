@@ -59,4 +59,10 @@ public class PolygonShape extends Shape {
 	 */
 	public void recalculate() {
 	}
+
+	@Override
+	public Shape copyBaseForm() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

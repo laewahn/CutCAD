@@ -13,6 +13,7 @@ import controlP5.Group;
 import controlP5.ListBox;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.view.Transformation;
 
 public class PrintDialogFrame extends PApplet
 {
@@ -262,13 +263,14 @@ public class PrintDialogFrame extends PApplet
       objectLayout.beginDraw();
       objectLayout.background(100);
       ArrayList<Shape> drawShapes = new ArrayList<Shape>();
+      Transformation t = new Transformation(1, new Vec2D(0,0));
       if(printInstances.size() > 0)
       {
     	  drawShapes = printInstances.get(selectedInstance).getPlacedShapes();
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
-       drawShapes.get(i).getGShape().draw2D(objectLayout);
+       drawShapes.get(i).getGShape().draw2D(objectLayout, t);
       }
       objectLayout.endDraw();
       image(objectLayout, 0, 0);

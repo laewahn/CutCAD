@@ -142,20 +142,20 @@ public class MCPCustomizer extends PApplet {
 
 	    for (Shape s : this.container.allShapes())
 	    {
-	      s.getGShape().draw2D(view2D);
+	      s.getGShape().draw2D(view2D, transform2D);
 	    }
 	    
 	    for (Connection c : this.container.allConnections())
 	    {
-	      c.draw2D(view2D);
+	      c.draw2D(view2D, transform2D);
 	    }
 	    
 	    for(Cutout c : this.container.allCutouts())
 	    {
-	      c.draw2D(view2D);
+	      c.draw2D(view2D, transform2D);
 	    }
 
-	    this.toolbar.getSelectedTool().draw2D(view2D);
+	    this.toolbar.getSelectedTool().draw2D(view2D, transform2D);
 
 	    view2D.endDraw();
 
@@ -174,15 +174,15 @@ public class MCPCustomizer extends PApplet {
 
 	    view3D.background(150);
 	    
-	    float scale = transform3D.getScale();	
-	    view3D.scale(scale);
+	    //float scale = transform3D.getScale();	
+	    //view3D.scale(scale);
     
 	    draw3DAxes(view3D);
 	    grid3D.drawGrid();
 	    
 	    for (Shape s : container.allShapes())
 	    {
-	      s.getGShape().draw3D(view3D);
+	      s.getGShape().draw3D(view3D, transform3D);
 	    }
 
 	    if(meshSTL.isStlImported())

@@ -1,6 +1,7 @@
 package de.mcp.customizer.model;
 
 import java.util.ArrayList;
+
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
@@ -189,10 +190,17 @@ public class Rectangle extends Shape {
 		Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()),
 				this.sizeX, this.sizeY);
 		copy.setShape(this.basic.copy(copy));
-
+		return copy;
+	}
+	
+	/**
+	 * Creates a copy of this shape with the basic values
+	 */
+	public Shape copyBaseForm() {
+		Rectangle copy = new Rectangle(new Vec3D(
+				this.basic.getPosition3D()), this.sizeX, this.sizeY);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));
 		return copy;
-
 	}
 }

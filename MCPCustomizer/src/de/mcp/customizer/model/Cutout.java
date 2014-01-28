@@ -3,6 +3,7 @@ package de.mcp.customizer.model;
 import java.util.ArrayList;
 
 import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 import toxi.geom.*;
 
@@ -213,8 +214,9 @@ public class Cutout implements Drawable2D {
 	/**
 	 * Draw cut-out line
 	 */
-	public void draw2D(PGraphics p) {
-		scalingFactor = master.getScalingFactor();
+	public void draw2D(PGraphics p, Transformation t) {
+		scalingFactor = t.getScale();
+//		scalingFactor = master.getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D())

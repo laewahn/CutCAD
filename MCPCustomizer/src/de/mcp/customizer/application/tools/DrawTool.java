@@ -1,13 +1,12 @@
 package de.mcp.customizer.application.tools;
 
 import processing.core.PGraphics;
-
 import toxi.geom.Vec2D;
-
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Rectangle;
+import de.mcp.customizer.view.Transformation;
 
 /**
  * The DrawTool is used to draw a rectangle-shape.
@@ -72,10 +71,10 @@ public class DrawTool extends Tool {
 
     }
 
-    public void draw2D(PGraphics p)
+    public void draw2D(PGraphics p, Transformation t)
     {
         if (this.previewRectangle != null) {
-            this.previewRectangle.getGShape().draw2D(p);
+            this.previewRectangle.getGShape().draw2D(p, t);
         }
     }
 

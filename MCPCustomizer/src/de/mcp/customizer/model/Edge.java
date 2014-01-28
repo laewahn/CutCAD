@@ -1,9 +1,11 @@
 package de.mcp.customizer.model;
 
 import java.util.ArrayList;
+
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
@@ -176,8 +178,9 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * Draw Box around the edge in 2D if the edge should be either highlighted
 	 * or selected
 	 */
-	public void draw2D(PGraphics p) {
-		scalingFactor = getGShape().getScalingFactor();
+	public void draw2D(PGraphics p, Transformation t) {
+		scalingFactor = t.getScale();
+		//scalingFactor = getGShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		
 		if (this.isHighlighted()) {
@@ -211,8 +214,10 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * Draw Box around the edge in 3D if the edge should be either highlighted
 	 * or selected
 	 */
-	public void draw3D(PGraphics p) {
-		scalingFactor3D = getGShape().getScalingFactor3D();
+	public void draw3D(PGraphics p, Transformation t) {
+		scalingFactor3D = t.getScale();
+		createBorderBox();
+//		scalingFactor3D = getGShape().getScalingFactor3D();
 		if (this.isHighlighted()) {
 			Vec3D offset = this.getGShape().getNormalVector()
 					.normalizeTo(this.getGShape().getThickness() / 2 + 4);
@@ -275,12 +280,17 @@ public class Edge implements Drawable2D, Drawable3D {
 	// since the user would have to precisely point to a line that is one pixel
 	// wide.
 	public boolean mouseOver(Vec2D mousePosition) {
-		// create a vector that is perpendicular to the edge
+		createBorderBox();
+		// create a rectangle around the edge
+		Polygon2D borders = new Polygon2D(definingPoints);
+
+		// check if the mousePointer is within the created rectangle
+		return borders.containsPoint(mousePosition.scale(scalingFactor));
+	}
+	
+	private void createBorderBox() {
 		Vec2D perpendicularVector = this.getV2().sub(this.getV1())
 				.perpendicular().getNormalizedTo(boundingBoxSize);
-
-		// with the perpendicular vector, calculate the defining points of a
-		// rectangle around the edge
 		definingPoints = new ArrayList<Vec2D>();
 		definingPoints.add(this.getV1().sub(perpendicularVector)
 				.add(getGShape().getPosition2D()).scale(scalingFactor));
@@ -289,13 +299,7 @@ public class Edge implements Drawable2D, Drawable3D {
 		definingPoints.add(this.getV2().add(perpendicularVector)
 				.add(getGShape().getPosition2D()).scale(scalingFactor));
 		definingPoints.add(this.getV1().add(perpendicularVector)
-				.add(getGShape().getPosition2D()).scale(scalingFactor));
-
-		// create a rectangle around the edge
-		Polygon2D borders = new Polygon2D(definingPoints);
-
-		// check if the mousePointer is within the created rectangle
-		return borders.containsPoint(mousePosition.scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor));	
 	}
 
 	/**

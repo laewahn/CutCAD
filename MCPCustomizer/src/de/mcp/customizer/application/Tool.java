@@ -25,7 +25,7 @@ public abstract class Tool implements Drawable2D {
     	this.customizer = customizer;
     	this.objectContainer = container;
 		PGraphics p = this.customizer.createGraphics(50, 50);
-		this.button = new ShapeButton(this.getIcon(), p);
+		this.button = new ShapeButton(this.getIcon(), p, transform);
     }
     
     public Tool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, String iconName)
@@ -48,7 +48,7 @@ public abstract class Tool implements Drawable2D {
         Vec2D newPos = inPosition.sub(this.view.getTopLeft());
         newPos.set(newPos.x()/transform.getScale(), newPos.y()/transform.getScale());
         newPos.addSelf(transform.getTranslation());
-        newPos = newPos.scale(1/scalingFactor);
+        //newPos = newPos.scale(1/scalingFactor);
         return newPos;
     }
 
@@ -88,6 +88,6 @@ public abstract class Tool implements Drawable2D {
     	this.button.setSelected(false);
     }
     
-    public void draw2D(PGraphics p) {};
+    public void draw2D(PGraphics p, Transformation t) {};
 
 }
