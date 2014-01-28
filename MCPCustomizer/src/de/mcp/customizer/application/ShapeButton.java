@@ -25,7 +25,7 @@ public class ShapeButton implements ControllerView<Button> {
     super();
     this.graphics = graphics;
     this.icon = icon;
-    this.isSelected = false;    
+    this.isSelected = false; 
   }
 
   /* (non-Javadoc)
@@ -33,7 +33,8 @@ public class ShapeButton implements ControllerView<Button> {
  */
 public void display(PApplet theApplet, Button theButton) 
   {    
-	graphics.stroke(160);
+	graphics.background(255);	   
+	graphics.stroke(140);
     if (theButton.isInside()) 
     {
     	graphics.stroke(0);
