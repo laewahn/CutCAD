@@ -19,7 +19,7 @@ public class Edge implements Drawable2D, Drawable3D {
 	private Vec3D p3D1, p3D2; // 3D logic
 	private Vec2D v1, v2; // 2D logic
 	private ArrayList<Vec2D> tenons; // 2D representation
-	private float scalingFactor, boundingBoxSize;
+	private float scalingFactor, scalingFactor3D, boundingBoxSize;
 	private boolean isHighlighted, isLocked, isSelected;
 	ArrayList<Vec2D> definingPoints; // highlighting area for selecting an edge
 
@@ -212,6 +212,7 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * or selected
 	 */
 	public void draw3D(PGraphics p) {
+		scalingFactor3D = getGShape().getScalingFactor3D();
 		if (this.isHighlighted()) {
 			Vec3D offset = this.getGShape().getNormalVector()
 					.normalizeTo(this.getGShape().getThickness() / 2 + 4);
@@ -219,13 +220,13 @@ public class Edge implements Drawable2D, Drawable3D {
 			p.noFill();
 			p.strokeWeight(2);
 			p.beginShape();
-			Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor);
+			Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
-			vector = p3D2.copy().add(offset).scale(scalingFactor);
+			vector = p3D2.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
-			vector = p3D2.copy().sub(offset).scale(scalingFactor);
+			vector = p3D2.copy().sub(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
-			vector = p3D1.copy().sub(offset).scale(scalingFactor);
+			vector = p3D1.copy().sub(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
 			p.endShape(PConstants.CLOSE);
 			p.strokeWeight(1);
@@ -238,13 +239,13 @@ public class Edge implements Drawable2D, Drawable3D {
 			p.noFill();
 			p.strokeWeight(2);
 			p.beginShape();
-			Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor);
+			Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
-			vector = p3D2.copy().add(offset).scale(scalingFactor);
+			vector = p3D2.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
-			vector = p3D2.copy().sub(offset).scale(scalingFactor);
+			vector = p3D2.copy().sub(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
-			vector = p3D1.copy().sub(offset).scale(scalingFactor);
+			vector = p3D1.copy().sub(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
 			p.endShape(PConstants.CLOSE);
 			p.strokeWeight(1);

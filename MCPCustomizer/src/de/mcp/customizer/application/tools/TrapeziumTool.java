@@ -40,10 +40,10 @@ public class TrapeziumTool extends Tool {
 
     		this.customizer.displayStatus("Trapezoid created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
 
-			Vec2D endCoord = this.positionRelativeToView(position);
-			Vec2D rectSize = endCoord.sub(this.startCoord);
+			//Vec2D endCoord = this.positionRelativeToView(position);
+			//Vec2D rectSize = endCoord.sub(this.startCoord);
 
-			this.previewRectangle.setSize(rectSize);
+			//this.previewRectangle.setSize(rectSize);
 
 			this.objectContainer.addShape(this.previewRectangle);
 			this.previewRectangle = null;

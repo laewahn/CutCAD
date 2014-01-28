@@ -2,8 +2,8 @@ package de.mcp.customizer.model;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import processing.core.PApplet;
+import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 import geomerative.*;
@@ -14,7 +14,8 @@ import geomerative.*;
 public class ImportSVG extends PApplet {
 	private static final long serialVersionUID = 1L;
 	private RPoint[][] pointPaths;
-	private List<Shape> shapes;
+//	private List<Shape> shapes;
+	private ObjectContainer container;
 	// ToDO: scalingFactor only correct for inkscape, illustrator needs another
 	private float scalingInkscape = 2.82222229120988f; // ->Preferences (SVG
 	// Resolution)
@@ -25,8 +26,8 @@ public class ImportSVG extends PApplet {
 	 * @param shapes
 	 *            List of shapes, where the produced shapes are registered
 	 */
-	public ImportSVG(List<Shape> shapes) {
-		this.shapes = shapes;
+	public ImportSVG(ObjectContainer container) {
+		this.container = container;
 		selectInput("Select a SVG file to process:", "fileSelected");
 	}
 
@@ -54,9 +55,29 @@ public class ImportSVG extends PApplet {
 		pointPaths = RG.loadShape(selection.getAbsolutePath())
 				.getPointsInPaths();
 
+		ArrayList<Shape> newShapes = new ArrayList<Shape>();
 		for (int i = 0; i < pointPaths.length; i++) {
 			if (pointPaths[i] != null) {
-				createShapeFromPath(i);
+				newShapes.add(createShapeFromPath(i));
+			}
+		}
+		createCutouts(newShapes);
+	}
+
+	private void createCutouts(ArrayList<Shape> newShapes) {
+		for (Shape original : newShapes) {
+			for (Shape possibleCutout : newShapes) {
+				boolean isCutout = true;
+				Polygon2D formOriginal = new Polygon2D(original.getGShape().getVertices());
+				Vec2D offset = possibleCutout.getGShape().getPosition2D().sub(original.getGShape().getPosition2D());
+				for (Vec2D v : possibleCutout.getGShape().getVertices()) {
+					if(!formOriginal.containsPoint(v.add(offset))) {
+						isCutout = false;
+					}
+				}
+				if (isCutout) {
+					original.getGShape().addCutout(possibleCutout.getGShape());
+				}
 			}
 		}
 	}
@@ -68,7 +89,7 @@ public class ImportSVG extends PApplet {
 	 * @param i
 	 *            number of path in the list of paths
 	 */
-	private void createShapeFromPath(int i) {
+	private Shape createShapeFromPath(int i) {
 		ArrayList<Vec2D> path = new ArrayList<Vec2D>();
 		float MinX = Integer.MAX_VALUE;
 		float MinY = Integer.MAX_VALUE;
@@ -89,6 +110,7 @@ public class ImportSVG extends PApplet {
 			path.remove(path.size() - 1);
 		}
 		Shape pathShape = new PolygonShape(path, position);
-		shapes.add(pathShape);
+		container.addShape(pathShape);
+		return pathShape;
 	}
 }
