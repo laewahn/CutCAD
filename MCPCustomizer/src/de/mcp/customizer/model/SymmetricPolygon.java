@@ -9,6 +9,9 @@ import toxi.geom.Vec3D;
  * Creates a symmetric polygon as a shape
  */
 public class SymmetricPolygon extends Shape {
+
+	private static final long serialVersionUID = 4464413451997462017L;
+
 	private int size, number;
 	private static int counter = 0;
 	private GShape basic;

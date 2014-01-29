@@ -1,5 +1,6 @@
 package de.mcp.customizer.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import toxi.geom.Rect;
@@ -9,7 +10,10 @@ import toxi.geom.Vec3D;
 /**
  * Creates a rectangle as a shape
  */
-public class Rectangle extends Shape {
+public class Rectangle extends Shape implements Serializable {
+	
+	private static final long serialVersionUID = -6511783713655746647L;
+	
 	private int sizeX, sizeY;
 	private static int counter = 0;
 	private GShape basic;

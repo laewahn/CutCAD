@@ -440,6 +440,9 @@ public class MCPCustomizer extends PApplet {
 				  transform3D.scaleDown(0.01f);
 			  }
 	    }
+	    if (key == 's') {
+	    	container.safe("foo");
+	    }
 	  }
 	  
 	  /* (non-Javadoc)

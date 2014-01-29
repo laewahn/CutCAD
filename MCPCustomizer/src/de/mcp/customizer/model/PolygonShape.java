@@ -7,6 +7,8 @@ import toxi.geom.Vec3D;
 
 public class PolygonShape extends Shape {
 	
+	private static final long serialVersionUID = 1677103755318526089L;
+	
 	private GShape shape;
 	private static int counter = 0;
 	

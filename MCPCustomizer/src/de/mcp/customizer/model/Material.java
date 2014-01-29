@@ -1,9 +1,14 @@
 package de.mcp.customizer.model;
 
+import java.io.Serializable;
+
 /**
  * Material parameter -Color, Name and lasercutter settings
  */
-public class Material {
+public class Material implements Serializable {
+	
+	private static final long serialVersionUID = 6426094075988228422L;
+	
 	private String name;
 	private int thickness;
 	private int materialColor;

@@ -1,5 +1,6 @@
 package de.mcp.customizer.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.mcp.customizer.view.Drawable2D;
@@ -10,7 +11,10 @@ import toxi.geom.*;
 /**
  * Connects two shapes such that the second one forms a cut-out in the first one
  */
-public class Cutout implements Drawable2D {
+public class Cutout implements Drawable2D, Serializable {
+	
+	private static final long serialVersionUID = -3035265244890031332L;
+	
 	private Vec2D position;
 	private float angle;
 	private GShape master, slave;

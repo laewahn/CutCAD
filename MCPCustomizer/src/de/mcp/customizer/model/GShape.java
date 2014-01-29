@@ -1,5 +1,6 @@
 package de.mcp.customizer.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,10 @@ import toxi.geom.Vec3D;
  * edges, corners, draw2D and draw3D, transform outline from 2D to 3D
  * correct corner from...
  */
-public class GShape implements Drawable2D, Drawable3D {
+public class GShape implements Drawable2D, Drawable3D, Serializable {
+	
+	private static final long serialVersionUID = -328360113782680890L;
+	
 	private int numberOfConnections;
 	private Vec2D position2D;
 	private Vec3D position3D;

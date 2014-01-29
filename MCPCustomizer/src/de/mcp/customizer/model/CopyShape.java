@@ -7,6 +7,9 @@ import toxi.geom.Vec2D;
  * Makes a copy of an existing shape
  */
 public class CopyShape extends Shape {
+	
+	private static final long serialVersionUID = 246039777844934399L;
+	
 	private List<Vec2D> basicShape;
 	private Vec2D position;
 	private GShape basic;

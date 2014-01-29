@@ -1,5 +1,6 @@
 package de.mcp.customizer.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import de.mcp.customizer.algorithm.RotateAdjectantShapes;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
-public class Connection implements Drawable2D
+public class Connection implements Drawable2D, Serializable
 {
+	private static final long serialVersionUID = 4881854804310087106L;
+	
 	private Edge masterEdge, slaveEdge;
 	private float angle = 400;
 	private boolean isSelected, isActive;

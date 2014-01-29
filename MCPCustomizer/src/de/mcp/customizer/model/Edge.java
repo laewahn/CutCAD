@@ -1,5 +1,6 @@
 package de.mcp.customizer.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.mcp.customizer.algorithm.CreateTenons;
@@ -16,7 +17,10 @@ import toxi.geom.Vec3D;
  * Edge object. Has a representation of the (logical) position of its end points
  * in 2D and 3D, and a representation of the (real) outline in 2D
  */
-public class Edge implements Drawable2D, Drawable3D {
+public class Edge implements Drawable2D, Drawable3D, Serializable {
+	
+	private static final long serialVersionUID = 924861921334437216L;
+	
 	private GShape gShape; // know parent
 	private Vec3D p3D1, p3D2; // 3D logic
 	private Vec2D v1, v2; // 2D logic

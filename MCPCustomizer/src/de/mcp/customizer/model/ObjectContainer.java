@@ -1,5 +1,10 @@
 package de.mcp.customizer.model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -102,5 +107,25 @@ public class ObjectContainer {
 	
 	public Tool getSelectedTool() {
 		return this.selectedTool;
+	}
+	
+	public void safe(String filename) {
+		FileOutputStream fos;
+		ObjectOutputStream oos;
+		try {
+			fos = new FileOutputStream(new File(filename));
+			oos = new ObjectOutputStream(fos);
+			
+			oos.writeObject(objects);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void load(String filename) {
+		
 	}
 }

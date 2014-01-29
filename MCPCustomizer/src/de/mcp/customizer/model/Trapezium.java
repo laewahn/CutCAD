@@ -10,6 +10,9 @@ import toxi.geom.Vec3D;
  * Creates a trapezium as a shape
  */
 public class Trapezium extends Shape {
+	
+	private static final long serialVersionUID = 8534996513132236907L;
+	
 	private int sizeXTop, sizeXBottom, sizeY;
 	private static int counter = 0;
 	private GShape basic;
