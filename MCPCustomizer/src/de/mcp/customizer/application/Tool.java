@@ -44,7 +44,7 @@ public abstract class Tool implements Drawable2D {
     {
         Vec2D newPos = inPosition.sub(this.view.getOrigin());
         newPos.set(newPos.x()/this.view.getTransformation().getScale(), newPos.y()/this.view.getTransformation().getScale());
-        newPos.addSelf(this.view.getTransformation().getTranslation());
+        //newPos.addSelf(this.view.getTransformation().getTranslation());
 //        newPos = newPos.scale(1/scalingFactor);
         return newPos;
     }
