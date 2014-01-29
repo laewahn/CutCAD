@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
@@ -72,6 +73,15 @@ public class PrintSubInstance
 			  newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
 		  }
 		  laserJob.addVerticesToVectorPart(newVertices);
+
+		  for(Cutout c : shapesPlaced.get(i).getGShape().getCutouts())
+		  {
+			  newVertices = c.getVectors();
+			  for(int j = 0; j < newVertices.size(); j++) {
+				  newVertices.get(j).set((newVertices.get(j).add(position)).scale(scaleFactor));
+			  }
+			  laserJob.addVerticesToVectorPart(newVertices);
+		  }
 	  }
 	  laserJob.sendLaserjob(this.parent.getMaterial().getMaterialName());
   }
@@ -123,6 +133,20 @@ public class PrintSubInstance
 			  } else
 			  {
 				  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
+			  }
+		  }
+		  for(Cutout c : shapesPlaced.get(i).getGShape().getCutouts())
+		  {
+			  vertices = c.getVectors();
+			  for(int j = 0; j < vertices.size(); j++) {
+
+				  if(j == (vertices.size()-1))
+				  {
+					  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
+				  } else
+				  {
+					  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
+				  }
 			  }
 		  }
 	  }
