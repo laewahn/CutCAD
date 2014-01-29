@@ -12,143 +12,150 @@ import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
 import processing.data.XML;
 import toxi.geom.Vec2D;
 
-public class PrintSubInstance
-{
-  private ArrayList<Shape> shapesPlaced;
-  private LaserJobCreator laserJob;
+public class PrintSubInstance {
+	
+	private ArrayList<Shape> shapesPlaced;
+	private LaserJobCreator laserJob;
   
-  private PrintSubDialog printSubDialog;
-  private Frame f;
+	private PrintSubDialogWindow printSubDialogWindow;
+	private Frame printSubDialogFrame;
   
-  private PrintInstance parent;
+	private PrintInstance parent;
   
-  public PrintSubInstance(PrintInstance parent)
-  {
-    this.parent = parent;
-    shapesPlaced = new ArrayList<Shape>();
-    laserJob = new LaserJobCreator();
-    laserJob.newVectorPart(500, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
-  }
+	private int dpi;
   
-  public void setLaserCutter(LaserCutter cutter, String ipAddress)
-  {
-	  laserJob.setLaserCutter(cutter, ipAddress);
-  }
+	public PrintSubInstance(PrintInstance parent) {
+		this.parent = parent;
+		shapesPlaced = new ArrayList<Shape>();
+		laserJob = new LaserJobCreator();
+	}
   
-  public void placeShape(Shape shape)
-  {
-    shapesPlaced.add(shape);
-  }
+	public void setLaserCutter(LaserCutter cutter, String ipAddress) {
+		laserJob.setLaserCutter(cutter, ipAddress);
+	}
   
-  public void unplaceShape(Shape shape)
-  {
-    shapesPlaced.remove(shape); 
-  }
+	public void placeShape(Shape shape) {
+		shapesPlaced.add(shape);
+	}
   
-  public ArrayList<Shape> getPlacedShapes()
-  {
-    return shapesPlaced;
-  } 
+	public void unplaceShape(Shape shape) {
+		shapesPlaced.remove(shape); 
+	}
   
-  public void print(String printJobName)
-  {
-    printSubDialog = createPrintSubDialog(printJobName);
-  }
+	public ArrayList<Shape> getPlacedShapes() {
+		return shapesPlaced;
+	} 
   
-  public void sendLaserJob()
-  {
-	  final float scaleFactor = 19.6850393700787f;
-	  for(int i = 0; i < shapesPlaced.size(); i++)
-	  {
-		  List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
-		  List<Vec2D> newVertices = new ArrayList<Vec2D>();
-		  for(int j = 0; j < vertices.size(); j++)
-		  {
-			  newVertices.add(new Vec2D(vertices.get(j)));
-		  }
-		  Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
-		  for(int j = 0; j < newVertices.size(); j++)
-		  {
-			  newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
-		  }
-		  laserJob.addVerticesToVectorPart(newVertices);
-	  }
-	  laserJob.sendLaserjob(this.parent.getMaterial().getMaterialName());
-  }
+	public void print(String printJobName) {
+		printSubDialogWindow = createPrintSubDialog(printJobName);
+	}
   
-  public void nextJob()
-  {
-	  printSubDialog.destroy();
-	  f.setVisible(false);
-	  this.parent.printNext();
-  }
+	public void setDPI(int dpi) {
+		this.dpi = dpi;
+	}
   
-  private PrintSubDialog createPrintSubDialog(String printJobName)
-  {
-    f = new Frame(printJobName);
-    PrintSubDialog p = new PrintSubDialog(this, 200,200);
-    f.add(p);
-    p.init();
-    p.setSize(300,300);
-    f.setTitle(printJobName);
-    f.setSize(p.getWidth(), p.getHeight());
-    f.setLocation(100, 100);
-    f.setResizable(false);
-    f.setVisible(true);
-    f.addWindowListener(new WindowAdapter() 
-    {
-      public void windowClosing(WindowEvent evt) 
-      {
-        printSubDialog.destroy();
-        f.setVisible(false);
-      }
-    });
-    return p;
-  }
+	public void sendLaserJob() {
+		
+		dpi = 500;
+		laserJob.newVectorPart(dpi, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
+		laserJob.newEngraveVectorPart(dpi, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
+		final float scaleFactor = (float)dpi/25.4f;
+		
+		for(int i = 0; i < shapesPlaced.size(); i++) {
+			
+			List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
+			List<Vec2D> newVertices = new ArrayList<Vec2D>();
+			
+			for(int j = 0; j < vertices.size(); j++) {
+				newVertices.add(new Vec2D(vertices.get(j)));
+			}
+			
+			Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
+			
+			for(int j = 0; j < newVertices.size(); j++) {
+				newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
+			}
+			
+			laserJob.addVerticesToVectorPart(newVertices);
+		}
+		
+		laserJob.sendLaserjob(this.parent.getMaterial().getMaterialName());
+	}
   
-  public void printSVG(String printJobName)
-  {
-	  final double widthInPx = 600;
-	  final double heightInPx = 300;
-	  String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" + widthInPx + "mm\" height=\"" + heightInPx + "mm\">";
-	  for(int i = 0; i < shapesPlaced.size(); i++)
-	  {
-		  List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
-		  Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
-		  for(int j = 0; j < vertices.size(); j++)
-		  {
-			  if(j == (vertices.size()-1))
-			  {
-				  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
-			  } else
-			  {
-				  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
-			  }
-		  }
-	  }
-	  output += "</svg>";
-	  try
-	  {
-		  XML xml = XML.parse(output);
-		  xml.save(new File("C:/" + printJobName + ".svg"),"");
-	  } catch (Exception e)
-	  {
-		  System.out.println(e);
-	  }
-  }
+	public void nextJob() {
+		printSubDialogWindow.destroy();
+		printSubDialogFrame.setVisible(false);
+		this.parent.printNext();
+	}
   
-  public boolean checkOverlap()
-  {
-	  for(int i = 0; i < shapesPlaced.size(); i++)
-	  {
-		  for(int j = i+1; j < shapesPlaced.size(); j++)
-		  {
-			  if(shapesPlaced.get(i).getGShape().overlapsWith(shapesPlaced.get(j).getGShape()))
-			  {
-				  return true;
-			  }
-		  }
-	  }
-	  return false;
-  }
+	private PrintSubDialogWindow createPrintSubDialog(String printJobName) {
+		
+		printSubDialogFrame = new Frame(printJobName);
+		PrintSubDialogWindow tempPrintSubDialog = new PrintSubDialogWindow(this, 200,200);
+		printSubDialogFrame.add(tempPrintSubDialog);
+		
+		tempPrintSubDialog.init();
+		tempPrintSubDialog.setSize(300,300);
+		
+		printSubDialogFrame.setTitle(printJobName);
+		printSubDialogFrame.setSize(tempPrintSubDialog.getWidth(), tempPrintSubDialog.getHeight());
+		printSubDialogFrame.setLocation(100, 100);
+		printSubDialogFrame.setResizable(false);
+		printSubDialogFrame.setVisible(true);
+		
+		printSubDialogFrame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent evt) {
+				printSubDialogWindow.destroy();
+				printSubDialogFrame.setVisible(false);
+			}
+		});
+		
+		return tempPrintSubDialog;
+	}
+  
+	public void printSVG(String printJobName) {
+	  
+		final double widthInPx = 600;
+		final double heightInPx = 300;
+		String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" + widthInPx + "mm\" height=\"" + heightInPx + "mm\">";
+	  
+		for(int i = 0; i < shapesPlaced.size(); i++) {
+		  
+			List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
+			Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
+		  
+			for(int j = 0; j < vertices.size(); j++) {
+			  
+				if(j == (vertices.size()-1)) {
+					output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
+				} else {
+					output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
+				}
+			}
+		}
+	  
+		output += "</svg>";
+	  
+		try {
+			XML xml = XML.parse(output);
+			xml.save(new File("C:/" + printJobName + ".svg"),""); // Use file dialog?
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+  
+	public boolean checkOverlap() {
+		
+		for(int i = 0; i < shapesPlaced.size(); i++) {
+			
+			for(int j = i+1; j < shapesPlaced.size(); j++) {
+				
+				if(shapesPlaced.get(i).getGShape().overlapsWith(shapesPlaced.get(j).getGShape())) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 }

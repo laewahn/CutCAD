@@ -13,7 +13,7 @@ public class PrintInstance
   private int selected;
   private int instancesPrinted;
   
-  private PrintDialogFrame parent;
+  private PrintDialogWindow parent;
   
   public PrintInstance(Shape shape, Material material) 
   {
@@ -118,7 +118,7 @@ public class PrintInstance
 	  } 
   }
   
-  public void setParent(PrintDialogFrame parent)
+  public void setParent(PrintDialogWindow parent)
   {
    this.parent = parent; 
   }
@@ -191,6 +191,14 @@ public class PrintInstance
 	  for(int i = 0; i < subInstances.size(); i++)
 	  {
 		  subInstances.get(i).setLaserCutter(cutter,ipAddress);
+	  }
+  }
+  
+  public void setDPI(int dpi)
+  {
+	  for(int i = 0; i < subInstances.size(); i++)
+	  {
+		  subInstances.get(i).setDPI(dpi);
 	  }
   }
 }
