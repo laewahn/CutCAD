@@ -47,41 +47,9 @@ public class PrintSubInstance {
 		return shapesPlaced;
 	} 
   
-<<<<<<< HEAD
 	public void print(String printJobName) {
 		printSubDialogWindow = createPrintSubDialog(printJobName);
 	}
-=======
-  public void sendLaserJob()
-  {
-	  final float scaleFactor = 19.6850393700787f;
-	  for(int i = 0; i < shapesPlaced.size(); i++)
-	  {
-		  List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
-		  List<Vec2D> newVertices = new ArrayList<Vec2D>();
-		  for(int j = 0; j < vertices.size(); j++)
-		  {
-			  newVertices.add(new Vec2D(vertices.get(j)));
-		  }
-		  Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
-		  for(int j = 0; j < newVertices.size(); j++)
-		  {
-			  newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
-		  }
-		  laserJob.addVerticesToVectorPart(newVertices);
-
-		  for(Cutout c : shapesPlaced.get(i).getGShape().getCutouts())
-		  {
-			  newVertices = c.getVectors();
-			  for(int j = 0; j < newVertices.size(); j++) {
-				  newVertices.get(j).set((newVertices.get(j).add(position)).scale(scaleFactor));
-			  }
-			  laserJob.addVerticesToVectorPart(newVertices);
-		  }
-	  }
-	  laserJob.sendLaserjob(this.parent.getMaterial().getMaterialName());
-  }
->>>>>>> 74dfa68ee4927ebac559b9be8daece3940e313ab
   
 	public void setDPI(int dpi) {
 		this.dpi = dpi;
@@ -109,64 +77,28 @@ public class PrintSubInstance {
 				newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
 			}
 			
+			for(Cutout c : shapesPlaced.get(i).getGShape().getCutouts()) {
+				
+				newVertices = c.getVectors();
+				
+				for(int j = 0; j < newVertices.size(); j++) {
+					
+					newVertices.get(j).set((newVertices.get(j).add(position)).scale(scaleFactor));
+				}
+				laserJob.addVerticesToVectorPart(newVertices);
+			}
+			
 			laserJob.addVerticesToVectorPart(newVertices);
 		}
 		
 		laserJob.sendLaserjob(this.parent.getMaterial().getMaterialName());
 	}
   
-<<<<<<< HEAD
 	public void nextJob() {
 		printSubDialogWindow.destroy();
 		printSubDialogFrame.setVisible(false);
 		this.parent.printNext();
 	}
-=======
-  public void printSVG(String printJobName)
-  {
-	  final double widthInPx = 600;
-	  final double heightInPx = 300;
-	  String output = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"" + widthInPx + "mm\" height=\"" + heightInPx + "mm\">";
-	  for(int i = 0; i < shapesPlaced.size(); i++)
-	  {
-		  List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
-		  Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
-		  for(int j = 0; j < vertices.size(); j++)
-		  {
-			  if(j == (vertices.size()-1))
-			  {
-				  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
-			  } else
-			  {
-				  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
-			  }
-		  }
-		  for(Cutout c : shapesPlaced.get(i).getGShape().getCutouts())
-		  {
-			  vertices = c.getVectors();
-			  for(int j = 0; j < vertices.size(); j++) {
-
-				  if(j == (vertices.size()-1))
-				  {
-					  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
-				  } else
-				  {
-					  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
-				  }
-			  }
-		  }
-	  }
-	  output += "</svg>";
-	  try
-	  {
-		  XML xml = XML.parse(output);
-		  xml.save(new File("C:/" + printJobName + ".svg"),"");
-	  } catch (Exception e)
-	  {
-		  System.out.println(e);
-	  }
-  }
->>>>>>> 74dfa68ee4927ebac559b9be8daece3940e313ab
   
 	private PrintSubDialogWindow createPrintSubDialog(String printJobName) {
 		
@@ -210,6 +142,20 @@ public class PrintSubInstance {
 					output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
 				} else {
 					output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
+				}
+			}
+			
+			for(Cutout c : shapesPlaced.get(i).getGShape().getCutouts()) {
+				
+				vertices = c.getVectors();
+				
+				for(int j = 0; j < vertices.size(); j++) {
+					
+					if(j == (vertices.size()-1)) {
+						output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
+					} else {
+						output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(j+1).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(j+1).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />";
+					}
 				}
 			}
 		}
