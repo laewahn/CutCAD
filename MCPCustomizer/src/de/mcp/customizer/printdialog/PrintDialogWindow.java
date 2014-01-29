@@ -17,6 +17,12 @@ import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.view.Transformation;
 
+/**
+ * 
+ * 
+ * @author Pierre
+ *
+ */
 public class PrintDialogWindow extends PApplet
 {
 	/**

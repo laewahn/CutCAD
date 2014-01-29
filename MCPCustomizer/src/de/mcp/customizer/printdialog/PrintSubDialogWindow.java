@@ -5,14 +5,20 @@ import controlP5.ControlP5;
 
 public class PrintSubDialogWindow extends PApplet
 {
-  private static final long serialVersionUID = -8457197443384630485L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8457197443384630485L;
 
-  private ControlP5 controlPrintSubDialog;
+	private ControlP5 controlPrintSubDialog;
 
-  private PrintSubInstance parent;
+	private PrintSubInstance parent;
  
-  private int w, h;
-  private int bgColor = 255;
+	private int w;
+  
+	private int h;
+  
+	private int bgColor = 255;
 
   public PrintSubDialogWindow(PrintSubInstance theParent, int theWidth, int theHeight) 
   {
@@ -42,11 +48,6 @@ public class PrintSubDialogWindow extends PApplet
   {
       background(bgColor);
   }
-  
-  public ControlP5 control() 
-  {
-    return controlPrintSubDialog;
-  } 
   
   public void setSize(int theHeight, int theWidth)
   {
