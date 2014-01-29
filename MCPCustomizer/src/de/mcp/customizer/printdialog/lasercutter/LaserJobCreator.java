@@ -79,6 +79,7 @@ public class LaserJobCreator {
 	public void setLaserCutter(LaserCutter device, String ipAddress) {
 		this.device = device;
 		int deviceNumber = device.returnDeviceNumber();
+		System.out.println(ipAddress);
 		switch(deviceNumber) {
 			case 0: epilogZing = new EpilogZing(ipAddress); 
 					break;
@@ -137,7 +138,6 @@ public class LaserJobCreator {
   
   public void sendLaserjob(String name) {
     LaserJob job = new LaserJob(name, "", "MCPCustomizer");//title, name, user
-    System.out.println(name);
     if (rp != null) {
       job.addPart(rp);
     }
@@ -147,17 +147,20 @@ public class LaserJobCreator {
     try {
     	int deviceNumber = device.returnDeviceNumber();
     	switch(deviceNumber) {
-    	case 0: System.out.println("printed to right cutter"); 
+    	case 0: System.out.println("Cutting on Epilog Zing"); 
     			epilogZing.sendJob(job);
     			break;
     			
-    	case 1:  epilogHelix.sendJob(job);
+    	case 1: System.out.println("Cutting on Epilog Helix"); 
+    			epilogHelix.sendJob(job);
     			break;
     			
-    	case 2: laosCutter.sendJob(job);
+    	case 2: System.out.println("Cutting on LAOS"); 
+    			laosCutter.sendJob(job);
     			break;
     			
-    	case 3: lasersaur.sendJob(job);
+    	case 3: System.out.println("Cutting on lasersaur"); 
+    			lasersaur.sendJob(job);
     			break;
     	}
      
