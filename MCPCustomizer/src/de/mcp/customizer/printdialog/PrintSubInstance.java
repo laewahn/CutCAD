@@ -27,7 +27,6 @@ public class PrintSubInstance
     this.parent = parent;
     shapesPlaced = new ArrayList<Shape>();
     laserJob = new LaserJobCreator();
-    //laserJob.setLaserCutter(new LaserCutter("epilogZing"),"127.1.1.1");
     laserJob.newVectorPart(500, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
   }
   
@@ -71,7 +70,6 @@ public class PrintSubInstance
 		  for(int j = 0; j < newVertices.size(); j++)
 		  {
 			  newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
-			  System.out.println(newVertices.get(j).getComponent(0) + " " + newVertices.get(j).getComponent(1));
 		  }
 		  laserJob.addVerticesToVectorPart(newVertices);
 	  }
@@ -121,7 +119,6 @@ public class PrintSubInstance
 		  {
 			  if(j == (vertices.size()-1))
 			  {
-				  System.out.println(position.getComponent(0) + " " + position.getComponent(1));
 				  output += "<line x1=\"" + (vertices.get(j).getComponent(0)+position.getComponent(0)) + "mm\" y1=\"" + (vertices.get(j).getComponent(1)+position.getComponent(1)) + "mm\" x2= \"" + (vertices.get(0).getComponent(0)+position.getComponent(0)) + "mm\" y2= \"" + (vertices.get(0).getComponent(1)+position.getComponent(1)) + "mm\" style=\"stroke:rgb(0,0,0);stroke-width:1mm\" />"; 
 			  } else
 			  {

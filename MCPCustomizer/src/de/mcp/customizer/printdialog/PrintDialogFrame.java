@@ -23,12 +23,41 @@ public class PrintDialogFrame extends PApplet
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+	 * The control element of control p5. Used to control GUI elements.
+	 */
 	private ControlP5 cp5;
  
-	private int w, h;
+	/**
+	 * The width in Px of the print dialog window
+	 */
+	private int w;
+	
+	/**
+	 * The height in Px of the print dialog window
+	 */
+	private int h;
+	
+	/**
+	 * Sets the backgroundcolor of the print dialog window
+	 */
 	private int bgColor = 255;
-	private int bedWidth, bedHeight;
+	
+	/**
+	 * Represents the width of the laser bed. This depends on the lasercutter selected (TODO)
+	 */
+	private int bedWidth;
+	
+	/**
+	 * Represents the height of the laser bed. This depends on the lasercutter selected (TODO)
+	 */
+	private int bedHeight;
+	
+	/**
+	 * Stores which of the print instances (material of a certain thickness) is currently 
+	 * active. 
+	 */
 	private int selectedInstance;
 	private int printCounter = 0;
 	private int printer;
@@ -43,6 +72,7 @@ public class PrintDialogFrame extends PApplet
 	private ListBox unplacedShapesBox;
 	private ListBox cutterBox;
 	private Textlabel statusLabel;
+	private Textlabel cutterSelected;
 	private Button lasercutButton;
 	private Button exportSVGButton;
 	private Button addExtraJobButton;
@@ -73,13 +103,16 @@ public class PrintDialogFrame extends PApplet
 	    this.overlapMessage = "";
 	}
   
-  
+  /**
+   * The setup method of the processing api. Here most properties of the GUI elements are set.
+   */
   public void setup()
   {
     size(h,w);
     frameRate(25);
     cp5 = new ControlP5(this);
     objectLayout = createGraphics(bedWidth, bedHeight);
+    selectedCutter = new LaserCutter();
     unplacedShapesBox = cp5.addListBox("unplacedShapesList")
                          .setPosition(10, bedHeight+20)
                          .setSize(120, 120)
@@ -121,7 +154,7 @@ public class PrintDialogFrame extends PApplet
    					 .setSize(30,30)
    					 .setVisible(false);
    cutterBox = cp5.addListBox("cutterBox")
-           		  .setPosition(w-140, 30)
+           		  .setPosition(w-160, 30)
            		  .setSize(120, 120)
            		  .setItemHeight(15)
            		  .setBarHeight(15)
@@ -130,12 +163,32 @@ public class PrintDialogFrame extends PApplet
    cutterBox.getValueLabel().getStyle().marginTop = 3;
    updateCutters();
    cutterAddress = cp5.addTextfield("cutterAddress")
-		   			  .setPosition(w-140,160)
-		   			  .setSize(120,30)
-		   			  .setCaptionLabel("address of cutter");
-   //setLaserCutter(); // should be removed for dropdownlist and textfield for ip
+		   			  .setPosition(w-155,220)
+		   			  .setSize(120,30);
+   cp5.addTextlabel("cutterAddressLabel")
+   	  .setPosition(w-160,200)
+   	  .setSize(150,30)
+   	  .setColorValueLabel(0xffffff)
+      .setFont(createFont("Georgia",12))
+      .setText("Address of laser cutter");
+   cp5.addTextlabel("cutterSelectedLabel")
+	  .setPosition(w-160,150)
+	  .setSize(150,30)
+	  .setColorValueLabel(0xffffff)
+	  .setFont(createFont("Georgia",12))
+	  .setText("Lasercutter selected");
+   cutterSelected = cp5.addTextlabel("cutterSelected")
+	  .setPosition(w-160,170)
+	  .setSize(150,30)
+	  .setColorValueLabel(0xffffff)
+	  .setFont(createFont("Georgia",12))
+   	  .setText(selectedCutter.returnDevice());
   }
   
+  /**
+   * This method updates the list of laser cutters in the dropdown box for 
+   * selecting the laser cutter to be used. 
+   */
   private void updateCutters()
   {
 	  cutterBox.clear();
@@ -176,8 +229,11 @@ public class PrintDialogFrame extends PApplet
       Shape toBePlacedShape = this.printInstances.get(selectedInstance).getUnplacedShapes().get(objectIndex);
       printInstances.get(selectedInstance).placeShape(toBePlacedShape);
       updateListBox();
-    }
-    else if(theEvent.isController() && theEvent.getName().equals("Start cutting"))
+    } else if(theEvent.isGroup() && theEvent.getName().equals("cutterBox")) {
+        int objectIndex = (int)theEvent.getGroup().getValue();
+        selectedCutter.setDevice(objectIndex);
+        cutterSelected.setText(selectedCutter.returnDevice());
+    } else if(theEvent.isController() && theEvent.getName().equals("Start cutting"))
     {
        print();
     }
@@ -418,12 +474,18 @@ public class PrintDialogFrame extends PApplet
 	  }
   }
   
-  private void startPrint()
-  {
-	  if(printer == 0)
-	  {
-		  printCounter = 0;
-		  printInstances.get(printCounter).print();
+  private void startPrint() {
+	  if(printer == 0) {
+		  if(selectedCutter.returnDevice().equals("no selected")) {
+			  statusLabel.setText("No lasercutter has been selected");
+		  } else if (cutterAddress.getText().equals("")) { // TODO more torough check
+			  statusLabel.setText("The address of the lasercutter is not specified");
+		  } else
+		  {
+			  setLaserCutter(cutterAddress.getText());
+			  printCounter = 0;
+			  printInstances.get(printCounter).print();
+		  }
 	  } else if(printer == 1)
 	  {
 		  for(int i = 0; i < printInstances.size(); i++)
@@ -563,11 +625,11 @@ public class PrintDialogFrame extends PApplet
 	  this.addExtraJobButton.setVisible(state);
   }
   
-  private void setLaserCutter()
+  private void setLaserCutter(String address)
   {
 	  for(int i = 0; i < printInstances.size(); i++)
 	  {
-		  printInstances.get(i).setLaserCutter(selectedCutter,"127.0.0.1");
+		  printInstances.get(i).setLaserCutter(selectedCutter,address);
 	  }
   }
 }

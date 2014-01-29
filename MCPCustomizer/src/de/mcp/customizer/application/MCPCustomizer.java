@@ -190,12 +190,10 @@ public class MCPCustomizer extends PApplet {
 	    	if(meshSTL.isPosChanged())
 	    	{
 	    		meshSTL.center();
-	    		System.out.println("changed position");
 	    	}
 	    	if(meshSTL.isRotChanged())
 	    	{
 	    		meshSTL.rotate();
-	    		System.out.println("rotation changed");
 	    	}
 	    	gfx.mesh(meshSTL.getSTLMesh());
 	    }
