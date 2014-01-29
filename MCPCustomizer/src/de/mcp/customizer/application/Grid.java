@@ -67,6 +67,6 @@ public class Grid {
 	 */
 	public int getScaledGridWidth()
 	{
-		return (int) (gridWidth * getScaleFactor(this.transformation.getScale()));		
+		return (int) (gridWidth * getScaleFactor(this.transformation.getScale())*this.transformation.getScale());		
 	}
 }
