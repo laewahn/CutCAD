@@ -597,6 +597,7 @@ public class GShape implements Drawable2D, Drawable3D {
 		this.createCover2D(p, getTenons(), position2D);
 
 		for (Edge e : edges) // not good... but i've no better idea
+
 		{
 			e.draw2D(p, t);
 		}

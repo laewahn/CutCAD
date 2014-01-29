@@ -101,9 +101,10 @@ public class ConnectTool extends Tool {
 		}
 	}
 
+
 	public void draw2D(PGraphics p, Transformation t) {
 		scalingFactor = t.getScale();
-//		scalingFactor = super.getScalingFactor();
+
 		if (selectedFirst) {
 			Vec2D mid = previewConnection
 					.getMasterEdge()

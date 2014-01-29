@@ -70,7 +70,7 @@ public class PolygonTool extends Tool {
 	@Override
 	public void draw2D(PGraphics p, Transformation t) {	
 		scalingFactor = t.getScale();
-//		scalingFactor = super.getScalingFactor();
+
 		boundingBoxSize = 4/scalingFactor;
 		if (vertices.size() > 0)
 		{

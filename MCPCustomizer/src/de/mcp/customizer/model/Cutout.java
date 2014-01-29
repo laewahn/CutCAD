@@ -216,7 +216,6 @@ public class Cutout implements Drawable2D {
 	 */
 	public void draw2D(PGraphics p, Transformation t) {
 		scalingFactor = t.getScale();
-//		scalingFactor = master.getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 
 		Vec2D mid1 = findCenter(slave).add(master.getPosition2D())

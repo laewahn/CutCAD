@@ -90,7 +90,6 @@ public class Connection implements Drawable2D
 
 	public void draw2D(PGraphics p, Transformation t) {
 		scalingFactor = t.getScale();
-//		scalingFactor = masterEdge.getGShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		
 		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D()).scale(scalingFactor);

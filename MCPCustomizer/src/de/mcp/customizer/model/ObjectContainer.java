@@ -3,31 +3,48 @@ package de.mcp.customizer.model;
 import java.util.List;
 import java.util.ArrayList;
 
+import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.view.Drawable2D;
+
 public class ObjectContainer {
 
-	private List<Shape> shapes;
-	private List<Connection> connections;
-	
+	private List<Drawable2D> objects;
+	private Tool selectedTool;
 	
 	public ObjectContainer() {
-		this.shapes = new ArrayList<Shape>();
-		this.connections = new ArrayList<Connection>();
+		this.objects = new ArrayList<>();
 	}
 	
 	
-	
+	public List<Drawable2D> allDrawables() {
+		List<Drawable2D> drawables = new ArrayList<Drawable2D>(this.objects);
+		
+		if(getSelectedTool() != null) {
+			drawables.add(getSelectedTool());
+		}
+		
+		return drawables;
+	}
 	
 	
 	public List<Shape> allShapes() {
-		return new ArrayList<Shape>(this.shapes);
+		List<Shape> shapes = new ArrayList<Shape>();
+		
+		for(Object o : this.objects) {
+			if (o instanceof Shape) {
+				shapes.add((Shape) o);
+			}
+		}
+		
+		return shapes;
 	}
 	
 	public void addShape(Shape shape) {
-		this.shapes.add(shape);
+		this.objects.add((Drawable2D) shape);
 	}
 	
 	public void removeShape(Shape shape) {
-		this.shapes.remove(shape);
+		this.objects.remove(shape);
 	}
 	
 	
@@ -36,7 +53,7 @@ public class ObjectContainer {
 	public List<Edge> allEdges() {
 		List<Edge> edges = new ArrayList<Edge>();
 		
-		for(Shape shape : this.shapes) {
+		for(Shape shape : this.allShapes()) {
 			edges.addAll(shape.getGShape().getEdges());
 		}
 		
@@ -47,15 +64,23 @@ public class ObjectContainer {
 	
 	
 	public List<Connection> allConnections() {
-		return new ArrayList<Connection>(this.connections);
+		List<Connection> connections = new ArrayList<>();
+		
+		for(Object o : this.objects) {
+			if(o instanceof Connection) {
+				connections.add((Connection) o);
+			}
+		}
+		
+		return connections;
 	}
 	
 	public void addConnection(Connection connection) {
-		this.connections.add(connection);
+		this.objects.add((Drawable2D) connection);
 	}
 	
 	public void removeConnection(Connection connection) {
-		this.connections.remove(connection);
+		this.objects.remove(connection);
 	}
 	
 	
@@ -64,18 +89,18 @@ public class ObjectContainer {
 	public List<Cutout> allCutouts() {
 		List<Cutout> cutouts = new ArrayList<Cutout>();
 		
-		for(Shape s : this.shapes) {
+		for(Shape s : this.allShapes()) {
 			cutouts.addAll(s.getGShape().getCutouts());
 		}
 		
 		return cutouts;
 	}
 	
-//	public void addCutout(Cutout cutout) {
-//		this.cutouts.add(cutout);
-//	}
-//	
-//	public void removeCutout(Cutout cutout) {
-//		this.cutouts.remove(cutout);
-//	}
+	public void setSelectedTool(Tool theTool) {
+		this.selectedTool = theTool;
+	}
+	
+	public Tool getSelectedTool() {
+		return this.selectedTool;
+	}
 }
