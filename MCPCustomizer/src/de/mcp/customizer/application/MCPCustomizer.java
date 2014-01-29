@@ -18,80 +18,81 @@ import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import de.mcp.customizer.application.tools.*;
 import de.mcp.customizer.model.AllMaterials;
-import de.mcp.customizer.model.Connection;
-import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.Shape;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
+class CustomizerFrame {
+	public Vec2D origin;
+	public Vec2D size;
+}
+
+class CustomizerView {
+	
+	private MCPCustomizer application;
+	private PGraphics context;
+	private CustomizerFrame frame;
+	
+	private Transformation transform;
+	private Grid grid;
+	private Drawable2D axes = new Axes2D();
+	
+	public CustomizerView(PGraphics context, CustomizerFrame frame, Grid grid, Transformation transform, MCPCustomizer application) {
+		this.context = context;
+		this.frame = frame;
+		this.grid = grid;
+		
+		this.transform = transform;
+		this.application = application;
+	}
+	
+	public void applyTransformation(Transformation transform) {
+		context.scale(transform.getScale());
+        context.translate(-transform.getTranslation().x(), -transform.getTranslation().y());
+	}
+	
+	public void draw(List<Drawable2D> drawables) {
+		context.beginDraw();
+		context.background(150);
+		
+		applyTransformation(this.transform);
+
+		drawables.add(axes);
+		drawables.add((Drawable2D) grid);
+		
+		for(Drawable2D d : drawables) {
+			d.draw2D(context);
+		}
+
+		context.endDraw();
+
+		application.image(context, frame.origin.x(), frame.origin.y());
+	}		
+}
+
+class Axes2D implements Drawable2D {
+	@Override
+	public void draw2D(PGraphics context) {
+		context.strokeWeight(2);
+		context.textSize(32);
+		context.fill(context.color(255, 0, 0));
+		context.stroke(context.color(255, 0, 0));
+		context.line(0, 0, 350, 0);
+		context.text("X", 350, 12);
+		context.fill(context.color(0, 255, 0));
+		context.stroke(context.color(0, 255, 0));
+		context.line(0, 0, 0, 350);
+		context.text("Y", -10, 385);
+		context.stroke(context.color(0, 0, 0));
+		context.strokeWeight(1);
+	}
+}
+
+
 public class MCPCustomizer extends PApplet {
 
-	class CustomizerFrame {
-		public Vec2D origin;
-		public Vec2D size;
-	}
-	
-	class CustomizerView {
-		
-		private PGraphics context;
-		private CustomizerFrame frame;
-		
-		private Transformation transform;
-		private Grid grid;
-		private Drawable2D axes = new Axes2D();
-		
-		public CustomizerView(PGraphics context, CustomizerFrame frame, Grid grid, Transformation transform) {
-			this.context = context;
-			this.frame = frame;
-			this.grid = grid;
-			
-			this.transform = transform;
-		}
-		
-		public void applyTransformation(Transformation transform) {
-			context.scale(transform.getScale());
-	        context.translate(-transform.getTranslation().x(), -transform.getTranslation().y());
-		}
-		
-		public void draw(List<Drawable2D> drawables) {
-			context.beginDraw();
-			context.background(150);
-			
-			applyTransformation(this.transform);
- 
-			drawables.add(axes);
-			drawables.add((Drawable2D) grid);
-			drawables.add(toolbar.getSelectedTool());
-			
-			for(Drawable2D d : drawables) {
-				d.draw2D(context);
-			}
-
-			context.endDraw();
-
-			image(context, frame.origin.x(), frame.origin.y());
-		}		
-	}
-	
-	class Axes2D implements Drawable2D {
-		@Override
-		public void draw2D(PGraphics context) {
-			context.strokeWeight(2);
-			context.textSize(32);
-			context.fill(color(255, 0, 0));
-			context.stroke(color(255, 0, 0));
-			context.line(0, 0, 350, 0);
-			context.text("X", 350, 12);
-			context.fill(color(0, 255, 0));
-			context.stroke(color(0, 255, 0));
-			context.line(0, 0, 0, 350);
-			context.text("Y", -10, 385);
-			context.stroke(color(0, 0, 0));
-			context.strokeWeight(1);
-		}
-	}
 	
 	private static final long serialVersionUID = 6945013714741954254L;
 	Toolbar toolbar;
@@ -161,7 +162,7 @@ public class MCPCustomizer extends PApplet {
 		CustomizerFrame theFrame = new CustomizerFrame();
 		theFrame.origin = new Vec2D(view2DPosX, view2DPosY);
 		theFrame.size = new Vec2D(viewSizeX, viewSizeY);
-		customizerView2D = new CustomizerView(view2D, theFrame, grid2D, transform2D);
+		customizerView2D = new CustomizerView(view2D, theFrame, grid2D, transform2D, this);
 		
 		gfx = new ToxiclibsSupport(this, view3D);
 		RG.init(this);

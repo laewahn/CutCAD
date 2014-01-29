@@ -3,11 +3,13 @@ package de.mcp.customizer.model;
 import java.util.List;
 import java.util.ArrayList;
 
+import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.view.Drawable2D;
 
 public class ObjectContainer {
 
 	private List<Drawable2D> objects;
+	private Tool selectedTool;
 	
 	public ObjectContainer() {
 		this.objects = new ArrayList<>();
@@ -15,7 +17,13 @@ public class ObjectContainer {
 	
 	
 	public List<Drawable2D> allDrawables() {
-		return new ArrayList<Drawable2D>(this.objects);
+		List<Drawable2D> drawables = new ArrayList<Drawable2D>(this.objects);
+		
+		if(getSelectedTool() != null) {
+			drawables.add(getSelectedTool());
+		}
+		
+		return drawables;
 	}
 	
 	
@@ -88,11 +96,11 @@ public class ObjectContainer {
 		return cutouts;
 	}
 	
-//	public void addCutout(Cutout cutout) {
-//		this.cutouts.add(cutout);
-//	}
-//	
-//	public void removeCutout(Cutout cutout) {
-//		this.cutouts.remove(cutout);
-//	}
+	public void setSelectedTool(Tool theTool) {
+		this.selectedTool = theTool;
+	}
+	
+	public Tool getSelectedTool() {
+		return this.selectedTool;
+	}
 }

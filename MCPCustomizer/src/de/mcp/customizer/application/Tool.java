@@ -72,8 +72,12 @@ public abstract class Tool implements Drawable2D {
 		return context;
     }
     
-    public void wasSelected(){};
-    public void wasUnselected(){};
+    public void wasSelected(){
+    	this.objectContainer.setSelectedTool(this);
+    };
+    
+    public void wasUnselected(){
+    };
     
     public void draw2D(PGraphics p) {};
 
