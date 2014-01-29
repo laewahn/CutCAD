@@ -24,7 +24,14 @@ public class SelectTool extends Tool {
 		this.originalMousePosition = new Vec2D(0, 0);
 	}
 	
-	
+	/**
+	 * If the mouse pointer is above a shape, connection etc. and a mouse button is
+	 * pressed, this function determines the correct reaction (updates properties bar)
+	 * and indicates the corresponding form as selected.
+	 * 
+	 * @param position the mouse pointer position
+	 * @param button check, if left or right button pressed
+	 */
 	public void mouseButtonPressed(Vec2D position, int button) {
 		boolean noneSelected = true;
 		for (Shape s : this.objectContainer.allShapes()) {
@@ -78,6 +85,13 @@ public class SelectTool extends Tool {
 		}
 	}
 
+	/**
+	 * Checks (and set true) if the mouse pointer is above a shape, cutout edge etc
+	 * and - if a button is additionally pressed - translates object positions corresponding 
+	 * to a basic drag and drop functionality
+	 * 
+	 * @param position mouse pointer position
+	 */
 	public void mouseMoved(Vec2D position) {
 		if (this.inView(position)) {
 			Vec2D relativePosition = this.positionRelativeToView(position);
