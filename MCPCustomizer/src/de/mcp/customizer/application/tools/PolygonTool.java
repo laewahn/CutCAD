@@ -5,16 +5,15 @@ import java.util.List;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
-
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.PolygonShape;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.view.Transformation;
 
 public class PolygonTool extends Tool {
 	
@@ -69,7 +68,7 @@ public class PolygonTool extends Tool {
 	}
 
 	@Override
-	public void draw2D(PGraphics p) {	
+	public void draw2D(PGraphics p, Transformation transform) {	
 		scalingFactor = super.getScalingFactor();
 		boundingBoxSize = 4/scalingFactor;
 		if (vertices.size() > 0)
@@ -82,7 +81,7 @@ public class PolygonTool extends Tool {
 			p.line(vertices.get(vertices.size()-1).scale(scalingFactor).x(), vertices.get(vertices.size()-1).scale(scalingFactor).y(), this.lastKnownMousePositon.scale(scalingFactor).x(), this.lastKnownMousePositon.scale(scalingFactor).y());
 		}
 		
-		super.draw2D(p);
+		super.draw2D(p, transform);
 	}
 
 	private void drawCloseRect(PGraphics p) {

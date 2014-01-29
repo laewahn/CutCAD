@@ -2,6 +2,7 @@ package de.mcp.customizer.model;
 
 import processing.core.PGraphics;
 import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.Transformation;
 
 public abstract class Shape implements Drawable2D
 {
@@ -14,8 +15,8 @@ public abstract class Shape implements Drawable2D
   public abstract void recalculate();
   
   @Override
-	public void draw2D(PGraphics p) {
-		this.getShape().draw2D(p);
+	public void draw2D(PGraphics p, Transformation transform) {
+		this.getShape().draw2D(p, transform);
 	}
 
 }

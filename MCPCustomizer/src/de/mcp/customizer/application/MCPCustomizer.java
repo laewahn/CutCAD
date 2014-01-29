@@ -27,6 +27,11 @@ import de.mcp.customizer.view.Transformation;
 class CustomizerFrame {
 	public Vec2D origin;
 	public Vec2D size;
+	
+	public boolean containsPoint(Vec2D point) {
+		Rect frameRect = new Rect(this.origin, this.origin.add(size));
+		return frameRect.containsPoint(point);
+	}
 }
 
 class CustomizerView {
@@ -63,18 +68,30 @@ class CustomizerView {
 		drawables.add((Drawable2D) grid);
 		
 		for(Drawable2D d : drawables) {
-			d.draw2D(context);
+			d.draw2D(context, this.transform);
 		}
 
 		context.endDraw();
 
 		application.image(context, frame.origin.x(), frame.origin.y());
-	}		
+	}
+	
+	public Vec2D getOrigin() {
+		return this.frame.origin;
+	}
+	
+	public boolean containsPoint(Vec2D point) {
+		return this.frame.containsPoint(point);
+	}
+	
+	public Transformation getTransformation() {
+		return this.transform;
+	}
 }
 
 class Axes2D implements Drawable2D {
 	@Override
-	public void draw2D(PGraphics context) {
+	public void draw2D(PGraphics context, Transformation transform) {
 		context.strokeWeight(2);
 		context.textSize(32);
 		context.fill(context.color(255, 0, 0));
@@ -136,7 +153,7 @@ public class MCPCustomizer extends PApplet {
 	Vec3D cameraPosition;
 	Tool tools[];
 
-	CustomizerView customizerView2D;
+	public CustomizerView customizerView2D;
 	
 	public STLMesh meshSTL;
 
@@ -191,41 +208,12 @@ public class MCPCustomizer extends PApplet {
 		fill(0);
 
 		customizerView2D.draw(container.allDrawables());
-//		draw2DView();
 		
 		draw3DView();
 		
 		properties.drawProperties(this);
 		statusbar.drawStatusbar(this);
 	}
-
-//	void draw2DView() {
-//		view2D.beginDraw();
-//		transform2D.transform(view2D);
-//
-//		view2D.background(150);
-//
-//		draw2DAxes(view2D);
-//		grid2D.drawGrid();
-//
-//		for (Shape s : this.container.allShapes()) {
-//			s.getShape().draw2D(view2D);
-//		}
-//
-//		for (Connection c : this.container.allConnections()) {
-//			c.draw2D(view2D);
-//		}
-//
-//		for (Cutout c : this.container.allCutouts()) {
-//			c.draw2D(view2D);
-//		}
-//
-//		this.toolbar.getSelectedTool().draw2D(view2D);
-//
-//		view2D.endDraw();
-//
-//		image(view2D, view2DPosX, view2DPosY);
-//	}
 
 	void draw3DView() {
 		view3D.beginDraw();
@@ -244,7 +232,7 @@ public class MCPCustomizer extends PApplet {
 		view3D.scale(scale);
 
 		draw3DAxes(view3D);
-		grid3D.drawGrid();
+		grid3D.draw2D(view3D, transform3D);
 
 		for (Shape s : container.allShapes()) {
 			s.getShape().draw3D(view3D);
@@ -282,21 +270,6 @@ public class MCPCustomizer extends PApplet {
 		p.stroke(color(0, 0, 255));
 		p.line(0, 0, 0, 0, 0, 350);
 		p.text("Z", 0, 0, 350);
-		p.stroke(color(0, 0, 0));
-		p.strokeWeight(1);
-	}
-
-	private void draw2DAxes(PGraphics p) {
-		p.strokeWeight(2);
-		p.textSize(32);
-		p.fill(color(255, 0, 0));
-		p.stroke(color(255, 0, 0));
-		p.line(0, 0, 350, 0);
-		p.text("X", 350, 12);
-		p.fill(color(0, 255, 0));
-		p.stroke(color(0, 255, 0));
-		p.line(0, 0, 0, 350);
-		p.text("Y", -10, 385);
 		p.stroke(color(0, 0, 0));
 		p.strokeWeight(1);
 	}

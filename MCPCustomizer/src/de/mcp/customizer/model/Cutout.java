@@ -1,7 +1,9 @@
 package de.mcp.customizer.model;
 
 import java.util.ArrayList;
+
 import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 import toxi.geom.*;
 
@@ -220,7 +222,7 @@ public class Cutout implements Drawable2D {
 	/**
 	 * Draw cut-out
 	 */
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation transform) {
 		scalingFactor = master.getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 

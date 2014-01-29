@@ -2,12 +2,12 @@ package de.mcp.customizer.application.tools;
 
 import processing.core.PGraphics;
 import toxi.geom.Vec2D;
-
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ImportSTL;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
+import de.mcp.customizer.view.Transformation;
 
 public class ImportSTLTool extends Tool {
 
@@ -32,7 +32,7 @@ public class ImportSTLTool extends Tool {
 	}
 
 	@Override
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation transform) {
 	}
 	
 	@Override

@@ -9,6 +9,7 @@ import de.mcp.customizer.model.CopyShape;
 import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.view.Transformation;
 
 public class CopyTool extends Tool {
 
@@ -88,12 +89,12 @@ public class CopyTool extends Tool {
 		}
 	}
 
-    public void draw2D(PGraphics p)
+    public void draw2D(PGraphics p, Transformation transform)
     {
     	if(selected)
     	{
     		previewShape.getShape().setPosition2D(lastMousePosition);
-    		previewShape.getShape().draw2D(p);
+    		previewShape.getShape().draw2D(p, transform);
     	}
     }
     

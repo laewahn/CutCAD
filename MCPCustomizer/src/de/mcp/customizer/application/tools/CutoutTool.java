@@ -2,15 +2,14 @@ package de.mcp.customizer.application.tools;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
-
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.view.Transformation;
 
 
 public class CutoutTool extends Tool {
@@ -75,7 +74,7 @@ public class CutoutTool extends Tool {
         }
     }
     
-    public void draw2D(PGraphics p)
+    public void draw2D(PGraphics p, Transformation transform)
     {
         scalingFactor = super.getScalingFactor();
         if (selectedFirst) {	

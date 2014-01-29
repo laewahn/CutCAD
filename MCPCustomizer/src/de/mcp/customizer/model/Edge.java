@@ -1,9 +1,11 @@
 package de.mcp.customizer.model;
 
 import java.util.ArrayList;
+
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
@@ -186,7 +188,7 @@ public class Edge implements Drawable2D, Drawable3D {
 	 * Draw Box around the edge in 2D if the edge should be either highlighted
 	 * or selected
 	 */
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation transform) {
 		scalingFactor = getShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		

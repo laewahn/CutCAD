@@ -8,6 +8,7 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Edge;
 import de.mcp.customizer.model.ObjectContainer;
+import de.mcp.customizer.view.Transformation;
 
 public class ConnectTool extends Tool {
 
@@ -93,7 +94,7 @@ public class ConnectTool extends Tool {
 		}
 	}
 
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation transform) {
 		scalingFactor = super.getScalingFactor();
 		if (selectedFirst) {
 			Vec2D mid = previewConnection

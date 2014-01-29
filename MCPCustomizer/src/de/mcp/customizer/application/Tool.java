@@ -5,13 +5,11 @@ import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.SVGIcon;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
-import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 
 public abstract class Tool implements Drawable2D {
 
-    protected Rect view;
-    protected Transformation transform;
+    protected CustomizerView view;
     protected String iconName;
     
     protected MCPCustomizer customizer;
@@ -28,23 +26,22 @@ public abstract class Tool implements Drawable2D {
     }
 
     public Tool(MCPCustomizer customizer, ObjectContainer container, String iconName) {
-    	this(customizer.view2DRect, customizer.properties, customizer.statusbar, customizer.transform2D, iconName);
+    	this(customizer.customizerView2D, customizer.properties, customizer.statusbar, customizer.transform2D, iconName);
     	this.customizer = customizer;
     	this.objectContainer = container;
     }
     
-    public Tool(Rect view, Properties properties, Statusbar statusbar, Transformation transform, String iconName)
+    public Tool(CustomizerView view, Properties properties, Statusbar statusbar, Transformation transform, String iconName)
     {
         this.view = view;
-        this.transform = transform;
         this.iconName = iconName;
     }
 
     protected Vec2D positionRelativeToView(Vec2D inPosition) 
     {
-        Vec2D newPos = inPosition.sub(this.view.getTopLeft());
-        newPos.set(newPos.x()/transform.getScale(), newPos.y()/transform.getScale());
-        newPos.addSelf(transform.getTranslation());
+        Vec2D newPos = inPosition.sub(this.view.getOrigin());
+        newPos.set(newPos.x()/this.view.getTransformation().getScale(), newPos.y()/this.view.getTransformation().getScale());
+        newPos.addSelf(this.view.getTransformation().getTranslation());
         newPos = newPos.scale(1/scalingFactor);
         return newPos;
     }
@@ -67,7 +64,7 @@ public abstract class Tool implements Drawable2D {
     	
     	float iconScaling = 1.57f;
 		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
-		icon.draw2D(context);
+		icon.draw2D(context, new Transformation((float) 1.0, new Vec2D()));
 		
 		return context;
     }
@@ -79,6 +76,6 @@ public abstract class Tool implements Drawable2D {
     public void wasUnselected(){
     };
     
-    public void draw2D(PGraphics p) {};
+    public void draw2D(PGraphics p, Transformation transform) {};
 
 }

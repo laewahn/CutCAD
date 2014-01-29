@@ -10,6 +10,7 @@ import toxi.geom.Vec3D;
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
 import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.Transformation;
 
 public class Connection implements Drawable2D
 {
@@ -91,7 +92,7 @@ public class Connection implements Drawable2D
 		this.slaveEdge = e;
 	}
 
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation transform) {
 		scalingFactor = masterEdge.getShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		

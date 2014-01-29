@@ -21,7 +21,7 @@ public class SVGIcon implements Drawable2D {
 	
 	
 	@Override
-	public void draw2D(PGraphics context) {
+	public void draw2D(PGraphics context, Transformation transform) {
 		
 		context.beginDraw();
 		context.fill(0);

@@ -6,6 +6,7 @@ import java.util.List;
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
+import de.mcp.customizer.view.Transformation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Line2D;
@@ -485,13 +486,13 @@ public class GShape implements Drawable2D, Drawable3D
 //  }
 
 
-  public void draw2D(PGraphics p) 
+  public void draw2D(PGraphics p, Transformation transform) 
   {
     this.createCover2D(p, getTenons(), position2D);
 
     for (Edge e: edges) //not good... but i've no better idea
     {
-      e.draw2D(p);
+      e.draw2D(p, transform);
     }
   }
 

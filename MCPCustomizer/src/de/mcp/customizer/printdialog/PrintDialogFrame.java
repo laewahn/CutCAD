@@ -268,7 +268,7 @@ public class PrintDialogFrame extends PApplet
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
-       drawShapes.get(i).getShape().draw2D(objectLayout);
+       drawShapes.get(i).getShape().draw2D(objectLayout, null);
       }
       objectLayout.endDraw();
       image(objectLayout, 0, 0);

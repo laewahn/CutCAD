@@ -6,6 +6,7 @@ import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
+import de.mcp.customizer.view.Transformation;
 
 public class ChangeSTLTool extends Tool {
 
@@ -30,7 +31,7 @@ public class ChangeSTLTool extends Tool {
 	}
 
 	@Override
-	public void draw2D(PGraphics p) {
+	public void draw2D(PGraphics p, Transformation transform) {
 	}
 	
 	@Override
