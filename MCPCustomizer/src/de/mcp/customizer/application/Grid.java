@@ -34,7 +34,7 @@ public class Grid implements Drawable2D {
 		int scaledGridWidth = getScaledGridWidth(transformation);
 		for (int i = -100; i < 100; i++)
 	    {
-			context.strokeWeight(getScaleFactor(transformation.getScale()));
+			context.strokeWeight(1);
 			context.stroke(220);
 			context.line(-100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth, scaledGridWidth * i);
 			context.line(scaledGridWidth * i, -100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth);
@@ -86,6 +86,6 @@ public class Grid implements Drawable2D {
 	 */
 	public int getScaledGridWidth(Transformation transformation)
 	{
-		return (int) (gridWidth * getScaleFactor(transformation.getScale()));		
+		return (int) (gridWidth * getScaleFactor(transformation.getScale())*transformation.getScale());		
 	}
 }
