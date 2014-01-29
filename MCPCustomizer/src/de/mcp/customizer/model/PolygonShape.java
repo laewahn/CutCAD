@@ -1,6 +1,7 @@
 package de.mcp.customizer.model;
 
 import java.util.List;
+
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
@@ -62,7 +63,7 @@ public class PolygonShape extends Shape {
 
 	@Override
 	public Shape copyBaseForm() {
-		// TODO Auto-generated method stub
-		return null;
+		PolygonShape copy = new PolygonShape(this.getGShape().getVertices(), this.getGShape().getPosition2D().to3DXY());
+		return copy;
 	}
 }

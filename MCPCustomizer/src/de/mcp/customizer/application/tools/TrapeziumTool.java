@@ -8,6 +8,9 @@ import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.Trapezium;
 import de.mcp.customizer.view.Transformation;
 
+/**
+ * The TrapeziumTool is used to draw a trapezium-shape (different top and bottom length, same side length and vertical symmetric).
+ */
 public class TrapeziumTool extends Tool {
 
 	boolean isDrawing;
@@ -15,6 +18,10 @@ public class TrapeziumTool extends Tool {
 	Vec2D startCoord;
 	Trapezium previewRectangle;
 
+    /**
+     * @param customizer the main class of the project
+     * @param container the currently loaded ObjectContainer
+     */
 	public TrapeziumTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "DrawTrapezium.svg");
 		

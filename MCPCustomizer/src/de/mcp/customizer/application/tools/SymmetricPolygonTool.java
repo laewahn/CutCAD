@@ -8,6 +8,9 @@ import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.SymmetricPolygon;
 import de.mcp.customizer.view.Transformation;
 
+/**
+ * The SymmetricPolygonTool is used to draw a symmetric polygons (same length of sides, same angle).
+ */
 public class SymmetricPolygonTool extends Tool {
 
 	boolean isDrawing;
@@ -15,6 +18,10 @@ public class SymmetricPolygonTool extends Tool {
 	Vec2D startCoord;
 	SymmetricPolygon previewRectangle;
 
+    /**
+     * @param customizer the main class of the project
+     * @param container the currently loaded ObjectContainer
+     */
 	public SymmetricPolygonTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "DrawSymmetricPolygon.svg");
 		this.isDrawing = false;

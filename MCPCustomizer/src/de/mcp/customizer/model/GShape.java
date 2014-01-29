@@ -768,6 +768,8 @@ public class GShape implements Drawable2D, Drawable3D {
 		copy.removeAllCutouts();
 		for (Cutout c : this.cutouts) {
 			copy.addCutout(new GShape(c.getVectors(), new Vec3D(0, 0, 0), shape));
+			copy.getCutouts().get(copy.getCutouts().size()-1).setValue0(0);
+			copy.getCutouts().get(copy.getCutouts().size()-1).setValue1(0);
 		}
 		return copy;
 	}
