@@ -61,7 +61,6 @@ public class PrintSubInstance {
 		laserJob.newVectorPart(dpi, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
 		laserJob.newEngraveVectorPart(dpi, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
 		final float scaleFactor = (float)dpi/25.4f;
-		
 		for(int i = 0; i < shapesPlaced.size(); i++) {
 			
 			List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
@@ -158,6 +157,8 @@ public class PrintSubInstance {
 					}
 				}
 			}
+			
+			//Genereate engrave part here later
 		}
 	  
 		output += "</svg>";

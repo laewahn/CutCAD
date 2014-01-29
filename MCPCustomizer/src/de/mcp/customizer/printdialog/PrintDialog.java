@@ -57,7 +57,7 @@ public class PrintDialog {
 	public void preparePrintDialog() {
 		copyShapes();
 		calculateInstances();
-		this.printDialogWindow = addPrintDialogFrame(800, 650, this.printInstances);
+		this.printDialogWindow = addPrintDialogFrame(1100, 650, this.printInstances);
 		
 		for(int i = 0; i < this.printInstances.size(); i++) {
 			this.printInstances.get(i).setParent(this.printDialogWindow);

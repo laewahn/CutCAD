@@ -76,7 +76,6 @@ public class LaserJobCreator {
 	public void setLaserCutter(LaserCutter device, String ipAddress) {
 		this.device = device;
 		int deviceNumber = device.returnDeviceNumber();
-		System.out.println(ipAddress);
 		switch(deviceNumber) {
 			case 0: epilogZing = new EpilogZing(ipAddress); 
 					break;
