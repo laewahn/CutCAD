@@ -445,6 +445,10 @@ public class MCPCustomizer extends PApplet {
 	    if (key == 's') {
 	    	container.safe("foo");
 	    }
+	    
+	    if (key == 'n') {
+	    	container.clear();
+	    }
 	  }
 	  
 	  /* (non-Javadoc)

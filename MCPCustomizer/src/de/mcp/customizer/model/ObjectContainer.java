@@ -128,4 +128,8 @@ public class ObjectContainer {
 	public void load(String filename) {
 		
 	}
+	
+	public void clear() {
+		this.objects = new ArrayList<Drawable2D>();
+	}
 }
