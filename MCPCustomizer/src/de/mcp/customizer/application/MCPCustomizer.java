@@ -87,25 +87,27 @@ class CustomizerView {
 	public Transformation getTransformation() {
 		return this.transform;
 	}
+	
+	private class Axes2D implements Drawable2D {
+		@Override
+		public void draw2D(PGraphics context, Transformation transform) {
+			context.strokeWeight(2);
+			context.textSize(32);
+			context.fill(context.color(255, 0, 0));
+			context.stroke(context.color(255, 0, 0));
+			context.line(0, 0, 350, 0);
+			context.text("X", 350, 12);
+			context.fill(context.color(0, 255, 0));
+			context.stroke(context.color(0, 255, 0));
+			context.line(0, 0, 0, 350);
+			context.text("Y", -10, 385);
+			context.stroke(context.color(0, 0, 0));
+			context.strokeWeight(1);
+		}
+	}
+
 }
 
-class Axes2D implements Drawable2D {
-	@Override
-	public void draw2D(PGraphics context, Transformation transform) {
-		context.strokeWeight(2);
-		context.textSize(32);
-		context.fill(context.color(255, 0, 0));
-		context.stroke(context.color(255, 0, 0));
-		context.line(0, 0, 350, 0);
-		context.text("X", 350, 12);
-		context.fill(context.color(0, 255, 0));
-		context.stroke(context.color(0, 255, 0));
-		context.line(0, 0, 0, 350);
-		context.text("Y", -10, 385);
-		context.stroke(context.color(0, 0, 0));
-		context.strokeWeight(1);
-	}
-}
 
 
 public class MCPCustomizer extends PApplet {
@@ -285,7 +287,7 @@ public class MCPCustomizer extends PApplet {
 
 	  private void createToolbar()
 	  {
-	    toolbar = new Toolbar(cp5, this);
+	    toolbar = new Toolbar(this.cp5);
 
 	    toolbar.setPosition(0, 50).setSize(50, 700).setItemHeight(50).disableCollapse().hideBar();
 	    

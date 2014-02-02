@@ -3,8 +3,6 @@ package de.mcp.customizer.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import processing.core.PApplet;
-import processing.core.PGraphics;
 import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -14,21 +12,17 @@ import controlP5.ListBox;
 class Toolbar extends ListBox
 {
 	
-  private PApplet pApplet;
   private List<Tool> tools;
   private Tool selectedTool;
-  private ControlP5 cp5;
   
-  Toolbar(ControlP5 cp5, PApplet papplet) {
-	  this(cp5, "Toolbar", papplet);
-	  this.cp5 = cp5;
+  Toolbar(ControlP5 cp5) {
+	  this(cp5, "Toolbar");
   }
   
-  Toolbar(ControlP5 cp5, String name, PApplet papplet)
+  Toolbar(ControlP5 cp5, String name)
   {
     super(cp5, cp5.getTab("default"), name, 0, 0, 100, 10);
     
-    this.pApplet = papplet;
     this.tools = new ArrayList<Tool>();
   }
 
