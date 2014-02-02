@@ -1,11 +1,12 @@
 package de.mcp.customizer.application;
 
 import de.mcp.customizer.model.ObjectContainer;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.SVGIcon;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 
 public abstract class Tool implements Drawable2D {
 
@@ -40,9 +41,9 @@ public abstract class Tool implements Drawable2D {
     	scalingFactor = factor;
     }
 
-    protected Vec2D positionRelativeToView(Vec2D inPosition) 
+    protected Vector2D positionRelativeToView(Vector2D inPosition) 
     {
-        Vec2D newPos = inPosition.sub(this.view.getOrigin());
+        Vector2D newPos = inPosition.sub(this.view.getOrigin());
         newPos.set(newPos.x()/this.view.getTransformation().getScale(), newPos.y()/this.view.getTransformation().getScale());
         newPos.addSelf(this.view.getTransformation().getTranslation());
 
@@ -51,7 +52,7 @@ public abstract class Tool implements Drawable2D {
         return newPos;
     }
 
-    protected boolean inView(Vec2D position) 
+    protected boolean inView(Vector2D position) 
     {
         return this.view.containsPoint(position);
     }
@@ -61,9 +62,9 @@ public abstract class Tool implements Drawable2D {
         return this.iconName;
     }
     
-    abstract public void mouseButtonPressed(Vec2D position, int button);
-    abstract public void mouseButtonReleased(Vec2D position, int button);
-    abstract public void mouseMoved(Vec2D position);
+    abstract public void mouseButtonPressed(Vector2D position, int button);
+    abstract public void mouseButtonReleased(Vector2D position, int button);
+    abstract public void mouseMoved(Vector2D position);
 
 	public SVGIcon getIcon() {
 

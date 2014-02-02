@@ -5,7 +5,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -14,6 +14,7 @@ import controlP5.ListBox;
 import controlP5.Textfield;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.view.Transformation;
 
@@ -94,7 +95,7 @@ public class PrintDialogWindow extends PApplet
 	private ArrayList<Button> instanceButtons;
   
 	private ArrayList<PrintInstance> printInstances;
-	private Vec2D originalMousePosition;
+	private Vector2D originalMousePosition;
 	private Rect view;
   
 	public PrintDialogWindow(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances)
@@ -111,7 +112,7 @@ public class PrintDialogWindow extends PApplet
 	    this.bedHeight = selectedCutter.returnBedHeight();
 	    this.dragging = false;
 	    this.view = new Rect(0,0,bedWidth,bedHeight);
-	    this.originalMousePosition = new Vec2D(0,0);
+	    this.originalMousePosition = new Vector2D(0,0);
 	    this.overlapMessage = "";
 	}
   
@@ -412,7 +413,7 @@ public class PrintDialogWindow extends PApplet
       objectLayout.beginDraw();
       objectLayout.background(100);
       ArrayList<Shape> drawShapes = new ArrayList<Shape>();
-      Transformation t = new Transformation(1, new Vec2D(0,0));
+      Transformation t = new Transformation(1, new Vector2D(0,0));
       if(printInstances.size() > 0)
       {
     	  drawShapes = printInstances.get(selectedInstance).getPlacedShapes();
@@ -429,8 +430,8 @@ public class PrintDialogWindow extends PApplet
   {
 	  if(printInstances.size() > 0)
 	  {
-        Vec2D position =  new Vec2D(mouseX, mouseY);
-        Vec2D relativePosition = this.positionRelativeToView(position);
+        Vector2D position =  new Vector2D(mouseX, mouseY);
+        Vector2D relativePosition = this.positionRelativeToView(position);
 
         for (Shape s : printInstances.get(selectedInstance).getPlacedShapes()) {
             s.getGShape().setSelected(s.getGShape().mouseOver(relativePosition));
@@ -445,8 +446,8 @@ public class PrintDialogWindow extends PApplet
     		for (Shape s : printInstances.get(selectedInstance).getPlacedShapes()) {
 	            if (s.getGShape().isSelected() && this.dragging)
 	            {
-	                Vec2D position = new Vec2D(mouseX, mouseY);
-	                Vec2D currentMousePosition = this.positionRelativeToView(position);
+	                Vector2D position = new Vector2D(mouseX, mouseY);
+	                Vector2D currentMousePosition = this.positionRelativeToView(position);
 	                s.getGShape().translate2D(currentMousePosition.sub(originalMousePosition));
 	                originalMousePosition.set(currentMousePosition);
 	            }
@@ -458,7 +459,7 @@ public class PrintDialogWindow extends PApplet
     {
     	if(printInstances.size() > 0)
   	  	{
-	      Vec2D mousePosition = new Vec2D(mouseX, mouseY);
+	      Vector2D mousePosition = new Vector2D(mouseX, mouseY);
 	      ArrayList<Shape> placedShapes = printInstances.get(selectedInstance).getPlacedShapes();
 	      ArrayList<Shape> shapes = new ArrayList<Shape>();
 	      for(int i = 0; i < placedShapes.size(); i++)
@@ -470,7 +471,7 @@ public class PrintDialogWindow extends PApplet
 	            if (s.getGShape().isSelected() && mouseButton == PConstants.LEFT)
 	            {
 	                this.dragging = true;
-	                Vec2D currentMousePosition = this.positionRelativeToView(mousePosition);
+	                Vector2D currentMousePosition = this.positionRelativeToView(mousePosition);
 	                this.originalMousePosition.set(currentMousePosition);
 	            } else if (s.getGShape().isSelected() && mouseButton == PConstants.RIGHT){
 	               printInstances.get(selectedInstance).unplaceShape(s);
@@ -488,7 +489,7 @@ public class PrintDialogWindow extends PApplet
       }
     }
     
-    private Vec2D positionRelativeToView(Vec2D inPosition) 
+    private Vector2D positionRelativeToView(Vector2D inPosition) 
     {
         return inPosition.sub(this.view.getTopLeft());
     }

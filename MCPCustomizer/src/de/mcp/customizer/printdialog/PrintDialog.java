@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mcp.customizer.model.primitives.Shape;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
+import de.mcp.customizer.model.primitives.Vector2D;
 
 /**
  * Prepares the print dialog. Preparation consists of making a new window and processing applet.
@@ -75,7 +76,7 @@ public class PrintDialog {
 		
 		for(int i = 0; i < this.shapes.size(); i++) {
 	       Shape copy = this.shapes.get(i).copy();
-	       copy.getGShape().setPosition2D(new Vec2D(100,100));
+	       copy.getGShape().setPosition2D(new Vector2D(100,100));
 	       copy.getGShape().scale2D(0.1f);
 	       copy.getGShape().setScalingFactor(1);
 	       this.preparedShapes.add(copy);

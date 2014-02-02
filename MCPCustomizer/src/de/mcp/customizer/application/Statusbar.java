@@ -1,7 +1,8 @@
 package de.mcp.customizer.application;
 
+import de.mcp.customizer.model.primitives.Vector2D;
 import processing.core.PApplet;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 
 /**
  * A simple statusbar at the bottom of the UI, displaying a status message that
@@ -11,13 +12,13 @@ import toxi.geom.Vec2D;
 public class Statusbar {
 
 	private String status;
-	private Vec2D mousePosition;
+	private Vector2D mousePosition;
 
 	/**
 	 * Creates a Statusbar.
 	 */
 	public Statusbar() {
-		this.mousePosition = new Vec2D(0, 0);
+		this.mousePosition = new Vector2D(0, 0);
 		this.status = null;
 	}
 
@@ -44,7 +45,7 @@ public class Statusbar {
 	 * @param mouse
 	 *            the mouse position to be displayed on the statusbar
 	 */
-	public void setMousePosition(Vec2D mouse) {
+	public void setMousePosition(Vector2D mouse) {
 		this.mousePosition = mouse;
 	}
 

@@ -4,7 +4,8 @@ import java.util.List;
 
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
-import toxi.geom.Vec2D;
+import de.mcp.customizer.model.primitives.Vector2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 public class PolygonShape extends Shape {
@@ -14,7 +15,7 @@ public class PolygonShape extends Shape {
 	private GShape shape;
 	private static int counter = 0;
 	
-	public PolygonShape(List<Vec2D> vectors, Vec3D position) {
+	public PolygonShape(List<Vector2D> vectors, Vec3D position) {
 		shape = new GShape(vectors, position, this);
 		this.shape.setName("PolygonShape " + counter);
 		counter++;

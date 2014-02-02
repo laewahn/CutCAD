@@ -3,7 +3,8 @@ package de.mcp.customizer.algorithm;
 import java.util.ArrayList;
 
 import de.mcp.customizer.model.primitives.Edge;
-import toxi.geom.Vec2D;
+import de.mcp.customizer.model.primitives.Vector2D;
+//import toxi.geom.Point2D;
 import toxi.geom.Vec3D;
 
 /**
@@ -12,7 +13,7 @@ import toxi.geom.Vec3D;
  *        Can be used either for unconnected edges (one edge) or two connected
  *        edges so far. Uses the normal vectors of the shape, to whom these
  *        edges belong, from the edges themselves the 2D coordinates as well as
- *        their Array of Vec2D, in which the outcome of the function (outline of
+ *        their Array of Point2D, in which the outcome of the function (outline of
  *        the edge) is stored.
  */
 public class CreateTenons {
@@ -26,15 +27,15 @@ public class CreateTenons {
 	 * 
 	 *        Calculates the outline of one (unconnected) edge - which is
 	 *        basically just the line between the two points of this edge in the
-	 *        2D view. It takes this two Vec2D, and sets the internal Arraylist
-	 *        of Vec2D (representing the outline of the edge) within edges to
-	 *        this two Vec2D
+	 *        2D view. It takes this two Point2D, and sets the internal Arraylist
+	 *        of Point2D (representing the outline of the edge) within edges to
+	 *        this two Point2D
 	 * 
 	 * @param edge
 	 *            is the the edge which outline has to be modified
 	 */
 	public static void createOutlineOfEdge(Edge edge) {
-		ArrayList<Vec2D> basic = new ArrayList<Vec2D>();
+		ArrayList<Vector2D> basic = new ArrayList<Vector2D>();
 		basic.add(edge.getV1());
 		basic.add(edge.getV2());
 		edge.setTenons(basic);
@@ -213,15 +214,15 @@ public class CreateTenons {
 	 * offset - depth(height) for the next point. And so on, until the end of
 	 * the edge is reached.
 	 */
-	private static ArrayList<Vec2D> createTenons(Edge edge,
+	private static ArrayList<Vector2D> createTenons(Edge edge,
 			float lengthOfATenon, float tenonHeight, float tenonDepth,
 			int numberOfTenons, boolean beginWithExtrusion) {
-		Vec2D edgeDirection = edge.getV2().sub(edge.getV1()).getNormalized();
-		Vec2D tenonDirection = edge.getGShape().get2Dperpendicular(edge.getV2(),
+		Vector2D edgeDirection = edge.getV2().sub(edge.getV1()).getNormalized();
+		Vector2D tenonDirection = edge.getGShape().get2Dperpendicular(edge.getV2(),
 				edge.getV1());
 
-		ArrayList<Vec2D> listTenons = new ArrayList<Vec2D>();
-		Vec2D currentTenon = edge.getV1().copy();
+		ArrayList<Vector2D> listTenons = new ArrayList<Vector2D>();
+		Vector2D currentTenon = edge.getV1().copy();
 
 		int startExtruded = beginWithExtrusion ? 0 : 1;
 

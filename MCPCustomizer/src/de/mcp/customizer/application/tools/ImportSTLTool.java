@@ -1,12 +1,13 @@
 package de.mcp.customizer.application.tools;
 
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ImportSTL;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Transformation;
 
 /**
@@ -28,16 +29,16 @@ public class ImportSTLTool extends Tool {
 	}
 	
 	@Override
-	public void mouseButtonPressed(Vec2D position, int button) {
+	public void mouseButtonPressed(Vector2D position, int button) {
 
 	}
 
 	@Override
-	public void mouseButtonReleased(Vec2D position, int button) {
+	public void mouseButtonReleased(Vector2D position, int button) {
 	}
 	
 	@Override
-	public void mouseMoved(Vec2D position) {
+	public void mouseMoved(Vector2D position) {
 	}
 
 	@Override

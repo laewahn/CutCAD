@@ -1,10 +1,11 @@
 package de.mcp.customizer.application.tools;
 
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.model.shapes.SymmetricPolygon;
 import de.mcp.customizer.view.Transformation;
 
@@ -15,7 +16,7 @@ public class SymmetricPolygonTool extends Tool {
 
 	boolean isDrawing;
 
-	Vec2D startCoord;
+	Vector2D startCoord;
 	SymmetricPolygon previewRectangle;
 
     /**
@@ -27,7 +28,7 @@ public class SymmetricPolygonTool extends Tool {
 		this.isDrawing = false;
 	}
 
-	public void mouseButtonPressed(Vec2D position, int button)
+	public void mouseButtonPressed(Vector2D position, int button)
 	{
 		if (this.inView(position)){
     		this.customizer.displayStatus("Use the mouse to drag the symmetric polygon to the size that you want");
@@ -39,14 +40,14 @@ public class SymmetricPolygonTool extends Tool {
 		}
 	}
 
-	public void mouseButtonReleased(Vec2D position, int button)
+	public void mouseButtonReleased(Vector2D position, int button)
 	{
 
 		if (isDrawing && this.inView(position)) {
     		this.customizer.displayStatus("Symmetric polygon created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
 
-			Vec2D endCoord = this.positionRelativeToView(position);
-			Vec2D rectSize = endCoord.sub(this.startCoord);
+			Vector2D endCoord = this.positionRelativeToView(position);
+			Vector2D rectSize = endCoord.sub(this.startCoord);
 
 			this.previewRectangle.setSize(rectSize);
 
@@ -58,15 +59,15 @@ public class SymmetricPolygonTool extends Tool {
 		}
 	}
 
-	public void mouseMoved(Vec2D position)
+	public void mouseMoved(Vector2D position)
 	{
-        Vec2D relativePosition = this.positionRelativeToView(position);
+        Vector2D relativePosition = this.positionRelativeToView(position);
         this.customizer.displayMousePosition(relativePosition.scale(0.1f));
         
 		if (isDrawing){
 
-			Vec2D endCoord = this.positionRelativeToView(position);
-			Vec2D rectSize = endCoord.sub(this.startCoord);
+			Vector2D endCoord = this.positionRelativeToView(position);
+			Vector2D rectSize = endCoord.sub(this.startCoord);
 
 			this.previewRectangle.setSize(rectSize);
 		}

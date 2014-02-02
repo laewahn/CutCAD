@@ -2,12 +2,13 @@ package de.mcp.customizer.application.tools;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.model.shapes.CopyShape;
 import de.mcp.customizer.view.Transformation;
 
@@ -17,7 +18,7 @@ import de.mcp.customizer.view.Transformation;
 public class CopyTool extends Tool {
 
 	GShape master;
-	Vec2D lastMousePosition;
+	Vector2D lastMousePosition;
 	boolean selected;
 
 	Shape copyShape, previewShape;
@@ -30,10 +31,10 @@ public class CopyTool extends Tool {
 		super(customizer, container, "Copy.svg");
 		
 		this.selected = false;
-		this.lastMousePosition = new Vec2D(0, 0);
+		this.lastMousePosition = new Vector2D(0, 0);
 	}
 
-    public void mouseButtonPressed(Vec2D position, int button)
+    public void mouseButtonPressed(Vector2D position, int button)
     {
     	if (this.inView(position)) {
     		if (!selected)
@@ -71,12 +72,12 @@ public class CopyTool extends Tool {
     	}
     }
 
-    public void mouseButtonReleased(Vec2D position, int button)
+    public void mouseButtonReleased(Vector2D position, int button)
     {
         // no actions required
     } 
     
-    public void mouseMoved(Vec2D position)
+    public void mouseMoved(Vector2D position)
     {
 		if (this.inView(position)) {
 			lastMousePosition = this.positionRelativeToView(position);

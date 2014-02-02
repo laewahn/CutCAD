@@ -1,7 +1,8 @@
 package de.mcp.customizer.printdialog.lasercutter;
 import java.util.List;
 
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
+
 
 import com.t_oster.liblasercut.IllegalJobException;
 import com.t_oster.liblasercut.LaserJob;
@@ -12,6 +13,8 @@ import com.t_oster.liblasercut.drivers.EpilogZing;
 import com.t_oster.liblasercut.drivers.EpilogHelix;
 import com.t_oster.liblasercut.drivers.LaosCutter;
 import com.t_oster.liblasercut.drivers.Lasersaur;
+
+import de.mcp.customizer.model.primitives.Vector2D;
 
 /**
  * This class handles the preparation of a laser job. The preparation includes setting
@@ -159,7 +162,7 @@ public class LaserJobCreator {
 	 * @param newVertices
 	 * A list of vertices which will be added to the cut through vector part as close shape
 	 */
-	public void addVerticesToVectorPart(List<Vec2D> newVertices) {
+	public void addVerticesToVectorPart(List<Vector2D> newVertices) {
 		if(newVertices.get(0) != null) {
 			vp.moveto((int)newVertices.get(0).getComponent(0),(int)newVertices.get(0).getComponent(1));
 			for(int i = 1; i < newVertices.size(); i++) {

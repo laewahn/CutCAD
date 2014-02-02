@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import toxi.geom.Rect;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 /**
@@ -18,7 +19,7 @@ public class Trapezium extends Shape {
 	private int sizeXTop, sizeXBottom, sizeY;
 	private static int counter = 0;
 	private GShape basic;
-	private ArrayList<Vec2D> basicShape;
+	private ArrayList<Vector2D> basicShape;
 
 	/**
 	 *        Creates a trapezium. For the basic shape both upper and lower side
@@ -37,11 +38,11 @@ public class Trapezium extends Shape {
 		this.sizeXTop = (sizeX / 10) * 10;
 		this.sizeXBottom = (sizeX / 10) * 10;
 		this.sizeY = (sizeY / 10) * 10;
-		basicShape = new ArrayList<Vec2D>();
-		basicShape.add(new Vec2D(0, 0));
-		basicShape.add(new Vec2D(sizeX, 0));
-		basicShape.add(new Vec2D(sizeX, sizeY));
-		basicShape.add(new Vec2D(0, sizeY));
+		basicShape = new ArrayList<Vector2D>();
+		basicShape.add(new Vector2D(0, 0));
+		basicShape.add(new Vector2D(sizeX, 0));
+		basicShape.add(new Vector2D(sizeX, sizeY));
+		basicShape.add(new Vector2D(0, sizeY));
 		basic = new GShape(basicShape, position, this);
 		basic.setName("Trapezium " + counter);
 		counter++;
@@ -141,15 +142,15 @@ public class Trapezium extends Shape {
 	 * Recalculates the vectors of the trapezium based on the input parameter
 	 */
 	public void recalculate() {
-		basicShape.set(1, new Vec2D(sizeXTop, 0));
+		basicShape.set(1, new Vector2D(sizeXTop, 0));
 		basicShape.set(
 				2,
-				new Vec2D(((float) sizeXTop / 2 + sizeXBottom / 2),
+				new Vector2D(((float) sizeXTop / 2 + sizeXBottom / 2),
 						(float) (Math.sqrt(Math.pow(sizeY, 2)
 								- Math.pow((sizeXBottom - sizeXTop) / 2, 2)))));
 		basicShape.set(
 				3,
-				new Vec2D(((float) sizeXTop - sizeXBottom) / 2, (float) (Math
+				new Vector2D(((float) sizeXTop - sizeXBottom) / 2, (float) (Math
 						.sqrt(Math.pow(sizeY, 2)
 								- Math.pow((sizeXBottom - sizeXTop) / 2, 2)))));
 		basic.recalculate(basicShape);
@@ -161,7 +162,7 @@ public class Trapezium extends Shape {
 	 * @param newSize
 	 *            Length and Height of the trapezium (0.1mm)
 	 */
-	public void setSize(Vec2D newSize) {
+	public void setSize(Vector2D newSize) {
 		this.sizeXTop = ((int) newSize.x() / 10) * 10;
 		this.sizeXBottom = ((int) newSize.x() / 10) * 10;
 		this.sizeY = (int) newSize.y();
@@ -193,7 +194,7 @@ public class Trapezium extends Shape {
 	 *            position of the mouse
 	 * @return true, if mouse is over shape
 	 */
-	public boolean mouseOver(Vec2D mousePosition) {
+	public boolean mouseOver(Vector2D mousePosition) {
 		return this.basic.mouseOver(mousePosition);
 	}
 

@@ -3,12 +3,13 @@ package de.mcp.customizer.application.tools;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Transformation;
 
 
@@ -19,8 +20,8 @@ public class CutoutTool extends Tool {
 
     boolean dragging;
     boolean selectedFirst;
-    Vec2D originalMousePosition;
-    Vec2D relativePosition;
+    Vector2D originalMousePosition;
+    Vector2D relativePosition;
     Shape masterShape;
     private float scalingFactor;
     
@@ -33,10 +34,10 @@ public class CutoutTool extends Tool {
     	
     	this.dragging = false;
         this.selectedFirst = false;
-        this.originalMousePosition = new Vec2D(0,0);
+        this.originalMousePosition = new Vector2D(0,0);
     }
     
-    public void mouseButtonPressed(Vec2D position, int button)
+    public void mouseButtonPressed(Vector2D position, int button)
     {
         for (Shape s : this.objectContainer.allShapes())
         {
@@ -46,7 +47,7 @@ public class CutoutTool extends Tool {
             	{
             		this.customizer.displayStatus("Now select the shape you want to add as a cutout");
             		s.getGShape().setSelected(true);
-            		Vec2D currentMousePosition = this.positionRelativeToView(position);
+            		Vector2D currentMousePosition = this.positionRelativeToView(position);
                     this.originalMousePosition.set(currentMousePosition);
             		masterShape = s;
             		selectedFirst = true;
@@ -61,14 +62,14 @@ public class CutoutTool extends Tool {
         }
     }
 
-    public void mouseButtonReleased(Vec2D position, int button)
+    public void mouseButtonReleased(Vector2D position, int button)
     {
         if (button == PConstants.RIGHT) {
             this.dragging = false;
         }
     }
     
-    public void mouseMoved(Vec2D position)
+    public void mouseMoved(Vector2D position)
     {			
         if (this.inView(position))
         {
@@ -87,12 +88,12 @@ public class CutoutTool extends Tool {
 //        scalingFactor = super.getScalingFactor();
         if (selectedFirst) {	
     		Polygon2D findCenter = new Polygon2D();
-    		for (Edge e : masterShape.getGShape().getEdges()) findCenter.add(e.getV1().copy());
-    		Vec2D center = findCenter.getCentroid();
-            Vec2D mid = center.add(masterShape.getGShape().getPosition2D());
+    		for (Edge e : masterShape.getGShape().getEdges()) findCenter.add(e.getV1().copy().getVec2D());
+    		Vector2D center = new Vector2D(findCenter.getCentroid());
+            Vector2D mid = center.add(masterShape.getGShape().getPosition2D());
             p.stroke(255,0,0);
-            Vec2D lineStart = mid.scale(scalingFactor);
-            Vec2D lineEnd = this.relativePosition.scale(scalingFactor);
+            Vector2D lineStart = mid.scale(scalingFactor);
+            Vector2D lineEnd = this.relativePosition.scale(scalingFactor);
             p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
             p.stroke(0);
         }

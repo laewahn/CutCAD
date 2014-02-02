@@ -7,6 +7,7 @@ import java.util.*;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.model.shapes.Rectangle;
 import static java.lang.System.*;
 
@@ -26,9 +27,9 @@ public class RotateAdjectantShapes {
 
 	private static Shape virtualShape = new Rectangle(new Vec3D(0, 0, 0), 1, 1);
 	private static Edge edgeA = new Edge(virtualShape.getGShape(), new Vec3D(1,
-			1, 1), new Vec3D(1, 1, 1), new Vec2D(1, 1), new Vec2D(1, 1));
+			1, 1), new Vec3D(1, 1, 1), new Vector2D(1, 1), new Vector2D(1, 1));
 	private static Edge edgeB = new Edge(virtualShape.getGShape(), new Vec3D(1,
-			1, 1), new Vec3D(1, 1, 1), new Vec2D(1, 1), new Vec2D(1, 1));
+			1, 1), new Vec3D(1, 1, 1), new Vector2D(1, 1), new Vector2D(1, 1));
 	private static Vec3D intersectionPoint = new Vec3D(0, 0, 0);
 
 	/**

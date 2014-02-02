@@ -1,10 +1,11 @@
 package de.mcp.customizer.application.tools;
 
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.PrintDialog;
 
 /**
@@ -31,21 +32,21 @@ public class PrintTool extends Tool {
 	/**
 	 * This method is not used in this class
 	 */
-    public void mouseButtonPressed(Vec2D position, int button)
+    public void mouseButtonPressed(Vector2D position, int button)
     {
     }
 
     /**
 	 * This method is not used in this class
 	 */
-    public void mouseButtonReleased(Vec2D position, int button)
+    public void mouseButtonReleased(Vector2D position, int button)
     {
     }
     
     /**
 	 * This method is not used in this class
 	 */
-    public void mouseMoved(Vec2D position)
+    public void mouseMoved(Vector2D position)
     {
     }
     

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import toxi.geom.Rect;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 /**
@@ -18,7 +19,7 @@ public class SymmetricPolygon extends Shape {
 	private int size, number;
 	private static int counter = 0;
 	private GShape basic;
-	private ArrayList<Vec2D> basicShape;
+	private ArrayList<Vector2D> basicShape;
 
 	/**
 	 *        Creates a symmetric Polygon. For the basic shape The basic shape
@@ -37,10 +38,10 @@ public class SymmetricPolygon extends Shape {
 	public SymmetricPolygon(Vec3D position, int sizeX, int sizeY) {
 		this.size = (((int) (sizeX + sizeY) / 2) / 10) * 10;
 		this.number = 3;
-		basicShape = new ArrayList<Vec2D>();
-		basicShape.add(new Vec2D(0, 0));
-		basicShape.add(new Vec2D(size, 0));
-		basicShape.add(new Vec2D(size, size));
+		basicShape = new ArrayList<Vector2D>();
+		basicShape.add(new Vector2D(0, 0));
+		basicShape.add(new Vector2D(size, 0));
+		basicShape.add(new Vector2D(size, size));
 		basic = new GShape(basicShape, position, this);
 		basic.setName("SymmetricPolygon " + counter);
 		counter++;
@@ -112,11 +113,11 @@ public class SymmetricPolygon extends Shape {
 			number = 3;
 		float alpha = 2 * (float) Math.PI / number;
 		float beta = ((float) Math.PI - alpha) / 2;
-		Vec2D diameter = new Vec2D(
+		Vector2D diameter = new Vector2D(
 				(float) (size / Math.sin(alpha) * Math.sin(beta)), 0f);
 		basicShape.clear();
 		for (int i = 0; i < number; i++) {
-			basicShape.add((diameter.getRotated(i * alpha)).add(new Vec2D(
+			basicShape.add((diameter.getRotated(i * alpha)).add(new Vector2D(
 					diameter.x(), diameter.y())));
 		}
 		basic.recalculate(basicShape);
@@ -152,7 +153,7 @@ public class SymmetricPolygon extends Shape {
 	 * @param newSize
 	 *            average of its coordinates as length (0.1mm)
 	 */
-	public void setSize(Vec2D newSize) {
+	public void setSize(Vector2D newSize) {
 		this.size = (((int) ((newSize.x() + newSize.y()) / 2)) / 10) * 10;
 		recalculate();
 	}
@@ -182,7 +183,7 @@ public class SymmetricPolygon extends Shape {
 	 *            position of the mouse
 	 * @return true, if mouse is over shape
 	 */
-	public boolean mouseOver(Vec2D mousePosition) {
+	public boolean mouseOver(Vector2D mousePosition) {
 		return this.basic.mouseOver(mousePosition);
 	}
 

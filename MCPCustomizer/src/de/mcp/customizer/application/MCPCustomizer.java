@@ -10,7 +10,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 import toxi.geom.Rect;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
@@ -21,16 +21,17 @@ import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
 class CustomizerFrame {
-	public Vec2D origin;
-	public Vec2D size;
+	public Vector2D origin;
+	public Vector2D size;
 	
-	public boolean containsPoint(Vec2D point) {
-		Rect frameRect = new Rect(this.origin, this.origin.add(size));
-		return frameRect.containsPoint(point);
+	public boolean containsPoint(Vector2D point) {
+		Rect frameRect = new Rect(this.origin.getVec2D(), this.origin.add(size).getVec2D());
+		return frameRect.containsPoint(point.getVec2D());
 	}
 }
 
@@ -76,11 +77,11 @@ class CustomizerView {
 		application.image(context, frame.origin.x(), frame.origin.y());
 	}
 	
-	public Vec2D getOrigin() {
+	public Vector2D getOrigin() {
 		return this.frame.origin;
 	}
 	
-	public boolean containsPoint(Vec2D point) {
+	public boolean containsPoint(Vector2D point) {
 		return this.frame.containsPoint(point);
 	}
 	
@@ -147,9 +148,9 @@ public class MCPCustomizer extends PApplet {
 	int cameraY = 1000;
 
 	public Transformation transform2D = new Transformation((float) 1.0,
-			new Vec2D(0, 0));
+			new Vector2D(0, 0));
 	Transformation transform3D = new Transformation((float) 1.0,
-			new Vec2D(0, 0));
+			new Vector2D(0, 0));
 
 	Grid grid3D, grid2D;
 
@@ -183,8 +184,8 @@ public class MCPCustomizer extends PApplet {
 		grid3D = new Grid(transform3D, view3D);
 
 		CustomizerFrame theFrame = new CustomizerFrame();
-		theFrame.origin = new Vec2D(view2DPosX, view2DPosY);
-		theFrame.size = new Vec2D(viewSizeX, viewSizeY);
+		theFrame.origin = new Vector2D(view2DPosX, view2DPosY);
+		theFrame.size = new Vector2D(viewSizeX, viewSizeY);
 		customizerView2D = new CustomizerView(view2D, theFrame, grid2D, transform2D, this);
 		
 		gfx = new ToxiclibsSupport(this, view3D);
@@ -331,7 +332,7 @@ public class MCPCustomizer extends PApplet {
 	  * Sets the mouse position to be displayed on the statusbar
 	  * @param position the mouse position to be displayed on the statusbar
 	  */
-	  public void displayMousePosition(Vec2D position) {
+	  public void displayMousePosition(Vector2D position) {
 		  this.statusbar.setMousePosition(position);
 	  }
 	  
@@ -360,7 +361,7 @@ public class MCPCustomizer extends PApplet {
 	          startY = mouseY - view3DPosY;
 	      }
 	      
-	      Vec2D mousePosition = new Vec2D(mouseX, mouseY);
+	      Vector2D mousePosition = new Vector2D(mouseX, mouseY);
 	      toolbar.getSelectedTool().mouseButtonPressed(mousePosition, mouseButton);
 	  }
 
@@ -380,7 +381,7 @@ public class MCPCustomizer extends PApplet {
 	    	}
 	    }
 
-	    toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
+	    toolbar.getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
 	  }
 
 	  /* (non-Javadoc)
@@ -388,7 +389,7 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mouseReleased()
 	  {
-	    toolbar.getSelectedTool().mouseButtonReleased(new Vec2D(mouseX, mouseY), mouseButton);
+	    toolbar.getSelectedTool().mouseButtonReleased(new Vector2D(mouseX, mouseY), mouseButton);
 
 	    if (mouseOver3DView() && mouseButton == PConstants.LEFT)
 	    {
@@ -402,7 +403,7 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mouseMoved() 
 	  {
-	      toolbar.getSelectedTool().mouseMoved(new Vec2D(mouseX, mouseY));
+	      toolbar.getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
 	  }
 
 	  private boolean mouseOver2DView()

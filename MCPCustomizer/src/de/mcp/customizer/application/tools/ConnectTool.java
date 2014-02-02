@@ -2,12 +2,13 @@ package de.mcp.customizer.application.tools;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Edge;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Transformation;
 
 /**
@@ -16,7 +17,7 @@ import de.mcp.customizer.view.Transformation;
 public class ConnectTool extends Tool {
 
 	boolean selectedFirst;
-	Vec2D lastMousePosition;
+	Vector2D lastMousePosition;
 
 	Connection previewConnection;
 
@@ -33,7 +34,7 @@ public class ConnectTool extends Tool {
 		this.selectedFirst = false;
 	}
 
-	public void mouseButtonPressed(Vec2D position, int button) {
+	public void mouseButtonPressed(Vector2D position, int button) {
 		for (Edge e : this.objectContainer.allEdges()) {
 			if (e.isHighlighted() && button == PConstants.LEFT) {
 				if (!selectedFirst) {
@@ -71,14 +72,14 @@ public class ConnectTool extends Tool {
 		}
 	}
 
-	public void mouseButtonReleased(Vec2D position, int button) {
+	public void mouseButtonReleased(Vector2D position, int button) {
 		// no actions required
 	}
 
-	public void mouseMoved(Vec2D position) {
+	public void mouseMoved(Vector2D position) {
 		this.customizer.displayStatus(this.lastMessage);
 		this.lastMousePosition = position;
-		Vec2D relativePosition = this.positionRelativeToView(position);
+		Vector2D relativePosition = this.positionRelativeToView(position);
 		this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 		for (Edge e : this.objectContainer.allEdges()) {
@@ -106,14 +107,14 @@ public class ConnectTool extends Tool {
 		scalingFactor = t.getScale();
 
 		if (selectedFirst) {
-			Vec2D mid = previewConnection
+			Vector2D mid = previewConnection
 					.getMasterEdge()
 					.getMid()
 					.add(previewConnection.getMasterEdge().getGShape()
 							.getPosition2D());
 			p.stroke(255, 0, 0);
-			Vec2D lineStart = mid.scale(scalingFactor);
-			Vec2D lineEnd = this.positionRelativeToView(this.lastMousePosition)
+			Vector2D lineStart = mid.scale(scalingFactor);
+			Vector2D lineEnd = this.positionRelativeToView(this.lastMousePosition)
 					.scale(scalingFactor);
 			p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
 			p.stroke(0);

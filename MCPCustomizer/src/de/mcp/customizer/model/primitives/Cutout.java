@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import de.mcp.customizer.model.AllMaterials;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
@@ -16,7 +17,7 @@ public class Cutout implements Drawable2D, Serializable {
 	
 	private static final long serialVersionUID = -3035265244890031332L;
 	
-	private Vec2D position;
+	private Vector2D position;
 	private float angle;
 	private GShape master, slave;
 	private boolean isSelected, isActive;
@@ -40,7 +41,7 @@ public class Cutout implements Drawable2D, Serializable {
 		slave.setMaterial(AllMaterials.getMaterials().get(0));
 		this.angle = 0;
 		if (!master.overlapsWith(slave)) {
-			this.position = new Vec2D(findCenter(master).sub(findCenter(slave)));
+			this.position = new Vector2D(findCenter(master).sub(findCenter(slave)));
 		} else {
 			this.position = slave.getPosition2D().sub(master.getPosition2D());
 		}
@@ -55,7 +56,7 @@ public class Cutout implements Drawable2D, Serializable {
 	 * @param direction
 	 *            offset to add (0.1mm)
 	 */
-	public void translate2D(Vec2D direction) {
+	public void translate2D(Vector2D direction) {
 		this.position.addSelf(direction);
 	}
 
@@ -105,16 +106,16 @@ public class Cutout implements Drawable2D, Serializable {
 	}
 
 	/**
-	 * @return List of Vec2D, which determine the form the cut-out (modified by angle and position)
+	 * @return List of Vector2D, which determine the form the cut-out (modified by angle and position)
 	 */
-	public ArrayList<Vec2D> getVectors() {
-		ArrayList<Vec2D> modifiedVectors = new ArrayList<Vec2D>();
+	public ArrayList<Vector2D> getVectors() {
+		ArrayList<Vector2D> modifiedVectors = new ArrayList<Vector2D>();
 
 		Polygon2D findCenter = new Polygon2D();
-		for (Vec2D v : slave.getTenons())
-			findCenter.add(v.copy());
-		Vec2D center = findCenter.getCentroid();
-		for (Vec2D v : slave.getTenons()) {
+		for (Vector2D v : slave.getTenons())
+			findCenter.add(v.copy().getVec2D());
+		Vector2D center = new Vector2D(findCenter.getCentroid());
+		for (Vector2D v : slave.getTenons()) {
 			modifiedVectors.add(v.copy().sub(center)
 					.rotate((float) Math.toRadians(angle)).add(position)
 					.add(center));
@@ -223,9 +224,9 @@ public class Cutout implements Drawable2D, Serializable {
 		scalingFactor = t.getScale();
 		boundingBoxSize = 4 / scalingFactor;
 
-		Vec2D mid1 = findCenter(slave).add(master.getPosition2D())
+		Vector2D mid1 = findCenter(slave).add(master.getPosition2D())
 				.add(this.position).scale(scalingFactor);
-		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D()).scale(
+		Vector2D mid2 = findCenter(slave).add(slave.getPosition2D()).scale(
 				scalingFactor);
 		if (this.isSelected) {
 			p.stroke(255, 0, 0);
@@ -245,11 +246,11 @@ public class Cutout implements Drawable2D, Serializable {
 	 *            A GShape
 	 * @return the position of the mass center
 	 */
-	public Vec2D findCenter(GShape shape) {
+	public Vector2D findCenter(GShape shape) {
 		Polygon2D findCenter = new Polygon2D();
 		for (Edge e : shape.getEdges())
-			findCenter.add(e.getV1().copy());
-		Vec2D center = findCenter.getCentroid();
+			findCenter.add(e.getV1().copy().getVec2D());
+		Vector2D center = new Vector2D(findCenter.getCentroid());
 		return center;
 	}
 
@@ -259,40 +260,40 @@ public class Cutout implements Drawable2D, Serializable {
 	 * @param mousePosition the current position of the mouse
 	 * @return true, if mouse is above cut-out/line
 	 */
-	public boolean mouseOver(Vec2D mousePosition) {
-		Vec2D mid1 = findCenter(slave).add(master.getPosition2D()).add(
+	public boolean mouseOver(Vector2D mousePosition) {
+		Vector2D mid1 = findCenter(slave).add(master.getPosition2D()).add(
 				this.position);
-		Vec2D mid2 = findCenter(slave).add(slave.getPosition2D());
+		Vector2D mid2 = findCenter(slave).add(slave.getPosition2D());
 
 		// create a vector that is perpendicular to the connections line
-		Vec2D perpendicularVector = mid1.sub(mid2).perpendicular()
+		Vector2D perpendicularVector = mid1.sub(mid2).perpendicular()
 				.getNormalizedTo(boundingBoxSize);
 
 		// with the perpendicular vector, calculate the defining points of a
 		// rectangle around the connections line
 		ArrayList<Vec2D> definingPoints = new ArrayList<Vec2D>();
-		for (Vec2D v : getVectors()) {
-			definingPoints.add(v.add(master.getPosition2D()));
+		for (Vector2D v : getVectors()) {
+			definingPoints.add(v.add(master.getPosition2D()).getVec2D());
 		}
 
 		ArrayList<Vec2D> definingPointsLine = new ArrayList<Vec2D>();
 		definingPointsLine.add(mid1.sub(perpendicularVector).scale(
-				scalingFactor));
+				scalingFactor).getVec2D());
 		definingPointsLine.add(mid2.sub(perpendicularVector).scale(
-				scalingFactor));
+				scalingFactor).getVec2D());
 		definingPointsLine.add(mid2.add(perpendicularVector).scale(
-				scalingFactor));
+				scalingFactor).getVec2D());
 		definingPointsLine.add(mid1.add(perpendicularVector).scale(
-				scalingFactor));
+				scalingFactor).getVec2D());
 
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
-		if (borders.containsPoint(mousePosition)) {
+		if (borders.containsPoint(mousePosition.getVec2D())) {
 			return true;
 		} else {
 			borders = new Polygon2D(definingPointsLine);
 			// check if the mousePointer is within the created rectangle
-			return borders.containsPoint(mousePosition.scale(scalingFactor));
+			return borders.containsPoint(mousePosition.scale(scalingFactor).getVec2D());
 		}
 	}
 

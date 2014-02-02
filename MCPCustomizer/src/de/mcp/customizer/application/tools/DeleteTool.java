@@ -1,13 +1,14 @@
 package de.mcp.customizer.application.tools;
 
 import processing.core.PConstants;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Cutout;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 
 /**
  * The DeleteTool is used to Delete a Shape, Connection or Cutout
@@ -15,7 +16,7 @@ import de.mcp.customizer.model.primitives.Shape;
 public class DeleteTool extends Tool {
     
     boolean dragging;
-    Vec2D originalMousePosition;
+    Vector2D originalMousePosition;
     
     /**
      * @param customizer the main class of the project
@@ -25,10 +26,10 @@ public class DeleteTool extends Tool {
     	super(customizer, container, "Delete.svg");
     	
         this.dragging = false;
-        this.originalMousePosition = new Vec2D(0,0);
+        this.originalMousePosition = new Vector2D(0,0);
     }
    
-    public void mouseButtonPressed(Vec2D position, int button)
+    public void mouseButtonPressed(Vector2D position, int button)
     {
         for(Shape s : this.objectContainer.allShapes()) {
         	if (this.inView(position) && s.getGShape().isSelected() && button == PConstants.LEFT)
@@ -78,16 +79,16 @@ public class DeleteTool extends Tool {
     	}        
     }
 
-    public void mouseButtonReleased(Vec2D position, int button)
+    public void mouseButtonReleased(Vector2D position, int button)
     {
         // nothing to do here
     }
     
-    public void mouseMoved(Vec2D position)
+    public void mouseMoved(Vector2D position)
     {
         if (this.inView(position))
         {
-            Vec2D relativePosition = this.positionRelativeToView(position);
+            Vector2D relativePosition = this.positionRelativeToView(position);
 	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 

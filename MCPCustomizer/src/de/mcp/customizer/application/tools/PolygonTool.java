@@ -6,20 +6,21 @@ import java.util.List;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.model.shapes.PolygonShape;
 import de.mcp.customizer.view.Transformation;
 
 public class PolygonTool extends Tool {
 	
-	private List<Vec2D> vertices;
+	private List<Vector2D> vertices;
 	
-	private Vec2D lastKnownMousePositon;
+	private Vector2D lastKnownMousePositon;
 	private float scalingFactor, boundingBoxSize;
 
 
@@ -28,12 +29,12 @@ public class PolygonTool extends Tool {
 	}
 	
 	@Override
-	public void mouseButtonPressed(Vec2D position, int button) {
+	public void mouseButtonPressed(Vector2D position, int button) {
 
 	}
 
 	@Override
-	public void mouseButtonReleased(Vec2D position, int button) {
+	public void mouseButtonReleased(Vector2D position, int button) {
 
 		if (!inView(position))
 			return;
@@ -43,7 +44,7 @@ public class PolygonTool extends Tool {
 			this.customizer.displayStatus("Shape finished! If you want to create another shape, click the left mousebutton anywhere on the 2D view");
 			Shape newShape = new PolygonShape(this.vertices, new Vec3D());
 			this.objectContainer.addShape(newShape);
-			this.vertices = new ArrayList<Vec2D>();			
+			this.vertices = new ArrayList<Vector2D>();			
 		}
 		else
 		{
@@ -51,18 +52,18 @@ public class PolygonTool extends Tool {
 			vertices.add(this.lastKnownMousePositon);			
 		}
 		if (button == PConstants.RIGHT) {
-			this.vertices = new ArrayList<Vec2D>();
+			this.vertices = new ArrayList<Vector2D>();
 		}
 	}
 	
 	private boolean mouseOverCloseShape()
 	{
-		Rect closeShapeRect = new Rect(vertices.get(0).add(-boundingBoxSize,-boundingBoxSize), vertices.get(0).add(boundingBoxSize,boundingBoxSize));
-		return closeShapeRect.containsPoint(this.lastKnownMousePositon);
+		Rect closeShapeRect = new Rect(vertices.get(0).add(-boundingBoxSize,-boundingBoxSize).getVec2D(), vertices.get(0).add(boundingBoxSize,boundingBoxSize).getVec2D());
+		return closeShapeRect.containsPoint(this.lastKnownMousePositon.getVec2D());
 	}
 	
 	@Override
-	public void mouseMoved(Vec2D position) {
+	public void mouseMoved(Vector2D position) {
 		this.lastKnownMousePositon = this.positionRelativeToView(position);
         this.customizer.displayMousePosition(lastKnownMousePositon.scale(0.1f));
 	}
@@ -102,7 +103,7 @@ public class PolygonTool extends Tool {
 	@Override
 	public void wasSelected() {
 		this.customizer.displayStatus("To start drawing a shape, click the left mousebutton anywhere on the 2D view");
-		this.vertices = new ArrayList<Vec2D>();
+		this.vertices = new ArrayList<Vector2D>();
 		super.wasSelected();
 	}
 	

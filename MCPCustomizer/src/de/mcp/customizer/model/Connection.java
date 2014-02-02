@@ -7,11 +7,13 @@ import java.util.List;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.GShape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
@@ -97,8 +99,8 @@ public class Connection implements Drawable2D, Serializable
 		scalingFactor = t.getScale();
 		boundingBoxSize = 4 / scalingFactor;
 		
-		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D()).scale(scalingFactor);
-		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getGShape().getPosition2D()).scale(scalingFactor);
+		Vector2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D()).scale(scalingFactor);
+		Vector2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getGShape().getPosition2D()).scale(scalingFactor);
 		if (this.isSelected)
 		{
 			p.stroke(255, 0, 0);
@@ -139,26 +141,26 @@ public class Connection implements Drawable2D, Serializable
 	 * @param mousePosition The position of the mouse
 	 * @return true if the given mousePosition is within the rectangle created around the connection
 	 */
-	public boolean mouseOver(Vec2D mousePosition)
+	public boolean mouseOver(Vector2D mousePosition)
 	{
-		Vec2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D());
-		Vec2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getGShape().getPosition2D());
+		Vector2D mid1 = this.getMasterEdge().getMid().add(getMasterEdge().getGShape().getPosition2D());
+		Vector2D mid2 = this.getSlaveEdge().getMid().add(getSlaveEdge().getGShape().getPosition2D());
 
 		// create a vector that is perpendicular to the connections line
-		Vec2D perpendicularVector = mid1.sub(mid2).perpendicular().getNormalizedTo(boundingBoxSize);
+		Vector2D perpendicularVector = mid1.sub(mid2).perpendicular().getNormalizedTo(boundingBoxSize);
 
 		// with the perpendicular vector, calculate the defining points of a rectangle around the connections line
 		ArrayList<Vec2D> definingPoints = new ArrayList<Vec2D>();
-		definingPoints.add(mid1.sub(perpendicularVector).scale(scalingFactor));
-		definingPoints.add(mid2.sub(perpendicularVector).scale(scalingFactor));
-		definingPoints.add(mid2.add(perpendicularVector).scale(scalingFactor));
-		definingPoints.add(mid1.add(perpendicularVector).scale(scalingFactor));
+		definingPoints.add(mid1.sub(perpendicularVector).scale(scalingFactor).getVec2D());
+		definingPoints.add(mid2.sub(perpendicularVector).scale(scalingFactor).getVec2D());
+		definingPoints.add(mid2.add(perpendicularVector).scale(scalingFactor).getVec2D());
+		definingPoints.add(mid1.add(perpendicularVector).scale(scalingFactor).getVec2D());
 
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
 
 		// check if the mousePointer is within the created rectangle
-		return borders.containsPoint(mousePosition.scale(scalingFactor));
+		return borders.containsPoint(mousePosition.scale(scalingFactor).getVec2D());
 	}
 
 	/**

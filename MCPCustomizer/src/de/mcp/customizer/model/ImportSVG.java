@@ -2,8 +2,10 @@ package de.mcp.customizer.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.model.shapes.PolygonShape;
 import processing.core.PApplet;
 import toxi.geom.Polygon2D;
@@ -71,10 +73,16 @@ public class ImportSVG extends PApplet {
 		for (Shape original : newShapes) {
 			for (Shape possibleCutout : newShapes) {
 				boolean isCutout = true;
-				Polygon2D formOriginal = new Polygon2D(original.getGShape().getVertices());
-				Vec2D offset = possibleCutout.getGShape().getPosition2D().sub(original.getGShape().getPosition2D());
-				for (Vec2D v : possibleCutout.getGShape().getVertices()) {
-					if(!formOriginal.containsPoint(v.add(offset))) {
+				
+				List<Vec2D> vec2DVertices = new ArrayList<Vec2D>();
+				for(Vector2D vertex : original.getGShape().getVertices()) {
+					vec2DVertices.add(vertex.getVec2D());
+				}
+				
+				Polygon2D formOriginal = new Polygon2D(vec2DVertices);
+				Vector2D offset = possibleCutout.getGShape().getPosition2D().sub(original.getGShape().getPosition2D());
+				for (Vector2D v : possibleCutout.getGShape().getVertices()) {
+					if(!formOriginal.containsPoint(v.add(offset).getVec2D())) {
 						isCutout = false;
 					}
 				}
@@ -93,7 +101,7 @@ public class ImportSVG extends PApplet {
 	 *            number of path in the list of paths
 	 */
 	private Shape createShapeFromPath(int i) {
-		ArrayList<Vec2D> path = new ArrayList<Vec2D>();
+		ArrayList<Vector2D> path = new ArrayList<Vector2D>();
 		float MinX = Integer.MAX_VALUE;
 		float MinY = Integer.MAX_VALUE;
 		for (int j = 0; j < pointPaths[i].length; j++) {
@@ -103,7 +111,7 @@ public class ImportSVG extends PApplet {
 		Vec3D position = new Vec3D(MinX * scalingInkscape, MinY * scalingInkscape,
 				0);
 		for (int j = 0; j < pointPaths[i].length; j++) {
-			path.add(new Vec2D((pointPaths[i][j].x) * scalingInkscape
+			path.add(new Vector2D((pointPaths[i][j].x) * scalingInkscape
 					- position.x(), (pointPaths[i][j].y) * scalingInkscape
 					- position.y()));
 		}

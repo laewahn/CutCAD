@@ -1,13 +1,14 @@
 package de.mcp.customizer.view;
+import de.mcp.customizer.model.primitives.Vector2D;
 import processing.core.PGraphics;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 
 public class Transformation
 {
     protected float scale;
-    protected Vec2D translation;
+    protected Vector2D translation;
 
-    public Transformation(float scale, Vec2D translation)
+    public Transformation(float scale, Vector2D translation)
     {
         this.scale = scale;
         this.translation = translation;
@@ -24,7 +25,7 @@ public class Transformation
         return this.scale;
     }
 
-    public Vec2D getTranslation()
+    public Vector2D getTranslation()
     {
         return this.translation;
     }
@@ -41,7 +42,7 @@ public class Transformation
         if (this.scale < 0) this.scale = 0;
     }
 
-    public void translate(Vec2D v)
+    public void translate(Vector2D v)
     {
         this.translation.subSelf(v);
     }

@@ -8,10 +8,11 @@ import java.util.List;
 
 import de.mcp.customizer.model.primitives.Cutout;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
 import processing.data.XML;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 
 /**
  * Represents a single plate of a certain material.
@@ -169,14 +170,14 @@ public class PrintSubInstance {
 		final float scaleFactor = (float)dpi/25.4f;
 		for(int i = 0; i < shapesPlaced.size(); i++) {
 			
-			List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
-			List<Vec2D> newVertices = new ArrayList<Vec2D>();
+			List<Vector2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
+			List<Vector2D> newVertices = new ArrayList<Vector2D>();
 			
 			for(int j = 0; j < vertices.size(); j++) {
-				newVertices.add(new Vec2D(vertices.get(j)));
+				newVertices.add(new Vector2D(vertices.get(j)));
 			}
 			
-			Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
+			Vector2D position = shapesPlaced.get(i).getGShape().getPosition2D();
 			
 			for(int j = 0; j < newVertices.size(); j++) {
 				newVertices.get(j).set((newVertices.get(j).getComponent(0)+position.getComponent(0))*scaleFactor,(newVertices.get(j).getComponent(1)+position.getComponent(1))*scaleFactor);
@@ -267,8 +268,8 @@ public class PrintSubInstance {
 	  
 		for(int i = 0; i < shapesPlaced.size(); i++) {
 		  
-			List<Vec2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
-			Vec2D position = shapesPlaced.get(i).getGShape().getPosition2D();
+			List<Vector2D> vertices = shapesPlaced.get(i).getGShape().getVertices();
+			Vector2D position = shapesPlaced.get(i).getGShape().getPosition2D();
 		  
 			for(int j = 0; j < vertices.size(); j++) {
 			  

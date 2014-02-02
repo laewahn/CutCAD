@@ -5,8 +5,9 @@ import java.util.ArrayList;
 
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.primitives.Vector2D;
 import toxi.geom.Rect;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 /**
@@ -19,7 +20,7 @@ public class Rectangle extends Shape implements Serializable {
 	private int sizeX, sizeY;
 	private static int counter = 0;
 	private GShape basic;
-	private ArrayList<Vec2D> basicShape;
+	private ArrayList<Vector2D> basicShape;
 
 	/**
 	 *        Creates a rectangle. Automatic generation of a individual name by
@@ -35,11 +36,11 @@ public class Rectangle extends Shape implements Serializable {
 	public Rectangle(Vec3D position, int sizeX, int sizeY) {
 		this.sizeX = (sizeX / 10) * 10;
 		this.sizeY = (sizeY / 10) * 10;
-		basicShape = new ArrayList<Vec2D>();
-		basicShape.add(new Vec2D(0, 0));
-		basicShape.add(new Vec2D(sizeX, 0));
-		basicShape.add(new Vec2D(sizeX, sizeY));
-		basicShape.add(new Vec2D(0, sizeY));
+		basicShape = new ArrayList<Vector2D>();
+		basicShape.add(new Vector2D(0, 0));
+		basicShape.add(new Vector2D(sizeX, 0));
+		basicShape.add(new Vector2D(sizeX, sizeY));
+		basicShape.add(new Vector2D(0, sizeY));
 		basic = new GShape(basicShape, position, this);
 		basic.setName("Rectangle " + counter);
 		counter++;
@@ -103,9 +104,9 @@ public class Rectangle extends Shape implements Serializable {
 	 * Recalculates the vectors of the rectangle based on the input parameter
 	 */
 	public void recalculate() {
-		basicShape.set(1, new Vec2D(sizeX, 0));
-		basicShape.set(2, new Vec2D(sizeX, sizeY));
-		basicShape.set(3, new Vec2D(0, sizeY));
+		basicShape.set(1, new Vector2D(sizeX, 0));
+		basicShape.set(2, new Vector2D(sizeX, sizeY));
+		basicShape.set(3, new Vector2D(0, sizeY));
 		basic.recalculate(basicShape);
 	}
 
@@ -145,7 +146,7 @@ public class Rectangle extends Shape implements Serializable {
 	 * @param newSize
 	 *            Length and Height of the rectangle (0.1mm)
 	 */
-	public void setSize(Vec2D newSize) {
+	public void setSize(Vector2D newSize) {
 		this.sizeX = ((int) newSize.x() / 10) * 10;
 		this.sizeY = ((int) newSize.y() / 10) * 10;
 		recalculate();
@@ -176,7 +177,7 @@ public class Rectangle extends Shape implements Serializable {
 	 *            position of the mouse
 	 * @return true, if mouse is over shape
 	 */
-	public boolean mouseOver(Vec2D mousePosition) {
+	public boolean mouseOver(Vector2D mousePosition) {
 		return this.basic.mouseOver(mousePosition);
 	}
 

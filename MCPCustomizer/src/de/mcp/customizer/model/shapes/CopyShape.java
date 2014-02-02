@@ -4,7 +4,8 @@ import java.util.List;
 
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
-import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
+import de.mcp.customizer.model.primitives.Vector2D;
 
 /**
  * Makes a copy of an existing shape
@@ -13,8 +14,8 @@ public class CopyShape extends Shape {
 	
 	private static final long serialVersionUID = 246039777844934399L;
 	
-	private List<Vec2D> basicShape;
-	private Vec2D position;
+	private List<Vector2D> basicShape;
+	private Vector2D position;
 	private GShape basic;
 	private static int counter = 0;
 
@@ -31,7 +32,7 @@ public class CopyShape extends Shape {
 	 *            Name of the original shape will be modified with a "Copy"
 	 *            string before
 	 */
-	public CopyShape(List<Vec2D> list, Vec2D position, String name) {
+	public CopyShape(List<Vector2D> list, Vector2D position, String name) {
 		this.basicShape = list;
 		this.position = position;
 		this.basic = new GShape(list, position.to3DXY(), this);

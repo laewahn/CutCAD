@@ -16,6 +16,7 @@ import processing.core.PGraphics;
 import toxi.geom.Line2D;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 /**
@@ -28,10 +29,10 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	private static final long serialVersionUID = -328360113782680890L;
 	
 	private int numberOfConnections;
-	private Vec2D position2D;
+	private Vector2D position2D;
 	private Vec3D position3D;
 	private boolean isSelected, isActive;
-	private List<Vec2D> vertices;
+	private List<Vector2D> vertices;
 	private List<Vec3D> vertices3D;
 	private List<Cutout> cutouts = new ArrayList<Cutout>();
 	private List<Edge> edges;
@@ -48,8 +49,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param position of this form in 3D
 	 * @param shape type of form, to which this form belong
 	 */
-	public GShape(List<Vec2D> initVertices, Vec3D position, Shape shape) {
-		this.position2D = position.to2DXY();
+	public GShape(List<Vector2D> initVertices, Vec3D position, Shape shape) {
+		this.position2D = new Vector2D(position.to2DXY());
 		this.position3D = position;
 		this.isSelected = false;
 		this.isActive = false;
@@ -61,7 +62,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 		edges = new ArrayList<Edge>();
 		vertices3D = new ArrayList<Vec3D>();
 
-		for (Vec2D v : vertices) {
+		for (Vector2D v : vertices) {
 			vertices3D.add(v.add(position2D).to3DXY());
 		}
 		for (int i = 0; i < vertices.size(); i++) {
@@ -110,13 +111,13 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * Recalculate form (edges) of the shape, if the form of its parent shape is modified
 	 * @param basicShape changed form in 2D
 	 */
-	public void recalculate(List<Vec2D> basicShape) {
+	public void recalculate(List<Vector2D> basicShape) {
 		if (this.numberOfConnections == 0) {
 			vertices = basicShape;
 			edges.clear();
 			vertices3D.clear();
 
-			for (Vec2D v : vertices) {
+			for (Vector2D v : vertices) {
 				vertices3D.add(v.add(position2D).to3DXY());
 			}
 			for (int i = 0; i < vertices.size(); i++) {
@@ -200,7 +201,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return all corners of a form
 	 */
-	public List<Vec2D> getVertices() {
+	public List<Vector2D> getVertices() {
 		return this.vertices;
 	}
 
@@ -267,8 +268,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 
 	private List<Vec2D> getVerticesIncludingPosition2D() {
 		ArrayList<Vec2D> vectors = new ArrayList<Vec2D>();
-		for (Vec2D v : this.getVertices()) {
-			vectors.add(v.add(this.position2D));
+		for (Vector2D v : this.getVertices()) {
+			vectors.add(v.add(this.position2D).getVec2D());
 		}
 		return vectors;
 	}
@@ -280,7 +281,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param edge which (first) point should be corrected
 	 * @return corrected start point for this edge (and the last point of its predecessor)
 	 */
-	private Vec2D correctIntersection(Edge edge) {
+	private Vector2D correctIntersection(Edge edge) {
 		int index = edges.indexOf(edge);
 
 		index = (index == 0) ? edges.size() - 1 : index - 1;
@@ -288,24 +289,24 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 		Edge edge1 = edges.get(index);
 		Edge edge2 = edge;
 
-		Vec2D firstVectorOfEdge1 = edge1.getTenons().get(0);
-		Vec2D secondVectorOfEdge1 = edge1.getTenons().get(1);
-		Vec2D firstVectorOfEdge2 = edge2.getTenons().get(1);
-		Vec2D secondVectorOfEdge2 = edge2.getTenons().get(0);
+		Vector2D firstVectorOfEdge1 = edge1.getTenons().get(0);
+		Vector2D secondVectorOfEdge1 = edge1.getTenons().get(1);
+		Vector2D firstVectorOfEdge2 = edge2.getTenons().get(1);
+		Vector2D secondVectorOfEdge2 = edge2.getTenons().get(0);
 
-		Line2D firstTenonOfEdge1 = new Line2D(firstVectorOfEdge1,
-				secondVectorOfEdge1);
+		Line2D firstTenonOfEdge1 = new Line2D(firstVectorOfEdge1.getVec2D(),
+				secondVectorOfEdge1.getVec2D());
 		firstTenonOfEdge1 = firstTenonOfEdge1.toRay2D()
 				.toLine2DWithPointAtDistance(10000);
-		Line2D firstTenonOfEdge2 = new Line2D(firstVectorOfEdge2,
-				secondVectorOfEdge2);
+		Line2D firstTenonOfEdge2 = new Line2D(firstVectorOfEdge2.getVec2D(),
+				secondVectorOfEdge2.getVec2D());
 		firstTenonOfEdge2 = firstTenonOfEdge2.toRay2D()
 				.toLine2DWithPointAtDistance(10000);
 
 		if (String.valueOf(
 				firstTenonOfEdge1.intersectLine(firstTenonOfEdge2).getType())
 				.equals("INTERSECTING")) {
-			return firstTenonOfEdge1.intersectLine(firstTenonOfEdge2).getPos();
+			return new Vector2D(firstTenonOfEdge1.intersectLine(firstTenonOfEdge2).getPos());
 		}
 		return firstVectorOfEdge2;
 	}
@@ -313,8 +314,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return outline of the form in 2D space
 	 */
-	public ArrayList<Vec2D> getTenons() {
-		ArrayList<Vec2D> allVectors = new ArrayList<Vec2D>();
+	public ArrayList<Vector2D> getTenons() {
+		ArrayList<Vector2D> allVectors = new ArrayList<Vector2D>();
 		for (Edge e : edges) {
 
 			allVectors.add(correctIntersection(e));
@@ -342,7 +343,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @return outline of the form in 3D
 	 */
 	private ArrayList<Vec3D> transformTo3D(boolean isTop,
-			ArrayList<Vec2D> vectors2D) {
+			ArrayList<Vector2D> vectors2D) {
 		// Use the algorithm for connecting two shapes to align logical 2D and
 		// 3D view
 		// Therefore produce a new GShape with the 2D positions (for the 3D
@@ -391,7 +392,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
 
 		// Now we know everything, apply the same Translations to the outline
-		// Vec2D array
+		// Vector2D array
 		// Translated by thickness/2 to top or bottom
 		int offsetZ;
 		if (isTop) {
@@ -401,7 +402,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 		}
 
 		ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
-		for (Vec2D v : vectors2D) {
+		for (Vector2D v : vectors2D) {
 			vectors3D.add(v.to3DXY().add(position3D)
 					.addSelf(new Vec3D(0, 0, offsetZ)));
 		}
@@ -464,15 +465,15 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param v2 second vector
 	 * @return perpendicular vector
 	 */
-	public Vec2D get2Dperpendicular(Vec2D v1, Vec2D v2) {
-		for (Vec2D v3 : vertices) {
+	public Vector2D get2Dperpendicular(Vector2D v1, Vector2D v2) {
+		for (Vector2D v3 : vertices) {
 			if (!v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY()).isZeroVector()) {
 				Vec3D normal = v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY());
-				return normal.cross((v2.sub(v1)).to3DXY()).invert()
-						.add(v1.to3DXY()).normalize().to2DXY();
+				return new Vector2D(normal.cross((v2.sub(v1)).to3DXY()).invert()
+						.add(v1.to3DXY()).normalize().to2DXY());
 			}
 		}
-		return new Vec2D(0, 1);
+		return new Vector2D(0, 1);
 	}
 
 	/**
@@ -496,7 +497,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return position of the object in 2D space
 	 */
-	public Vec2D getPosition2D() {
+	public Vector2D getPosition2D() {
 		return this.position2D;
 	}
 
@@ -534,7 +535,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 */
 	public void scale2D(float scaleFactor) {
 		this.position2D = this.position2D.scale(scaleFactor);
-		ArrayList<Vec2D> newVertices = new ArrayList<Vec2D>();
+		ArrayList<Vector2D> newVertices = new ArrayList<Vector2D>();
 		for (int i = 0; i < this.vertices.size(); i++) {
 			newVertices.add(this.vertices.get(i).scale(scaleFactor));
 		}
@@ -552,7 +553,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * 
 	 * @param position new position of the form
 	 */
-	public void setPosition2D(Vec2D position) {
+	public void setPosition2D(Vector2D position) {
 		this.position2D = position;
 	}
 
@@ -560,7 +561,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * 
 	 * @param direction how the form should be moved in the 2D space
 	 */
-	public void translate2D(Vec2D direction) {
+	public void translate2D(Vector2D direction) {
 		this.position2D.addSelf(direction);
 	}
 
@@ -645,7 +646,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param p where to draw
 	 * @param vectors outline of the form
 	 */
-	private void createSides(PGraphics p, ArrayList<Vec2D> vectors) {
+	private void createSides(PGraphics p, ArrayList<Vector2D> vectors) {
 		this.setFillColor(p);
 		ArrayList<Vec3D> top = transformTo3D(true, vectors);
 		ArrayList<Vec3D> bottom = transformTo3D(false, vectors);
@@ -711,20 +712,20 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param vectors outline of the form
 	 * @param position of the form
 	 */
-	private void createCover2D(PGraphics p, ArrayList<Vec2D> vectors,
-			Vec2D position) {
+	private void createCover2D(PGraphics p, ArrayList<Vector2D> vectors,
+			Vector2D position) {
 		this.setFillColor(p);
 		p.beginShape();
-		for (Vec2D vector : getTenons()) {
-			Vec2D scaledPosition = vector.add(getPosition2D()).scale(
+		for (Vector2D vector : getTenons()) {
+			Vector2D scaledPosition = vector.add(getPosition2D()).scale(
 					scalingFactor);
 			p.vertex(scaledPosition.x(), scaledPosition.y());
 		}
 
 		for (Cutout cutout : cutouts) {
 			p.beginContour();
-			for (Vec2D vector : cutout.getVectors()) {
-				Vec2D scaledPosition = vector.add(getPosition2D()).scale(
+			for (Vector2D vector : cutout.getVectors()) {
+				Vector2D scaledPosition = vector.add(getPosition2D()).scale(
 						scalingFactor);
 				p.vertex(scaledPosition.x(), scaledPosition.y());
 			}
@@ -757,9 +758,15 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param mousePosition the current mouse position
 	 * @return true, if mouse is above cut-out/line
 	 */
-	public boolean mouseOver(Vec2D mousePosition) {
-		Polygon2D test = new Polygon2D((List<Vec2D>) vertices);
-		return test.containsPoint(mousePosition.sub(position2D));
+	public boolean mouseOver(Vector2D mousePosition) {
+		List<Vec2D> vec2DList = new ArrayList<Vec2D>();
+		
+		for(Vector2D vertex : vertices) {
+			vec2DList.add(vertex.getVec2D());
+		}
+		
+		Polygon2D test = new Polygon2D(vec2DList);
+		return test.containsPoint(mousePosition.sub(position2D).getVec2D());
 	}
 
 	/**

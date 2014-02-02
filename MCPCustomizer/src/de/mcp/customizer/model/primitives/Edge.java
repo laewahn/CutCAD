@@ -11,6 +11,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
+//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 /**
@@ -23,14 +24,14 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	
 	private GShape gShape; // know parent
 	private Vec3D p3D1, p3D2; // 3D logic
-	private Vec2D v1, v2; // 2D logic
-	private ArrayList<Vec2D> tenons; // 2D representation
+	private Vector2D v1, v2; // 2D logic
+	private ArrayList<Vector2D> tenons; // 2D representation
 	private float scalingFactor, scalingFactor3D, boundingBoxSize;
 	private boolean isHighlighted, isLocked, isSelected;
-	ArrayList<Vec2D> definingPoints; // highlighting area for selecting an edge
+	transient ArrayList<Vec2D> definingPoints; // highlighting area for selecting an edge
 
 	/**
-	 *        Create a edge - the outline (Arraylist of Vec2D) is automatically
+	 *        Create a edge - the outline (Arraylist of Vector2D) is automatically
 	 *        build (at the beginning just the start- and end-point in 2D)
 	 * 
 	 * @param shape
@@ -44,7 +45,7 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	 * @param v2
 	 *            end point in 2D (0.1mm)
 	 */
-	public Edge(GShape gShape, Vec3D p3D1, Vec3D p3D2, Vec2D v1, Vec2D v2) {
+	public Edge(GShape gShape, Vec3D p3D1, Vec3D p3D2, Vector2D v1, Vector2D v2) {
 		this.gShape = gShape;
 		this.p3D1 = p3D1;
 		this.p3D2 = p3D2;
@@ -101,14 +102,14 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return Get start point of the edge (in the 2D view) (0.1mm)
 	 */
-	public Vec2D getV1() {
+	public Vector2D getV1() {
 		return this.v1;
 	}
 
 	/**
 	 * @return get end point of the edge (in the 2D view)
 	 */
-	public Vec2D getV2() {
+	public Vector2D getV2() {
 		return this.v2;
 	}
 
@@ -127,9 +128,9 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	}
 
 	/**
-	 * @return get outline of the edge as a List of Vec2D
+	 * @return get outline of the edge as a List of Vector2D
 	 */
-	public ArrayList<Vec2D> getTenons() {
+	public ArrayList<Vector2D> getTenons() {
 		return tenons;
 	}
 
@@ -157,14 +158,14 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @param v set start point of the edge (in the 2D view)
 	 */
-	public void setV1(Vec2D v) {
+	public void setV1(Vector2D v) {
 		this.getV1().set(v);
 	}
 
 	/**
 	 * @param v set end point of the edge (in the 2D view)
 	 */
-	public void setV2(Vec2D v) {
+	public void setV2(Vector2D v) {
 		this.getV2().set(v);
 	}
 
@@ -174,7 +175,7 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	 * @param tenons
 	 *            List of corner points of the outline
 	 */
-	public void setTenons(ArrayList<Vec2D> tenons) {
+	public void setTenons(ArrayList<Vector2D> tenons) {
 		this.tenons = tenons;
 	}
 
@@ -266,8 +267,8 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return mid point of the edge
 	 */
-	public Vec2D getMid() {
-		return new Vec2D((this.getV1().x() + this.getV2().x()) / 2, (this
+	public Vector2D getMid() {
+		return new Vector2D((this.getV1().x() + this.getV2().x()) / 2, (this
 				.getV1().y() + this.getV2().y()) / 2);
 	}
 
@@ -283,27 +284,27 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	// usability
 	// since the user would have to precisely point to a line that is one pixel
 	// wide.
-	public boolean mouseOver(Vec2D mousePosition) {
+	public boolean mouseOver(Vector2D mousePosition) {
 		createBorderBox();
 		// create a rectangle around the edge
 		Polygon2D borders = new Polygon2D(definingPoints);
 
 		// check if the mousePointer is within the created rectangle
-		return borders.containsPoint(mousePosition.scale(scalingFactor));
+		return borders.containsPoint(mousePosition.scale(scalingFactor).getVec2D());
 	}
 	
 	private void createBorderBox() {
-		Vec2D perpendicularVector = this.getV2().sub(this.getV1())
+		Vector2D perpendicularVector = this.getV2().sub(this.getV1())
 				.perpendicular().getNormalizedTo(boundingBoxSize);
 		definingPoints = new ArrayList<Vec2D>();
 		definingPoints.add(this.getV1().sub(perpendicularVector)
-				.add(getGShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor).getVec2D());
 		definingPoints.add(this.getV2().sub(perpendicularVector)
-				.add(getGShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor).getVec2D());
 		definingPoints.add(this.getV2().add(perpendicularVector)
-				.add(getGShape().getPosition2D()).scale(scalingFactor));
+				.add(getGShape().getPosition2D()).scale(scalingFactor).getVec2D());
 		definingPoints.add(this.getV1().add(perpendicularVector)
-				.add(getGShape().getPosition2D()).scale(scalingFactor));	
+				.add(getGShape().getPosition2D()).scale(scalingFactor).getVec2D());	
 	}
 
 	/**
@@ -319,7 +320,7 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	public void scale2D(float scaleFactor) {
 		this.v1 = v1.scale(scaleFactor);
 		this.v2 = v2.scale(scaleFactor);
-		ArrayList<Vec2D> newTenons = new ArrayList<Vec2D>();
+		ArrayList<Vector2D> newTenons = new ArrayList<Vector2D>();
 		for (int i = 0; i < tenons.size(); i++) {
 			newTenons.add(this.tenons.get(i).scale(scaleFactor));
 		}
