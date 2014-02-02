@@ -12,11 +12,11 @@ import de.mcp.customizer.model.shapes.Rectangle;
 import static java.lang.System.*;
 
 /**
- * @brief Rotates two shapes until two edges of them are at the same position
+ * Rotates two shapes until two edges of them are at the same position
  * 
  * Rotates two shapes until two edges are at the same position - the edges need
  * to have a common point and both of them are already connected. The already
- * conencted edges need to have at least one common point (same as the edges,
+ * connected edges need to have at least one common point (same as the edges,
  * which should be rotated) and one of them has to have only one connection
  * (such that a rotation is still possible)
  * 
@@ -33,7 +33,7 @@ public class RotateAdjectantShapes {
 	private static Vec3D intersectionPoint = new Vec3D(0, 0, 0);
 
 	/**
-	 * @brief Rotates two edges with a common point until the other is common,
+	 *        Rotates two edges with a common point until the other is common,
 	 *        too
 	 * 
 	 *        Two edges on different shapes, which have one common point, at
@@ -47,7 +47,7 @@ public class RotateAdjectantShapes {
 	 *        both edges will describe by rotating around their rotating axis,
 	 *        and then again tries to rotate (now both edges) until this
 	 *        position is reached (or stops , if it can't reach it). Works only
-	 *        if the roating edges have also a common point (the same as the two
+	 *        if the rotating edges have also a common point (the same as the two
 	 *        edges which should be connected)
 	 * 
 	 * @param connection
@@ -98,8 +98,8 @@ public class RotateAdjectantShapes {
 			boolean couldConnect = tryToConnectOneEdge(connection,
 					rotateEdgeSlaveOfConnectingShape, rotatingEdgeSlave, angle);
 			if (!couldConnect) {
-				connection.connectEdges(rotateEdgeSlaveOfConnectingShape,
-						rotatingEdgeSlave, (float) Math.PI);
+//				connection.connectEdges(rotateEdgeSlaveOfConnectingShape,
+//						rotatingEdgeSlave, (float) Math.PI);
 				return false;
 			}
 
@@ -118,8 +118,8 @@ public class RotateAdjectantShapes {
 					rotateEdgeMasterOfConnectingShape, rotatingEdgeMaster,
 					angle);
 			if (!couldConnect) {
-				connection.connectEdges(rotateEdgeMasterOfConnectingShape,
-						rotatingEdgeMaster, (float) Math.PI);
+//				connection.connectEdges(rotateEdgeMasterOfConnectingShape,
+//						rotatingEdgeMaster, (float) Math.PI);
 				return false;
 			}
 
@@ -148,10 +148,10 @@ public class RotateAdjectantShapes {
 					angleMasterB, rotateEdgeSlaveOfConnectingShape,
 					rotatingEdgeSlave, angleSlaveB);
 			if (!couldConnect) {
-				connection.connectEdges(rotateEdgeMasterOfConnectingShape,
-						rotatingEdgeMaster, (float) Math.PI);
-				connection.connectEdges(rotateEdgeSlaveOfConnectingShape,
-						rotatingEdgeSlave, (float) Math.PI);
+//				connection.connectEdges(rotateEdgeMasterOfConnectingShape,
+//						rotatingEdgeMaster, (float) Math.PI);
+//				connection.connectEdges(rotateEdgeSlaveOfConnectingShape,
+//						rotatingEdgeSlave, (float) Math.PI);
 				return false;
 			}
 
@@ -278,12 +278,12 @@ public class RotateAdjectantShapes {
 		// mirrored at the rotating edge. Both resulting points form a line
 		// perpendicular to the rotating edge, which is the projection
 		// of the circle on this plane, which is described through the rotation
-		// of the (master-)edge endpoint around the rotating axis.
+		// of the (master-)edge end point around the rotating axis.
 		Line3D intersectionLine1 = getIntersectionLine(edge1);
 		Line3D intersectionLine2 = getIntersectionLine(edge2);
 
 		// The intersection of both (circle-projection)lines is the projection
-		// of the point in the 3D space, where both endpoints of
+		// of the point in the 3D space, where both end points of
 		// master- and slaveShape will met by rotation
 		return intersectionLine1.closestLineTo(intersectionLine2).getLine()
 				.getMidPoint();
@@ -343,14 +343,14 @@ public class RotateAdjectantShapes {
 	 * Returns the angle, how the shape of edge has to be rotated until it is on
 	 * the correct position. It uses the projection of the intersection point on
 	 * the virtual shape to determine this intersection point in 3D space
-	 * (triangle formulas) an then compares the normalvector of the virtual
-	 * shape (= normalvector shape, because of the alignment) with the plane,
+	 * (triangle formulas) an then compares the normal vector of the virtual
+	 * shape (= normal vector shape, because of the alignment) with the plane,
 	 * which is made by the rotating axis and the edge between intersection
 	 * point and the common point of the two edges, which should be connected
 	 */
 	private static float getRotationFor(Edge edge) {
 		// To get the angles for the rotation, we can produce a line in the
-		// direction of the roating axis
+		// direction of the rotating axis
 		// and find intersection of this line with the above used
 		// circle-projection line and can compute the distance between
 		// this point and the previous computed intersection. This means: We
@@ -359,8 +359,8 @@ public class RotateAdjectantShapes {
 		// position and the rotating axis.
 		// If we look at the plane perpendicular to the rotating edge, the first
 		// corresponds to the opposite/adjacent of a triangle
-		// while the other one is the hypotenuse with opposite/adgjacent
-		// perpendicul/parallel to the base shapes
+		// while the other one is the hypotenuse with opposite/adjacent
+		// perpendicular/parallel to the base shapes
 		Line3D rotationAxis = new Line3D(getPointOfRotatingEdge(edge),
 				getCommonPoint(edge)).toRay3D().toLine3DWithPointAtDistance(
 				10000);

@@ -8,7 +8,7 @@ import de.mcp.customizer.model.primitives.Vector2D;
 import toxi.geom.Vec3D;
 
 /**
- * @brief Static class to calculate the outline (tenon structure) of an edge
+ *        Static class to calculate the outline (tenon structure) of an edge
  * 
  *        Can be used either for unconnected edges (one edge) or two connected
  *        edges so far. Uses the normal vectors of the shape, to whom these
@@ -23,7 +23,7 @@ public class CreateTenons {
 	private static int relationTenonToEdge = 4;
 
 	/**
-	 * @brief Calculates the outline of one (unconnected) edge
+	 *        Calculates the outline of one (unconnected) edge
 	 * 
 	 *        Calculates the outline of one (unconnected) edge - which is
 	 *        basically just the line between the two points of this edge in the
@@ -64,7 +64,7 @@ public class CreateTenons {
 	}
 
 	/**
-	 * @brief Calculates the outline of two (connected) edges
+	 *        Calculates the outline of two (connected) edges
 	 * 
 	 *        Calculates the outline of two (connected) edges - using the
 	 *        addition of the thicknesses of both shapes times a factor for the
