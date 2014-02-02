@@ -11,8 +11,8 @@ import toxi.geom.Vec3D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.PolygonShape;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.shapes.PolygonShape;
 import de.mcp.customizer.view.Transformation;
 
 public class PolygonTool extends Tool {

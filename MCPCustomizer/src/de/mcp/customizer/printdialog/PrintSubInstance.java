@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mcp.customizer.model.Cutout;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Cutout;
+import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
 import processing.data.XML;

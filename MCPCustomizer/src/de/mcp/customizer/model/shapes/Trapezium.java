@@ -1,37 +1,41 @@
-package de.mcp.customizer.model;
+package de.mcp.customizer.model.shapes;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
+import de.mcp.customizer.model.primitives.GShape;
+import de.mcp.customizer.model.primitives.Shape;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
 /**
- * Creates a rectangle as a shape
+ * Creates a trapezium as a shape
  */
-public class Rectangle extends Shape implements Serializable {
+public class Trapezium extends Shape {
 	
-	private static final long serialVersionUID = -6511783713655746647L;
+	private static final long serialVersionUID = 8534996513132236907L;
 	
-	private int sizeX, sizeY;
+	private int sizeXTop, sizeXBottom, sizeY;
 	private static int counter = 0;
 	private GShape basic;
 	private ArrayList<Vec2D> basicShape;
 
 	/**
-	 *        Creates a rectangle. Automatic generation of a individual name by
-	 *        a static counter of all instances
+	 *        Creates a trapezium. For the basic shape both upper and lower side
+	 *        have the same dimension, which result in a rectangle as special
+	 *        trapezium. Automatic generation of a individual name by a static counter
+	 *            of all instances
 	 * 
 	 * @param position
-	 *            Position within the coordinate system
+	 *            Position within the coordinate system(0.1mm)
 	 * @param sizeX
-	 *            Width of the rectangle (0.1mm)
+	 *            length of upper and lower side of the trapezium (0.1mm)
 	 * @param sizeY
-	 *            Length of the rectangle (0.1mm)
+	 *            length of the side of the trapezium (0.1mm)
 	 */
-	public Rectangle(Vec3D position, int sizeX, int sizeY) {
-		this.sizeX = (sizeX / 10) * 10;
+	public Trapezium(Vec3D position, int sizeX, int sizeY) {
+		this.sizeXTop = (sizeX / 10) * 10;
+		this.sizeXBottom = (sizeX / 10) * 10;
 		this.sizeY = (sizeY / 10) * 10;
 		basicShape = new ArrayList<Vec2D>();
 		basicShape.add(new Vec2D(0, 0));
@@ -39,7 +43,7 @@ public class Rectangle extends Shape implements Serializable {
 		basicShape.add(new Vec2D(sizeX, sizeY));
 		basicShape.add(new Vec2D(0, sizeY));
 		basic = new GShape(basicShape, position, this);
-		basic.setName("Rectangle " + counter);
+		basic.setName("Trapezium " + counter);
 		counter++;
 	}
 
@@ -50,7 +54,7 @@ public class Rectangle extends Shape implements Serializable {
 	 * @return Total number of controlled parameters
 	 */
 	public int getNumberOfControls() {
-		return 2;
+		return 3;
 	}
 
 	/**
@@ -63,7 +67,9 @@ public class Rectangle extends Shape implements Serializable {
 	 */
 	public int getValue(int index) {
 		if (index == 0)
-			return sizeX / 10;
+			return sizeXTop / 10;
+		else if (index == 1)
+			return sizeXBottom / 10;
 		else
 			return sizeY / 10;
 	}
@@ -75,8 +81,7 @@ public class Rectangle extends Shape implements Serializable {
 	 * @param index
 	 *            The number of the controlled parameter
 	 * 
-	 * @return Type of parameter (0 angle(0..360), 1 position(0..6000), 2
-	 *         position(-300..300), 3 number(3..16))
+	 * @return Type of parameter (0 angle(0..360), 1 position(0..6000), 2 position(-300..300), 3 number(3..16))
 	 */
 	public int getControlType(int index) {
 		return 1;
@@ -92,70 +97,84 @@ public class Rectangle extends Shape implements Serializable {
 	 */
 	public String getNameOfControl(int index) {
 		if (index == 0)
-			return "Width";
+			return "Top";
+		else if (index == 1)
+			return "Bottom";
 		else
-			return "Heigth";
-	}
-
-	/**
-	 * Recalculates the vectors of the rectangle based on the input parameter
-	 */
-	public void recalculate() {
-		basicShape.set(1, new Vec2D(sizeX, 0));
-		basicShape.set(2, new Vec2D(sizeX, sizeY));
-		basicShape.set(3, new Vec2D(0, sizeY));
-		basic.recalculate(basicShape);
+			return "Side";
 	}
 
 	/**
 	 * Change Parameter 1
 	 * 
 	 * @param size
-	 *            Width of the rectangle (0.1mm)
+	 *            Length of the top of the trapezium (0.1mm)
 	 */
 	public void setValue0(int size) {
-		this.sizeX = size * 10;
-		recalculate();
+		sizeXTop = size * 10;
+		this.recalculate();
 	}
 
 	/**
 	 * Change Parameter 2
 	 * 
 	 * @param size
-	 *            Height of the rectangle (0.1mm)
+	 *            Length of the bottom of the trapezium (0.1mm)
 	 */
 	public void setValue1(int size) {
-		this.sizeY = size * 10;
-		recalculate();
-	}
-
-	public int getSizeX() {
-		return sizeX;
-	}
-
-	public int getSizeY() {
-		return sizeY;
+		sizeXBottom = size * 10;
+		this.recalculate();
 	}
 
 	/**
-	 * Changes sizes of the rectangle
+	 * Change Parameter 3
+	 * 
+	 * @param size
+	 *            Length of the sides of the trapezium (0.1mm)
+	 */
+	public void setValue2(int size) {
+		sizeY = size * 10;
+		this.recalculate();
+	}
+
+	/**
+	 * Recalculates the vectors of the trapezium based on the input parameter
+	 */
+	public void recalculate() {
+		basicShape.set(1, new Vec2D(sizeXTop, 0));
+		basicShape.set(
+				2,
+				new Vec2D(((float) sizeXTop / 2 + sizeXBottom / 2),
+						(float) (Math.sqrt(Math.pow(sizeY, 2)
+								- Math.pow((sizeXBottom - sizeXTop) / 2, 2)))));
+		basicShape.set(
+				3,
+				new Vec2D(((float) sizeXTop - sizeXBottom) / 2, (float) (Math
+						.sqrt(Math.pow(sizeY, 2)
+								- Math.pow((sizeXBottom - sizeXTop) / 2, 2)))));
+		basic.recalculate(basicShape);
+	}
+
+	/**
+	 * Changes sizes of the trapezium to a basic rectangle form with
 	 * 
 	 * @param newSize
-	 *            Length and Height of the rectangle (0.1mm)
+	 *            Length and Height of the trapezium (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
-		this.sizeX = ((int) newSize.x() / 10) * 10;
-		this.sizeY = ((int) newSize.y() / 10) * 10;
+		this.sizeXTop = ((int) newSize.x() / 10) * 10;
+		this.sizeXBottom = ((int) newSize.x() / 10) * 10;
+		this.sizeY = (int) newSize.y();
 		recalculate();
 	}
 
 	/**
 	 * Set the corresponding GShape
 	 * 
-	 * @param shape the corresponding GShape
+	 * @param gshape the corresponding GShape
 	 */
-	public void setShape(GShape shape) {
-		this.basic = shape;
+	public void setShape(GShape gshape) {
+		this.basic = gshape;
 	}
 
 	/**
@@ -191,8 +210,8 @@ public class Rectangle extends Shape implements Serializable {
 	 * Creates a copy of this shape
 	 */
 	public Shape copy() {
-		Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()),
-				this.sizeX, this.sizeY);
+		Trapezium copy = new Trapezium(new Vec3D(this.basic.getPosition3D()),
+				this.sizeXTop, this.sizeY);
 		copy.setShape(this.basic.copy(copy));
 		return copy;
 	}
@@ -201,10 +220,11 @@ public class Rectangle extends Shape implements Serializable {
 	 * Creates a copy of this shape with the basic values
 	 */
 	public Shape copyBaseForm() {
-		Rectangle copy = new Rectangle(new Vec3D(
-				this.basic.getPosition3D()), this.sizeX, this.sizeY);
+		Trapezium copy = new Trapezium(new Vec3D(
+				this.basic.getPosition3D()), this.sizeXTop, this.sizeY);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));
+		copy.setValue2(this.getValue(2));
 		return copy;
 	}
 }

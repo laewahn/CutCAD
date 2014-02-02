@@ -5,9 +5,9 @@ import toxi.geom.*;
 import java.util.*;
 
 import de.mcp.customizer.model.Connection;
-import de.mcp.customizer.model.Edge;
-import de.mcp.customizer.model.Rectangle;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Edge;
+import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.shapes.Rectangle;
 import static java.lang.System.*;
 
 /**

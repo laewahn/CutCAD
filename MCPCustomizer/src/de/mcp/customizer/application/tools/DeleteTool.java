@@ -1,15 +1,13 @@
 package de.mcp.customizer.application.tools;
 
 import processing.core.PConstants;
-
 import toxi.geom.Vec2D;
-
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
-import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Cutout;
+import de.mcp.customizer.model.primitives.Shape;
 
 /**
  * The DeleteTool is used to Delete a Shape, Connection or Cutout

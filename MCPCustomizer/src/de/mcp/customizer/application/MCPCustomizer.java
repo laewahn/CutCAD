@@ -20,7 +20,7 @@ import de.mcp.customizer.application.tools.*;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 

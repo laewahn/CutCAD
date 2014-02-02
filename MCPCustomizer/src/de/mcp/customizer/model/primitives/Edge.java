@@ -1,4 +1,4 @@
-package de.mcp.customizer.model;
+package de.mcp.customizer.model.primitives;
 
 import java.io.Serializable;
 import java.util.ArrayList;

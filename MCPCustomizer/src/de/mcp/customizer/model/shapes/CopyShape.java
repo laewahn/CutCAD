@@ -1,6 +1,9 @@
-package de.mcp.customizer.model;
+package de.mcp.customizer.model.shapes;
 
 import java.util.List;
+
+import de.mcp.customizer.model.primitives.GShape;
+import de.mcp.customizer.model.primitives.Shape;
 import toxi.geom.Vec2D;
 
 /**

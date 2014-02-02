@@ -5,10 +5,10 @@ import processing.core.PGraphics;
 import toxi.geom.Vec2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
-import de.mcp.customizer.model.CopyShape;
-import de.mcp.customizer.model.GShape;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.GShape;
+import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.shapes.CopyShape;
 import de.mcp.customizer.view.Transformation;
 
 /**

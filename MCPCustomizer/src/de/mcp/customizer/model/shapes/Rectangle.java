@@ -1,45 +1,47 @@
-package de.mcp.customizer.model;
+package de.mcp.customizer.model.shapes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import de.mcp.customizer.model.primitives.GShape;
+import de.mcp.customizer.model.primitives.Shape;
 import toxi.geom.Rect;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 
 /**
- * Creates a symmetric polygon as a shape
+ * Creates a rectangle as a shape
  */
-public class SymmetricPolygon extends Shape {
-
-	private static final long serialVersionUID = 4464413451997462017L;
-
-	private int size, number;
+public class Rectangle extends Shape implements Serializable {
+	
+	private static final long serialVersionUID = -6511783713655746647L;
+	
+	private int sizeX, sizeY;
 	private static int counter = 0;
 	private GShape basic;
 	private ArrayList<Vec2D> basicShape;
 
 	/**
-	 *        Creates a symmetric Polygon. For the basic shape The basic shape
-	 *        has three edges (the minimum). Length of the side is the average
-	 *        of sizeX and sizeY (because of mouse dragging). Automatic
-	 *        generation of a individual name by a static counter of all
-	 *        instances
+	 *        Creates a rectangle. Automatic generation of a individual name by
+	 *        a static counter of all instances
 	 * 
 	 * @param position
-	 *            Position within the coordinate system (0.1mm)
+	 *            Position within the coordinate system
 	 * @param sizeX
-	 *            together with
+	 *            Width of the rectangle (0.1mm)
 	 * @param sizeY
-	 *            determines the length of one side (average) (0.1mm)
+	 *            Length of the rectangle (0.1mm)
 	 */
-	public SymmetricPolygon(Vec3D position, int sizeX, int sizeY) {
-		this.size = (((int) (sizeX + sizeY) / 2) / 10) * 10;
-		this.number = 3;
+	public Rectangle(Vec3D position, int sizeX, int sizeY) {
+		this.sizeX = (sizeX / 10) * 10;
+		this.sizeY = (sizeY / 10) * 10;
 		basicShape = new ArrayList<Vec2D>();
 		basicShape.add(new Vec2D(0, 0));
-		basicShape.add(new Vec2D(size, 0));
-		basicShape.add(new Vec2D(size, size));
+		basicShape.add(new Vec2D(sizeX, 0));
+		basicShape.add(new Vec2D(sizeX, sizeY));
+		basicShape.add(new Vec2D(0, sizeY));
 		basic = new GShape(basicShape, position, this);
-		basic.setName("SymmetricPolygon " + counter);
+		basic.setName("Rectangle " + counter);
 		counter++;
 	}
 
@@ -63,9 +65,9 @@ public class SymmetricPolygon extends Shape {
 	 */
 	public int getValue(int index) {
 		if (index == 0)
-			return size / 10;
+			return sizeX / 10;
 		else
-			return number;
+			return sizeY / 10;
 	}
 
 	/**
@@ -79,10 +81,7 @@ public class SymmetricPolygon extends Shape {
 	 *         position(-300..300), 3 number(3..16))
 	 */
 	public int getControlType(int index) {
-		if (index == 0)
-			return 1;
-		else
-			return 3;
+		return 1;
 	}
 
 	/**
@@ -95,27 +94,18 @@ public class SymmetricPolygon extends Shape {
 	 */
 	public String getNameOfControl(int index) {
 		if (index == 0)
-			return "Length of edges";
+			return "Width";
 		else
-			return "Number of edges";
+			return "Heigth";
 	}
 
 	/**
-	 * Recalculates the vectors of the symmetric polygon based on the input
-	 * parameter
+	 * Recalculates the vectors of the rectangle based on the input parameter
 	 */
 	public void recalculate() {
-		if (number < 3)
-			number = 3;
-		float alpha = 2 * (float) Math.PI / number;
-		float beta = ((float) Math.PI - alpha) / 2;
-		Vec2D diameter = new Vec2D(
-				(float) (size / Math.sin(alpha) * Math.sin(beta)), 0f);
-		basicShape.clear();
-		for (int i = 0; i < number; i++) {
-			basicShape.add((diameter.getRotated(i * alpha)).add(new Vec2D(
-					diameter.x(), diameter.y())));
-		}
+		basicShape.set(1, new Vec2D(sizeX, 0));
+		basicShape.set(2, new Vec2D(sizeX, sizeY));
+		basicShape.set(3, new Vec2D(0, sizeY));
 		basic.recalculate(basicShape);
 	}
 
@@ -123,34 +113,41 @@ public class SymmetricPolygon extends Shape {
 	 * Change Parameter 1
 	 * 
 	 * @param size
-	 *            Length of a side of the symmetric polygon (0.1mm)
+	 *            Width of the rectangle (0.1mm)
 	 */
 	public void setValue0(int size) {
-		this.size = size * 10;
+		this.sizeX = size * 10;
 		recalculate();
 	}
 
 	/**
 	 * Change Parameter 2
 	 * 
-	 * @param number
-	 *            Number of corners of the symmetric polygon
+	 * @param size
+	 *            Height of the rectangle (0.1mm)
 	 */
-	public void setValue1(int number) {
-		this.number = number;
+	public void setValue1(int size) {
+		this.sizeY = size * 10;
 		recalculate();
 	}
 
+	public int getSizeX() {
+		return sizeX;
+	}
+
+	public int getSizeY() {
+		return sizeY;
+	}
+
 	/**
-	 * Changes sizes of the symmetric polygon to a basic form (can't really
-	 * translate the mouse-dragged rectangle to a symmetric form - here we just
-	 * use the average of the x and y size as length of a side)
+	 * Changes sizes of the rectangle
 	 * 
 	 * @param newSize
-	 *            average of its coordinates as length (0.1mm)
+	 *            Length and Height of the rectangle (0.1mm)
 	 */
 	public void setSize(Vec2D newSize) {
-		this.size = (((int) ((newSize.x() + newSize.y()) / 2)) / 10) * 10;
+		this.sizeX = ((int) newSize.x() / 10) * 10;
+		this.sizeY = ((int) newSize.y() / 10) * 10;
 		recalculate();
 	}
 
@@ -196,19 +193,18 @@ public class SymmetricPolygon extends Shape {
 	 * Creates a copy of this shape
 	 */
 	public Shape copy() {
-		SymmetricPolygon copy = new SymmetricPolygon(new Vec3D(
-				this.basic.getPosition3D()), this.size, this.size);
+		Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()),
+				this.sizeX, this.sizeY);
 		copy.setShape(this.basic.copy(copy));
 		return copy;
-
 	}
 	
 	/**
 	 * Creates a copy of this shape with the basic values
 	 */
 	public Shape copyBaseForm() {
-		SymmetricPolygon copy = new SymmetricPolygon(new Vec3D(
-				this.basic.getPosition3D()), this.size, this.size);
+		Rectangle copy = new Rectangle(new Vec3D(
+				this.basic.getPosition3D()), this.sizeX, this.sizeY);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));
 		return copy;

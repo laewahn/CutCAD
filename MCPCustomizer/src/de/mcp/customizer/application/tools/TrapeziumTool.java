@@ -5,7 +5,7 @@ import toxi.geom.Vec2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.Trapezium;
+import de.mcp.customizer.model.shapes.Trapezium;
 import de.mcp.customizer.view.Transformation;
 
 /**

@@ -5,7 +5,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Shape;
 import toxi.geom.Vec2D;
 
 /**

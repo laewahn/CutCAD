@@ -10,10 +10,10 @@ import controlP5.Textfield;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Connection;
-import de.mcp.customizer.model.Cutout;
 import de.mcp.customizer.model.Material;
 import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Cutout;
+import de.mcp.customizer.model.primitives.Shape;
 
 /**
  * A property-bar that handles up to 6 sliders that can control parameters of

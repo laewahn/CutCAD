@@ -2,7 +2,7 @@ package de.mcp.customizer.algorithm;
 
 import java.util.ArrayList;
 
-import de.mcp.customizer.model.Edge;
+import de.mcp.customizer.model.primitives.Edge;
 import toxi.geom.Vec2D;
 import toxi.geom.Vec3D;
 

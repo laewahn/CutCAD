@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.ArrayList;
 
 import de.mcp.customizer.application.Tool;
+import de.mcp.customizer.model.primitives.Cutout;
+import de.mcp.customizer.model.primitives.Edge;
+import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.view.Drawable2D;
 
 public class ObjectContainer {

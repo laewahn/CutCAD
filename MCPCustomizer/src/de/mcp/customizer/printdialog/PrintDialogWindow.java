@@ -13,7 +13,7 @@ import controlP5.Group;
 import controlP5.ListBox;
 import controlP5.Textfield;
 import controlP5.Textlabel;
-import de.mcp.customizer.model.Shape;
+import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.view.Transformation;
 

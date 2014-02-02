@@ -2,6 +2,9 @@ package de.mcp.customizer.model;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import de.mcp.customizer.model.primitives.Shape;
+import de.mcp.customizer.model.shapes.PolygonShape;
 import processing.core.PApplet;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;

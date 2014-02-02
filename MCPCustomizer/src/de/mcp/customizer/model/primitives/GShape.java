@@ -1,10 +1,13 @@
-package de.mcp.customizer.model;
+package de.mcp.customizer.model.primitives;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.mcp.customizer.algorithm.CreateTenons;
+import de.mcp.customizer.model.AllMaterials;
+import de.mcp.customizer.model.Connection;
+import de.mcp.customizer.model.Material;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Drawable3D;
 import de.mcp.customizer.view.Transformation;

@@ -1,8 +1,9 @@
-package de.mcp.customizer.model;
+package de.mcp.customizer.model.primitives;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
