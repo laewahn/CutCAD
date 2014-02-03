@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import toxi.geom.Rect;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 
 /**
  * Creates a symmetric polygon as a shape
@@ -35,7 +34,7 @@ public class SymmetricPolygon extends Shape {
 	 * @param sizeY
 	 *            determines the length of one side (average) (0.1mm)
 	 */
-	public SymmetricPolygon(Vec3D position, int sizeX, int sizeY) {
+	public SymmetricPolygon(Vector3D position, int sizeX, int sizeY) {
 		this.size = (((int) (sizeX + sizeY) / 2) / 10) * 10;
 		this.number = 3;
 		basicShape = new ArrayList<Vector2D>();
@@ -200,7 +199,7 @@ public class SymmetricPolygon extends Shape {
 	 * Creates a copy of this shape
 	 */
 	public Shape copy() {
-		SymmetricPolygon copy = new SymmetricPolygon(new Vec3D(
+		SymmetricPolygon copy = new SymmetricPolygon(new Vector3D(
 				this.basic.getPosition3D()), this.size, this.size);
 		copy.setShape(this.basic.copy(copy));
 		return copy;
@@ -211,7 +210,7 @@ public class SymmetricPolygon extends Shape {
 	 * Creates a copy of this shape with the basic values
 	 */
 	public Shape copyBaseForm() {
-		SymmetricPolygon copy = new SymmetricPolygon(new Vec3D(
+		SymmetricPolygon copy = new SymmetricPolygon(new Vector3D(
 				this.basic.getPosition3D()), this.size, this.size);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));

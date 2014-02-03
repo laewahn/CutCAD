@@ -7,13 +7,12 @@ import java.util.List;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
@@ -329,17 +328,17 @@ public class Connection implements Drawable2D, Serializable
 
 		alignEdges(slave, masterEdge, slaveEdge);
 
-		Vec3D toOrigin = slaveEdge.getP3D1().scale(-1);
+		Vector3D toOrigin = slaveEdge.getP3D1().scale(-1);
 
 		slave.translate3D(toOrigin);
 
 		alignShapes(master, slave, masterEdge, slaveEdge);  
 
 		// rotate the slave by the specified angle (currently hardcoded 90 degrees)
-		Vec3D rotationAxis = slaveEdge.getP3D2().getNormalized();
+		Vector3D rotationAxis = slaveEdge.getP3D2().getNormalized();
 		slave.rotateAroundAxis(rotationAxis, angle);
 
-		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
+		Vector3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
 		slave.translate3D(toMaster);
 
 		CreateTenons.createOutlineOfEdge(masterEdge, slaveEdge);
@@ -347,24 +346,24 @@ public class Connection implements Drawable2D, Serializable
 
 	private void alignEdges(GShape slave, Edge masterEdge, Edge slaveEdge)
 	{
-		Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
-		Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
+		Vector3D masterEdgeDirection = masterEdge.getP3D2().sub(masterEdge.getP3D1());
+		Vector3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
 		float angle = safeAngleBetween(masterEdgeDirection, slaveEdgeDirection);
 
-		Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
-		while (normalVector.equals(new Vec3D(0,0,0)))
+		Vector3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection).getNormalized();
+		while (normalVector.equals(new Vector3D(0,0,0)))
 		{
-			normalVector = masterEdgeDirection.cross(new Vec3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
+			normalVector = masterEdgeDirection.cross(new Vector3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
 		}
 		slave.rotateAroundAxis(normalVector, angle);
 	}
 
-	private float safeAngleBetween(Vec3D masterEdgeDirection,
-			Vec3D slaveEdgeDirection) {
+	private float safeAngleBetween(Vector3D masterEdgeDirection,
+			Vector3D slaveEdgeDirection) {
 		float angle = slaveEdgeDirection.angleBetween(masterEdgeDirection, true);
 		if (Float.isNaN(angle))
 		{
-			if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vec3D(0,0,0), 0.1f))
+			if(slaveEdgeDirection.add(masterEdgeDirection).equalsWithTolerance(new Vector3D(0,0,0), 0.1f))
 			{
 				angle = (float)Math.PI;
 			}
@@ -378,7 +377,7 @@ public class Connection implements Drawable2D, Serializable
 
 	private void alignShapes(GShape master, GShape slave, Edge masterEdge, Edge slaveEdge)
 	{
-		Vec3D slaveEdgeDirection = slaveEdge.getP3D2().getNormalized();
+		Vector3D slaveEdgeDirection = slaveEdge.getP3D2().getNormalized();
 
 		float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
 		slave.rotateAroundAxis(slaveEdgeDirection, angleBetweenNormals);
@@ -391,8 +390,8 @@ public class Connection implements Drawable2D, Serializable
 
 	private float calculateAngleBetweenNormals(GShape master, GShape slave)
 	{
-		Vec3D masterNormal = master.getNormalVector();
-		Vec3D slaveNormal = slave.getNormalVector();
+		Vector3D masterNormal = master.getNormalVector();
+		Vector3D slaveNormal = slave.getNormalVector();
 		return safeAngleBetween(masterNormal, slaveNormal);
 	}
 

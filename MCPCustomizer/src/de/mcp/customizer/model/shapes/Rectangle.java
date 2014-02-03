@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import toxi.geom.Rect;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 
 /**
  * Creates a rectangle as a shape
@@ -33,7 +32,7 @@ public class Rectangle extends Shape implements Serializable {
 	 * @param sizeY
 	 *            Length of the rectangle (0.1mm)
 	 */
-	public Rectangle(Vec3D position, int sizeX, int sizeY) {
+	public Rectangle(Vector3D position, int sizeX, int sizeY) {
 		this.sizeX = (sizeX / 10) * 10;
 		this.sizeY = (sizeY / 10) * 10;
 		basicShape = new ArrayList<Vector2D>();
@@ -194,7 +193,7 @@ public class Rectangle extends Shape implements Serializable {
 	 * Creates a copy of this shape
 	 */
 	public Shape copy() {
-		Rectangle copy = new Rectangle(new Vec3D(this.basic.getPosition3D()),
+		Rectangle copy = new Rectangle(new Vector3D(this.basic.getPosition3D()),
 				this.sizeX, this.sizeY);
 		copy.setShape(this.basic.copy(copy));
 		return copy;
@@ -204,7 +203,7 @@ public class Rectangle extends Shape implements Serializable {
 	 * Creates a copy of this shape with the basic values
 	 */
 	public Shape copyBaseForm() {
-		Rectangle copy = new Rectangle(new Vec3D(
+		Rectangle copy = new Rectangle(new Vector3D(
 				this.basic.getPosition3D()), this.sizeX, this.sizeY);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));

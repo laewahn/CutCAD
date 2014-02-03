@@ -6,13 +6,12 @@ import java.util.List;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import de.mcp.customizer.model.shapes.PolygonShape;
 import de.mcp.customizer.view.Transformation;
 
@@ -42,7 +41,7 @@ public class PolygonTool extends Tool {
 		if (vertices.size() > 1 && mouseOverCloseShape())
 		{
 			this.customizer.displayStatus("Shape finished! If you want to create another shape, click the left mousebutton anywhere on the 2D view");
-			Shape newShape = new PolygonShape(this.vertices, new Vec3D());
+			Shape newShape = new PolygonShape(this.vertices, new Vector3D());
 			this.objectContainer.addShape(newShape);
 			this.vertices = new ArrayList<Vector2D>();			
 		}

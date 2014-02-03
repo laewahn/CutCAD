@@ -30,10 +30,10 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	
 	private int numberOfConnections;
 	private Vector2D position2D;
-	private Vec3D position3D;
+	private Vector3D position3D;
 	private boolean isSelected, isActive;
 	private List<Vector2D> vertices;
-	private List<Vec3D> vertices3D;
+	private List<Vector3D> vertices3D;
 	private List<Cutout> cutouts = new ArrayList<Cutout>();
 	private List<Edge> edges;
 	private Shape shape;
@@ -49,8 +49,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param position of this form in 3D
 	 * @param shape type of form, to which this form belong
 	 */
-	public GShape(List<Vector2D> initVertices, Vec3D position, Shape shape) {
-		this.position2D = new Vector2D(position.to2DXY());
+	public GShape(List<Vector2D> initVertices, Vector3D position, Shape shape) {
+		this.position2D = position.to2DXY();
 		this.position3D = position;
 		this.isSelected = false;
 		this.isActive = false;
@@ -60,7 +60,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 
 		vertices = initVertices;
 		edges = new ArrayList<Edge>();
-		vertices3D = new ArrayList<Vec3D>();
+		vertices3D = new ArrayList<Vector3D>();
 
 		for (Vector2D v : vertices) {
 			vertices3D.add(v.add(position2D).to3DXY());
@@ -180,7 +180,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return position in 3D space
 	 */
-	public Vec3D getPosition3D() {
+	public Vector3D getPosition3D() {
 		return this.position3D;
 	}
 
@@ -342,7 +342,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param vectors2D outline of the form in 2D
 	 * @return outline of the form in 3D
 	 */
-	private ArrayList<Vec3D> transformTo3D(boolean isTop,
+	private ArrayList<Vector3D> transformTo3D(boolean isTop,
 			ArrayList<Vector2D> vectors2D) {
 		// Use the algorithm for connecting two shapes to align logical 2D and
 		// 3D view
@@ -356,29 +356,29 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 		Edge masterEdge = this.getEdges().get(0);
 		Edge slaveEdge = helperShape.getEdges().get(0);
 
-		Vec3D masterEdgeDirection = masterEdge.getP3D2().sub(
+		Vector3D masterEdgeDirection = masterEdge.getP3D2().sub(
 				masterEdge.getP3D1());
-		Vec3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
+		Vector3D slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
 
 		float angleBetweenEdges = safeAngleBetween(slaveEdgeDirection,
 				masterEdgeDirection);
 
-		Vec3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection)
+		Vector3D normalVector = slaveEdgeDirection.cross(masterEdgeDirection)
 				.getNormalized();
 		while (normalVector.equals(new Vec3D(0, 0, 0))) {
 			normalVector = masterEdgeDirection.cross(
-					new Vec3D((float) Math.random(), (float) Math.random(),
+					new Vector3D((float) Math.random(), (float) Math.random(),
 							(float) Math.random())).getNormalized();
 		}
 		slave.rotateAroundAxis(normalVector, angleBetweenEdges);
 
 		slaveEdgeDirection = slaveEdge.getP3D2().sub(slaveEdge.getP3D1());
 
-		Vec3D toOrigin = slaveEdge.getP3D1().scale(-1).copy();
+		Vector3D toOrigin = slaveEdge.getP3D1().scale(-1).copy();
 
 		slave.translate3D(toOrigin);
 
-		Vec3D rotationAxis = slaveEdge.getP3D2().getNormalized();
+		Vector3D rotationAxis = slaveEdge.getP3D2().getNormalized();
 
 		float angleBetweenNormals = calculateAngleBetweenNormals(master, slave);
 		slave.rotateAroundAxis(rotationAxis, angleBetweenNormals);
@@ -389,7 +389,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 			angleBetweenNormals = -angleBetweenNormals;
 		}
 
-		Vec3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
+		Vector3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1()).copy();
 
 		// Now we know everything, apply the same Translations to the outline
 		// Vector2D array
@@ -401,10 +401,10 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 			offsetZ = -this.getThickness() / 2;
 		}
 
-		ArrayList<Vec3D> vectors3D = new ArrayList<Vec3D>();
+		ArrayList<Vector3D> vectors3D = new ArrayList<Vector3D>();
 		for (Vector2D v : vectors2D) {
 			vectors3D.add(v.to3DXY().add(position3D)
-					.addSelf(new Vec3D(0, 0, offsetZ)));
+					.addSelf(new Vector3D(0, 0, offsetZ)));
 		}
 		for (int i = 0; i < vectors3D.size(); i++) {
 			vectors3D.set(
@@ -429,13 +429,13 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * both values should have a result near zero, if an angle of 180 degree
 	 * exists between these two vectors, otherwise the angle is 0 degree.
 	 */
-	private float safeAngleBetween(Vec3D masterEdgeDirection,
-			Vec3D slaveEdgeDirection) {
+	private float safeAngleBetween(Vector3D masterEdgeDirection,
+			Vector3D slaveEdgeDirection) {
 		float angle = slaveEdgeDirection
 				.angleBetween(masterEdgeDirection, true);
 		if (Float.isNaN(angle)) {
 			if (slaveEdgeDirection.add(masterEdgeDirection)
-					.equalsWithTolerance(new Vec3D(0, 0, 0), 0.1f)) {
+					.equalsWithTolerance(new Vector3D(0, 0, 0), 0.1f)) {
 				angle = (float) Math.PI;
 			} else {
 				angle = 0;
@@ -452,8 +452,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @return angle between GShapes(radiant)
 	 */
 	private float calculateAngleBetweenNormals(GShape master, GShape slave) {
-		Vec3D masterNormal = master.getNormalVector();
-		Vec3D slaveNormal = slave.getNormalVector();
+		Vector3D masterNormal = master.getNormalVector();
+		Vector3D slaveNormal = slave.getNormalVector();
 		return safeAngleBetween(masterNormal, slaveNormal);
 	}
 
@@ -468,7 +468,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	public Vector2D get2Dperpendicular(Vector2D v1, Vector2D v2) {
 		for (Vector2D v3 : vertices) {
 			if (!v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY()).isZeroVector()) {
-				Vec3D normal = v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY());
+				Vector3D normal = v3.sub(v1).to3DXY().cross(v2.sub(v1).to3DXY());
 				return new Vector2D(normal.cross((v2.sub(v1)).to3DXY()).invert()
 						.add(v1.to3DXY()).normalize().to2DXY());
 			}
@@ -484,14 +484,14 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param v2 second vector
 	 * @return perpendicular vector
 	 */
-	public Vec3D get3Dperpendicular(Vec3D v1, Vec3D v2) {
-		for (Vec3D v3 : vertices3D) {
+	public Vector3D get3Dperpendicular(Vector3D v1, Vector3D v2) {
+		for (Vector3D v3 : vertices3D) {
 			if (!v3.sub(v1).cross(v2.sub(v1)).isZeroVector()) {
-				Vec3D normal = v3.sub(v1).cross(v2.sub(v1));
+				Vector3D normal = v3.sub(v1).cross(v2.sub(v1));
 				return normal.cross(v2.sub(v1)).invert().add(v1).normalize();
 			}
 		}
-		return new Vec3D(0, 0, 1);
+		return new Vector3D(0, 0, 1);
 	}
 
 	/**
@@ -571,8 +571,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @param rotationAxis around which the rotation took place
 	 * @param theta how much to rotate
 	 */
-	public void rotateAroundAxis(Vec3D rotationAxis, float theta) {
-		for (Vec3D v : vertices3D) {
+	public void rotateAroundAxis(Vector3D rotationAxis, float theta) {
+		for (Vector3D v : vertices3D) {
 			v.rotateAroundAxis(rotationAxis, theta);
 		}
 	}
@@ -580,8 +580,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @param translationVector how the form should be moved in the 3D space
 	 */
-	public void translate3D(Vec3D translationVector) {
-		for (Vec3D v : vertices3D) {
+	public void translate3D(Vector3D translationVector) {
+		for (Vector3D v : vertices3D) {
 			v.addSelf(translationVector);
 		}
 	}
@@ -589,7 +589,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return normal-vector of 3D representation of the form
 	 */
-	public Vec3D getNormalVector() {
+	public Vector3D getNormalVector() {
 		return edges.get(0).getP3D1().sub(edges.get(0).getP3D2())
 				.cross(edges.get(1).getP3D1().sub(edges.get(1).getP3D2()))
 				.getNormalized();
@@ -648,8 +648,8 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 */
 	private void createSides(PGraphics p, ArrayList<Vector2D> vectors) {
 		this.setFillColor(p);
-		ArrayList<Vec3D> top = transformTo3D(true, vectors);
-		ArrayList<Vec3D> bottom = transformTo3D(false, vectors);
+		ArrayList<Vector3D> top = transformTo3D(true, vectors);
+		ArrayList<Vector3D> bottom = transformTo3D(false, vectors);
 
 		for (int i = 0; i < top.size() - 1; i++) {
 			p.beginShape();
@@ -679,13 +679,13 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	private void createCover3D(PGraphics p, boolean isTop) {
 		this.setFillColor(p);
 		p.beginShape();
-		for (Vec3D vector : transformTo3D(isTop, getTenons())) {
+		for (Vector3D vector : transformTo3D(isTop, getTenons())) {
 			p.vertex(vector.x(), vector.y(), vector.z());
 		}
 
 		for (Cutout cutout : cutouts) {
 			p.beginContour();
-			for (Vec3D vector : transformTo3D(isTop, cutout.getVectors())) {
+			for (Vector3D vector : transformTo3D(isTop, cutout.getVectors())) {
 				p.vertex(vector.x(), vector.y(), vector.z());
 			}
 			p.endContour();
@@ -697,7 +697,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 					.getMaterialName().equals("Nothing 0,5 mm")) {
 				p.fill(cutout.getSlaveShape().getGShape().getMaterial()
 						.getMaterialColor());
-				for (Vec3D vector : transformTo3D(isTop, cutout.getVectors())) {
+				for (Vector3D vector : transformTo3D(isTop, cutout.getVectors())) {
 					p.vertex(vector.x(), vector.y(), vector.z());
 				}
 			}
@@ -777,12 +777,12 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	 * @return a new instance (to be attached to the corresponding new shape)
 	 */
 	public GShape copy(Shape shape) {
-		GShape copy = new GShape(getTenons(), new Vec3D(position3D), shape);
+		GShape copy = new GShape(getTenons(), new Vector3D(position3D), shape);
 		copy.setMaterial(this.material);
 		copy.setName(this.getName());
 		copy.removeAllCutouts();
 		for (Cutout c : this.cutouts) {
-			copy.addCutout(new GShape(c.getVectors(), new Vec3D(0, 0, 0), shape));
+			copy.addCutout(new GShape(c.getVectors(), new Vector3D(0, 0, 0), shape));
 			copy.getCutouts().get(copy.getCutouts().size()-1).setValue0(0);
 			copy.getCutouts().get(copy.getCutouts().size()-1).setValue1(0);
 		}

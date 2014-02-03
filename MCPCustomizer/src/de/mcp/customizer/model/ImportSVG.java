@@ -6,11 +6,11 @@ import java.util.List;
 
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import de.mcp.customizer.model.shapes.PolygonShape;
 import processing.core.PApplet;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
-import toxi.geom.Vec3D;
 import geomerative.*;
 
 /**
@@ -108,7 +108,7 @@ public class ImportSVG extends PApplet {
 			MinX = ((pointPaths[i][j].x < MinX) ? pointPaths[i][j].x : MinX);
 			MinY = ((pointPaths[i][j].y < MinY) ? pointPaths[i][j].y : MinY);
 		}
-		Vec3D position = new Vec3D(MinX * scalingInkscape, MinY * scalingInkscape,
+		Vector3D position = new Vector3D(MinX * scalingInkscape, MinY * scalingInkscape,
 				0);
 		for (int j = 0; j < pointPaths[i].length; j++) {
 			path.add(new Vector2D((pointPaths[i][j].x) * scalingInkscape
