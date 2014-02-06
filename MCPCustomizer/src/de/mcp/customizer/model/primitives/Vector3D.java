@@ -30,6 +30,19 @@ public class Vector3D implements Serializable {
 		return new Vector3D(this.vector.copy());
 	}
 	
+	public boolean equals(Object o) {
+		
+		if(o instanceof Vector3D) {
+			Vector3D otherVector = (Vector3D) o;
+			return this.equals(otherVector.getVec3D());
+		}
+		
+		if (o instanceof Vec3D) {
+			return this.vector.equals(o);
+		}
+		return false;	
+	}
+	
 	public float x() {
 		return this.vector.x();
 	}
