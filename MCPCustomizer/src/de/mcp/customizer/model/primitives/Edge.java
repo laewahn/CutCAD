@@ -11,8 +11,6 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 
 /**
  * Edge object. Has a representation of the (logical) position of its end points
@@ -23,7 +21,7 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	private static final long serialVersionUID = 924861921334437216L;
 	
 	private GShape gShape; // know parent
-	private Vec3D p3D1, p3D2; // 3D logic
+	private Vector3D p3D1, p3D2; // 3D logic
 	private Vector2D v1, v2; // 2D logic
 	private ArrayList<Vector2D> tenons; // 2D representation
 	private float scalingFactor, scalingFactor3D, boundingBoxSize;
@@ -45,7 +43,7 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	 * @param v2
 	 *            end point in 2D (0.1mm)
 	 */
-	public Edge(GShape gShape, Vec3D p3D1, Vec3D p3D2, Vector2D v1, Vector2D v2) {
+	public Edge(GShape gShape, Vector3D p3D1, Vector3D p3D2, Vector2D v1, Vector2D v2) {
 		this.gShape = gShape;
 		this.p3D1 = p3D1;
 		this.p3D2 = p3D2;
@@ -116,14 +114,14 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @return get start point of the edge (in the 3D view)
 	 */
-	public Vec3D getP3D1() {
+	public Vector3D getP3D1() {
 		return p3D1;
 	}
 
 	/**
 	 * @return get end point of the edge (in the 3D view)
 	 */
-	public Vec3D getP3D2() {
+	public Vector3D getP3D2() {
 		return p3D2;
 	}
 
@@ -144,14 +142,14 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	/**
 	 * @param v set start point of the edge (in the 3D view)
 	 */
-	public void setP3D1(Vec3D v) {
+	public void setP3D1(Vector3D v) {
 		this.p3D1 = v;
 	}
 
 	/**
 	 * @param v set end point of the edge (in the 3D view)
 	 */
-	public void setP3D2(Vec3D v) {
+	public void setP3D2(Vector3D v) {
 		this.p3D2 = v;
 	}
 
@@ -224,13 +222,13 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 		createBorderBox();
 //		scalingFactor3D = getGShape().getScalingFactor3D();
 		if (this.isHighlighted()) {
-			Vec3D offset = this.getGShape().getNormalVector()
+			Vector3D offset = this.getGShape().getNormalVector()
 					.normalizeTo(this.getGShape().getThickness() / 2 + 4);
 			p.stroke(255, 0, 0);
 			p.noFill();
 			p.strokeWeight(2);
 			p.beginShape();
-			Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor3D);
+			Vector3D vector = p3D1.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
 			vector = p3D2.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
@@ -243,13 +241,13 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 			p.fill(255);
 			p.stroke(0);
 		} else if (this.isSelected()) {
-			Vec3D offset = this.getGShape().getNormalVector()
+			Vector3D offset = this.getGShape().getNormalVector()
 					.normalizeTo(this.getGShape().getThickness() / 2 + 4);
 			p.stroke(0, 255, 0);
 			p.noFill();
 			p.strokeWeight(2);
 			p.beginShape();
-			Vec3D vector = p3D1.copy().add(offset).scale(scalingFactor3D);
+			Vector3D vector = p3D1.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());
 			vector = p3D2.copy().add(offset).scale(scalingFactor3D);
 			p.vertex(vector.x(), vector.y(), vector.z());

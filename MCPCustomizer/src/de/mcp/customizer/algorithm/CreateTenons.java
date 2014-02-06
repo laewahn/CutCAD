@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.Vector2D;
-//import toxi.geom.Point2D;
-import toxi.geom.Vec3D;
+import de.mcp.customizer.model.primitives.Vector3D;
 
 /**
  *        Static class to calculate the outline (tenon structure) of an edge
@@ -48,13 +47,13 @@ public class CreateTenons {
 	 * both values should have a result near zero, if an angle of 180 degree
 	 * exists between these two vectors, otherwise the angle is 0 degree.
 	 */
-	private static float safeAngleBetween(Vec3D masterEdgeDirection,
-			Vec3D slaveEdgeDirection) {
+	private static float safeAngleBetween(Vector3D masterEdgeDirection,
+			Vector3D slaveEdgeDirection) {
 		float angle = slaveEdgeDirection
 				.angleBetween(masterEdgeDirection, true);
 		if (Float.isNaN(angle)) {
 			if (slaveEdgeDirection.add(masterEdgeDirection)
-					.equalsWithTolerance(new Vec3D(0, 0, 0), tolerance)) {
+					.equalsWithTolerance(new Vector3D(0, 0, 0), tolerance)) {
 				angle = (float) Math.PI;
 			} else {
 				angle = 0;
@@ -90,9 +89,9 @@ public class CreateTenons {
 	 */
 	public static void createOutlineOfEdge(Edge masterEdge, Edge slaveEdge) {
 
-		Vec3D p1 = masterEdge.getGShape().get3Dperpendicular(
+		Vector3D p1 = masterEdge.getGShape().get3Dperpendicular(
 				masterEdge.getP3D1(), masterEdge.getP3D2());
-		Vec3D p2 = slaveEdge.getGShape().get3Dperpendicular(slaveEdge.getP3D1(),
+		Vector3D p2 = slaveEdge.getGShape().get3Dperpendicular(slaveEdge.getP3D1(),
 				slaveEdge.getP3D2());
 		float angle = safeAngleBetween(p1, p2);
 

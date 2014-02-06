@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import toxi.geom.Rect;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 
 /**
  * Creates a trapezium as a shape
@@ -34,7 +33,7 @@ public class Trapezium extends Shape {
 	 * @param sizeY
 	 *            length of the side of the trapezium (0.1mm)
 	 */
-	public Trapezium(Vec3D position, int sizeX, int sizeY) {
+	public Trapezium(Vector3D position, int sizeX, int sizeY) {
 		this.sizeXTop = (sizeX / 10) * 10;
 		this.sizeXBottom = (sizeX / 10) * 10;
 		this.sizeY = (sizeY / 10) * 10;
@@ -211,7 +210,7 @@ public class Trapezium extends Shape {
 	 * Creates a copy of this shape
 	 */
 	public Shape copy() {
-		Trapezium copy = new Trapezium(new Vec3D(this.basic.getPosition3D()),
+		Trapezium copy = new Trapezium(new Vector3D(this.basic.getPosition3D()),
 				this.sizeXTop, this.sizeY);
 		copy.setShape(this.basic.copy(copy));
 		return copy;
@@ -221,7 +220,7 @@ public class Trapezium extends Shape {
 	 * Creates a copy of this shape with the basic values
 	 */
 	public Shape copyBaseForm() {
-		Trapezium copy = new Trapezium(new Vec3D(
+		Trapezium copy = new Trapezium(new Vector3D(
 				this.basic.getPosition3D()), this.sizeXTop, this.sizeY);
 		copy.setValue0(this.getValue(0));
 		copy.setValue1(this.getValue(1));

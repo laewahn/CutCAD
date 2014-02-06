@@ -3,7 +3,6 @@ package de.mcp.customizer.model.primitives;
 import java.io.Serializable;
 
 import toxi.geom.Vec2D;
-import toxi.geom.Vec3D;
 
 public class Vector2D implements Serializable{
 
@@ -39,8 +38,8 @@ public class Vector2D implements Serializable{
 		return this.vector.y();
 	}
 	
-	public Vec3D to3DXY() {
-		return new Vec3D(this.x(), this.y(), 0);
+	public Vector3D to3DXY() {
+		return new Vector3D(this.x(), this.y(), 0);
 	}
 	
 	public float getComponent(int idx) {

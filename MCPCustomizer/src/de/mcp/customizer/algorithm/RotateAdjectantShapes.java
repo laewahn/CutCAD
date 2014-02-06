@@ -8,6 +8,7 @@ import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+import de.mcp.customizer.model.primitives.Vector3D;
 import de.mcp.customizer.model.shapes.Rectangle;
 import static java.lang.System.*;
 
@@ -25,12 +26,12 @@ public class RotateAdjectantShapes {
 	private static float bigTolerance = 5f;
 	private static float smallTolerance = 1f;
 
-	private static Shape virtualShape = new Rectangle(new Vec3D(0, 0, 0), 1, 1);
-	private static Edge edgeA = new Edge(virtualShape.getGShape(), new Vec3D(1,
-			1, 1), new Vec3D(1, 1, 1), new Vector2D(1, 1), new Vector2D(1, 1));
-	private static Edge edgeB = new Edge(virtualShape.getGShape(), new Vec3D(1,
-			1, 1), new Vec3D(1, 1, 1), new Vector2D(1, 1), new Vector2D(1, 1));
-	private static Vec3D intersectionPoint = new Vec3D(0, 0, 0);
+	private static Shape virtualShape = new Rectangle(new Vector3D(0, 0, 0), 1, 1);
+	private static Edge edgeA = new Edge(virtualShape.getGShape(), new Vector3D(1,
+			1, 1), new Vector3D(1, 1, 1), new Vector2D(1, 1), new Vector2D(1, 1));
+	private static Edge edgeB = new Edge(virtualShape.getGShape(), new Vector3D(1,
+			1, 1), new Vector3D(1, 1, 1), new Vector2D(1, 1), new Vector2D(1, 1));
+	private static Vector3D intersectionPoint = new Vector3D(0, 0, 0);
 
 	/**
 	 *        Rotates two edges with a common point until the other is common,
@@ -177,7 +178,7 @@ public class RotateAdjectantShapes {
 	/*
 	 * Returns the common point with the other edge
 	 */
-	private static Vec3D getCommonPoint(Edge edge) {
+	private static Vector3D getCommonPoint(Edge edge) {
 		return (compareEdges(edge, getOtherEdge(edge))) ? edge.getP3D1() : edge
 				.getP3D2();
 	}
@@ -186,7 +187,7 @@ public class RotateAdjectantShapes {
 	 * Returns the point to move until it is also a common point between the two
 	 * shapes (which is not a common point yet :-)
 	 */
-	private static Vec3D getNotCommonPoint(Edge edge) {
+	private static Vector3D getNotCommonPoint(Edge edge) {
 		return (compareEdges(edge, getOtherEdge(edge))) ? edge.getP3D2() : edge
 				.getP3D1();
 	}
@@ -209,7 +210,7 @@ public class RotateAdjectantShapes {
 	 * Returns the point of the above mentioned rotatingEdge, which is not the
 	 * common point (other possible rotations are not allowed here)
 	 */
-	private static Vec3D getPointOfRotatingEdge(Edge edge) {
+	private static Vector3D getPointOfRotatingEdge(Edge edge) {
 		Edge rotatingEdge = getRotatingEdge(edge);
 		return (compareEdges(rotatingEdge, edge)) ? rotatingEdge.getP3D2()
 				: rotatingEdge.getP3D1();
@@ -254,11 +255,11 @@ public class RotateAdjectantShapes {
 	 * rotation. This angle is then returned
 	 */
 	private static float rotateOnlyOneShape(Edge edgeA, Edge edgeB) {
-		Vec3D directionEdge = getNotCommonPoint(edgeB).sub(
+		Vector3D directionEdge = getNotCommonPoint(edgeB).sub(
 				getCommonPoint(edgeB));
-		Vec3D directionRotatingEdge = getPointOfRotatingEdge(edgeA).sub(
+		Vector3D directionRotatingEdge = getPointOfRotatingEdge(edgeA).sub(
 				getCommonPoint(edgeA));
-		Vec3D normalVectorSlave = directionEdge.cross(directionRotatingEdge)
+		Vector3D normalVectorSlave = directionEdge.cross(directionRotatingEdge)
 				.normalize();
 
 		float angle = safeAngleBetween(virtualShape.getGShape()
@@ -272,7 +273,7 @@ public class RotateAdjectantShapes {
 	 * rotated around other vectors (describing circles in 3D), which is planar
 	 * projected on the plane of the virtual shape
 	 */
-	private static Vec3D findIntersectionPoint(Edge edge1, Edge edge2) {
+	private static Vector3D findIntersectionPoint(Edge edge1, Edge edge2) {
 		// Since both shapes are aligned in one plane, we can add the
 		// (master-)edge to the rotating edge as it is and a second time
 		// mirrored at the rotating edge. Both resulting points form a line
@@ -285,8 +286,8 @@ public class RotateAdjectantShapes {
 		// The intersection of both (circle-projection)lines is the projection
 		// of the point in the 3D space, where both end points of
 		// master- and slaveShape will met by rotation
-		return intersectionLine1.closestLineTo(intersectionLine2).getLine()
-				.getMidPoint();
+		return new Vector3D(intersectionLine1.closestLineTo(intersectionLine2).getLine()
+				.getMidPoint());
 	}
 
 	/*
@@ -296,13 +297,13 @@ public class RotateAdjectantShapes {
 	 * both values should have a result near zero, if an angle of 180 degree
 	 * exists between these two vectors, otherwise the angle is 0 degree.
 	 */
-	private static float safeAngleBetween(Vec3D masterEdgeDirection,
-			Vec3D slaveEdgeDirection) {
+	private static float safeAngleBetween(Vector3D masterEdgeDirection,
+			Vector3D slaveEdgeDirection) {
 		float angle = slaveEdgeDirection
 				.angleBetween(masterEdgeDirection, true);
 		if (Float.isNaN(angle)) {
 			if (slaveEdgeDirection.add(masterEdgeDirection)
-					.equalsWithTolerance(new Vec3D(0, 0, 0), 0.1f)) {
+					.equalsWithTolerance(new Vector3D(0, 0, 0), 0.1f)) {
 				angle = (float) Math.PI;
 			} else {
 				angle = 0;
@@ -321,13 +322,13 @@ public class RotateAdjectantShapes {
 	private static Line3D getIntersectionLine(Edge edge) {
 		Edge virtualEdgeA = virtualShape.getGShape().getEdges().get(0);
 		Edge virtualEdgeB = virtualShape.getGShape().getEdges().get(1);
-		Vec3D rotationAxis = getPointOfRotatingEdge(edge).sub(
+		Vector3D rotationAxis = getPointOfRotatingEdge(edge).sub(
 				getCommonPoint(edge));
-		Vec3D notCommonPoint = getNotCommonPoint(edge)
+		Vector3D notCommonPoint = getNotCommonPoint(edge)
 				.sub(getCommonPoint(edge));
 		float angle = safeAngleBetween(rotationAxis, notCommonPoint);
 
-		Vec3D rotated = (getNotCommonPoint(edge).sub(getCommonPoint(edge)))
+		Vector3D rotated = (getNotCommonPoint(edge).sub(getCommonPoint(edge)))
 				.rotateAroundAxis(getNormalVector(virtualEdgeA, virtualEdgeB),
 						-2 * angle).add(getCommonPoint(edge));
 		if (safeAngleBetween(rotationAxis, rotated.sub(getCommonPoint(edge))) != angle) {
@@ -336,7 +337,7 @@ public class RotateAdjectantShapes {
 							getNormalVector(virtualEdgeA, virtualEdgeB),
 							2 * angle).add(getCommonPoint(edge));
 		}
-		return new Line3D(getNotCommonPoint(edge), rotated);
+		return new Line3D(getNotCommonPoint(edge).getVec3D(), rotated.getVec3D());
 	}
 
 	/*
@@ -361,15 +362,15 @@ public class RotateAdjectantShapes {
 		// corresponds to the opposite/adjacent of a triangle
 		// while the other one is the hypotenuse with opposite/adjacent
 		// perpendicular/parallel to the base shapes
-		Line3D rotationAxis = new Line3D(getPointOfRotatingEdge(edge),
-				getCommonPoint(edge)).toRay3D().toLine3DWithPointAtDistance(
+		Line3D rotationAxis = new Line3D(getPointOfRotatingEdge(edge).getVec3D(),
+				getCommonPoint(edge).getVec3D()).toRay3D().toLine3DWithPointAtDistance(
 				10000);
 		Vec3D intersectionWithRotationAxis = getIntersectionLine(edge)
 				.closestLineTo(rotationAxis).getLine().getMidPoint();
 		double lengthIntersectionToAxisMaster = intersectionWithRotationAxis
-				.distanceTo(intersectionPoint);
+				.distanceTo(intersectionPoint.getVec3D());
 		double lengthVectorToAxisMaster = intersectionWithRotationAxis
-				.distanceTo(getNotCommonPoint(edge));
+				.distanceTo(getNotCommonPoint(edge).getVec3D());
 
 		// Result: 4 possible angles, test, which one is the correct one
 		// return
@@ -396,10 +397,10 @@ public class RotateAdjectantShapes {
 	/*
 	 * Returns the normalVector of a plane formed by edge 1 and edge2
 	 */
-	private static Vec3D getNormalVector(Edge edge1, Edge edge2) {
-		Vec3D directionEdge1 = getPointOfRotatingEdge(edge1).sub(
+	private static Vector3D getNormalVector(Edge edge1, Edge edge2) {
+		Vector3D directionEdge1 = getPointOfRotatingEdge(edge1).sub(
 				getCommonPoint(edge1));
-		Vec3D directionEdge2 = getPointOfRotatingEdge(edge2).sub(
+		Vector3D directionEdge2 = getPointOfRotatingEdge(edge2).sub(
 				getCommonPoint(edge2));
 		return directionEdge1.cross(directionEdge2).normalize();
 	}
