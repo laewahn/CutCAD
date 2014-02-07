@@ -6,12 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PVector;
 import processing.event.MouseEvent;
+import processing.opengl.*;
+import remixlab.proscene.Scene;
 import toxi.geom.Rect;
-//import toxi.geom.Vector2D;
-import toxi.geom.Vec3D;
 import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
 import controlP5.ControlEvent;
@@ -92,24 +92,17 @@ class CustomizerView {
 	private class Axes2D implements Drawable2D {
 		@Override
 		public void draw2D(PGraphics context, Transformation transform) {
-			context.strokeWeight(2);
-			context.textSize(32);
-			context.fill(context.color(255, 0, 0));
-			context.stroke(context.color(255, 0, 0));
-			context.line(0, 0, 350, 0);
-			context.text("X", 350, 12);
-			context.fill(context.color(0, 255, 0));
-			context.stroke(context.color(0, 255, 0));
-			context.line(0, 0, 0, 350);
-			context.text("Y", -10, 385);
+			context.strokeWeight(10);
+			context.stroke(context.color(255, 100, 100));
+			context.line(0, 0, 800, 0);
+			context.stroke(context.color(100, 255, 100));
+			context.line(0, 0, 0, 800);
 			context.stroke(context.color(0, 0, 0));
 			context.strokeWeight(1);
 		}
 	}
 
 }
-
-
 
 public class MCPCustomizer extends PApplet {
 
@@ -121,6 +114,8 @@ public class MCPCustomizer extends PApplet {
 
 	Statusbar statusbar;
 	ControlP5 cp5;
+	
+	Scene scene;
 
 	ToxiclibsSupport gfx;
 	PGraphics view2D, view3D;
@@ -148,13 +143,12 @@ public class MCPCustomizer extends PApplet {
 	int cameraY = 1000;
 
 	public Transformation transform2D = new Transformation((float) 1.0,
-			new Vector2D(0, 0));
+			new Vector2D(-50, -50));
 	Transformation transform3D = new Transformation((float) 1.0,
 			new Vector2D(0, 0));
 
 	Grid grid3D, grid2D;
 
-	Vec3D cameraPosition;
 	Tool tools[];
 
 	public CustomizerView customizerView2D;
@@ -206,9 +200,13 @@ public class MCPCustomizer extends PApplet {
 		statusbar = new Statusbar();
 		createToolbar();
 
-		cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY)
-				.getRotatedAroundAxis(new Vec3D((float) 0.0, (float) 0.0,
-						(float) 1.0), radians(cameraX));
+		scene = new Scene((PApplet)this, (PGraphics3D)view3D);
+		scene.disableKeyboardHandling();
+		scene.disableMouseHandling();
+		scene.setGridIsDrawn(false);
+		scene.setAxisIsDrawn(false);
+		scene.setRadius(10000.0f);
+		scene.camera().setPosition(new PVector(500, 550, 1500));
 	}
 
 /* (non-Javadoc)
@@ -229,17 +227,10 @@ public class MCPCustomizer extends PApplet {
 	private void draw3DView()
 	  {
 	    view3D.beginDraw();
-
-	    view3D.ortho();
-	    view3D.beginCamera();
-	    view3D.camera(cameraPosition.x(), cameraPosition.y(), cameraPosition.z(), (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)0.0, (float)-1.0);
-	    view3D.translate(-viewSizeX/2, -viewSizeY/2);
-	    view3D.endCamera();
+	    
+	    scene.beginDraw();
 
 	    view3D.background(150);
-	    
-	    //float scale = transform3D.getScale();	
-	    //view3D.scale(scale);
   
 	    draw3DAxes(view3D);
 	    grid3D.draw2D(view3D, transform3D);;
@@ -262,26 +253,20 @@ public class MCPCustomizer extends PApplet {
 	    	gfx.mesh(meshSTL.getSTLMesh());
 	    }
 	    
+	    scene.endDraw();
 	    view3D.endDraw(); 
 	    
 	    image(view3D, view3DPosX, view3DPosY);
 	  }
 
 	private void draw3DAxes(PGraphics p) {
-		p.strokeWeight(2);
-		p.textSize(32);
-		p.fill(color(255, 0, 0));
-		p.stroke(color(255, 0, 0));
-		p.line(0, 0, 0, 350, 0, 0);
-		p.text("X", 350, 12, 0);
-		p.fill(color(0, 255, 0));
-		p.stroke(color(0, 255, 0));
-		p.line(0, 0, 0, 0, 350, 0);
-		p.text("Y", -10, 385, 0);
-		p.fill(color(0, 0, 255));
-		p.stroke(color(0, 0, 255));
-		p.line(0, 0, 0, 0, 0, 350);
-		p.text("Z", 0, 0, 350);
+		p.strokeWeight(10);
+		p.stroke(color(255, 100, 100));
+		p.line(0, 0, 0, 1000, 0, 0);
+		p.stroke(color(100, 255, 100));
+		p.line(0, 0, 0, 0, 1000, 0);
+		p.stroke(color(100, 100, 255));
+		p.line(0, 0, 0, 0, 0, 1000);
 		p.stroke(color(0, 0, 0));
 		p.strokeWeight(1);
 	}
@@ -370,17 +355,6 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mouseDragged()
 	  {
-	    if (mouseOver3DView()) {
-	    	if (mouseButton == PConstants.LEFT)
-	    	{
-	    		cameraPosition = new Vec3D(viewSizeX, viewSizeY, cameraY + 5 * (mouseY - view3DPosY - startY)).getRotatedAroundAxis(new Vec3D((float)0.0, (float)0.0, (float)1.0), radians(cameraX + mouseX - view3DPosX - startX));
-	    	}	    	
-	    	else if (mouseButton == PConstants.RIGHT)
-	    	{
-	    		// do nothing... later: translate 3D view. This is problematic due to the way the camera is handled.
-	    	}
-	    }
-
 	    toolbar.getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
 	  }
 
@@ -391,11 +365,6 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    toolbar.getSelectedTool().mouseButtonReleased(new Vector2D(mouseX, mouseY), mouseButton);
 
-	    if (mouseOver3DView() && mouseButton == PConstants.LEFT)
-	    {
-	      cameraX += mouseX - view3DPosX - startX;
-	      cameraY += 5 * (mouseY - view3DPosY - startY);
-	    }
 	  }
 
 	  /* (non-Javadoc)
@@ -404,6 +373,14 @@ public class MCPCustomizer extends PApplet {
 	public void mouseMoved() 
 	  {
 	      toolbar.getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
+	      if (mouseOver3DView())
+	      {
+	    	  scene.enableMouseHandling();
+	      }
+	      else
+	      {
+	    	  scene.disableMouseHandling();
+	      }
 	  }
 
 	  private boolean mouseOver2DView()
@@ -427,20 +404,12 @@ public class MCPCustomizer extends PApplet {
 			  {
 				  transform2D.scaleUp(0.01f);
 			  }
-			  if (mouseOver3DView())
-			  {
-				  transform3D.scaleUp(0.01f);
-			  }
 	    }
 	    if (key == '-')
 	    {
 	    	if (mouseOver2DView())
 			  {
 				  transform2D.scaleDown(0.01f);
-			  }
-			  if (mouseOver3DView())
-			  {
-				  transform3D.scaleDown(0.01f);
 			  }
 	    }
 	    if (key == 's') {
@@ -461,10 +430,6 @@ public class MCPCustomizer extends PApplet {
 		  if (mouseOver2DView())
 		  {
 			  transform2D.scaleUp((float) (0.01 * -event.getAmount()));
-		  }
-		  if (mouseOver3DView())
-		  {
-			  transform3D.scaleUp((float) (0.01 * -event.getAmount()));
 		  }
 	  }
 	

@@ -22,5 +22,6 @@
 	<classpathentry kind="lib" path="Libraries/toxiclibs_p5.jar"/>
 	<classpathentry kind="lib" path="Libraries/toxiclibscore.jar"/>
 	<classpathentry kind="lib" path="Libraries/geomerative.jar"/>
+	<classpathentry kind="lib" path="Libraries/proscene.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
