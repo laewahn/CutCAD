@@ -3,6 +3,7 @@ package de.mcp.customizer.model.primitives;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import de.mcp.customizer.application.Pluggable;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
@@ -13,7 +14,7 @@ import toxi.geom.*;
 /**
  * Connects two shapes such that the second one forms a cut-out in the first one
  */
-public class Cutout implements Drawable2D, Serializable {
+public class Cutout implements Drawable2D, Serializable, Pluggable {
 	
 	private static final long serialVersionUID = -3035265244890031332L;
 	

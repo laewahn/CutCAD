@@ -2,17 +2,14 @@ package de.mcp.customizer.application;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.DropdownList;
-import controlP5.Slider;
-import controlP5.Textfield;
+import controlP5.Numberbox;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.AllMaterials;
-import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.Material;
-import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.model.primitives.Cutout;
 import de.mcp.customizer.model.primitives.Shape;
 
 /**
@@ -28,17 +25,11 @@ public class Properties extends PApplet
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Controller<?>> controllers;
 	private ArrayList<Material> materials;
-	private ArrayList<Slider> sliders;
-	private ArrayList<Slider> dummySliders;
-	private ArrayList<Textfield> textfields;
+	private ArrayList<Numberbox> numberBoxes;
 	private ArrayList<Textlabel> controlNames;
 	private ArrayList<Textlabel> controlUnits;
 	private DropdownList setMaterial;
-	private Shape shapeCurrentlyPluggedTo;
-	private Cutout cutoutCurrentlyPluggedTo;
-	private STLMesh stlMeshCurrentlyPluggedTo;
-	private Connection connectionCurrentlyPluggedTo;
-	private int posX, posY, sizeX, sizeY;
+	private Pluggable currentlyPluggedTo;
 	private boolean hidden;
 
 	/**
@@ -52,42 +43,19 @@ public class Properties extends PApplet
 	 */
 	public Properties(ControlP5 cp5, int posX, int posY, int sizeX, int sizeY)
 	{
-		this.posX = posX;
-		this.posY = posY;
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
 		this.hidden = false;
 
 		this.controllers = new ArrayList<Controller<?>>();
 		this.materials = AllMaterials.getMaterials();
-		this.shapeCurrentlyPluggedTo = null;
-		this.connectionCurrentlyPluggedTo = null;
-		this.cutoutCurrentlyPluggedTo = null;
-		this.stlMeshCurrentlyPluggedTo = null;
+		this.currentlyPluggedTo = null;
 
-		sliders = new ArrayList<Slider>();
-		sliders.add(cp5.addSlider("setSlider0"));
-		sliders.add(cp5.addSlider("setSlider1"));
-		sliders.add(cp5.addSlider("setSlider2"));
-		sliders.add(cp5.addSlider("setSlider3"));
-		sliders.add(cp5.addSlider("setSlider4"));
-		sliders.add(cp5.addSlider("setSlider5"));
-
-		dummySliders = new ArrayList<Slider>();
-		dummySliders.add(cp5.addSlider("setValue0"));
-		dummySliders.add(cp5.addSlider("setValue1"));
-		dummySliders.add(cp5.addSlider("setValue2"));
-		dummySliders.add(cp5.addSlider("setValue3"));
-		dummySliders.add(cp5.addSlider("setValue4"));
-		dummySliders.add(cp5.addSlider("setValue5"));
-
-		textfields = new ArrayList<Textfield>();
-		textfields.add(cp5.addTextfield("setText0"));
-		textfields.add(cp5.addTextfield("setText1"));
-		textfields.add(cp5.addTextfield("setText2"));
-		textfields.add(cp5.addTextfield("setText3"));
-		textfields.add(cp5.addTextfield("setText4"));
-		textfields.add(cp5.addTextfield("setText5"));
+		numberBoxes = new ArrayList<Numberbox>();
+		numberBoxes.add(new NumberInputBox(this, cp5, "setValue0"));
+		numberBoxes.add(new NumberInputBox(this, cp5, "setValue1"));
+		numberBoxes.add(new NumberInputBox(this, cp5, "setValue2"));
+		numberBoxes.add(new NumberInputBox(this, cp5, "setValue3"));
+		numberBoxes.add(new NumberInputBox(this, cp5, "setValue4"));
+		numberBoxes.add(new NumberInputBox(this, cp5, "setValue5"));
 
 		controlNames = new ArrayList<Textlabel>();
 		controlNames.add(cp5.addTextlabel("setName0"));
@@ -105,41 +73,26 @@ public class Properties extends PApplet
 		controlUnits.add(cp5.addTextlabel("setUnit4"));
 		controlUnits.add(cp5.addTextlabel("setUnit5"));
 
-		for (int i=0; i<sliders.size(); i++)
+		for (int i = 0; i < numberBoxes.size(); i++)
 		{
-			sliders.get(i).setPosition(50+i*200, 18)
-					.setSize(100, 20)
+			numberBoxes.get(i).setPosition(50+i*100, 18)
+					.setSize(50, 20)
 			    	.setColorForeground(color(120))
 			    	.setColorActive(color(80))
 			    	.setColorBackground(color(150))
+			        .setDecimalPrecision(1)
+			        .setDirection(Controller.HORIZONTAL)
 			    	.setLabelVisible(false);
 			
-			controllers.add(sliders.get(i));
+			controllers.add(numberBoxes.get(i));
 			
-			sliders.get(i).plugTo(this);
+			numberBoxes.get(i).plugTo(this);
 
-			dummySliders.get(i)
-					.setRange(0, Float.MAX_VALUE)
-					.setVisible(false);
-
-			textfields.get(i).setPosition(152+i*200, 18)
-					.setAutoClear(false)
-					.setSize(50, 20)
-					.setCaptionLabel("")
-			    	.setColorForeground(color(0))
-			    	.setColorActive(color(0))
-			    	.setColorBackground(color(150))
-					.setInputFilter(ControlP5.INTEGER);
-			
-			controllers.add(textfields.get(i));
-			
-			textfields.get(i).plugTo(this);
-
-			controlUnits.get(i).setPosition(202+i*200, 22)
+			controlUnits.get(i).setPosition(101+i*100, 25)
 	    			.setColor(color(0));
 
 			controlNames.get(i)
-					.setPosition(120+i*200, 5)
+					.setPosition(60+i*100, 5)
 	    			.setColor(color(0));
 		}
 
@@ -158,115 +111,17 @@ public class Properties extends PApplet
 			setMaterial.addItem(m.getMaterialName(), materials.indexOf(m));
 		}
 	}
-
-	/**
-	 * @param text the textlabel for the first slider
-	 */
-	public void setText0(String text)
-	{
-		sliders.get(0).setValue(Integer.valueOf(text));
-	}
-
-	/**
-	 * @param text the textlabel for the second slider
-	 */
-	public void setText1(String text)
-	{
-		sliders.get(1).setValue(Integer.valueOf(text));
-	}
-
-	/**
-	 * @param text the textlabel for the third slider
-	 */
-	public void setText2(String text)
-	{
-		sliders.get(2).setValue(Integer.valueOf(text));
-	}
-
-	/**
-	 * @param text the textlabel for the fourth slider
-	 */
-	public void setText3(String text)
-	{
-		sliders.get(3).setValue(Integer.valueOf(text));
-	}
-
-	/**
-	 * @param text the textlabel for the fifth slider
-	 */
-	public void setText4(String text)
-	{
-		sliders.get(4).setValue(Integer.valueOf(text));
-	}
-
-	/**
-	 * @param text the textlabel for the sixth slider
-	 */
-	public void setText5(String text)
-	{
-		sliders.get(5).setValue(Integer.valueOf(text));
-	}
-
-	/**
-	 * @param value the value the first slider will be set to
-	 */
-	public void setSlider1(int value)
-	{
-		textfields.get(1).setText(value+"");
-		dummySliders.get(1).setValue(value);
-	}
-
-	/**
-	 * @param value the value the second slider will be set to
-	 */
-	public void setSlider2(int value)
-	{
-		textfields.get(2).setText(value+"");
-		dummySliders.get(2).setValue(value);
-	}
-
-	/**
-	 * @param value the value the third slider will be set to
-	 */
-	public void setSlider0(int value)
-	{
-		textfields.get(0).setText(value+"");
-		dummySliders.get(0).setValue(value);
-	}
-
-	/**
-	 * @param value the value the fourth slider will be set to
-	 */
-	public void setSlider3(int value)
-	{
-		textfields.get(3).setText(value+"");
-		dummySliders.get(3).setValue(value);
-	}
-
-	/**
-	 * @param value the value the fifth slider will be set to
-	 */
-	public void setSlider4(int value)
-	{
-		textfields.get(4).setText(value+"");
-		dummySliders.get(4).setValue(value);
-	}
-
-	/**
-	 * @param value the value the sixth slider will be set to
-	 */
-	public void setSlider5(int value)
-	{
-		textfields.get(5).setText(value+"");
-		dummySliders.get(5).setValue(value);
-	}
-
+	
 	/**
 	 * @param materialNumber number of the Material the shape currently plugged to the properties bar will be set to
 	 */
 	public void changeMaterial(float materialNumber)
 	{
-		shapeCurrentlyPluggedTo.getGShape().setMaterial(materials.get((int)materialNumber));
+		if (this.currentlyPluggedTo instanceof Shape)
+		{
+			Shape s = (Shape) this.currentlyPluggedTo;
+			s.getGShape().setMaterial(materials.get((int)materialNumber));
+		}
 	}
 
 	/**
@@ -274,166 +129,69 @@ public class Properties extends PApplet
 	 */
 	public void unplugAll()
 	{
-		if (this.shapeCurrentlyPluggedTo != null)
+		if (this.currentlyPluggedTo != null)
 		{
-			for(Slider s : dummySliders) s.unplugFrom(this.shapeCurrentlyPluggedTo);
-			this.shapeCurrentlyPluggedTo.getGShape().setActive(false);
-		}
-		if (this.connectionCurrentlyPluggedTo != null)
-		{
-			for(Slider s : dummySliders) s.unplugFrom(this.connectionCurrentlyPluggedTo);
-			this.connectionCurrentlyPluggedTo.setActive(false);
-		}
-		if (this.cutoutCurrentlyPluggedTo != null)
-		{
-			for(Slider s : dummySliders) s.unplugFrom(this.cutoutCurrentlyPluggedTo);
-			this.cutoutCurrentlyPluggedTo.setActive(false);
-		}
-		if (this.stlMeshCurrentlyPluggedTo != null)
-		{
-			for(Slider s : dummySliders) s.unplugFrom(this.stlMeshCurrentlyPluggedTo);
-			//this.stlMeshCurrentlyPluggedTo.setActive(false);
+			for (Numberbox n : numberBoxes) n.unplugFrom(this.currentlyPluggedTo);
+			this.currentlyPluggedTo.setActive(false);
 		}
 		hideAll();
 	}
-
+	
 	/**
-	 * Plugs the property-bars controls to the specified connection
 	 * 
-	 * @param c the connection the properties bars controls will be plugged to
+	 * Plugs the controls of the properties bar to the Pluggable p. 
+	 * Until the properties bar is unplugged from the Pluggable p, 
+	 * the controls will change the parameters of Pluggable p.
+	 * 
+	 * @param p the Pluggable the controls are plugged to
 	 */
-	public void plugTo(Connection c)
+	public void plugTo(Pluggable p)
 	{
 		unplugAll();
-		for(int i=0; i<c.getNumberOfControls(); i++)
+		for (int i = 0; i < p.getNumberOfControls(); i++)
 		{
-			int value = c.getValue(i);
-			sliders.get(i)
-			.setRange(getMinimum(c.getControlType(i)), getMaximum(c.getControlType(i)))
-			.setCaptionLabel(c.getNameOfControl(i))
+			int value = p.getValue(i);
+			numberBoxes.get(i)
+			.plugTo(p)
+			.setRange(getMinimum(p.getControlType(i)), getMaximum(p.getControlType(i)))
+			.setCaptionLabel(p.getNameOfControl(i))
 			.setValue(value)
 			.show();
-			textfields.get(i)
-			.setText((int)sliders.get(i).getValue()+"")
-			.show();
 			controlUnits.get(i)
-			.setText(getUnit(c.getControlType(i)))
+			.setText(getUnit(p.getControlType(i)))
 			.show();
-			controlNames.get(i).setText(c.getNameOfControl(i)).show();
-			dummySliders.get(i).plugTo(c);
+			controlNames.get(i).setText(p.getNameOfControl(i)).show();
 		}
-		c.setActive(true);
-		this.connectionCurrentlyPluggedTo = c;
-	}
-
-	/**
-	 * Plugs the property-bars controls to the specified shape
-	 * 
-	 * @param s the shape the properties bars controls will be plugged to
-	 */
-	public void plugTo(Shape s)
-	{
-		unplugAll();
-		for(int i=0; i<s.getNumberOfControls(); i++)
+		p.setActive(true);
+		this.currentlyPluggedTo = p;
+		
+		if (p instanceof Shape)
 		{
-			int value = s.getValue(i);
-			sliders.get(i)
-			.setRange(getMinimum(s.getControlType(i)), getMaximum(s.getControlType(i)))
-			.setCaptionLabel(s.getNameOfControl(i))
-			.setValue(value)
-			.show();
-			textfields.get(i)
-			.setText((int)sliders.get(i).getValue()+"")
-			.show();
-			controlUnits.get(i)
-			.setText(getUnit(s.getControlType(i)))
-			.show();
-			controlNames.get(i).setText(s.getNameOfControl(i)).show();
-			dummySliders.get(i).plugTo(s);
-
-			if(s.getGShape().getNumberOfConnections()>0)
+			Shape s = (Shape) p;
+			for (int i = 0; i < p.getNumberOfControls(); i++)
 			{
-				sliders.get(i).lock();
-				textfields.get(i).lock();
-				controlUnits.get(i).lock();
-				dummySliders.get(i).lock();
+				if (s.getGShape().getNumberOfConnections() > 0)
+				{
+					numberBoxes.get(i).lock();
+					controlUnits.get(i).lock();
+				}
+				else
+				{
+					numberBoxes.get(i).unlock();
+					controlUnits.get(i).unlock();
+				}
 			}
-			else
-			{
-				sliders.get(i).unlock();
-				textfields.get(i).unlock();
-				controlUnits.get(i).unlock();
-				dummySliders.get(i).unlock();
-			}
-		}
-		setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
-		setMaterial.show();
+			setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
+			setMaterial.show();
 
-		s.getGShape().setActive(true);
-		this.shapeCurrentlyPluggedTo = s;
-	}
-
-	/**
-	 * Plugs the property-bars controls to the specified cutout
-	 * 
-	 * @param c the cutout the properties bars controls will be plugged to
-	 */
-	public void plugTo(Cutout c)
-	{
-		unplugAll();
-		for(int i=0; i<c.getNumberOfControls(); i++)
-		{
-			int value = c.getValue(i);
-			sliders.get(i)
-			.setRange(getMinimum(c.getControlType(i)), getMaximum(c.getControlType(i)))
-			.setCaptionLabel(c.getNameOfControl(i))
-			.setValue(value)
-			.show();
-			textfields.get(i)
-			.setText((int)sliders.get(i).getValue()+"")
-			.show();
-			controlUnits.get(i)
-			.setText(getUnit(c.getControlType(i)))
-			.show();
-			controlNames.get(i).setText(c.getNameOfControl(i)).show();
-			dummySliders.get(i).plugTo(c);
+			s.getGShape().setActive(true);
 		}
-		c.setActive(true);
-		this.cutoutCurrentlyPluggedTo = c;
-	}
-
-	/**
-	 * Plugs the property-bars controls to the specified STLmesh
-	 * 
-	 * @param mesh the STLmesh the properties bars controls will be plugged to
-	 */
-	public void plugTo(STLMesh mesh) {
-		unplugAll();
-		for(int i=0; i<mesh.getNumberOfControls(); i++)
-		{
-			float value = mesh.getValue(i);
-			sliders.get(i)
-			.setRange(getMinimum(mesh.getControlType(i)), getMaximum(mesh.getControlType(i)))
-			.setCaptionLabel(mesh.getNameOfControl(i))
-			.setValue(value)
-			.show();
-			textfields.get(i)
-			.setText((int)sliders.get(i).getValue()+"")
-			.show();
-			controlUnits.get(i)
-			.setText(getUnit(mesh.getControlType(i)))
-			.show();
-			controlNames.get(i).setText(mesh.getNameOfControl(i)).show();
-			dummySliders.get(i).plugTo(mesh);
-		}
-		this.stlMeshCurrentlyPluggedTo = mesh;
 	}
 	
 	private void hideAll()
 	{
 		setMaterial.hide();
-		for(Slider s : sliders) s.hide();
-		for(Textfield t : textfields) t.hide();
+		for(Numberbox n : numberBoxes) n.hide();
 		for(Textlabel t : controlUnits) t.hide();
 		for(Textlabel t : controlNames) t.hide();
 	} 
@@ -494,10 +252,17 @@ public class Properties extends PApplet
 	public void drawProperties(PApplet p)
 	{
 		p.fill(180);
-		// p.rect(posX, posY, sizeX, sizeY); // overwrites drop-down menu, move to show & if(hidden) branch????
 		if (this.hidden)
 		{
 			unplugAll();
+		}
+	}
+	
+	public void keyEvent(KeyEvent k)
+	{
+		for(Numberbox n : numberBoxes)
+		{
+			n.keyEvent(k);
 		}
 	}
 }

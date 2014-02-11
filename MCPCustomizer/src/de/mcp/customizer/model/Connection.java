@@ -9,6 +9,7 @@ import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 import de.mcp.customizer.algorithm.CreateTenons;
 import de.mcp.customizer.algorithm.RotateAdjectantShapes;
+import de.mcp.customizer.application.Pluggable;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Vector2D;
@@ -16,7 +17,7 @@ import de.mcp.customizer.model.primitives.Vector3D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
-public class Connection implements Drawable2D, Serializable
+public class Connection implements Drawable2D, Serializable, Pluggable
 {
 	private static final long serialVersionUID = 4881854804310087106L;
 	

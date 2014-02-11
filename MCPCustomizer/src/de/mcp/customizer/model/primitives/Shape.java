@@ -3,10 +3,11 @@ package de.mcp.customizer.model.primitives;
 import java.io.Serializable;
 
 import processing.core.PGraphics;
+import de.mcp.customizer.application.Pluggable;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.Transformation;
 
-public abstract class Shape implements Drawable2D, Serializable {
+public abstract class Shape implements Drawable2D, Serializable, Pluggable {
 
 	private static final long serialVersionUID = 9220129288985965532L;
 
@@ -29,6 +30,11 @@ public abstract class Shape implements Drawable2D, Serializable {
 	@Override
 	public void draw2D(PGraphics p, Transformation transform) {
 		this.getGShape().draw2D(p, transform);
+	}
+	
+	public void setActive(boolean b)
+	{
+		this.getGShape().setActive(b);
 	}
 
 }

@@ -1,9 +1,10 @@
 package de.mcp.customizer.model;
 
+import de.mcp.customizer.application.Pluggable;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.TriangleMesh;
 
-public class STLMesh {
+public class STLMesh implements Pluggable {
 	private TriangleMesh STLMesh;
 	private float X;
 	private float Y;
@@ -115,21 +116,21 @@ public class STLMesh {
 		return 6;
 	}
 	
-	public float getValue(int i)
+	public int getValue(int i)
 	{
 		switch (i) {
 		
-        case 0: return this.X/10;
+        case 0: return (int) (this.X/10);
         
-        case 1: return this.Y/10;
+        case 1: return (int) (this.Y/10);
         
-        case 2: return this.Z/10;
+        case 2: return (int) (this.Z/10);
         
-        case 3: return this.rotX;
+        case 3: return (int) this.rotX;
         
-        case 4: return this.rotY;
+        case 4: return (int) this.rotY;
         
-        case 5: return this.rotZ;
+        case 5: return (int) this.rotZ;
         
         default: return 0; }
 	}
@@ -179,5 +180,11 @@ public class STLMesh {
 		rotDelY = 0;
 		rotDelZ = 0;
 		this.changedRot = false;
+	}
+
+	@Override
+	public void setActive(boolean b)
+	{
+		// appearently isn't supposed to do anything.
 	}
 }
