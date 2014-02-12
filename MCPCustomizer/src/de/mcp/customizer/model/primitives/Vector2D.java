@@ -3,6 +3,7 @@ package de.mcp.customizer.model.primitives;
 import java.io.Serializable;
 
 import toxi.geom.Vec2D;
+import toxi.geom.Vec3D;
 
 public class Vector2D implements Serializable{
 
@@ -117,5 +118,23 @@ public class Vector2D implements Serializable{
 	public Vector2D rotate(float angle) {
 		this.vector.rotate(angle);
 		return this;
+	}
+
+	public boolean equalsWithTolerance(Vector2D v, float f)
+	{
+		return this.vector.equalsWithTolerance(v.getVec2D(), f);
+	}
+	
+	public boolean equals(Object o) {
+		
+		if(o instanceof Vector2D) {
+			Vector2D otherVector = (Vector2D) o;
+			return this.equals(otherVector.getVec2D());
+		}
+		
+		if (o instanceof Vec2D) {
+			return this.vector.equals(o);
+		}
+		return false;	
 	}
 }

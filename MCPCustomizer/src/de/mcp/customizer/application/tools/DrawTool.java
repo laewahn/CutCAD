@@ -42,19 +42,25 @@ public class DrawTool extends Tool {
 
     public void mouseButtonReleased(Vector2D position, int button)
     {
-
         if (isDrawing && this.inView(position)) {
+        	if (this.positionRelativeToView(position).equals(this.startCoord))
+        	{
+                this.previewRectangle = null;
+                isDrawing = false;
+        	}
+        	else
+        	{
+        		this.customizer.displayStatus("Rectangle created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
+                Vector2D endCoord = this.positionRelativeToView(position);
+                Vector2D rectSize = endCoord.sub(this.startCoord);
+                
+                this.previewRectangle.setSize(rectSize);
 
-    		this.customizer.displayStatus("Rectangle created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
-            Vector2D endCoord = this.positionRelativeToView(position);
-            Vector2D rectSize = endCoord.sub(this.startCoord);
-            
-            this.previewRectangle.setSize(rectSize);
+                this.objectContainer.addShape(this.previewRectangle);
+                this.previewRectangle = null;
 
-            this.objectContainer.addShape(this.previewRectangle);
-            this.previewRectangle = null;
-
-            isDrawing = false;
+                isDrawing = false;
+        	}
         }
     }
 
