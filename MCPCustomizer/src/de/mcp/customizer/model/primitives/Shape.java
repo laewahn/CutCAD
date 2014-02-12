@@ -36,5 +36,9 @@ public abstract class Shape implements Drawable2D, Serializable, Pluggable {
 	{
 		this.getGShape().setActive(b);
 	}
-
+	
+	public String getName()
+	{
+		return this.getGShape().getName();
+	}
 }

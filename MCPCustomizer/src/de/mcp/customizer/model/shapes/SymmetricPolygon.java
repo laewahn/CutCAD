@@ -55,6 +55,15 @@ public class SymmetricPolygon extends Shape {
 	public int getNumberOfControls() {
 		return 2;
 	}
+	
+	/**
+	 * Sets the name of this shape to name
+	 * @param name the name
+	 */
+	public void setName(String theValue)
+	{
+		this.getGShape().setName(theValue);
+	}
 
 	/**
 	 * Returns the actual value for the corresponding parameter

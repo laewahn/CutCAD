@@ -46,6 +46,15 @@ public class CopyShape extends Shape {
 	public GShape getGShape() {
 		return basic;
 	}
+	
+	/**
+	 * Sets the name of this shape to name
+	 * @param name the name
+	 */
+	public void setName(String theValue)
+	{
+		this.getGShape().setName(theValue);
+	}
 
 	/**
 	 * Set the corresponding GShape

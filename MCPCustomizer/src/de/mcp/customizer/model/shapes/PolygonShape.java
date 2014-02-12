@@ -20,6 +20,15 @@ public class PolygonShape extends Shape {
 		counter++;
 	}
 	
+	/**
+	 * Sets the name of this shape to name
+	 * @param name the name
+	 */
+	public void setName(String theValue)
+	{
+		this.getGShape().setName(theValue);
+	}
+	
 	@Override
 	public GShape getGShape() {
 		return this.shape;

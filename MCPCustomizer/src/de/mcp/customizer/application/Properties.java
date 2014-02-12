@@ -7,6 +7,7 @@ import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.DropdownList;
 import controlP5.Numberbox;
+import controlP5.Textfield;
 import controlP5.Textlabel;
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.Material;
@@ -28,6 +29,8 @@ public class Properties extends PApplet
 	private ArrayList<Numberbox> numberBoxes;
 	private ArrayList<Textlabel> controlNames;
 	private ArrayList<Textlabel> controlUnits;
+	private Textfield shapeName;
+	private Textlabel nameLabel;
 	private DropdownList setMaterial;
 	private Pluggable currentlyPluggedTo;
 	private boolean hidden;
@@ -48,6 +51,20 @@ public class Properties extends PApplet
 		this.controllers = new ArrayList<Controller<?>>();
 		this.materials = AllMaterials.getMaterials();
 		this.currentlyPluggedTo = null;
+		
+		this.nameLabel = cp5.addTextlabel("nameLabel")
+				.setColor(0)
+				.setText("Name")
+				.setPosition(sizeX-390, (sizeY-10)/2)
+				.setSize(50, 20)
+                ;
+		this.shapeName = cp5.addTextfield("setName")
+				.setPosition(sizeX-350, (sizeY-25)/2)
+				.setSize(100, 25)
+		    	.setColorForeground(color(120))
+		    	.setColorActive(color(80))
+		    	.setColorBackground(color(150))
+		    	.setLabelVisible(false);
 
 		numberBoxes = new ArrayList<Numberbox>();
 		numberBoxes.add(new NumberInputBox(this, cp5, "setValue0"));
@@ -132,6 +149,7 @@ public class Properties extends PApplet
 		if (this.currentlyPluggedTo != null)
 		{
 			for (Numberbox n : numberBoxes) n.unplugFrom(this.currentlyPluggedTo);
+			this.shapeName.unplugFrom(this.currentlyPluggedTo);
 			this.currentlyPluggedTo.setActive(false);
 		}
 		hideAll();
@@ -168,6 +186,10 @@ public class Properties extends PApplet
 		if (p instanceof Shape)
 		{
 			Shape s = (Shape) p;
+			this.shapeName.plugTo(p);
+			this.shapeName.setText(s.getName());
+			this.shapeName.show();
+			this.nameLabel.show();
 			for (int i = 0; i < p.getNumberOfControls(); i++)
 			{
 				if (s.getGShape().getNumberOfConnections() > 0)
@@ -191,6 +213,8 @@ public class Properties extends PApplet
 	private void hideAll()
 	{
 		setMaterial.hide();
+		shapeName.hide();
+		nameLabel.hide();
 		for(Numberbox n : numberBoxes) n.hide();
 		for(Textlabel t : controlUnits) t.hide();
 		for(Textlabel t : controlNames) t.hide();
@@ -202,6 +226,8 @@ public class Properties extends PApplet
 		{
 			c.hide();
 		}
+		shapeName.hide();
+		nameLabel.hide();
 		setMaterial.hide();
 
 		this.hidden = true;
@@ -213,6 +239,8 @@ public class Properties extends PApplet
 		{
 			c.show();
 		}
+		shapeName.show();
+		nameLabel.show();
 		setMaterial.show();
 
 		this.hidden = false;

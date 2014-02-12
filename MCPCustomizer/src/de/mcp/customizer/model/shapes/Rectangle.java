@@ -44,6 +44,16 @@ public class Rectangle extends Shape implements Serializable {
 		basic.setName("Rectangle " + counter);
 		counter++;
 	}
+	
+	
+	/**
+	 * Sets the name of this shape to name
+	 * @param name the name
+	 */
+	public void setName(String theValue)
+	{
+		this.getGShape().setName(theValue);
+	}
 
 	/**
 	 * Returns the total number of possible controls to change the parameter
