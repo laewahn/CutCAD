@@ -10,24 +10,17 @@ import processing.core.PGraphics;
 public class Grid implements Drawable2D {
 
 	private int gridWidth;
-//	private Transformation transformation;
-//	private PGraphics view;
 	
 	/**
-	 * Creates a Grid that gets drawn on the passed PGraphics-object view and will be scaled depending on the Transformation-object t
-	 * 
-	 * @param t the transformation-object for the view
-	 * @param view the view that the grid is drawn on
+	 * Creates a Grid with a default width of 5mm
 	 */
 	public Grid(Transformation t, PGraphics view)
 	{
 		this.gridWidth = 50;
-//		this.transformation = t;
-//		this.view = view;
 	}
 	
 	/**
-	 * Draws the Grid.
+	 * Draws the Grid on the passed PGraphics-object view and scales it depending on the transformation.
 	 */
 	@Override
 	public void draw2D(PGraphics context, Transformation transformation) {
@@ -41,24 +34,6 @@ public class Grid implements Drawable2D {
 	    }
 	}
 	
-	
-//	public void drawGrid()
-//	{		
-//		int scaledGridWidth = getScaledGridWidth();
-//		for (int i = -100; i < 100; i++)
-//	    {
-//			view.strokeWeight(1);
-//			view.stroke(220);
-//			view.line(-100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth, scaledGridWidth * i);
-//			view.line(scaledGridWidth * i, -100 * scaledGridWidth, scaledGridWidth * i, 100 * scaledGridWidth);
-//	    }
-//	}
-	
-//	public void drawGrid()
-//	{		
-//		this.draw2D(this.view);
-//	}
-
 	private float getScaleFactor(float scale) {
 
 		float scaleFactor = 1;
