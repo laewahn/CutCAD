@@ -116,10 +116,10 @@ public class ObjectContainer {
 	
 	public void safe(String filename) {
 		FileOutputStream fos;
-		ObjectOutputStream oos;
+		ObjectOutputStream oos = null;
 		try {
 			fos = new FileOutputStream(new File(filename));
-			oos = new ObjectOutputStream(fos);
+			oos = new ObjectOutputStream(fos);			
 			
 			oos.writeObject(objects);
 			
@@ -128,12 +128,19 @@ public class ObjectContainer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		finally {
+			try {
+				oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void load(String filename) {
 		FileInputStream fis;
-		ObjectInputStream ois;
+		ObjectInputStream ois = null;
 		
 		try {
 			fis = new FileInputStream(new File(filename));
@@ -146,6 +153,12 @@ public class ObjectContainer {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				ois.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
