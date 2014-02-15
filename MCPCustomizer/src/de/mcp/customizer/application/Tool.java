@@ -6,13 +6,14 @@ import java.util.TimerTask;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.DrawingView2D;
 import de.mcp.customizer.view.SVGIcon;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
 
 public abstract class Tool implements Drawable2D {
 
-    protected CustomizerView view;
+    protected DrawingView2D view;
     protected String iconName;
     protected ShapeButton button;
     
@@ -22,17 +23,14 @@ public abstract class Tool implements Drawable2D {
     private float scalingFactor = 0.5f;
 
     public Tool(MCPCustomizer customizer, ObjectContainer container, String iconName) {
-    	this(customizer.customizerView2D, customizer.properties, customizer.statusbar, customizer.transform2D, iconName);
+ 
+    	this.view = customizer.drawingView2D;
     	this.customizer = customizer;
     	this.objectContainer = container;
+    	this.iconName = iconName;
+    	
 		PGraphics p = this.customizer.createGraphics(50, 50);
-		this.button = new ShapeButton(this.getIcon(), p, customizer.customizerView2D.getTransformation());
-    }
-    
-    public Tool(CustomizerView view, Properties properties, Statusbar statusbar, Transformation transform, String iconName)
-    {
-        this.view = view;
-        this.iconName = iconName;
+		this.button = new ShapeButton(this.getIcon(), p, this.view.getTransformation());
     }
     
     public float getScalingFactor() {

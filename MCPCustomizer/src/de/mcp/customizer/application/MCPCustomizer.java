@@ -3,7 +3,6 @@ package de.mcp.customizer.application;
 import geomerative.RG;
 
 import java.util.Arrays;
-import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -11,107 +10,25 @@ import processing.core.PVector;
 import processing.event.MouseEvent;
 import processing.opengl.*;
 import remixlab.proscene.Scene;
-import toxi.geom.Rect;
 import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-
 import de.mcp.customizer.application.tools.drawing.*;
 import de.mcp.customizer.application.tools.fileManagement.*;
 import de.mcp.customizer.application.tools.objectImport.*;
 import de.mcp.customizer.application.tools.objectManipulation.*;
-
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
-import de.mcp.customizer.view.Drawable2D;
+import de.mcp.customizer.view.DrawingView2D;
+import de.mcp.customizer.view.DrawingViewFrame;
 import de.mcp.customizer.view.Transformation;
-
-class CustomizerFrame {
-	public Vector2D origin;
-	public Vector2D size;
-	
-	public boolean containsPoint(Vector2D point) {
-		Rect frameRect = new Rect(this.origin.getVec2D(), this.origin.add(size).getVec2D());
-		return frameRect.containsPoint(point.getVec2D());
-	}
-}
-
-class CustomizerView {
-	
-	private MCPCustomizer application;
-	private PGraphics context;
-	private CustomizerFrame frame;
-	
-	private Transformation transform;
-	private Grid grid;
-	private Drawable2D axes = new Axes2D();
-	
-	public CustomizerView(PGraphics context, CustomizerFrame frame, Grid grid, Transformation transform, MCPCustomizer application) {
-		this.context = context;
-		this.frame = frame;
-		this.grid = grid;
-		
-		this.transform = transform;
-		this.application = application;
-	}
-	
-	public void applyTransformation(Transformation transform) {
-		context.scale(transform.getScale());
-        context.translate(-transform.getTranslation().x(), -transform.getTranslation().y());
-	}
-	
-	public void draw(List<Drawable2D> drawables) {
-		context.beginDraw();
-		context.background(150);
-		
-		applyTransformation(this.transform);
-
-		drawables.add(axes);
-		drawables.add((Drawable2D) grid);
-		
-		for(Drawable2D d : drawables) {
-			d.draw2D(context, this.transform);
-		}
-
-		context.endDraw();
-
-		application.image(context, frame.origin.x(), frame.origin.y());
-	}
-	
-	public Vector2D getOrigin() {
-		return this.frame.origin;
-	}
-	
-	public boolean containsPoint(Vector2D point) {
-		return this.frame.containsPoint(point);
-	}
-	
-	public Transformation getTransformation() {
-		return this.transform;
-	}
-	
-	private class Axes2D implements Drawable2D {
-		@Override
-		public void draw2D(PGraphics context, Transformation transform) {
-			context.strokeWeight(10);
-			context.stroke(context.color(255, 100, 100));
-			context.line(0, 0, 800, 0);
-			context.stroke(context.color(100, 255, 100));
-			context.line(0, 0, 0, 800);
-			context.stroke(context.color(0, 0, 0));
-			context.strokeWeight(1);
-		}
-	}
-
-}
 
 public class MCPCustomizer extends PApplet {
 
-	
 	private static final long serialVersionUID = 6945013714741954254L;
 	Toolbar toolbar;
 
@@ -132,20 +49,14 @@ public class MCPCustomizer extends PApplet {
 	int startX = 0;
 	int startY = 0;
 
-	int gridWidth = 50; // 5 mm
-
 	int viewSizeX;
 	int viewSizeY;
 
 	int view2DPosX;
 	int view2DPosY;
-	Rect view2DRect;
 
 	int view3DPosX;
 	int view3DPosY;
-
-	int cameraX = 45;
-	int cameraY = 1000;
 
 	public Transformation transform2D = new Transformation((float) 1.0,
 			new Vector2D(-50, -50));
@@ -156,7 +67,7 @@ public class MCPCustomizer extends PApplet {
 
 	Tool tools[];
 
-	public CustomizerView customizerView2D;
+	public DrawingView2D drawingView2D;
 	
 	public STLMesh meshSTL;
 
@@ -173,8 +84,6 @@ public class MCPCustomizer extends PApplet {
 		view2DPosY = 50;
 		view3DPosX = view2DPosX + viewSizeX + 15;
 		view3DPosY = 50;
-		
-		view2DRect = new Rect(view2DPosX, view2DPosY, viewSizeX, viewSizeY);
 
 		view2D = createGraphics(viewSizeX, viewSizeY, P3D);
 		view3D = createGraphics(viewSizeX, viewSizeY, P3D);
@@ -182,10 +91,10 @@ public class MCPCustomizer extends PApplet {
 		grid2D = new Grid(transform2D, view2D);
 		grid3D = new Grid(transform3D, view3D);
 
-		CustomizerFrame theFrame = new CustomizerFrame();
+		DrawingViewFrame theFrame = new DrawingViewFrame();
 		theFrame.origin = new Vector2D(view2DPosX, view2DPosY);
 		theFrame.size = new Vector2D(viewSizeX, viewSizeY);
-		customizerView2D = new CustomizerView(view2D, theFrame, grid2D, transform2D, this);
+		drawingView2D = new DrawingView2D(view2D, theFrame, grid2D, transform2D, this);
 		
 		gfx = new ToxiclibsSupport(this, view3D);
 
@@ -221,7 +130,7 @@ public class MCPCustomizer extends PApplet {
 		background(255);
 		fill(0);
 
-		customizerView2D.draw(container.allDrawables());
+		drawingView2D.draw(container.allDrawables());
 		
 		draw3DView();
 		
