@@ -33,13 +33,15 @@ public class LoadTool extends Tool implements FileDialogDelegate {
 		
 		OpenFileDialog openDialog = new OpenFileDialog(this);
 		openDialog.showDialog();
-		
-		this.wasUnselected();
 	}
 
 	@Override
 	public void fileWasSelected(File theFile) {
 		this.objectContainer.load(theFile);
 	}
-
+	
+	@Override
+	public boolean canStaySelected() {
+		return false;
+	}
 }

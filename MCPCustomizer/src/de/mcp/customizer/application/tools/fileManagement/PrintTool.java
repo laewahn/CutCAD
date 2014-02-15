@@ -60,4 +60,9 @@ public class PrintTool extends Tool {
     	PrintDialog printDialog = new PrintDialog(this.objectContainer.allShapes());
     	printDialog.preparePrintDialog();
     }
+    
+    @Override
+	public boolean canStaySelected() {
+		return false;
+	}
 }

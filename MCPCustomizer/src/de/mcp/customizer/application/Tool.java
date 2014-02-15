@@ -1,12 +1,14 @@
 package de.mcp.customizer.application;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Drawable2D;
 import de.mcp.customizer.view.SVGIcon;
 import de.mcp.customizer.view.Transformation;
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 
 public abstract class Tool implements Drawable2D {
 
@@ -81,6 +83,16 @@ public abstract class Tool implements Drawable2D {
 	public void wasSelected() {
 		this.objectContainer.setSelectedTool(this);
 		this.button.setSelected(true);
+		
+		if(!this.canStaySelected()) {
+			final Timer unselectTimer = new Timer();
+			unselectTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					wasUnselected();					
+				};
+			}, 100);	
+		}
 	};
 
 	public void wasUnselected() {
@@ -89,5 +101,9 @@ public abstract class Tool implements Drawable2D {
 
 	public void draw2D(PGraphics p, Transformation transform) {
 	};
+	
+	public boolean canStaySelected() {
+		return true;
+	}
 
 }

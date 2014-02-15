@@ -33,8 +33,6 @@ public class SaveTool extends Tool implements FileDialogDelegate{
 		
 		SaveFileDialog dialog = new SaveFileDialog(this);
 		dialog.showDialog();
-		
-		this.wasUnselected();
 	}
 
 	@Override
@@ -42,4 +40,8 @@ public class SaveTool extends Tool implements FileDialogDelegate{
 		this.objectContainer.save(theFile);		
 	}
 
+	@Override
+	public boolean canStaySelected() {
+		return false;
+	}
 }

@@ -46,7 +46,7 @@ public class ImportSVGTool extends Tool {
 	}
 	
 	@Override
-	public void wasUnselected() {
-		super.wasUnselected();
+	public boolean canStaySelected() {
+		return false;
 	}
 }

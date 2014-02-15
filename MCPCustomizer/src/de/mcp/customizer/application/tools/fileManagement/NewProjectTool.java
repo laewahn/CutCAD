@@ -26,10 +26,11 @@ public class NewProjectTool extends Tool {
 	@Override
 	public void wasSelected() {
 		super.wasSelected();
-		
 		this.objectContainer.clear();
-		
-		this.wasUnselected();
 	}
 
+	@Override
+	public boolean canStaySelected() {
+		return false;
+	}
 }

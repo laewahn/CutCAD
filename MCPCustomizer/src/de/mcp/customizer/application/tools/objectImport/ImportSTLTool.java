@@ -47,12 +47,12 @@ public class ImportSTLTool extends Tool {
 	
 	@Override
 	public void wasSelected() {
-		new ImportSTL(mesh);	
 		super.wasSelected();
+		new ImportSTL(mesh);	
 	}
 	
 	@Override
-	public void wasUnselected() {
-		super.wasUnselected();
+	public boolean canStaySelected() {
+		return false;
 	}
 }
