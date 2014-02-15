@@ -13,10 +13,6 @@ public class Vector3D implements Serializable {
 	
 	private transient Vec3D vector;
 	
-	private float x;
-	private float y;
-	private float z;
-	
 	public Vector3D() {
 		this(0, 0, 0);
 	}
@@ -30,10 +26,6 @@ public class Vector3D implements Serializable {
 	}
 	
 	public Vector3D(Vec3D vector) {
-		this.x = vector.x();
-		this.y = vector.y();
-		this.z = vector.z();
-		
 		this.vector = vector;
 	}
 	
@@ -131,16 +123,17 @@ public class Vector3D implements Serializable {
 	}
 	
 	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
-		ois.defaultReadObject();
+
+		float x = (float) ois.readFloat();
+		float y = (float) ois.readFloat();
+		float z = (float) ois.readFloat();
 		
-		this.vector = new Vec3D(this.x, this.y, this.z);
+		this.vector = new Vec3D(x, y, z);
 	}
 	
 	private void writeObject(ObjectOutputStream oos) throws IOException {
-		this.x = this.vector.x();
-		this.y = this.vector.y();
-		this.z = this.vector.z();
-		
-		oos.defaultWriteObject();
+		oos.writeFloat(this.vector.x());
+		oos.writeFloat(this.vector.y());
+		oos.writeFloat(this.vector.z());
 	}
 }
