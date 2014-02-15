@@ -1,15 +1,19 @@
 package de.mcp.customizer.model.primitives;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import toxi.geom.Vec2D;
-import toxi.geom.Vec3D;
 
 public class Vector2D implements Serializable{
 
 	private static final long serialVersionUID = 3944945759160627223L;
 
 	private transient Vec2D vector;
+	
+	private float x;
+	private float y;
 	
 	public Vector2D(Vector2D vector) {
 		this(vector.x(), vector.y());
@@ -19,7 +23,10 @@ public class Vector2D implements Serializable{
 		this(new Vec2D(x,y));
 	}
 	
-	public Vector2D(Vec2D vec) {
+	public Vector2D(Vec2D vec) {		
+		this.x = vec.x();
+		this.y = vec.y();
+		
 		this.vector = vec;
 	}
 	
@@ -136,5 +143,11 @@ public class Vector2D implements Serializable{
 			return this.vector.equals(o);
 		}
 		return false;	
+	}
+	
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		ois.defaultReadObject();
+		
+		this.vector = new Vec2D(this.x, this.y);
 	}
 }

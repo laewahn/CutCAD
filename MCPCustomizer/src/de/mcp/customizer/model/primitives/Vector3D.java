@@ -1,5 +1,7 @@
 package de.mcp.customizer.model.primitives;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import toxi.geom.Vec3D;
@@ -9,6 +11,10 @@ public class Vector3D implements Serializable {
 	private static final long serialVersionUID = -4325576947506131537L;
 	
 	private transient Vec3D vector;
+	
+	private float x;
+	private float y;
+	private float z;
 	
 	public Vector3D() {
 		this(0, 0, 0);
@@ -23,6 +29,10 @@ public class Vector3D implements Serializable {
 	}
 	
 	public Vector3D(Vec3D vector) {
+		this.x = vector.x();
+		this.y = vector.y();
+		this.z = vector.z();
+		
 		this.vector = vector;
 	}
 	
@@ -117,5 +127,11 @@ public class Vector3D implements Serializable {
 	
 	public Vector3D normalizeTo(float n) {
 		return new Vector3D(this.vector.normalizeTo(n));
+	}
+	
+	private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+		ois.defaultReadObject();
+		
+		this.vector = new Vec3D(this.x, this.y, this.z);
 	}
 }
