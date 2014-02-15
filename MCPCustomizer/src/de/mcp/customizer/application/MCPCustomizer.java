@@ -275,9 +275,11 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    toolbar = new Toolbar(this.cp5);
 
-	    toolbar.setPosition(0, 50).setSize(50, 700).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(50, 900).setItemHeight(50).disableCollapse().hideBar();
 	    
 	    tools = new Tool[]{
+	    	  new LoadTool(this, container),
+	    	  new SaveTool(this, container),
 	  	      new SelectTool(this, container),
 	  	      new DrawTool(this, container),
 	  	      new SymmetricPolygonTool(this, container),
@@ -294,7 +296,7 @@ public class MCPCustomizer extends PApplet {
 	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));
-	    toolbar.setSelectedTool(tools[0]);
+	    toolbar.setSelectedTool(tools[2]);
 	  }
 
 	  private void createProperties()
@@ -412,14 +414,7 @@ public class MCPCustomizer extends PApplet {
 				  transform2D.scaleDown(0.01f);
 			  }
 	    }
-	    if (key == 's') {
-	    	container.safe("foo");
-	    }
-	    
-	    if (key == 'o') {
-	    	container.load("foo");
-	    }
-	    
+	    	    
 	    if (key == 'n') {
 	    	container.clear();
 	    }

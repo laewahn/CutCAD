@@ -114,11 +114,11 @@ public class ObjectContainer {
 		return this.selectedTool;
 	}
 	
-	public void safe(String filename) {
+	public void save(File file) {
 		FileOutputStream fos;
 		ObjectOutputStream oos = null;
 		try {
-			fos = new FileOutputStream(new File(filename));
+			fos = new FileOutputStream(file);
 			oos = new ObjectOutputStream(fos);			
 			
 			oos.writeObject(objects);
@@ -138,12 +138,12 @@ public class ObjectContainer {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void load(String filename) {
+	public void load(File theFile) {
 		FileInputStream fis;
 		ObjectInputStream ois = null;
 		
 		try {
-			fis = new FileInputStream(new File(filename));
+			fis = new FileInputStream(theFile);
 			ois = new ObjectInputStream(fis);
 			
 			objects = (List<Drawable2D>) ois.readObject();
