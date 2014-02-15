@@ -1,7 +1,6 @@
 package de.mcp.customizer.application.tools.drawing;
 
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
@@ -55,11 +54,6 @@ public class TrapeziumTool extends Tool {
         	else
         	{
 	    		this.customizer.displayStatus("Trapezoid created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
-	
-				//Vector2D endCoord = this.positionRelativeToView(position);
-				//Vector2D rectSize = endCoord.sub(this.startCoord);
-	
-				//this.previewRectangle.setSize(rectSize);
 	
 				this.objectContainer.addShape(this.previewRectangle);
 				this.previewRectangle = null;

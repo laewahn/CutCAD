@@ -1,7 +1,6 @@
 package de.mcp.customizer.application.tools.drawing;
 
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;

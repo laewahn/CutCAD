@@ -1,7 +1,5 @@
 package de.mcp.customizer.application.tools.fileManagement;
 
-//import toxi.geom.Vector2D;
-
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;

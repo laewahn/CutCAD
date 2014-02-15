@@ -48,7 +48,6 @@ public class Cutout implements Drawable2D, Serializable, Pluggable {
 		}
 		this.isSelected = false;
 		this.isActive = false;
-//		allCutouts.add(this);
 	}
 
 	/**

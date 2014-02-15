@@ -1,4 +1,5 @@
 package de.mcp.customizer.printdialog;
+
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -12,7 +13,6 @@ import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
 import de.mcp.customizer.printdialog.lasercutter.LaserJobCreator;
 import processing.data.XML;
-//import toxi.geom.Vector2D;
 
 /**
  * Represents a single plate of a certain material.

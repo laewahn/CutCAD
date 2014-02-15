@@ -3,7 +3,6 @@ package de.mcp.customizer.application.tools.objectManipulation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
@@ -85,7 +84,6 @@ public class CutoutTool extends Tool {
     public void draw2D(PGraphics p, Transformation t)
     {
     	scalingFactor = t.getScale();
-//        scalingFactor = super.getScalingFactor();
         if (selectedFirst) {	
     		Polygon2D findCenter = new Polygon2D();
     		for (Edge e : masterShape.getGShape().getEdges()) findCenter.add(e.getV1().copy().getVec2D());

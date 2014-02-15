@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.mcp.customizer.model.primitives.GShape;
 import de.mcp.customizer.model.primitives.Shape;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.model.primitives.Vector2D;
 
 /**
@@ -110,7 +109,6 @@ public class CopyShape extends Shape {
 
 	@Override
 	public Shape copyBaseForm() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

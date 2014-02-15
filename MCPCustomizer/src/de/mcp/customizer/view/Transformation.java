@@ -1,7 +1,7 @@
 package de.mcp.customizer.view;
+
 import de.mcp.customizer.model.primitives.Vector2D;
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 
 public class Transformation
 {
@@ -16,7 +16,6 @@ public class Transformation
 
     public void transform(PGraphics view)
     {
-        //view.scale(this.scale);
         view.translate(-this.translation.x(), -this.translation.y());
     }
 

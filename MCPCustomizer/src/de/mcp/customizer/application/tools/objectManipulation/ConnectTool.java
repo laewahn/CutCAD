@@ -2,7 +2,6 @@ package de.mcp.customizer.application.tools.objectManipulation;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
@@ -51,7 +50,7 @@ public class ConnectTool extends Tool {
 					if (connectMessage == "Connection created!") {
 						this.customizer.displayStatus("Connection created! If you want to create another connection, select another edge");
 						this.lastMessage = "Connection created! If you want to create another connection, select another edge";
-						// this.connections.add(this.previewConnection);
+
 						this.objectContainer
 								.addConnection(this.previewConnection);
 					} else {
@@ -61,9 +60,7 @@ public class ConnectTool extends Tool {
 						this.customizer.displayStatus(connectMessage);
 						this.lastMessage = connectMessage;
 					}
-					// println("Added Connection between " +
-					// this.previewConnection.getEdge1() + " and " +
-					// this.previewConnection.getEdge2());
+
 					this.previewConnection.getMasterEdge().setSelected(false);
 					this.previewConnection = null;
 					selectedFirst = false;
@@ -91,8 +88,6 @@ public class ConnectTool extends Tool {
 			if (this.previewConnection != null) {
 				Edge firstEdge = this.previewConnection.getMasterEdge();
 				if (firstEdge != null) {
-					// canBeSelected = canBeSelected && (firstEdge.getLength()
-					// == e.getLength());
 					canBeSelected = canBeSelected
 							&& (Math.abs(firstEdge.getLength() - e.getLength()) < 5f);
 				}

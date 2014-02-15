@@ -19,7 +19,6 @@ import geomerative.*;
 public class ImportSVG extends PApplet {
 	private static final long serialVersionUID = 1L;
 	private RPoint[][] pointPaths;
-//	private List<Shape> shapes;
 	private ObjectContainer container;
 	// ToDO: scalingFactor only correct for inkscape, illustrator needs another
 	private float scalingInkscape = 2.82222229120988f; // ->Preferences (SVG

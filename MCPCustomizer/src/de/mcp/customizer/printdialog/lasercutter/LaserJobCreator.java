@@ -1,8 +1,6 @@
 package de.mcp.customizer.printdialog.lasercutter;
+
 import java.util.List;
-
-//import toxi.geom.Vector2D;
-
 
 import com.t_oster.liblasercut.IllegalJobException;
 import com.t_oster.liblasercut.LaserJob;

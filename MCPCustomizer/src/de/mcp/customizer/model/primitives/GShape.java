@@ -16,7 +16,6 @@ import processing.core.PGraphics;
 import toxi.geom.Line2D;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
-//import toxi.geom.Vector2D;
 import toxi.geom.Vec3D;
 
 /**

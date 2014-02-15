@@ -183,7 +183,6 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	 */
 	public void draw2D(PGraphics p, Transformation t) {
 		scalingFactor = t.getScale();
-		//scalingFactor = getGShape().getScalingFactor();
 		boundingBoxSize = 4 / scalingFactor;
 		
 		if (this.isHighlighted()) {
@@ -220,7 +219,6 @@ public class Edge implements Drawable2D, Drawable3D, Serializable {
 	public void draw3D(PGraphics p, Transformation t) {
 		scalingFactor3D = t.getScale();
 		createBorderBox();
-//		scalingFactor3D = getGShape().getScalingFactor3D();
 		if (this.isHighlighted()) {
 			Vector3D offset = this.getGShape().getNormalVector()
 					.normalizeTo(this.getGShape().getThickness() / 2 + 4);

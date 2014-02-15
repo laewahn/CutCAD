@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mcp.customizer.model.primitives.Shape;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.model.primitives.Vector2D;
 
 /**

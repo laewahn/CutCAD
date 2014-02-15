@@ -2,7 +2,6 @@ package de.mcp.customizer.application.tools.objectManipulation;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;

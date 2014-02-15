@@ -1,7 +1,6 @@
 package de.mcp.customizer.application.tools.drawing;
 
 import processing.core.PGraphics;
-//import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
@@ -58,8 +57,7 @@ public class SymmetricPolygonTool extends Tool {
 				Vector2D rectSize = endCoord.sub(this.startCoord);
 	
 				this.previewRectangle.setSize(rectSize);
-	
-	//			shapes.add(this.previewRectangle);
+
 				this.objectContainer.addShape(this.previewRectangle);
 				this.previewRectangle = null;
 	

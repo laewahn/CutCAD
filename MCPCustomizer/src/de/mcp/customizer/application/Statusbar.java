@@ -2,7 +2,6 @@ package de.mcp.customizer.application;
 
 import de.mcp.customizer.model.primitives.Vector2D;
 import processing.core.PApplet;
-//import toxi.geom.Vector2D;
 
 /**
  * A simple statusbar at the bottom of the UI, displaying a status message that

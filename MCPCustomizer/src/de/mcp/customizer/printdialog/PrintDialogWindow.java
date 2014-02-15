@@ -5,7 +5,6 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
-//import toxi.geom.Vector2D;
 import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
