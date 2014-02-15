@@ -2,6 +2,7 @@ package de.mcp.customizer.model.primitives;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import toxi.geom.Vec3D;
@@ -133,5 +134,13 @@ public class Vector3D implements Serializable {
 		ois.defaultReadObject();
 		
 		this.vector = new Vec3D(this.x, this.y, this.z);
+	}
+	
+	private void writeObject(ObjectOutputStream oos) throws IOException {
+		this.x = this.vector.x();
+		this.y = this.vector.y();
+		this.z = this.vector.z();
+		
+		oos.defaultWriteObject();
 	}
 }
