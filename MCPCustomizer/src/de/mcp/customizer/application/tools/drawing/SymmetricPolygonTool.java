@@ -1,4 +1,4 @@
-package de.mcp.customizer.application.tools;
+package de.mcp.customizer.application.tools.drawing;
 
 import processing.core.PGraphics;
 //import toxi.geom.Vector2D;

@@ -16,7 +16,12 @@ import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-import de.mcp.customizer.application.tools.*;
+
+import de.mcp.customizer.application.tools.drawing.*;
+import de.mcp.customizer.application.tools.fileManagement.*;
+import de.mcp.customizer.application.tools.objectImport.*;
+import de.mcp.customizer.application.tools.objectManipulation.*;
+
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
@@ -282,7 +287,7 @@ public class MCPCustomizer extends PApplet {
 	    	  new LoadTool(this, container),
 	    	  new SaveTool(this, container),
 	  	      new SelectTool(this, container),
-	  	      new DrawTool(this, container),
+	  	      new RectangleTool(this, container),
 	  	      new SymmetricPolygonTool(this, container),
 	  	      new TrapeziumTool(this, container),
 	  	      new PolygonTool(this, container),

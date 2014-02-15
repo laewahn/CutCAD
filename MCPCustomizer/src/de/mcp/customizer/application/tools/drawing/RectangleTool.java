@@ -1,4 +1,4 @@
-package de.mcp.customizer.application.tools;
+package de.mcp.customizer.application.tools.drawing;
 
 import processing.core.PGraphics;
 //import toxi.geom.Vector2D;
@@ -12,7 +12,7 @@ import de.mcp.customizer.view.Transformation;
 /**
  * The DrawTool is used to draw a rectangle-shape.
  */
-public class DrawTool extends Tool {
+public class RectangleTool extends Tool {
     
     boolean isDrawing;
 
@@ -23,7 +23,7 @@ public class DrawTool extends Tool {
      * @param customizer the main class of the project
      * @param container the currently loaded ObjectContainer
      */
-    public DrawTool(MCPCustomizer customizer, ObjectContainer container) {
+    public RectangleTool(MCPCustomizer customizer, ObjectContainer container) {
     	super(customizer, container, "DrawRectangle.svg");
     	this.isDrawing = false;
     }

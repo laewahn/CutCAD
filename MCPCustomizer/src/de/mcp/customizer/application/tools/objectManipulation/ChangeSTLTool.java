@@ -1,30 +1,29 @@
-package de.mcp.customizer.application.tools;
+package de.mcp.customizer.application.tools.objectManipulation;
 
 import processing.core.PGraphics;
 //import toxi.geom.Vector2D;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
-import de.mcp.customizer.model.ImportSTL;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.Transformation;
 
 /**
- * The ImportSTLTool is used to import an STL-mesh into the 3D-view.
- * Once imported, the STL-mesh can be moved and rotated with the ChangeSTLTool.
- * Only one STL-mesh can be loaded at a time.
+ * The ChangeSTLTool is used to move and rotate an imported STL mesh in the 3D-view
  */
-public class ImportSTLTool extends Tool {
+public class ChangeSTLTool extends Tool {
 
 	private STLMesh mesh;
 
 	/**
+	 * Creates a ChangeSTLTool
+	 * 
 	 * @param customizer the main class of the project
 	 * @param container the currently loaded ObjectContainer
 	 */
-	public ImportSTLTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "LoadSTL.svg");
+	public ChangeSTLTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "MoveSTL.svg");
 		this.mesh = customizer.meshSTL;
 	}
 	
@@ -47,7 +46,11 @@ public class ImportSTLTool extends Tool {
 	
 	@Override
 	public void wasSelected() {
-		new ImportSTL(mesh);	
+		if(mesh.isStlImported())
+		{
+			this.customizer.properties.show();
+			this.customizer.properties.plugTo(mesh);
+		}
 		super.wasSelected();
 	}
 	

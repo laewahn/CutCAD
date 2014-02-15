@@ -1,4 +1,4 @@
-package de.mcp.customizer.application.tools;
+package de.mcp.customizer.application.tools.fileManagement;
 
 import java.io.File;
 
@@ -7,16 +7,16 @@ import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.FileDialogDelegate;
-import de.mcp.customizer.view.SaveFileDialog;
+import de.mcp.customizer.view.OpenFileDialog;
 
-public class SaveTool extends Tool implements FileDialogDelegate{
+public class LoadTool extends Tool implements FileDialogDelegate {
 
-	public SaveTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "Save2.svg");
+	public LoadTool(MCPCustomizer customizer, ObjectContainer container) {
+		super(customizer, container, "Load2.svg");
 	}
 
 	@Override
-	public void mouseButtonPressed(Vector2D position, int button) {
+	public void mouseButtonPressed(Vector2D position, int button) {		
 	}
 
 	@Override
@@ -31,15 +31,15 @@ public class SaveTool extends Tool implements FileDialogDelegate{
 	public void wasSelected() {
 		super.wasSelected();
 		
-		SaveFileDialog dialog = new SaveFileDialog(this);
-		dialog.showDialog();
+		OpenFileDialog openDialog = new OpenFileDialog(this);
+		openDialog.showDialog();
 		
 		this.wasUnselected();
 	}
 
 	@Override
 	public void fileWasSelected(File theFile) {
-		this.objectContainer.save(theFile);		
+		this.objectContainer.load(theFile);
 	}
 
 }
