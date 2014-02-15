@@ -278,6 +278,7 @@ public class MCPCustomizer extends PApplet {
 	    toolbar.setPosition(0, 50).setSize(50, 900).setItemHeight(50).disableCollapse().hideBar();
 	    
 	    tools = new Tool[]{
+	    	  new NewProjectTool(this, container),
 	    	  new LoadTool(this, container),
 	    	  new SaveTool(this, container),
 	  	      new SelectTool(this, container),
@@ -296,7 +297,7 @@ public class MCPCustomizer extends PApplet {
 	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));
-	    toolbar.setSelectedTool(tools[2]);
+	    toolbar.setSelectedTool(tools[3]);
 	  }
 
 	  private void createProperties()
@@ -413,10 +414,6 @@ public class MCPCustomizer extends PApplet {
 			  {
 				  transform2D.scaleDown(0.01f);
 			  }
-	    }
-	    	    
-	    if (key == 'n') {
-	    	container.clear();
 	    }
 	  }
 	  
