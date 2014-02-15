@@ -136,25 +136,25 @@ public class CreateTenons {
 		// the shape ?)
 		if ((angle > (float) 0 && angle < (float) Math.PI / 2)
 				|| (angle > (float) Math.PI && angle < (float) Math.PI * 3 / 2)) {
-			if (masterTenonDepth > 2 * thicknessMaster) {
-				masterTenonDepth = 2 * thicknessMaster;
-				slaveTenonHeight = thicknessMaster * (float) Math.sin(angle);
+			if (masterTenonDepth > (thicknessMaster+thicknessSlave)) {
+				masterTenonDepth = (thicknessMaster+thicknessSlave);
+				slaveTenonHeight = (thicknessMaster+thicknessSlave)/2 * (float) Math.sin(angle);
 			}
-			if (slaveTenonDepth > 2 * thicknessSlave) {
-				slaveTenonDepth = 2 * thicknessSlave;
-				masterTenonHeight = thicknessSlave * (float) Math.sin(angle);
+			if (slaveTenonDepth > (thicknessMaster+thicknessSlave)) {
+				slaveTenonDepth = (thicknessMaster+thicknessSlave);
+				masterTenonHeight = (thicknessMaster+thicknessSlave)/2 * (float) Math.sin(angle);
 			}
 		} else {
 			angle = angle - (float) Math.PI / 2;
-			if (masterTenonDepth > 2 * thicknessMaster) {
-				masterTenonDepth = 2 * thicknessMaster;
+			if (masterTenonDepth > (thicknessMaster+thicknessSlave)) {
+				masterTenonDepth = (thicknessMaster+thicknessSlave);
 				slaveTenonHeight = (float) (masterTenonDepth / Math.sin(angle) + Math
-						.abs((thicknessSlave / 2) / Math.tan(angle)));
+						.abs(((thicknessMaster+thicknessSlave) / 4) / Math.tan(angle)));
 			}
-			if (slaveTenonDepth > 2 * thicknessSlave) {
-				slaveTenonDepth = 2 * thicknessSlave;
+			if (slaveTenonDepth > (thicknessMaster+thicknessSlave)) {
+				slaveTenonDepth = (thicknessMaster+thicknessSlave);
 				masterTenonHeight = (float) (slaveTenonDepth / Math.sin(angle) + Math
-						.abs((thicknessMaster / 2) / Math.tan(angle)));
+						.abs(((thicknessMaster+thicknessSlave) / 4) / Math.tan(angle)));
 			}
 		}
 		masterEdge.setTenons(createTenons(masterEdge, lengthOfATenon,
