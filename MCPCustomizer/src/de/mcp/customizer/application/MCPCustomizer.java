@@ -9,20 +9,26 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 import processing.opengl.*;
+
 import remixlab.proscene.Scene;
+
 import toxi.geom.mesh.*;
 import toxi.processing.ToxiclibsSupport;
+
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
+
 import de.mcp.customizer.application.tools.drawing.*;
 import de.mcp.customizer.application.tools.fileManagement.*;
 import de.mcp.customizer.application.tools.objectImport.*;
 import de.mcp.customizer.application.tools.objectManipulation.*;
+
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
+
 import de.mcp.customizer.view.DrawingView2D;
 import de.mcp.customizer.view.DrawingViewFrame;
 import de.mcp.customizer.view.Transformation;
