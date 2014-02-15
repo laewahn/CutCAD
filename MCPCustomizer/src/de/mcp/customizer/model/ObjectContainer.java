@@ -1,9 +1,11 @@
 package de.mcp.customizer.model;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.ArrayList;
@@ -128,8 +130,23 @@ public class ObjectContainer {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void load(String filename) {
+		FileInputStream fis;
+		ObjectInputStream ois;
 		
+		try {
+			fis = new FileInputStream(new File(filename));
+			ois = new ObjectInputStream(fis);
+			
+			objects = (List<Drawable2D>) ois.readObject();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void clear() {
