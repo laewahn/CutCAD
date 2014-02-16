@@ -32,21 +32,6 @@ public class ImportSVG extends PApplet {
 	 */
 	public ImportSVG(ObjectContainer container) {
 		this.container = container;
-		selectInput("Select a SVG file to process:", "fileSelected");
-	}
-
-	/**
-	 * Load a file and checks, if it is an svg
-	 * 
-	 * @param selection
-	 *            Path name
-	 */
-	public void fileSelected(File selection) {
-		if (!(selection == null)) {
-			if (checkExtension(selection.getAbsolutePath()).equals("svg")) {
-				createPathsFromSVG(selection);
-			}
-		}
 	}
 
 	/**
@@ -55,7 +40,7 @@ public class ImportSVG extends PApplet {
 	 * @param selection
 	 *            Path name
 	 */
-	private void createPathsFromSVG(File selection) {
+	public void createPathsFromSVG(File selection) {
 		pointPaths = RG.loadShape(selection.getAbsolutePath())
 				.getPointsInPaths();
 

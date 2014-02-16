@@ -32,7 +32,7 @@ public class LoadTool extends Tool implements FileDialogDelegate {
 		super.wasSelected();
 		
 		OpenFileDialog openDialog = new OpenFileDialog(this);
-		openDialog.showDialog();
+		openDialog.showDialog("Select a file to load.");
 	}
 
 	@Override

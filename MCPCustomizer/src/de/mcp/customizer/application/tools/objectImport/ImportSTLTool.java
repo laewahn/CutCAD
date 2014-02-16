@@ -56,8 +56,8 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 	public void wasSelected() {
 		super.wasSelected();
 
-		OpenFileDialog dialog = new OpenFileDialog("Select a STL file to process:", this);
-		dialog.showDialog();
+		OpenFileDialog dialog = new OpenFileDialog(this);
+		dialog.showDialog("Select a STL file to process:");
 	}
 
 	@Override
