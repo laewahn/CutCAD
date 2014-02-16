@@ -31,7 +31,7 @@ public class SaveTool extends Tool implements FileDialogDelegate{
 	public void wasSelected() {
 		super.wasSelected();
 		
-		SaveFileDialog dialog = new SaveFileDialog(this);
+		SaveFileDialog dialog = new SaveFileDialog("Enter the name or select the file you would like to save your project into.", this);
 		dialog.showDialog();
 	}
 
