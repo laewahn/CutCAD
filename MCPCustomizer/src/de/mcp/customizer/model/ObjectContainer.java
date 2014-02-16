@@ -19,12 +19,18 @@ import de.mcp.customizer.view.Drawable2D;
 public class ObjectContainer {
 
 	private List<Drawable2D> objects;
+	private STLMesh stlMesh;
+	
 	private Tool selectedTool;
 	
 	public ObjectContainer() {
 		this.objects = new ArrayList<>();
+		this.stlMesh = new STLMesh();
 	}
 	
+	public STLMesh getSTLMesh() {
+		return this.stlMesh;
+	}
 	
 	public List<Drawable2D> allDrawables() {
 		List<Drawable2D> drawables = new ArrayList<Drawable2D>(this.objects);
@@ -35,7 +41,6 @@ public class ObjectContainer {
 		
 		return drawables;
 	}
-	
 	
 	public List<Shape> allShapes() {
 		List<Shape> shapes = new ArrayList<Shape>();
@@ -164,5 +169,6 @@ public class ObjectContainer {
 	
 	public void clear() {
 		this.objects = new ArrayList<Drawable2D>();
+		this.stlMesh = new STLMesh();
 	}
 }

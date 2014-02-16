@@ -6,14 +6,8 @@ import java.util.Arrays;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import processing.event.MouseEvent;
 import processing.opengl.*;
-
-import remixlab.proscene.Scene;
-
-import toxi.geom.mesh.*;
-import toxi.processing.ToxiclibsSupport;
 
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
@@ -25,108 +19,89 @@ import de.mcp.customizer.application.tools.objectManipulation.*;
 
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
 
-import de.mcp.customizer.view.DrawingView2D;
 import de.mcp.customizer.view.DrawingViewFrame;
+
+import de.mcp.customizer.view.DrawingView2D;
+import de.mcp.customizer.view.DrawingView3D;
+
 import de.mcp.customizer.view.Transformation;
+
+
 
 public class MCPCustomizer extends PApplet {
 
 	private static final long serialVersionUID = 6945013714741954254L;
-	Toolbar toolbar;
-
-	public Properties properties;
-
-	Statusbar statusbar;
-	ControlP5 cp5;
 	
-	Scene scene;
-
-	ToxiclibsSupport gfx;
-	PGraphics view2D, view3D;
-
-	ObjectContainer container = new ObjectContainer();
-
-	TriangleMesh mesh;
-
-	int startX = 0;
-	int startY = 0;
-
 	int viewSizeX;
 	int viewSizeY;
 
-	int view2DPosX;
-	int view2DPosY;
-
-	int view3DPosX;
-	int view3DPosY;
+	ControlP5 cp5;
+	Toolbar toolbar;
+	public Properties properties;
+	Statusbar statusbar;
+	
+	ObjectContainer container = new ObjectContainer();
 
 	public Transformation transform2D = new Transformation((float) 1.0,
 			new Vector2D(-50, -50));
 	Transformation transform3D = new Transformation((float) 1.0,
 			new Vector2D(0, 0));
 
-	Grid grid3D, grid2D;
-
 	Tool tools[];
 
 	public DrawingView2D drawingView2D;
+	public DrawingView3D drawingView3D;
 	
-	public STLMesh meshSTL;
-
 	/* (non-Javadoc)
 	 * @see processing.core.PApplet#setup()
 	 */
 	public void setup() {
 		size(displayWidth, displayHeight, P3D);
 		ortho();
-
+		
 		viewSizeX = (displayWidth - 50 - 30) / 2;
 		viewSizeY = (displayHeight - 50 - 30);
-		view2DPosX = 50;
-		view2DPosY = 50;
-		view3DPosX = view2DPosX + viewSizeX + 15;
-		view3DPosY = 50;
-
-		view2D = createGraphics(viewSizeX, viewSizeY, P3D);
-		view3D = createGraphics(viewSizeX, viewSizeY, P3D);
-
-		grid2D = new Grid(transform2D, view2D);
-		grid3D = new Grid(transform3D, view3D);
-
-		DrawingViewFrame theFrame = new DrawingViewFrame();
-		theFrame.origin = new Vector2D(view2DPosX, view2DPosY);
-		theFrame.size = new Vector2D(viewSizeX, viewSizeY);
-		drawingView2D = new DrawingView2D(view2D, theFrame, grid2D, transform2D, this);
 		
-		gfx = new ToxiclibsSupport(this, view3D);
-
-		RG.init(this);
-		RG.ignoreStyles(false);
-
-		RG.setPolygonizer(RG.ADAPTATIVE);
-
-		meshSTL = new STLMesh();
-
+		setup2DDrawingView(50, 50, viewSizeX, viewSizeY);
+		
+		int view3DPosX = 50 + viewSizeX + 15;
+		int view3DPosY = 50;
+		
+		setup3DDrawingView(view3DPosX, view3DPosY, viewSizeX, viewSizeY);
+		
 		new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
 		AllMaterials.setBaseMaterial(AllMaterials.getMaterials().get(40));
 
 		cp5 = new ControlP5(this);
-
 		createProperties();
 		statusbar = new Statusbar();
 		createToolbar();
+	}
+	
+	private void setup2DDrawingView(int originX, int originY, int width, int heigth) {
+		
+		DrawingViewFrame theFrame = new DrawingViewFrame();
+		theFrame.origin = new Vector2D(originX, originY);
+		theFrame.size = new Vector2D(width, heigth);
+		
+		PGraphics view2D = createGraphics(width, heigth, P3D);
+		drawingView2D = new DrawingView2D(view2D, theFrame, transform2D, this);
+	}
+	
+	private void setup3DDrawingView(int originX, int originY, int width, int heigth) {
 
-		scene = new Scene((PApplet)this, (PGraphics3D)view3D);
-		scene.disableKeyboardHandling();
-		scene.disableMouseHandling();
-		scene.setGridIsDrawn(false);
-		scene.setAxisIsDrawn(false);
-		scene.setRadius(10000.0f);
-		scene.camera().setPosition(new PVector(500, 550, 1500));
+		RG.init(this);
+		RG.ignoreStyles(false);
+		RG.setPolygonizer(RG.ADAPTATIVE);
+
+		DrawingViewFrame theFrame = new DrawingViewFrame();
+		theFrame.origin = new Vector2D(originX, originY);
+		theFrame.size = new Vector2D(width, heigth);
+		
+		PGraphics3D view3D = (PGraphics3D) createGraphics(width, height, P3D);
+		drawingView3D = new DrawingView3D(view3D, theFrame, transform3D, this);
 	}
 
 /* (non-Javadoc)
@@ -136,59 +111,11 @@ public class MCPCustomizer extends PApplet {
 		background(255);
 		fill(0);
 
-		drawingView2D.draw(container.allDrawables());
-		
-		draw3DView();
+		drawingView2D.draw(container);
+		drawingView3D.draw(container);
 		
 		properties.drawProperties(this);
 		statusbar.drawStatusbar(this);
-	}
-
-	private void draw3DView()
-	  {
-	    view3D.beginDraw();
-	    
-	    scene.beginDraw();
-
-	    view3D.background(150);
-  
-	    draw3DAxes(view3D);
-	    grid3D.draw2D(view3D, transform3D);;
-	    
-	    for (Shape s : container.allShapes())
-	    {
-	      s.getGShape().draw3D(view3D, transform3D);
-	    }
-
-	    if(meshSTL.isStlImported())
-	    {
-	    	if(meshSTL.isPosChanged())
-	    	{
-	    		meshSTL.center();
-	    	}
-	    	if(meshSTL.isRotChanged())
-	    	{
-	    		meshSTL.rotate();
-	    	}
-	    	gfx.mesh(meshSTL.getSTLMesh());
-	    }
-	    
-	    scene.endDraw();
-	    view3D.endDraw(); 
-	    
-	    image(view3D, view3DPosX, view3DPosY);
-	  }
-
-	private void draw3DAxes(PGraphics p) {
-		p.strokeWeight(10);
-		p.stroke(color(255, 100, 100));
-		p.line(0, 0, 0, 1000, 0, 0);
-		p.stroke(color(100, 255, 100));
-		p.line(0, 0, 0, 0, 1000, 0);
-		p.stroke(color(100, 100, 255));
-		p.line(0, 0, 0, 0, 0, 1000);
-		p.stroke(color(0, 0, 0));
-		p.strokeWeight(1);
 	}
 
 	  private void createToolbar()
@@ -263,12 +190,6 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mousePressed()
 	  {   
-	      if (mouseOver3DView())
-	      {
-	          startX = mouseX - view3DPosX;
-	          startY = mouseY - view3DPosY;
-	      }
-	      
 	      Vector2D mousePosition = new Vector2D(mouseX, mouseY);
 	      toolbar.getSelectedTool().mouseButtonPressed(mousePosition, mouseButton);
 	  }
@@ -295,25 +216,9 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mouseMoved() 
 	  {
-	      toolbar.getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
-	      if (mouseOver3DView())
-	      {
-	    	  scene.enableMouseHandling();
-	      }
-	      else
-	      {
-	    	  scene.disableMouseHandling();
-	      }
-	  }
-
-	  private boolean mouseOver2DView()
-	  {
-	    return mouseX > view2DPosX && mouseX <= view2DPosX + viewSizeX && mouseY > view2DPosY && mouseY <= view2DPosY + viewSizeY;
-	  }
-
-	  private boolean mouseOver3DView()
-	  {
-	    return mouseX > view3DPosX && mouseX <= view3DPosX + viewSizeX && mouseY > view3DPosY && mouseY <= view3DPosY + viewSizeY;
+		Vector2D mousePosition = new Vector2D(mouseX, mouseY);
+	      toolbar.getSelectedTool().mouseMoved(mousePosition);
+	      drawingView3D.setInteractionEnabled(drawingView3D.mouseOver(mousePosition));
 	  }
 
 	  /* (non-Javadoc)
@@ -323,14 +228,14 @@ public class MCPCustomizer extends PApplet {
 	  {
 	    if (key == '+')
 	    {
-	    	if (mouseOver2DView())
+	    	if (drawingView2D.mouseOver(new Vector2D(mouseX, mouseY)))
 			  {
 				  transform2D.scaleUp(0.01f);
 			  }
 	    }
 	    if (key == '-')
 	    {
-	    	if (mouseOver2DView())
+	    	if (drawingView2D.mouseOver(new Vector2D(mouseX, mouseY)))
 			  {
 				  transform2D.scaleDown(0.01f);
 			  }
@@ -343,7 +248,7 @@ public class MCPCustomizer extends PApplet {
 	@SuppressWarnings("deprecation")
 	public void mouseWheel(MouseEvent event)
 	  {
-		  if (mouseOver2DView())
+		if (drawingView2D.mouseOver(new Vector2D(mouseX, mouseY)))
 		  {
 			  transform2D.scaleUp((float) (0.01 * -event.getAmount()));
 		  }

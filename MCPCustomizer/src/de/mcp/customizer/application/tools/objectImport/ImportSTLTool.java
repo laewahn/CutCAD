@@ -32,7 +32,7 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 	 */
 	public ImportSTLTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "LoadSTL.svg");
-		this.mesh = customizer.meshSTL;
+		this.mesh = container.getSTLMesh();
 	}
 
 	@Override

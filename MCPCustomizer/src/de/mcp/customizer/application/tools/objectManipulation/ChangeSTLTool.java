@@ -23,7 +23,7 @@ public class ChangeSTLTool extends Tool {
 	 */
 	public ChangeSTLTool(MCPCustomizer customizer, ObjectContainer container) {
 		super(customizer, container, "MoveSTL.svg");
-		this.mesh = customizer.meshSTL;
+		this.mesh = container.getSTLMesh();
 	}
 	
 	@Override

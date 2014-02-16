@@ -5,6 +5,7 @@ import java.util.List;
 import processing.core.PGraphics;
 import de.mcp.customizer.application.Grid;
 import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
 
 public class DrawingView2D {
@@ -17,13 +18,13 @@ public class DrawingView2D {
 	private Grid grid;
 	private Drawable2D axes = new Axes2D();
 	
-	public DrawingView2D(PGraphics context, DrawingViewFrame frame, Grid grid, Transformation transform, MCPCustomizer application) {
+	public DrawingView2D(PGraphics context, DrawingViewFrame frame, Transformation transform, MCPCustomizer application) {
 		this.context = context;
 		this.frame = frame;
-		this.grid = grid;
-		
 		this.transform = transform;
 		this.application = application;
+		
+		this.grid = new Grid(transform, context);
 	}
 	
 	public void applyTransformation(Transformation transform) {
@@ -31,17 +32,20 @@ public class DrawingView2D {
         context.translate(-transform.getTranslation().x(), -transform.getTranslation().y());
 	}
 	
-	public void draw(List<Drawable2D> drawables) {
+	public void draw(ObjectContainer container) {
 		context.beginDraw();
 		context.background(150);
 		
 		applyTransformation(this.transform);
-
-		drawables.add(axes);
-		drawables.add((Drawable2D) grid);
 		
-		for(Drawable2D d : drawables) {
-			d.draw2D(context, this.transform);
+		List<Drawable2D> allDrawables = container.allDrawables();
+		allDrawables.add(axes);
+		allDrawables.add((Drawable2D) grid);
+		
+		for(Drawable2D d : allDrawables) {
+			if(d instanceof Drawable2D) { 
+				d.draw2D(context, this.transform);				
+			}
 		}
 
 		context.endDraw();
@@ -59,6 +63,11 @@ public class DrawingView2D {
 	
 	public Transformation getTransformation() {
 		return this.transform;
+	}
+	
+	public boolean mouseOver(Vector2D mousePosition) {
+		return mousePosition.x() > frame.origin.x() && mousePosition.x() <= frame.origin.x() + frame.size.x()
+				&& mousePosition.x() > frame.origin.x() && mousePosition.y() <= frame.origin.y() + frame.size.y();
 	}
 	
 	private class Axes2D implements Drawable2D {
