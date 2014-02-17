@@ -90,7 +90,7 @@ public class MCPCustomizer extends PApplet {
 		drawingView2D = new DrawingView2D(view2D, theFrame, transform2D, this);
 	}
 	
-	private void setup3DDrawingView(int originX, int originY, int width, int heigth) {
+	private void setup3DDrawingView(int originX, int originY, int width, int height) {
 
 		RG.init(this);
 		RG.ignoreStyles(false);
@@ -98,7 +98,7 @@ public class MCPCustomizer extends PApplet {
 
 		DrawingViewFrame theFrame = new DrawingViewFrame();
 		theFrame.origin = new Vector2D(originX, originY);
-		theFrame.size = new Vector2D(width, heigth);
+		theFrame.size = new Vector2D(width, height);
 		
 		PGraphics3D view3D = (PGraphics3D) createGraphics(width, height, P3D);
 		drawingView3D = new DrawingView3D(view3D, theFrame, transform3D, this);
