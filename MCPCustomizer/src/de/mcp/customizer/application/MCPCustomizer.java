@@ -4,31 +4,25 @@ import geomerative.RG;
 
 import java.util.Arrays;
 
+import javax.swing.JOptionPane;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 import processing.opengl.*;
-
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-
 import de.mcp.customizer.application.tools.drawing.*;
 import de.mcp.customizer.application.tools.fileManagement.*;
 import de.mcp.customizer.application.tools.objectImport.*;
 import de.mcp.customizer.application.tools.objectManipulation.*;
-
 import de.mcp.customizer.model.AllMaterials;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
-
 import de.mcp.customizer.view.DrawingViewFrame;
-
 import de.mcp.customizer.view.DrawingView2D;
 import de.mcp.customizer.view.DrawingView3D;
-
 import de.mcp.customizer.view.Transformation;
-
-
 
 public class MCPCustomizer extends PApplet {
 
@@ -240,7 +234,18 @@ public class MCPCustomizer extends PApplet {
 				  transform2D.scaleDown(0.01f);
 			  }
 	    }
+	    if (keyCode == ESC) {
+	    	if (container.hasUnsavedChanges()) {
+	    		int response = JOptionPane.showConfirmDialog(null, "You have unsaved changes. Quit anyways?");
+	    		if (response == JOptionPane.CANCEL_OPTION || response == JOptionPane.NO_OPTION) {
+	    			key = 0;  			
+	    		}
+	    	}
+	    	
+	    }
 	  }
+	
+	
 	  
 	  /* (non-Javadoc)
 	 * @see processing.core.PApplet#mouseWheel(processing.event.MouseEvent)
