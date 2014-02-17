@@ -22,6 +22,7 @@ public class ObjectContainer {
 	private STLMesh stlMesh;
 	
 	private Tool selectedTool;
+	private boolean unsavedChanges;
 	
 	public ObjectContainer() {
 		this.objects = new ArrayList<>();
@@ -56,10 +57,12 @@ public class ObjectContainer {
 	
 	public void addShape(Shape shape) {
 		this.objects.add((Drawable2D) shape);
+		this.unsavedChanges = true;
 	}
 	
 	public void removeShape(Shape shape) {
 		this.objects.remove(shape);
+		this.unsavedChanges = true;
 	}
 	
 	
@@ -92,10 +95,12 @@ public class ObjectContainer {
 	
 	public void addConnection(Connection connection) {
 		this.objects.add((Drawable2D) connection);
+		this.unsavedChanges = true;
 	}
 	
 	public void removeConnection(Connection connection) {
 		this.objects.remove(connection);
+		this.unsavedChanges = true;
 	}
 	
 	
@@ -127,7 +132,6 @@ public class ObjectContainer {
 			oos = new ObjectOutputStream(fos);			
 			
 			oos.writeObject(objects);
-			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -136,6 +140,7 @@ public class ObjectContainer {
 		finally {
 			try {
 				oos.close();
+				this.unsavedChanges = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -161,6 +166,7 @@ public class ObjectContainer {
 		} finally {
 			try {
 				ois.close();
+				this.unsavedChanges = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -170,5 +176,10 @@ public class ObjectContainer {
 	public void clear() {
 		this.objects = new ArrayList<Drawable2D>();
 		this.stlMesh = new STLMesh();
+		this.unsavedChanges = false;
+	}
+	
+	public boolean hasUnsavedChanges() {
+		return this.unsavedChanges;
 	}
 }
