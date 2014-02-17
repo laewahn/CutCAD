@@ -194,19 +194,37 @@ public class Properties extends PApplet
 			{
 				if (s.getGShape().getNumberOfConnections() > 0)
 				{
-					numberBoxes.get(i).lock();
-					controlUnits.get(i).lock();
+					lockAll();
 				}
 				else
 				{
-					numberBoxes.get(i).unlock();
-					controlUnits.get(i).unlock();
+					unlockAll();
 				}
 			}
 			setMaterial.setCaptionLabel(s.getGShape().getMaterial().getMaterialName());
 			setMaterial.show();
 
 			s.getGShape().setActive(true);
+		}
+		else
+		{
+			unlockAll();
+		}
+	}
+
+	private void unlockAll()
+	{
+		for (int i = 0; i < controllers.size(); i++)
+		{
+			controllers.get(i).unlock();
+		}
+	}
+	
+	private void lockAll()
+	{
+		for (int i = 0; i < controllers.size(); i++)
+		{
+			controllers.get(i).lock();
 		}
 	}
 	
