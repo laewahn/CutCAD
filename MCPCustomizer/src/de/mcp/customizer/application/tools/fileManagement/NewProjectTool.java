@@ -1,5 +1,7 @@
 package de.mcp.customizer.application.tools.fileManagement;
 
+import javax.swing.JOptionPane;
+
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
@@ -26,7 +28,12 @@ public class NewProjectTool extends Tool {
 	@Override
 	public void wasSelected() {
 		super.wasSelected();
-		this.objectContainer.clear();
+		
+		int confirmation = JOptionPane.showConfirmDialog(null, "Unsaved changes will be lost. Continue?");
+		
+		if (confirmation == JOptionPane.OK_OPTION) {
+			this.objectContainer.clear();			
+		}
 	}
 
 	@Override
