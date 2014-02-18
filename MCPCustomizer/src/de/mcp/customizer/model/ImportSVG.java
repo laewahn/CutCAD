@@ -19,7 +19,6 @@ import geomerative.*;
 public class ImportSVG extends PApplet {
 	private static final long serialVersionUID = 1L;
 	private RPoint[][] pointPaths;
-	private ObjectContainer container;
 	// ToDO: scalingFactor only correct for inkscape, illustrator needs another
 	private float scalingInkscape = 2.82222229120988f; // ->Preferences (SVG
 	// Resolution)
@@ -30,8 +29,7 @@ public class ImportSVG extends PApplet {
 	 * @param shapes
 	 *            List of shapes, where the produced shapes are registered
 	 */
-	public ImportSVG(ObjectContainer container) {
-		this.container = container;
+	public ImportSVG() {
 	}
 
 	/**
@@ -40,7 +38,7 @@ public class ImportSVG extends PApplet {
 	 * @param selection
 	 *            Path name
 	 */
-	public void createPathsFromSVG(File selection) {
+	public ArrayList<Shape> createPathsFromSVG(File selection) {
 		pointPaths = RG.loadShape(selection.getAbsolutePath())
 				.getPointsInPaths();
 
@@ -51,6 +49,7 @@ public class ImportSVG extends PApplet {
 			}
 		}
 		createCutouts(newShapes);
+		return newShapes;
 	}
 
 	private void createCutouts(ArrayList<Shape> newShapes) {
@@ -105,7 +104,6 @@ public class ImportSVG extends PApplet {
 			path.remove(path.size() - 1);
 		}
 		Shape pathShape = new PolygonShape(path, position);
-		container.addShape(pathShape);
 		return pathShape;
 	}
 }
