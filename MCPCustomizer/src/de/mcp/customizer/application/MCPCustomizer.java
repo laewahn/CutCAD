@@ -131,10 +131,11 @@ public class MCPCustomizer extends PApplet {
 	  	      new DeleteTool(this, container),
 	  	      new CutoutTool(this, container),
 	  	      new CopyTool(this, container),
+	  	      new PrintTool(this, container),
 	  	      new ImportSVGTool(this, container),
 	  	      new ImportSTLTool(this, container),
-	  	      new ChangeSTLTool(this, container),
-	  	      new PrintTool(this, container)
+	  	      new ChangeSTLTool(this, container)
+	  	     
 	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));

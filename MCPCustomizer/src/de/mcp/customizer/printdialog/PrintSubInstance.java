@@ -18,13 +18,13 @@ import processing.data.XML;
  * Represents a single plate of a certain material.
  * Main responsibilities are: 
  * - managing objects which are placed on the plate.
- * - Setup a laser job and adding the objects placed on the plate.
+ * - Setup a laser job and adding the objects placed on the plate to the laser job.
  * - SVG export and execution of the laser job
  * 
  * @author Pierre
  *
  */
-public class PrintSubInstance {
+class PrintSubInstance {
 	
 	/**
 	 * Stores the shapes with all of their properties placed on this plate
@@ -77,7 +77,7 @@ public class PrintSubInstance {
 	 * To be able to signal whether the printSubInstance is ready, with for example cutting,
 	 * it needs to know the printInstance to who it belongs.
 	 */
-	public PrintSubInstance(PrintInstance parent) {
+	PrintSubInstance(PrintInstance parent) {
 		this.parent = parent;
 		shapesPlaced = new ArrayList<Shape>();
 		laserJob = new LaserJobCreator();
@@ -93,7 +93,7 @@ public class PrintSubInstance {
 	 * @param ipAddress
 	 * The address of the laser cutter as a String. Can be a ip address, host name or port.
 	 */
-	public void setLaserCutter(LaserCutter cutter, String ipAddress) {
+	void setLaserCutter(LaserCutter cutter, String ipAddress) {
 		laserJob.setLaserCutter(cutter, ipAddress);
 	}
 	
@@ -104,7 +104,7 @@ public class PrintSubInstance {
 	 * @param shape
 	 * The shape that has been added to the plate
 	 */
-	public void placeShape(Shape shape) {
+	void placeShape(Shape shape) {
 		shapesPlaced.add(shape);
 	}
   
@@ -115,7 +115,7 @@ public class PrintSubInstance {
 	 * @param shape
 	 * The shape that has been removed from the plate
 	 */
-	public void unplaceShape(Shape shape) {
+	void unplaceShape(Shape shape) {
 		shapesPlaced.remove(shape); 
 	}
   
@@ -125,7 +125,7 @@ public class PrintSubInstance {
 	 * @return
 	 * A List containing all the shapes that have been placed on the plate
 	 */
-	public ArrayList<Shape> getPlacedShapes() {
+	ArrayList<Shape> getPlacedShapes() {
 		return shapesPlaced;
 	} 
   
@@ -139,7 +139,7 @@ public class PrintSubInstance {
 	 * @param printJobName
 	 * The name, thickness of the material and the printSubInstance number of the plate
 	 */
-	public void print(String printJobName) {
+	void print(String printJobName) {
 		printSubDialogWindow = createPrintSubDialog(printJobName);
 	}
   
@@ -151,7 +151,7 @@ public class PrintSubInstance {
 	 * @param dpi
 	 * The dpi to be used for the cutting
 	 */
-	public void setDPI(int dpi) {
+	void setDPI(int dpi) {
 		this.dpi = dpi;
 	}
 	
@@ -163,7 +163,7 @@ public class PrintSubInstance {
 	 * stored in the dpi variable of this class. When the parts are created the job is
 	 * send to the laser cutter specified in the laser job belonging to the plate to be cut.
 	 */
-	public void sendLaserJob() {
+	void sendLaserJob() {
 		
 		laserJob.newVectorPart(dpi, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
 		laserJob.newEngraveVectorPart(dpi, this.parent.getMaterial().getPower(), this.parent.getMaterial().getSpeed(), this.parent.getMaterial().getFocus(), this.parent.getMaterial().getFrequency());
@@ -209,7 +209,7 @@ public class PrintSubInstance {
 	 * Then the printInstance (material) to which this printSubInstance (plate) belongs
 	 * is signalled that this printSubInstance is done with cutting.
 	 */
-	public void nextJob() {
+	void nextJob() {
 		printSubDialogWindow.destroy();
 		printSubDialogFrame.setVisible(false);
 		this.parent.printNext();
@@ -231,11 +231,11 @@ public class PrintSubInstance {
 	private PrintSubDialogWindow createPrintSubDialog(String printJobName) {
 		
 		printSubDialogFrame = new Frame(printJobName);
-		PrintSubDialogWindow tempPrintSubDialog = new PrintSubDialogWindow(this, 200,200);
+		PrintSubDialogWindow tempPrintSubDialog = new PrintSubDialogWindow(this,printJobName ,200,200);
 		printSubDialogFrame.add(tempPrintSubDialog);
 		
 		tempPrintSubDialog.init();
-		tempPrintSubDialog.setSize(300,300);
+		tempPrintSubDialog.setSize(250,310);
 		
 		printSubDialogFrame.setTitle(printJobName);
 		printSubDialogFrame.setSize(tempPrintSubDialog.getWidth(), tempPrintSubDialog.getHeight());
@@ -258,9 +258,9 @@ public class PrintSubInstance {
 	 * The name of the SVG file is the name transmitted by the parameter printJobName
 	 * 
 	 * @param printJobName
-	 * The name of the exported SVG file
+	 * The path the where the SVG File should be exported
 	 */
-	public void printSVG(String printJobName) {
+	void printSVG(String exportPath) {
 	  
 		final double widthInPx = 600;
 		final double heightInPx = 300;
@@ -301,7 +301,7 @@ public class PrintSubInstance {
 	  
 		try {
 			XML xml = XML.parse(output);
-			xml.save(new File("C:/" + printJobName + ".svg"),""); // Use file dialog?
+			xml.save(new File(exportPath + ".svg"),""); 
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -314,7 +314,7 @@ public class PrintSubInstance {
 	 * @return
 	 * true when overlapping, false when not
 	 */
-	public boolean checkOverlap() {
+	boolean checkOverlap() {
 		
 		for(int i = 0; i < shapesPlaced.size(); i++) {
 			

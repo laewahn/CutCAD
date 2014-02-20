@@ -1,4 +1,5 @@
 package de.mcp.customizer.printdialog;
+import java.io.File;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -15,6 +16,7 @@ import controlP5.Textlabel;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
+import de.mcp.customizer.printdialog.selectpath.SelectPathDialogInstance;
 import de.mcp.customizer.view.Transformation;
 
 /**
@@ -23,8 +25,11 @@ import de.mcp.customizer.view.Transformation;
  * @author Pierre
  *
  */
-public class PrintDialogWindow extends PApplet
+class PrintDialogWindow extends PApplet
 {
+	//TODO Refactor this class: View, controller combined in this class
+	//TODO make UI look consistent
+	
 	/**
 	 * 
 	 */
@@ -44,11 +49,6 @@ public class PrintDialogWindow extends PApplet
 	 * The height in Px of the print dialog window
 	 */
 	private int h;
-	
-	/**
-	 * Sets the backgroundcolor of the print dialog window
-	 */
-	private int bgColor = 255;
 	
 	/**
 	 * Represents the width of the laser bed. This depends on the lasercutter selected 
@@ -115,12 +115,10 @@ public class PrintDialogWindow extends PApplet
 	    this.overlapMessage = "";
 	}
   
-  /**
-   * The setup method of the processing api. Here most properties of the GUI elements are set.
-   */
+  @Override
   public void setup()
   {
-    size(h,w);
+    size(h, w);
     frameRate(25);
     cp5 = new ControlP5(this);
     objectLayout = createGraphics(bedWidth, bedHeight);
@@ -129,6 +127,9 @@ public class PrintDialogWindow extends PApplet
                          .setSize(120, 120)
                          .setItemHeight(15)
                          .setBarHeight(15)
+                         .setColorBackground(color(128,128,128))
+                         .setColorForeground(color(0,0,0))
+                         .setColorLabel(color(255,255,255))
                          .setCaptionLabel("Choose an object");
     unplacedShapesBox.getCaptionLabel().getStyle().marginTop = 3;
     unplacedShapesBox.getValueLabel().getStyle().marginTop = 3;
@@ -136,14 +137,23 @@ public class PrintDialogWindow extends PApplet
    lasercutButton = cp5.addButton("Start cutting")
 		   			   .setPosition(10,h-70)
 		   			   .setSize(100,30)
+		   			   .setColorBackground(color(128,128,128))
+                       .setColorForeground(color(0,0,0))
+                       .setColorCaptionLabel(color(255,255,255))
 		   			   .setId(0);
    exportSVGButton = cp5.addButton("Export as SVG")
 		   				.setPosition(120,h-70)
 		   				.setSize(80,30)
+		   				.setColorBackground(color(128,128,128))
+                        .setColorForeground(color(0,0,0))
+                        .setColorCaptionLabel(color(255,255,255))
 		   				.setId(1);
    addExtraJobButton = cp5.addButton("Add extra job")
 		   				  .setPosition(10,h-140)
 		   				  .setSize(100,30)
+		   				  .setColorBackground(color(128,128,128))
+                          .setColorForeground(color(0,0,0))
+                          .setColorCaptionLabel(color(255,255,255))
 		   				  .setId(2);
    statusLabel = cp5.addTextlabel("")
 		   			.setPosition(10,h-100)
@@ -153,28 +163,43 @@ public class PrintDialogWindow extends PApplet
    instanceButtons = new ArrayList<Button>();
    instanceGroup = cp5.addGroup("Jobs")
                       .setPosition(140,bedHeight+20)
-                      .setColorBackground(0x00000000)
+                      .setColorBackground(color(128,128,128))
+                      .setColorForeground(color(128,128,128))
+                      .setColorLabel(color(255,255,255))
+                      .hideArrow()
+                      .disableCollapse()
                       .setWidth(790);			  
    createButtons();
    confirmPrint = cp5.addButton("yes")
-   					 .setPosition(420,h-110)
+   					 .setPosition(450,h-110)
    					 .setSize(30,30)
+   					 .setColorBackground(color(128,128,128))
+                     .setColorForeground(color(0,0,0))
+                     .setColorCaptionLabel(color(255,255,255))
    					 .setVisible(false);
    declinePrint = cp5.addButton("no")
-   					 .setPosition(460,h-110)
+   					 .setPosition(490,h-110)
    					 .setSize(30,30)
+   					 .setColorBackground(color(128,128,128))
+                     .setColorForeground(color(0,0,0))
+                     .setColorCaptionLabel(color(255,255,255))
    					 .setVisible(false);
    cutterBox = cp5.addListBox("cutterBox")
            		  .setPosition(w-440, 40)
            		  .setSize(120, 120)
            		  .setItemHeight(15)
            		  .setBarHeight(15)
+           		  .setColorBackground(color(128,128,128))
+                  .setColorForeground(color(0,0,0))
+                  .setColorLabel(color(255,255,255))
            		  .setCaptionLabel("Choose an cutter");
    cutterBox.getCaptionLabel().getStyle().marginTop = 3;
    cutterBox.getValueLabel().getStyle().marginTop = 3;
    updateCutters();
    cutterAddress = cp5.addTextfield("cutterAddress")
 		   			  .setPosition(w-295,40)
+		   			  .setColorBackground(color(128,128,128))
+		   			  .setColorForeground(color(128,128,128))
 		   			  .setSize(120,30);
    cp5.addTextlabel("cutterAddressLabel")
    	  .setPosition(w-300,20)
@@ -200,6 +225,9 @@ public class PrintDialogWindow extends PApplet
 		   	   .setItemHeight(15)
      		   .setBarHeight(15)
      		   .setVisible(false)
+     		   .setColorBackground(color(128,128,128))
+               .setColorForeground(color(0,0,0))
+               .setColorLabel(color(255,255,255))
      		   .setCaptionLabel("Choose a dpi setting");
    dpiBox.getCaptionLabel().getStyle().marginTop = 3;
    dpiBox.getValueLabel().getStyle().marginTop = 3;
@@ -316,6 +344,7 @@ public class PrintDialogWindow extends PApplet
     	} else if(confirmLevel == 1)
     	{
     		startPrint();
+    		activateAll(true);
     	}
     }
     else if(theEvent.isController() && theEvent.getName().equals("no"))
@@ -337,7 +366,7 @@ public class PrintDialogWindow extends PApplet
         buttonNumber += printInstances.get(i).getNumberOfSubInstances();
       }
       buttonNumber += printInstances.get(selectedInstance).getSelectedSubInstance();
-      instanceButtons.get(buttonNumber).setColorBackground(0x00000000);
+      instanceButtons.get(buttonNumber).setColorBackground(color(128,128,128));
       while(!instanceFound)
       {
         if((subInstance + printInstances.get(instance).getNumberOfSubInstances()) > objectIndex)
@@ -365,12 +394,13 @@ public class PrintDialogWindow extends PApplet
 		 buttonNumber += printInstances.get(i).getNumberOfSubInstances();
 	  }
 	  buttonNumber += printInstances.get(selectedInstance).getSelectedSubInstance();
-	  instanceButtons.get(buttonNumber).setColorBackground(0xffff0000);
+	  instanceButtons.get(buttonNumber).setColorBackground(color(0,0,0));
   }
   
+  @Override
   public void draw() 
   {
-      background(bgColor);
+      background(255);
       drawObjectLayout();
   }
   
@@ -397,7 +427,9 @@ public class PrintDialogWindow extends PApplet
 	                             .setPosition((collumn*160),(row*50))
 	                             .setSize(150,30)
 	                             .setId(buttonNumber)
-	                             .setColorBackground(0x00000000)
+	                             .setColorBackground(color(128,128,128))
+	                             .setColorForeground(color(0,0,0))
+	                             .setColorCaptionLabel(color(255,255,255))
 	                             .setGroup(instanceGroup); 
 	       instanceButtons.add(newButton); 
 	       buttonNumber++;
@@ -544,12 +576,16 @@ public class PrintDialogWindow extends PApplet
 			  printCounter = 0;
 			  printInstances.get(printCounter).print();
 		  }
-	  } else if(printer == 1)
-	  {
-		  for(int i = 0; i < printInstances.size(); i++)
-		  {
-			  printInstances.get(i).printSVG();
-		  }
+	  } else if(printer == 1) {
+		  SelectPathDialogInstance selectPathInstance = new SelectPathDialogInstance();
+		  selectPathInstance.showSelectPathDialog();
+		  exportSVG(selectPathInstance.getSelectedPath());
+	  }
+  }
+  
+  protected void exportSVG(File thePath) {
+	  for(int i = 0; i < printInstances.size(); i++) {
+		  printInstances.get(i).printSVG(thePath);
 	  }
   }
   
