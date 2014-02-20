@@ -234,16 +234,16 @@ public class RotateAdjectantShapes {
 	private static void initialiseVirtualShape(Edge masterEdge, Edge slaveEdge) {
 		List<Edge> edges = virtualShape.getGShape().getEdges();
 
-		edges.get(0).setP3D1(getRotatingEdge(masterEdge).getP3D1().copy());
-		edges.get(0).setP3D2(getRotatingEdge(masterEdge).getP3D2().copy());
-		edges.get(1).setP3D1(getRotatingEdge(slaveEdge).getP3D1().copy());
-		edges.get(1).setP3D2(getRotatingEdge(slaveEdge).getP3D2().copy());
+		edges.get(0).setP3D1(getRotatingEdge(masterEdge).getP3D2().copy());
+		edges.get(0).setP3D2(getRotatingEdge(masterEdge).getP3D1().copy());
+		edges.get(1).setP3D1(getRotatingEdge(slaveEdge).getP3D2().copy());
+		edges.get(1).setP3D2(getRotatingEdge(slaveEdge).getP3D1().copy());
 
-		edges.get(2).setP3D1(getRotatingEdge(masterEdge).getP3D2().copy());
-		edges.get(2).setP3D2(getRotatingEdge(slaveEdge).getP3D1().copy());
+		edges.get(2).setP3D1(getRotatingEdge(masterEdge).getP3D1().copy());
+		edges.get(2).setP3D2(getRotatingEdge(slaveEdge).getP3D2().copy());
 
-		edges.get(3).setP3D1(getRotatingEdge(slaveEdge).getP3D1().copy());
-		edges.get(3).setP3D2(getRotatingEdge(masterEdge).getP3D1().copy());
+		edges.get(3).setP3D1(getRotatingEdge(slaveEdge).getP3D2().copy());
+		edges.get(3).setP3D2(getRotatingEdge(masterEdge).getP3D2().copy());
 	}
 
 	/*

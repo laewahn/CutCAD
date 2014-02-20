@@ -311,7 +311,7 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 		if (!(this.slaveEdge.getGShape().getNumberOfConnections() > 1))
 		{
 			this.angle = angle;
-			connectEdges(this.masterEdge, this.slaveEdge, (float) Math.toRadians(angle));
+			connectEdges(this.masterEdge, this.slaveEdge, (float) (Math.toRadians(angle) - Math.PI));
 		}
 	}
 
@@ -335,12 +335,18 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 
 		alignShapes(master, slave, masterEdge, slaveEdge);  
 
-		// rotate the slave by the specified angle (currently hardcoded 90 degrees)
+		// rotate the slave by the specified angle
 		Vector3D rotationAxis = slaveEdge.getP3D2().getNormalized();
-		slave.rotateAroundAxis(rotationAxis, angle);
+		slave.rotateAroundAxis(rotationAxis, (float) (angle - Math.PI));
 
 		Vector3D toMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D1());
 		slave.translate3D(toMaster);
+		
+		if (!masterEdge.getP3D2().equals(slaveEdge.getP3D2()))
+		{
+			Vector3D newToMaster = masterEdge.getP3D1().sub(slaveEdge.getP3D2());
+			slave.translate3D(newToMaster);
+		}
 
 		CreateTenons.createOutlineOfEdge(masterEdge, slaveEdge);
 	}
@@ -356,7 +362,7 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 		{
 			normalVector = masterEdgeDirection.cross(new Vector3D((float)Math.random(), (float)Math.random(), (float)Math.random())).getNormalized();
 		}
-		slave.rotateAroundAxis(normalVector, angle);
+		slave.rotateAroundAxis(normalVector, (float) (Math.PI + angle));
 	}
 
 	private float safeAngleBetween(Vector3D masterEdgeDirection,
