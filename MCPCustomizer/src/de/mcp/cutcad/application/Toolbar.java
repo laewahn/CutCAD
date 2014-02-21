@@ -26,8 +26,17 @@ import de.mcp.cutcad.application.tools.objectManipulation.CutoutTool;
 import de.mcp.cutcad.application.tools.objectManipulation.DeleteTool;
 import de.mcp.cutcad.application.tools.objectManipulation.SelectTool;
 
-
+/**
+ * Defines an interface for an observer of the toolbar. The observer will be informed whenever a new tool was selected in the toolbar.
+ * @author dennis
+ *
+ */
 interface ToolbarDelegate {
+	
+	/**
+	 * This method will be called when a new tool was selected in the toolbar.
+	 * @param theTool The tool that was selected.
+	 */
 	public void toolWasSelected(Tool theTool);
 }
 
