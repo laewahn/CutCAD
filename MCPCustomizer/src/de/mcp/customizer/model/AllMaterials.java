@@ -1,7 +1,5 @@
 package de.mcp.customizer.model;
 
-import geomerative.RG;
-
 import java.io.File;
 import java.util.ArrayList;
 
