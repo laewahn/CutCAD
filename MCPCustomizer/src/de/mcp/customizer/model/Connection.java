@@ -312,6 +312,9 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 		{
 			this.angle = angle;
 			connectEdges(this.masterEdge, this.slaveEdge, (float) (Math.toRadians(angle) - Math.PI));
+		} else if (!(this.masterEdge.getGShape().getNumberOfConnections() > 1)) {
+			this.angle = angle;
+			connectEdges(this.slaveEdge, this.masterEdge, (float) (Math.toRadians(angle) - Math.PI));
 		}
 	}
 
