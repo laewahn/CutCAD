@@ -22,12 +22,17 @@ public class DeleteTool extends Tool {
      * @param container the currently loaded ObjectContainer
      */
     public DeleteTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container, "Delete.svg");
+    	super(customizer, container);
     	
         this.dragging = false;
         this.originalMousePosition = new Vector2D(0,0);
     }
    
+    @Override
+	public String getIconName() {
+		return "Delete.svg";
+	}
+    
     public void mouseButtonPressed(Vector2D position, int button)
     {
         for(Shape s : this.objectContainer.allShapes()) {
@@ -78,11 +83,6 @@ public class DeleteTool extends Tool {
     	}        
     }
 
-    public void mouseButtonReleased(Vector2D position, int button)
-    {
-        // nothing to do here
-    }
-    
     public void mouseMoved(Vector2D position)
     {
         if (this.inView(position))
@@ -104,15 +104,15 @@ public class DeleteTool extends Tool {
     }
 
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("Click on a shape or connection to delete it");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
     
 }

@@ -28,11 +28,16 @@ public class ConnectTool extends Tool {
 	 * @param container the currently loaded ObjectContainer
 	 */
 	public ConnectTool(MCPCustomizer mcpCustomizer, ObjectContainer container) {
-		super(mcpCustomizer, container, "Connect.svg");
+		super(mcpCustomizer, container);
 
 		this.selectedFirst = false;
 	}
 
+	@Override
+	public String getIconName() {
+		return "Connect.svg";
+	}
+	
 	public void mouseButtonPressed(Vector2D position, int button) {
 		for (Edge e : this.objectContainer.allEdges()) {
 			if (e.isHighlighted() && button == PConstants.LEFT) {
@@ -67,10 +72,6 @@ public class ConnectTool extends Tool {
 				}
 			}
 		}
-	}
-
-	public void mouseButtonReleased(Vector2D position, int button) {
-		// no actions required
 	}
 
 	public void mouseMoved(Vector2D position) {
@@ -117,14 +118,14 @@ public class ConnectTool extends Tool {
 	}
 
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("Select an edge to create a connection");
 		this.lastMessage = "Select an edge to create a connection";
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
 		this.lastMessage = "";
 		selectedFirst = false;
@@ -132,7 +133,7 @@ public class ConnectTool extends Tool {
 			this.previewConnection.getMasterEdge().setSelected(false);
 		}
 		this.previewConnection = null;
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 
 }

@@ -50,12 +50,12 @@ class Toolbar extends ListBox
 
   void setSelectedTool(Tool theTool) {
 	  
-	  theTool.wasSelected();
+	  theTool.toolWasSelected();
 	  
 	  if(theTool.canStaySelected()) {
 		  
 		  if(this.selectedTool != null) {
-			  this.selectedTool.wasUnselected();
+			  this.selectedTool.toolWasUnselected();
 		  }
 	
 		  this.selectedTool = theTool;  

@@ -3,7 +3,6 @@ package de.mcp.customizer.application.tools.fileManagement;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.PrintDialog;
 
 /**
@@ -24,37 +23,21 @@ public class PrintTool extends Tool {
 	 * @param container
 	 */
 	public PrintTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "Print.svg");
+		super(customizer, container);
 	}
 	
-	/**
-	 * This method is not used in this class
-	 */
-    public void mouseButtonPressed(Vector2D position, int button)
-    {
-    }
-
-    /**
-	 * This method is not used in this class
-	 */
-    public void mouseButtonReleased(Vector2D position, int button)
-    {
-    }
-    
-    /**
-	 * This method is not used in this class
-	 */
-    public void mouseMoved(Vector2D position)
-    {
-    }
-    
+	@Override
+	public String getIconName() {
+		return "Print.svg";
+	}
+	    
     @Override
     /**
      * This method handles the event handler when the tool was selected. When this tool was
      * selected it calls methods to prepare the print dialog.
      */
-    public void wasSelected() {
-    	super.wasSelected();
+    public void toolWasSelected() {
+    	super.toolWasSelected();
     	PrintDialog printDialog = new PrintDialog(this.objectContainer.allShapes());
     	printDialog.preparePrintDialog();
     }

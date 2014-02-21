@@ -23,8 +23,13 @@ public class SymmetricPolygonTool extends Tool {
      * @param container the currently loaded ObjectContainer
      */
 	public SymmetricPolygonTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "DrawSymmetricPolygon.svg");
+		super(customizer, container);
 		this.isDrawing = false;
+	}
+	
+	@Override
+	public String getIconName() {
+		return "DrawSymmetricPolygon.svg";
 	}
 
 	public void mouseButtonPressed(Vector2D position, int button)
@@ -89,15 +94,15 @@ public class SymmetricPolygonTool extends Tool {
 	}
 
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("To draw a symmetric polygon, click and hold the left mousebutton anywhere on the 2D view");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 	
 	

@@ -29,9 +29,14 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 	 * @param container the currently loaded ObjectContainer
 	 */
 	public ImportSVGTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "LoadSVG.svg");
+		super(customizer, container);
 		this.shapes = new ArrayList<Shape>();
 		this.originalMousePosition = new Vector2D(0, 0);
+	}
+	
+	@Override
+	public String getIconName() {
+		return "LoadSVG.svg";
 	}
 	
 	@Override
@@ -43,13 +48,9 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 				this.objectContainer.addShape(s);
 			}
 		}
-		this.wasUnselected();
+		this.toolWasUnselected();
 	}
 
-	@Override
-	public void mouseButtonReleased(Vector2D position, int button) {
-	}
-	
 	@Override
 	public void mouseMoved(Vector2D position) {
 		Vector2D currentMousePosition = this.positionRelativeToView(position);
@@ -71,8 +72,8 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 	}
 	
 	@Override
-	public void wasSelected() {
-		super.wasSelected();		
+	public void toolWasSelected() {
+		super.toolWasSelected();		
 		
 		OpenFileDialog dialog = new OpenFileDialog(this);
 		dialog.showDialog("Select a SVG file to process:");
@@ -81,11 +82,11 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 	
 	
 	@Override
-	public void wasUnselected()
+	public void toolWasUnselected()
 	{
 		this.shapes.clear();
 		this.originalMousePosition = new Vector2D(0,0);
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 
 	@Override

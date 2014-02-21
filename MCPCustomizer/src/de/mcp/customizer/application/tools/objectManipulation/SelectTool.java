@@ -15,11 +15,16 @@ public class SelectTool extends Tool {
 	Vector2D originalMousePosition;
 
 	public SelectTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "Select.svg");
+		super(customizer, container);
 		
 		this.dragging = false;
 		this.draggingCutout = false;
 		this.originalMousePosition = new Vector2D(0, 0);
+	}
+	
+	@Override
+	public String getIconName() {
+		return "Select.svg";
 	}
 	
 	/**
@@ -148,18 +153,16 @@ public class SelectTool extends Tool {
 		}
 	}
 	
-	
-
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("Click left on a shape to select it, drag a shape with the right mouse button to move it and drag anywhere on the 2D view to move the camera");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
 		this.customizer.properties.hide();
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 }

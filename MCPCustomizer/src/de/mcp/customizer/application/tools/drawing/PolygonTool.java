@@ -24,14 +24,14 @@ public class PolygonTool extends Tool {
 
 
 	public PolygonTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "DrawPolygon.svg");
+		super(customizer, container);
 	}
 	
 	@Override
-	public void mouseButtonPressed(Vector2D position, int button) {
-
+	public String getIconName() {
+		return "DrawPolygon.svg";
 	}
-
+	
 	@Override
 	public void mouseButtonReleased(Vector2D position, int button) {
 
@@ -100,16 +100,16 @@ public class PolygonTool extends Tool {
 	}
 	
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("To start drawing a shape, click the left mousebutton anywhere on the 2D view");
 		this.vertices = new ArrayList<Vector2D>();
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 	
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 
 }

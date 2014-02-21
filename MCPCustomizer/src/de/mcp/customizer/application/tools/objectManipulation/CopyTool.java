@@ -27,12 +27,17 @@ public class CopyTool extends Tool {
 	 * @param container the currently loaded ObjectContainer
 	 */
 	public CopyTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "Copy.svg");
+		super(customizer, container);
 		
 		this.selected = false;
 		this.lastMousePosition = new Vector2D(0, 0);
 	}
 
+	@Override
+	public String getIconName() {
+		return "Copy.svg";
+	}
+	
     public void mouseButtonPressed(Vector2D position, int button)
     {
     	if (this.inView(position)) {
@@ -71,11 +76,6 @@ public class CopyTool extends Tool {
     	}
     }
 
-    public void mouseButtonReleased(Vector2D position, int button)
-    {
-        // no actions required
-    } 
-    
     public void mouseMoved(Vector2D position)
     {
 		if (this.inView(position)) {
@@ -106,17 +106,17 @@ public class CopyTool extends Tool {
     }
     
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("Select the shape you want to copy");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
 		this.copyShape = null;
 		this.selected = false;
 		this.previewShape = null;
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 }

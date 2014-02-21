@@ -5,29 +5,21 @@ import javax.swing.JOptionPane;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
-import de.mcp.customizer.model.primitives.Vector2D;
 
 public class NewProjectTool extends Tool {
 
 	public NewProjectTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "New.svg");
+		super(customizer, container);
 	}
 
 	@Override
-	public void mouseButtonPressed(Vector2D position, int button) {
-	}
-
-	@Override
-	public void mouseButtonReleased(Vector2D position, int button) {
-	}
-
-	@Override
-	public void mouseMoved(Vector2D position) {
+	public String getIconName() {
+		return "New.svg";
 	}
 	
 	@Override
-	public void wasSelected() {
-		super.wasSelected();
+	public void toolWasSelected() {
+		super.toolWasSelected();
 		
 		int confirmation = JOptionPane.showConfirmDialog(null, "Unsaved changes will be lost. Continue?");
 		

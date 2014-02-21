@@ -29,12 +29,17 @@ public class CutoutTool extends Tool {
      * @param container the currently loaded ObjectContainer
      */
     public CutoutTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container, "Cutout.svg");
+    	super(customizer, container);
     	
     	this.dragging = false;
         this.selectedFirst = false;
         this.originalMousePosition = new Vector2D(0,0);
     }
+    
+    @Override
+	public String getIconName() {
+		return "Cutout.svg";
+	}
     
     public void mouseButtonPressed(Vector2D position, int button)
     {
@@ -98,16 +103,16 @@ public class CutoutTool extends Tool {
     }
 
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("First, select the shape you want to add a cutout to");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
 		selectedFirst = false;
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
     
 }

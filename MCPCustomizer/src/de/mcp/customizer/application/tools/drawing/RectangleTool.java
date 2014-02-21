@@ -23,9 +23,14 @@ public class RectangleTool extends Tool {
      * @param container the currently loaded ObjectContainer
      */
     public RectangleTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container, "DrawRectangle.svg");
+    	super(customizer, container);
     	this.isDrawing = false;
     }
+
+    @Override
+	public String getIconName() {
+		return "DrawRectangle.svg";
+	}
 
     public void mouseButtonPressed(Vector2D position, int button)
     {
@@ -85,15 +90,15 @@ public class RectangleTool extends Tool {
     }
 
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("To draw a rectangle, click and hold the left mousebutton anywhere on the 2D view");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
     
     

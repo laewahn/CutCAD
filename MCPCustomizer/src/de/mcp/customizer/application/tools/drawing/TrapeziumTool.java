@@ -23,9 +23,14 @@ public class TrapeziumTool extends Tool {
      * @param container the currently loaded ObjectContainer
      */
 	public TrapeziumTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "DrawTrapezium.svg");
+		super(customizer, container);
 		
 		this.isDrawing = false;
+	}
+	
+	@Override
+	public String getIconName() {
+		return "DrawTrapezium.svg";
 	}
 	
 	public void mouseButtonPressed(Vector2D position, int button)
@@ -86,14 +91,14 @@ public class TrapeziumTool extends Tool {
 	}
 
 	@Override
-	public void wasSelected() {
+	public void toolWasSelected() {
 		this.customizer.displayStatus("To draw a trapezoid, click and hold the left mousebutton anywhere on the 2D view");
-		super.wasSelected();
+		super.toolWasSelected();
 	}
 
 	@Override
-	public void wasUnselected() {
+	public void toolWasUnselected() {
 		this.customizer.displayStatus("");
-		super.wasUnselected();
+		super.toolWasUnselected();
 	}
 }

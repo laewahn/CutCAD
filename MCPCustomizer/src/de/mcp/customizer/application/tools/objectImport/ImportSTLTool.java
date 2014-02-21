@@ -3,17 +3,14 @@ package de.mcp.customizer.application.tools.objectImport;
 import java.io.File;
 
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import de.mcp.customizer.application.MCPCustomizer;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
-import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.view.FileDialogDelegate;
 import de.mcp.customizer.view.OpenFileDialog;
-import de.mcp.customizer.view.Transformation;
 
 /**
  * The ImportSTLTool is used to import an STL-mesh into the 3D-view. Once
@@ -31,30 +28,18 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 	 *            the currently loaded ObjectContainer
 	 */
 	public ImportSTLTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container, "LoadSTL.svg");
+		super(customizer, container);
 		this.mesh = container.getSTLMesh();
 	}
 
 	@Override
-	public void mouseButtonPressed(Vector2D position, int button) {
-
+	public String getIconName() {
+		return "LoadSTL.svg";
 	}
-
+	
 	@Override
-	public void mouseButtonReleased(Vector2D position, int button) {
-	}
-
-	@Override
-	public void mouseMoved(Vector2D position) {
-	}
-
-	@Override
-	public void draw2D(PGraphics p, Transformation t) {
-	}
-
-	@Override
-	public void wasSelected() {
-		super.wasSelected();
+	public void toolWasSelected() {
+		super.toolWasSelected();
 
 		OpenFileDialog dialog = new OpenFileDialog(this);
 		dialog.showDialog("Select a STL file to process:");

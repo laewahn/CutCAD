@@ -14,32 +14,51 @@ import processing.core.PGraphics;
 public abstract class Tool implements Drawable2D {
 
     protected DrawingView2D view;
-    protected String iconName;
     protected ShapeButton button;
     
     protected MCPCustomizer customizer;
     protected ObjectContainer objectContainer;
     
-    private float scalingFactor = 0.5f;
-
-    public Tool(MCPCustomizer customizer, ObjectContainer container, String iconName) {
+    public Tool(MCPCustomizer customizer, ObjectContainer container) {
  
     	this.view = customizer.drawingView2D;
     	this.customizer = customizer;
     	this.objectContainer = container;
-    	this.iconName = iconName;
     	
 		PGraphics p = this.customizer.createGraphics(50, 50);
 		this.button = new ShapeButton(this.getIcon(), p, this.view.getTransformation());
     }
     
-    public float getScalingFactor() {
-    	return scalingFactor;
-    }
+    public abstract String getIconName();
     
-    public void setScalingFactor(float factor) {
-    	scalingFactor = factor;
-    }
+    public void mouseButtonPressed(Vector2D position, int button) {};
+    public void mouseButtonReleased(Vector2D position, int button) {};
+    public void mouseMoved(Vector2D position) {};
+
+	public void toolWasSelected() {
+		this.objectContainer.setSelectedTool(this);
+		this.button.setSelected(true);
+		
+		if(!this.canStaySelected()) {
+			final Timer unselectTimer = new Timer();
+			unselectTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					toolWasUnselected();					
+				};
+			}, 100);	
+		}
+	};
+
+	public void toolWasUnselected() {
+		this.button.setSelected(false);
+	};
+
+	public void draw2D(PGraphics p, Transformation transform) {};	
+	
+	public boolean canStaySelected() {
+		return true;
+	}
 
     protected Vector2D positionRelativeToView(Vector2D inPosition) 
     {
@@ -57,51 +76,15 @@ public abstract class Tool implements Drawable2D {
         return this.view.containsPoint(position);
     }
 
-    public String getIconName()
-    {
-        return this.iconName;
-    }
+    public ShapeButton getButton() {
+		return this.button;
+	}
     
-    abstract public void mouseButtonPressed(Vector2D position, int button);
-    abstract public void mouseButtonReleased(Vector2D position, int button);
-    abstract public void mouseMoved(Vector2D position);
-
-	public SVGIcon getIcon() {
+	private SVGIcon getIcon() {
 
 		float iconScaling = 1.57f;
 
 		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
 		return icon;
-	}
-
-	public ShapeButton getButton() {
-		return this.button;
-	}
-
-	public void wasSelected() {
-		this.objectContainer.setSelectedTool(this);
-		this.button.setSelected(true);
-		
-		if(!this.canStaySelected()) {
-			final Timer unselectTimer = new Timer();
-			unselectTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					wasUnselected();					
-				};
-			}, 100);	
-		}
-	};
-
-	public void wasUnselected() {
-		this.button.setSelected(false);
-	};
-
-	public void draw2D(PGraphics p, Transformation transform) {
-	};
-	
-	public boolean canStaySelected() {
-		return true;
-	}
-
+	}	
 }
