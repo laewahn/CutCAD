@@ -48,6 +48,14 @@
     		<focus>0.0</focus>
 		</cut>
 	</thickness>
+	<thickness value="300">
+		<cut>
+			<speed>30</speed>
+    		<power>70</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
 	<thickness value="400">
 		<cut>
 			<speed>30</speed>

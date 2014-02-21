@@ -1,7 +1,10 @@
 package de.mcp.customizer.model;
 
+import geomerative.RG;
+
 import java.io.File;
 import java.util.ArrayList;
+
 import processing.core.PApplet;
 import processing.data.XML;
 
@@ -12,11 +15,16 @@ public class AllMaterials extends PApplet {
 	private static final long serialVersionUID = -8801211971447138231L;
 	private static ArrayList<Material> materials = new ArrayList<Material>();
 	private static int baseMaterialIndex = 0;
+	private static String baseMaterialName;// = "Pulp board(white coat)";
+	private static int baseMaterialThickness;// = 30; // in 0.1mm
 
 	/**
-	 * Useless Dummy Constructor
+	 * Loads standard material from the setting file
 	 */
 	public AllMaterials() {
+		XML setting = loadXML("Settings.xml");
+		baseMaterialThickness = (int)(setting.getChild("standardMaterial").getChild("thickness").getIntContent())/10;
+		baseMaterialName = setting.getChild("standardMaterial").getChild("name").getContent();
 	}
 
 	/**
@@ -60,6 +68,9 @@ public class AllMaterials extends PApplet {
 
 				materials.add(new Material(name, thickness, materialColor,
 						power, speed, focus, frequency));
+				if (name.equals(baseMaterialName) && thickness == baseMaterialThickness) {
+					baseMaterialIndex = materials.size()-1;
+				}
 			}
 		}
 	}

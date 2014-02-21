@@ -29,7 +29,7 @@ public abstract class Tool implements Drawable2D {
     	this.objectContainer = container;
     	this.iconName = iconName;
     	
-		PGraphics p = this.customizer.createGraphics(50, 50);
+		PGraphics p = this.customizer.createGraphics(customizer.toolbarWidth, customizer.toolbarWidth);
 		this.button = new ShapeButton(this.getIcon(), p, this.view.getTransformation());
     }
     
@@ -68,7 +68,7 @@ public abstract class Tool implements Drawable2D {
 
 	public SVGIcon getIcon() {
 
-		float iconScaling = 1.57f;
+		float iconScaling = ((float)customizer.toolbarWidth)/32;
 
 		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
 		return icon;
