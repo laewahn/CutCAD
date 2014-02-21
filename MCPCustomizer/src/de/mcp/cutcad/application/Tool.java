@@ -51,7 +51,7 @@ public abstract class Tool implements Drawable2D {
     	this.application = application;
     	this.objectContainer = container;
     	
-		PGraphics p = this.application.createGraphics(application.toolbarWidth, application.toolbarWidth);
+		PGraphics p = this.application.createGraphics(Toolbar.DEFAULT_TOOLBAR_WIDTH, Toolbar.DEFAULT_TOOLBAR_WIDTH);
 		this.button = new ShapeButton(this.getIcon(), p, this.view.getTransformation());
     }
     
@@ -138,7 +138,7 @@ public abstract class Tool implements Drawable2D {
      * @return A SVGIcon with the tools icon loaded from the icon SVG file.
      */
 	private SVGIcon getIcon() {
-		float iconScaling = ((float)application.toolbarWidth)/32;
+		float iconScaling = ((float)Toolbar.DEFAULT_TOOLBAR_WIDTH)/32;
 		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
 		
 		return icon;

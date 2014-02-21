@@ -2,8 +2,6 @@ package de.mcp.cutcad.application;
 
 import geomerative.RG;
 
-import java.util.Arrays;
-
 import javax.swing.JOptionPane;
 
 import processing.core.PApplet;
@@ -12,10 +10,6 @@ import processing.event.MouseEvent;
 import processing.opengl.*;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-import de.mcp.cutcad.application.tools.drawing.*;
-import de.mcp.cutcad.application.tools.fileManagement.*;
-import de.mcp.cutcad.application.tools.objectImport.*;
-import de.mcp.cutcad.application.tools.objectManipulation.*;
 import de.mcp.cutcad.model.AllMaterials;
 import de.mcp.cutcad.model.ObjectContainer;
 import de.mcp.cutcad.model.primitives.Vector2D;
@@ -31,8 +25,6 @@ public class CutCADApplet extends PApplet implements ToolbarDelegate {
 	int viewSizeX;
 	int viewSizeY;
 	
-	int toolbarWidth = 40;
-
 	ControlP5 cp5;
 	Toolbar toolbar;
 	public Properties properties;
@@ -46,8 +38,6 @@ public class CutCADApplet extends PApplet implements ToolbarDelegate {
 	Transformation transform3D = new Transformation((float) 1.0,
 			new Vector2D(0, 0));
 
-	Tool tools[];
-
 	public DrawingView2D drawingView2D;
 	public DrawingView3D drawingView3D;
 	
@@ -57,6 +47,8 @@ public class CutCADApplet extends PApplet implements ToolbarDelegate {
 	public void setup() {
 		size(displayWidth, displayHeight, P3D);
 		ortho();
+		
+		int toolbarWidth = Toolbar.DEFAULT_TOOLBAR_WIDTH;
 		
 		viewSizeX = (displayWidth - toolbarWidth - 30) / 2;
 		viewSizeY = (displayHeight - 50 - 30);
@@ -73,7 +65,7 @@ public class CutCADApplet extends PApplet implements ToolbarDelegate {
 		cp5 = new ControlP5(this);
 		createProperties();
 		statusbar = new Statusbar();
-		createToolbar();
+		toolbar = Toolbar.createDefaultToolbar(this);
 	}
 	
 	private void setup2DDrawingView(int originX, int originY, int width, int heigth) {
@@ -113,36 +105,6 @@ public class CutCADApplet extends PApplet implements ToolbarDelegate {
 		properties.drawProperties(this);
 		statusbar.drawStatusbar(this);
 	}
-
-	  private void createToolbar()
-	  {
-	    toolbar = new Toolbar(this.cp5, this);
-
-	    toolbar.setPosition(0, 50).setSize(toolbarWidth, 900).setItemHeight(toolbarWidth).disableCollapse().hideBar();
-	    
-	    tools = new Tool[]{
-	    	  new NewProjectTool(this, container),
-	    	  new LoadTool(this, container),
-	    	  new SaveTool(this, container),
-	  	      new SelectTool(this, container),
-	  	      new RectangleTool(this, container),
-	  	      new SymmetricPolygonTool(this, container),
-	  	      new TrapeziumTool(this, container),
-	  	      new PolygonTool(this, container),
-	  	      new ConnectTool(this, container),
-	  	      new DeleteTool(this, container),
-	  	      new CutoutTool(this, container),
-	  	      new CopyTool(this, container),
-	  	      new PrintTool(this, container),
-	  	      new ImportSVGTool(this, container),
-	  	      new ImportSTLTool(this, container),
-	  	      new ChangeSTLTool(this, container)
-	  	     
-	  	    };
-	    
-	    toolbar.addTools(Arrays.asList(tools));
-	    this.setSelectedTool(tools[3]);
-	  }
 
 	  private void createProperties()
 	  {
