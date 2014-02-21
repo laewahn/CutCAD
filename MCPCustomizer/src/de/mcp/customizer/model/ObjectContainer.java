@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.ArrayList;
 
-import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.primitives.Cutout;
 import de.mcp.customizer.model.primitives.Edge;
 import de.mcp.customizer.model.primitives.Shape;
@@ -21,7 +20,6 @@ public class ObjectContainer {
 	private List<Drawable2D> objects;
 	private STLMesh stlMesh;
 	
-	private Tool selectedTool;
 	private boolean unsavedChanges;
 	
 	public ObjectContainer() {
@@ -35,11 +33,6 @@ public class ObjectContainer {
 	
 	public List<Drawable2D> allDrawables() {
 		List<Drawable2D> drawables = new ArrayList<Drawable2D>(this.objects);
-		
-		if(getSelectedTool() != null) {
-			drawables.add(getSelectedTool());
-		}
-		
 		return drawables;
 	}
 	
@@ -114,14 +107,6 @@ public class ObjectContainer {
 		}
 		
 		return cutouts;
-	}
-	
-	public void setSelectedTool(Tool theTool) {
-		this.selectedTool = theTool;
-	}
-	
-	public Tool getSelectedTool() {
-		return this.selectedTool;
 	}
 	
 	public void save(File file) {

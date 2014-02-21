@@ -24,7 +24,7 @@ import de.mcp.customizer.view.DrawingView2D;
 import de.mcp.customizer.view.DrawingView3D;
 import de.mcp.customizer.view.Transformation;
 
-public class MCPCustomizer extends PApplet {
+public class MCPCustomizer extends PApplet implements ToolbarDelegate {
 
 	private static final long serialVersionUID = 6945013714741954254L;
 	
@@ -37,6 +37,7 @@ public class MCPCustomizer extends PApplet {
 	Statusbar statusbar;
 	
 	ObjectContainer container = new ObjectContainer();
+	private Tool selectedTool;
 
 	public Transformation transform2D = new Transformation((float) 1.0,
 			new Vector2D(-50, -50));
@@ -114,7 +115,7 @@ public class MCPCustomizer extends PApplet {
 
 	  private void createToolbar()
 	  {
-	    toolbar = new Toolbar(this.cp5);
+	    toolbar = new Toolbar(this.cp5, this);
 
 	    toolbar.setPosition(0, 50).setSize(50, 900).setItemHeight(50).disableCollapse().hideBar();
 	    
@@ -139,7 +140,7 @@ public class MCPCustomizer extends PApplet {
 	  	    };
 	    
 	    toolbar.addTools(Arrays.asList(tools));
-	    toolbar.setSelectedTool(tools[3]);
+	    this.setSelectedTool(tools[3]);
 	  }
 
 	  private void createProperties()
@@ -178,7 +179,29 @@ public class MCPCustomizer extends PApplet {
 		  {
 			  properties.changeMaterial(theEvent.getGroup().getValue());
 		  }
-	  } 
+	  }
+	  
+	  public void toolWasSelected(Tool theTool) {
+		  setSelectedTool(theTool);
+	  }
+	  
+	  void setSelectedTool(Tool theTool) {
+		  
+		  theTool.toolWasSelected();
+		  
+		  if(theTool.canStaySelected()) {
+			  
+			  if(this.selectedTool != null) {
+				  this.selectedTool.toolWasUnselected();
+			  }
+		
+			  this.selectedTool = theTool;  
+		  }
+	  }
+	  
+	  public Tool getSelectedTool() {
+		  return this.selectedTool;
+	  }
 
 	/* (non-Javadoc)
 	 * @see processing.core.PApplet#mousePressed()
@@ -186,7 +209,7 @@ public class MCPCustomizer extends PApplet {
 	public void mousePressed()
 	  {   
 	      Vector2D mousePosition = new Vector2D(mouseX, mouseY);
-	      toolbar.getSelectedTool().mouseButtonPressed(mousePosition, mouseButton);
+	      getSelectedTool().mouseButtonPressed(mousePosition, mouseButton);
 	  }
 
 	  /* (non-Javadoc)
@@ -194,7 +217,7 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mouseDragged()
 	  {
-	    toolbar.getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
+	    getSelectedTool().mouseMoved(new Vector2D(mouseX, mouseY));
 	  }
 
 	  /* (non-Javadoc)
@@ -202,7 +225,7 @@ public class MCPCustomizer extends PApplet {
 	 */
 	public void mouseReleased()
 	  {
-	    toolbar.getSelectedTool().mouseButtonReleased(new Vector2D(mouseX, mouseY), mouseButton);
+	    getSelectedTool().mouseButtonReleased(new Vector2D(mouseX, mouseY), mouseButton);
 
 	  }
 
@@ -212,7 +235,7 @@ public class MCPCustomizer extends PApplet {
 	public void mouseMoved() 
 	  {
 		Vector2D mousePosition = new Vector2D(mouseX, mouseY);
-	      toolbar.getSelectedTool().mouseMoved(mousePosition);
+	      getSelectedTool().mouseMoved(mousePosition);
 	      drawingView3D.setInteractionEnabled(drawingView3D.mouseOver(mousePosition));
 	  }
 

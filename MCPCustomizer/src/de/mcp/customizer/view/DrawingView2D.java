@@ -39,6 +39,7 @@ public class DrawingView2D {
 		applyTransformation(this.transform);
 		
 		List<Drawable2D> allDrawables = container.allDrawables();
+		allDrawables.add(application.getSelectedTool());
 		allDrawables.add(axes);
 		allDrawables.add((Drawable2D) grid);
 		

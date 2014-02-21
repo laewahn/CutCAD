@@ -85,7 +85,6 @@ public abstract class Tool implements Drawable2D {
      * Will be called by the application when this tool was selected.
      */
 	public void toolWasSelected() {
-		this.objectContainer.setSelectedTool(this);
 		this.button.setSelected(true);
 		
 		if(!this.canStaySelected()) {

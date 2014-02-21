@@ -9,20 +9,28 @@ import controlP5.ControlP5;
 import controlP5.ControllerView;
 import controlP5.ListBox;
 
+
+interface ToolbarDelegate {
+	public void toolWasSelected(Tool theTool);
+}
+
+
 class Toolbar extends ListBox
 {
 	
   private List<Tool> tools;
-  private Tool selectedTool;
+  private ToolbarDelegate delegate;
   
-  Toolbar(ControlP5 cp5) {
-	  this(cp5, "Toolbar");
+  Toolbar(ControlP5 cp5, ToolbarDelegate delegate) {
+	  
+	  this(cp5, "Toolbar", delegate);
   }
   
-  Toolbar(ControlP5 cp5, String name)
+  Toolbar(ControlP5 cp5, String name, ToolbarDelegate delegate)
   {
     super(cp5, cp5.getTab("default"), name, 0, 0, 100, 10);
     
+    this.delegate = delegate;
     this.tools = new ArrayList<Tool>();
   }
 
@@ -48,32 +56,14 @@ class Toolbar extends ListBox
       this.tools.add(theTool);
   }
 
-  void setSelectedTool(Tool theTool) {
-	  
-	  theTool.toolWasSelected();
-	  
-	  if(theTool.canStaySelected()) {
-		  
-		  if(this.selectedTool != null) {
-			  this.selectedTool.toolWasUnselected();
-		  }
-	
-		  this.selectedTool = theTool;  
-	  }
-  }
-  
-  Tool getSelectedTool() 
-  {
-  	return this.selectedTool;
-  }
-  
   public void controlEvent(ControlEvent theEvent)
   {
 	  if(theEvent.getController() instanceof Button) {
 		  Button theButton = (Button) theEvent.getController();
 		  int buttonIdx = (int) theButton.getValue();
 	  
-		  this.setSelectedTool(tools.get(buttonIdx));
+		  Tool selectedTool = tools.get(buttonIdx);
+		  this.delegate.toolWasSelected(selectedTool);
 	  }
   } 
 }
