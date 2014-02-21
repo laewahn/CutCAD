@@ -30,6 +30,8 @@ public class MCPCustomizer extends PApplet implements ToolbarDelegate {
 	
 	int viewSizeX;
 	int viewSizeY;
+	
+	int toolbarWidth = 40;
 
 	ControlP5 cp5;
 	Toolbar toolbar;
@@ -56,18 +58,17 @@ public class MCPCustomizer extends PApplet implements ToolbarDelegate {
 		size(displayWidth, displayHeight, P3D);
 		ortho();
 		
-		viewSizeX = (displayWidth - 50 - 30) / 2;
+		viewSizeX = (displayWidth - toolbarWidth - 30) / 2;
 		viewSizeY = (displayHeight - 50 - 30);
 		
-		setup2DDrawingView(50, 50, viewSizeX, viewSizeY);
+		setup2DDrawingView(toolbarWidth, 50, viewSizeX, viewSizeY);
 		
-		int view3DPosX = 50 + viewSizeX + 15;
+		int view3DPosX = toolbarWidth + viewSizeX + 15;
 		int view3DPosY = 50;
 		
 		setup3DDrawingView(view3DPosX, view3DPosY, viewSizeX, viewSizeY);
 		
 		new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
-		AllMaterials.setBaseMaterial(AllMaterials.getMaterials().get(40));
 
 		cp5 = new ControlP5(this);
 		createProperties();
@@ -117,7 +118,7 @@ public class MCPCustomizer extends PApplet implements ToolbarDelegate {
 	  {
 	    toolbar = new Toolbar(this.cp5, this);
 
-	    toolbar.setPosition(0, 50).setSize(50, 900).setItemHeight(50).disableCollapse().hideBar();
+	    toolbar.setPosition(0, 50).setSize(toolbarWidth, 900).setItemHeight(toolbarWidth).disableCollapse().hideBar();
 	    
 	    tools = new Tool[]{
 	    	  new NewProjectTool(this, container),

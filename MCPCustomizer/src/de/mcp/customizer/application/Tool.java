@@ -51,7 +51,7 @@ public abstract class Tool implements Drawable2D {
     	this.customizer = customizer;
     	this.objectContainer = container;
     	
-		PGraphics p = this.customizer.createGraphics(50, 50);
+		PGraphics p = this.customizer.createGraphics(customizer.toolbarWidth, customizer.toolbarWidth);
 		this.button = new ShapeButton(this.getIcon(), p, this.view.getTransformation());
     }
     
@@ -85,6 +85,7 @@ public abstract class Tool implements Drawable2D {
      * Will be called by the application when this tool was selected.
      */
 	public void toolWasSelected() {
+
 		this.button.setSelected(true);
 		
 		if(!this.canStaySelected()) {
@@ -137,10 +138,9 @@ public abstract class Tool implements Drawable2D {
      * @return A SVGIcon with the tools icon loaded from the icon SVG file.
      */
 	private SVGIcon getIcon() {
-
-		float iconScaling = 1.57f;
-
+		float iconScaling = ((float)customizer.toolbarWidth)/32;
 		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
+		
 		return icon;
 	}	
 }
