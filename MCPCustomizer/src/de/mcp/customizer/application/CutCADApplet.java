@@ -24,7 +24,7 @@ import de.mcp.customizer.view.DrawingView2D;
 import de.mcp.customizer.view.DrawingView3D;
 import de.mcp.customizer.view.Transformation;
 
-public class MCPCustomizer extends PApplet implements ToolbarDelegate {
+public class CutCADApplet extends PApplet implements ToolbarDelegate {
 
 	private static final long serialVersionUID = 6945013714741954254L;
 	
@@ -285,7 +285,7 @@ public class MCPCustomizer extends PApplet implements ToolbarDelegate {
 	  }
 	
 	public static void main(String args[]) {
-		    PApplet.main(new String[] { /*"--present", */"de.mcp.customizer.application.MCPCustomizer" });
+		    PApplet.main(new String[] { /*"--present", */"de.mcp.customizer.application.CutCADApplet" });
 		  }
 	  
 	  /* (non-Javadoc)

@@ -6,7 +6,7 @@ import java.util.List;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Shape;
@@ -23,8 +23,8 @@ public class PolygonTool extends Tool {
 	private float scalingFactor, boundingBoxSize;
 
 
-	public PolygonTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public PolygonTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 	}
 	
 	@Override
@@ -40,14 +40,14 @@ public class PolygonTool extends Tool {
 
 		if (vertices.size() > 1 && mouseOverCloseShape())
 		{
-			this.customizer.displayStatus("Shape finished! If you want to create another shape, click the left mousebutton anywhere on the 2D view");
+			this.application.displayStatus("Shape finished! If you want to create another shape, click the left mousebutton anywhere on the 2D view");
 			Shape newShape = new PolygonShape(this.vertices, new Vector3D());
 			this.objectContainer.addShape(newShape);
 			this.vertices = new ArrayList<Vector2D>();			
 		}
 		else
 		{
-			this.customizer.displayStatus("Point added! To add another point, click anywhere on the 2D view. To finish the shape, click on the first point of the shape");
+			this.application.displayStatus("Point added! To add another point, click anywhere on the 2D view. To finish the shape, click on the first point of the shape");
 			vertices.add(this.lastKnownMousePositon);			
 		}
 		if (button == PConstants.RIGHT) {
@@ -64,7 +64,7 @@ public class PolygonTool extends Tool {
 	@Override
 	public void mouseMoved(Vector2D position) {
 		this.lastKnownMousePositon = view.positionRelativeToView(position);
-        this.customizer.displayMousePosition(lastKnownMousePositon.scale(0.1f));
+        this.application.displayMousePosition(lastKnownMousePositon.scale(0.1f));
 	}
 
 	@Override
@@ -101,14 +101,14 @@ public class PolygonTool extends Tool {
 	
 	@Override
 	public void toolWasSelected() {
-		this.customizer.displayStatus("To start drawing a shape, click the left mousebutton anywhere on the 2D view");
+		this.application.displayStatus("To start drawing a shape, click the left mousebutton anywhere on the 2D view");
 		this.vertices = new ArrayList<Vector2D>();
 		super.toolWasSelected();
 	}
 	
 	@Override
 	public void toolWasUnselected() {
-		this.customizer.displayStatus("");
+		this.application.displayStatus("");
 		super.toolWasUnselected();
 	}
 

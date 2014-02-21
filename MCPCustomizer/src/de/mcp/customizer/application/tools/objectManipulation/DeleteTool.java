@@ -1,7 +1,7 @@
 package de.mcp.customizer.application.tools.objectManipulation;
 
 import processing.core.PConstants;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.ObjectContainer;
@@ -18,11 +18,11 @@ public class DeleteTool extends Tool {
     Vector2D originalMousePosition;
     
     /**
-     * @param customizer the main class of the project
+     * @param application the main class of the project
      * @param container the currently loaded ObjectContainer
      */
-    public DeleteTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container);
+    public DeleteTool(CutCADApplet application, ObjectContainer container) {
+    	super(application, container);
     	
         this.dragging = false;
         this.originalMousePosition = new Vector2D(0,0);
@@ -88,7 +88,7 @@ public class DeleteTool extends Tool {
         if (view.containsPoint(position))
         {
             Vector2D relativePosition = view.positionRelativeToView(position);
-	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
+	        this.application.displayMousePosition(relativePosition.scale(0.1f));
 
 
             for (Shape s : this.objectContainer.allShapes()) {
@@ -105,13 +105,13 @@ public class DeleteTool extends Tool {
 
 	@Override
 	public void toolWasSelected() {
-		this.customizer.displayStatus("Click on a shape or connection to delete it");
+		this.application.displayStatus("Click on a shape or connection to delete it");
 		super.toolWasSelected();
 	}
 
 	@Override
 	public void toolWasUnselected() {
-		this.customizer.displayStatus("");
+		this.application.displayStatus("");
 		super.toolWasUnselected();
 	}
     

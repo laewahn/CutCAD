@@ -4,13 +4,13 @@ import java.util.List;
 
 import processing.core.PGraphics;
 import de.mcp.customizer.application.Grid;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
 
 public class DrawingView2D {
 	
-	private MCPCustomizer application;
+	private CutCADApplet application;
 	private PGraphics context;
 	private DrawingViewFrame frame;
 	
@@ -18,7 +18,7 @@ public class DrawingView2D {
 	private Grid grid;
 	private Drawable2D axes = new Axes2D();
 	
-	public DrawingView2D(PGraphics context, DrawingViewFrame frame, Transformation transform, MCPCustomizer application) {
+	public DrawingView2D(PGraphics context, DrawingViewFrame frame, Transformation transform, CutCADApplet application) {
 		this.context = context;
 		this.frame = frame;
 		this.transform = transform;

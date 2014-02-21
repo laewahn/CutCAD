@@ -1,6 +1,6 @@
 package de.mcp.customizer.application.tools.fileManagement;
 
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.printdialog.PrintDialog;
@@ -17,13 +17,13 @@ public class PrintTool extends Tool {
 	
 	/**
 	 * 
-	 * @param customizer 
+	 * @param application 
 	 * The main class of the project
 	 * 
 	 * @param container
 	 */
-	public PrintTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public PrintTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 	}
 	
 	@Override

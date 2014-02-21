@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ImportSVG;
 import de.mcp.customizer.model.ObjectContainer;
@@ -25,11 +25,11 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 	private Vector2D originalMousePosition;
 	
 	/**
-	 * @param customizer the main class of the project
+	 * @param application the main class of the project
 	 * @param container the currently loaded ObjectContainer
 	 */
-	public ImportSVGTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public ImportSVGTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 		this.shapes = new ArrayList<Shape>();
 		this.originalMousePosition = new Vector2D(0, 0);
 	}

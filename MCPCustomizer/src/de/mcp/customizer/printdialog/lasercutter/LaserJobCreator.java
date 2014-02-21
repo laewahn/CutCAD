@@ -179,7 +179,7 @@ public class LaserJobCreator {
 	 * the name of the laser job as displayed on the laser cutter
 	 */
 	public void sendLaserjob(String name) {
-		LaserJob job = new LaserJob(name, "", "MCPCustomizer");
+		LaserJob job = new LaserJob(name, "", "CutCADApplet");
 		if (rp != null) {
 			job.addPart(rp);
 		}

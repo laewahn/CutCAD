@@ -1,6 +1,6 @@
 package de.mcp.customizer.application.tools.objectManipulation;
 
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
@@ -15,11 +15,11 @@ public class ChangeSTLTool extends Tool {
 	/**
 	 * Creates a ChangeSTLTool
 	 * 
-	 * @param customizer the main class of the project
+	 * @param application the main class of the project
 	 * @param container the currently loaded ObjectContainer
 	 */
-	public ChangeSTLTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public ChangeSTLTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 		this.mesh = container.getSTLMesh();
 	}
 	
@@ -32,8 +32,8 @@ public class ChangeSTLTool extends Tool {
 	public void toolWasSelected() {
 		if(mesh.isStlImported())
 		{
-			this.customizer.properties.show();
-			this.customizer.properties.plugTo(mesh);
+			this.application.properties.show();
+			this.application.properties.plugTo(mesh);
 		}
 		super.toolWasSelected();
 	}

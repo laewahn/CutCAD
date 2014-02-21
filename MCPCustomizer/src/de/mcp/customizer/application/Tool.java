@@ -31,7 +31,7 @@ public abstract class Tool implements Drawable2D {
     /**
      * A reference to the application itself.
      */
-    protected MCPCustomizer customizer;
+    protected CutCADApplet application;
     
     /**
      * A reference to the object container.
@@ -42,16 +42,16 @@ public abstract class Tool implements Drawable2D {
     
     /**
      * Default constructor for a tool. 
-     * @param customizer Reference to the application.
+     * @param application Reference to the application.
      * @param container Reference to the object container.
      */
-    public Tool(MCPCustomizer customizer, ObjectContainer container) {
+    public Tool(CutCADApplet application, ObjectContainer container) {
  
-    	this.view = customizer.drawingView2D;
-    	this.customizer = customizer;
+    	this.view = application.drawingView2D;
+    	this.application = application;
     	this.objectContainer = container;
     	
-		PGraphics p = this.customizer.createGraphics(customizer.toolbarWidth, customizer.toolbarWidth);
+		PGraphics p = this.application.createGraphics(application.toolbarWidth, application.toolbarWidth);
 		this.button = new ShapeButton(this.getIcon(), p, this.view.getTransformation());
     }
     
@@ -138,7 +138,7 @@ public abstract class Tool implements Drawable2D {
      * @return A SVGIcon with the tools icon loaded from the icon SVG file.
      */
 	private SVGIcon getIcon() {
-		float iconScaling = ((float)customizer.toolbarWidth)/32;
+		float iconScaling = ((float)application.toolbarWidth)/32;
 		SVGIcon icon = new SVGIcon(this.getIconName(), iconScaling);
 		
 		return icon;

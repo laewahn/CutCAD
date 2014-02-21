@@ -5,7 +5,7 @@ import java.io.File;
 import processing.core.PApplet;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.STLMesh;
@@ -22,13 +22,13 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 	private STLMesh mesh;
 
 	/**
-	 * @param customizer
+	 * @param application
 	 *            the main class of the project
 	 * @param container
 	 *            the currently loaded ObjectContainer
 	 */
-	public ImportSTLTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public ImportSTLTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 		this.mesh = container.getSTLMesh();
 	}
 

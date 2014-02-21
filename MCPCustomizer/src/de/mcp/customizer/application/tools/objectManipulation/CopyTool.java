@@ -2,7 +2,7 @@ package de.mcp.customizer.application.tools.objectManipulation;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.GShape;
@@ -23,11 +23,11 @@ public class CopyTool extends Tool {
 	Shape copyShape, previewShape;
 
 	/**
-	 * @param customizer the main class of the project
+	 * @param application the main class of the project
 	 * @param container the currently loaded ObjectContainer
 	 */
-	public CopyTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public CopyTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 		
 		this.selected = false;
 		this.lastMousePosition = new Vector2D(0, 0);
@@ -47,7 +47,7 @@ public class CopyTool extends Tool {
     			{
     				if (s.getGShape().isSelected() && button == PConstants.LEFT)
     				{
-    					this.customizer.displayStatus("Shape selected! Use the left mouse button to create copies or use the right mouse button to clear the selection");
+    					this.application.displayStatus("Shape selected! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     					master = s.getGShape();
     					previewShape = new CopyShape(master.getVertices(), lastMousePosition, master.getName());
     					previewShape.getGShape().setMaterial(master.getMaterial());
@@ -59,14 +59,14 @@ public class CopyTool extends Tool {
     		{
     			if(button == PConstants.RIGHT)
     			{
-    				this.customizer.displayStatus("Select the shape you want to copy");
+    				this.application.displayStatus("Select the shape you want to copy");
     				this.copyShape = null;
     				this.selected = false;
     				this.previewShape = null;
     			}
     			else
     			{
-    				this.customizer.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
+    				this.application.displayStatus("Copy created! Use the left mouse button to create copies or use the right mouse button to clear the selection");
     				Shape copy = master.copyCompleteStructure();
     				copy.getGShape().setPosition2D(lastMousePosition);
     				copy.recalculate();
@@ -80,7 +80,7 @@ public class CopyTool extends Tool {
     {
 		if (view.containsPoint(position)) {
 			lastMousePosition = view.positionRelativeToView(position);
-	        this.customizer.displayMousePosition(lastMousePosition.scale(0.1f));
+	        this.application.displayMousePosition(lastMousePosition.scale(0.1f));
 
 			for (Shape s : this.objectContainer.allShapes()) 
 			{
@@ -107,13 +107,13 @@ public class CopyTool extends Tool {
     
 	@Override
 	public void toolWasSelected() {
-		this.customizer.displayStatus("Select the shape you want to copy");
+		this.application.displayStatus("Select the shape you want to copy");
 		super.toolWasSelected();
 	}
 
 	@Override
 	public void toolWasUnselected() {
-		this.customizer.displayStatus("");
+		this.application.displayStatus("");
 		this.copyShape = null;
 		this.selected = false;
 		this.previewShape = null;

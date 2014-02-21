@@ -2,7 +2,7 @@ package de.mcp.customizer.application.tools.objectManipulation;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.Connection;
 import de.mcp.customizer.model.ObjectContainer;
@@ -24,11 +24,11 @@ public class ConnectTool extends Tool {
 	private String lastMessage;
 
 	/**
-	 * @param mcpCustomizer the main class of the project
+	 * @param application the main class of the project
 	 * @param container the currently loaded ObjectContainer
 	 */
-	public ConnectTool(MCPCustomizer mcpCustomizer, ObjectContainer container) {
-		super(mcpCustomizer, container);
+	public ConnectTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 
 		this.selectedFirst = false;
 	}
@@ -42,7 +42,7 @@ public class ConnectTool extends Tool {
 		for (Edge e : this.objectContainer.allEdges()) {
 			if (e.isHighlighted() && button == PConstants.LEFT) {
 				if (!selectedFirst) {
-					this.customizer.displayStatus("Select another edge to connect it to the first edge");
+					this.application.displayStatus("Select another edge to connect it to the first edge");
 					this.lastMessage = "Select another edge to connect it to the first edge";
 					this.previewConnection = new Connection(
 							this.objectContainer.allConnections());
@@ -53,7 +53,7 @@ public class ConnectTool extends Tool {
 					this.previewConnection.setSlaveEdge(e);
 					String connectMessage = this.previewConnection.connect();
 					if (connectMessage == "Connection created!") {
-						this.customizer.displayStatus("Connection created! If you want to create another connection, select another edge");
+						this.application.displayStatus("Connection created! If you want to create another connection, select another edge");
 						this.lastMessage = "Connection created! If you want to create another connection, select another edge";
 
 						this.objectContainer
@@ -61,8 +61,8 @@ public class ConnectTool extends Tool {
 					} else {
 						// TODO: Find out why the connection couldn't be created
 						// and tell the user
-						this.customizer.displayStatus("Could not create the connection!");
-						this.customizer.displayStatus(connectMessage);
+						this.application.displayStatus("Could not create the connection!");
+						this.application.displayStatus(connectMessage);
 						this.lastMessage = connectMessage;
 					}
 
@@ -75,14 +75,14 @@ public class ConnectTool extends Tool {
 	}
 
 	public void mouseMoved(Vector2D position) {
-		this.customizer.displayStatus(this.lastMessage);
+		this.application.displayStatus(this.lastMessage);
 		this.lastMousePosition = position;
 		Vector2D relativePosition = view.positionRelativeToView(position);
-		this.customizer.displayMousePosition(relativePosition.scale(0.1f));
+		this.application.displayMousePosition(relativePosition.scale(0.1f));
 
 		for (Edge e : this.objectContainer.allEdges()) {
 			if (e.mouseOver(relativePosition))
-				this.customizer.displayStatus("Length of this edge: " + e.getLength() / 10
+				this.application.displayStatus("Length of this edge: " + e.getLength() / 10
 						+ " mm");
 			boolean canBeSelected = e.mouseOver(relativePosition);
 
@@ -119,14 +119,14 @@ public class ConnectTool extends Tool {
 
 	@Override
 	public void toolWasSelected() {
-		this.customizer.displayStatus("Select an edge to create a connection");
+		this.application.displayStatus("Select an edge to create a connection");
 		this.lastMessage = "Select an edge to create a connection";
 		super.toolWasSelected();
 	}
 
 	@Override
 	public void toolWasUnselected() {
-		this.customizer.displayStatus("");
+		this.application.displayStatus("");
 		this.lastMessage = "";
 		selectedFirst = false;
 		if (this.previewConnection != null) {

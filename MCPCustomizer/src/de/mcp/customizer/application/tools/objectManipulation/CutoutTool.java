@@ -3,7 +3,7 @@ package de.mcp.customizer.application.tools.objectManipulation;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Edge;
@@ -25,11 +25,11 @@ public class CutoutTool extends Tool {
     private float scalingFactor;
     
     /**
-     * @param customizer the main class of the project
+     * @param application the main class of the project
      * @param container the currently loaded ObjectContainer
      */
-    public CutoutTool(MCPCustomizer customizer, ObjectContainer container) {
-    	super(customizer, container);
+    public CutoutTool(CutCADApplet application, ObjectContainer container) {
+    	super(application, container);
     	
     	this.dragging = false;
         this.selectedFirst = false;
@@ -49,7 +49,7 @@ public class CutoutTool extends Tool {
             {
             	if (!selectedFirst && s.getGShape().isSelected() )
             	{
-            		this.customizer.displayStatus("Now select the shape you want to add as a cutout");
+            		this.application.displayStatus("Now select the shape you want to add as a cutout");
             		s.getGShape().setSelected(true);
             		Vector2D currentMousePosition = view.positionRelativeToView(position);
                     this.originalMousePosition.set(currentMousePosition);
@@ -58,7 +58,7 @@ public class CutoutTool extends Tool {
             	}
             	else if (selectedFirst && s.getGShape().isSelected() && s != masterShape )
             	{
-            		this.customizer.displayStatus("Cutout created! If you want to create another cutout, select the shape you want to add a cutout to");
+            		this.application.displayStatus("Cutout created! If you want to create another cutout, select the shape you want to add a cutout to");
             		masterShape.getGShape().addCutout(s.getGShape());
             		selectedFirst = false;
             	}
@@ -78,7 +78,7 @@ public class CutoutTool extends Tool {
         if (view.containsPoint(position))
         {
             relativePosition = view.positionRelativeToView(position);
-	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
+	        this.application.displayMousePosition(relativePosition.scale(0.1f));
 
             for (Shape s : this.objectContainer.allShapes()) {
                 s.getGShape().setSelected(s.getGShape().mouseOver(relativePosition));
@@ -104,13 +104,13 @@ public class CutoutTool extends Tool {
 
 	@Override
 	public void toolWasSelected() {
-		this.customizer.displayStatus("First, select the shape you want to add a cutout to");
+		this.application.displayStatus("First, select the shape you want to add a cutout to");
 		super.toolWasSelected();
 	}
 
 	@Override
 	public void toolWasUnselected() {
-		this.customizer.displayStatus("");
+		this.application.displayStatus("");
 		selectedFirst = false;
 		super.toolWasUnselected();
 	}

@@ -1,7 +1,7 @@
 package de.mcp.customizer.application.tools.drawing;
 
 import processing.core.PGraphics;
-import de.mcp.customizer.application.MCPCustomizer;
+import de.mcp.customizer.application.CutCADApplet;
 import de.mcp.customizer.application.Tool;
 import de.mcp.customizer.model.ObjectContainer;
 import de.mcp.customizer.model.primitives.Vector2D;
@@ -19,11 +19,11 @@ public class SymmetricPolygonTool extends Tool {
 	SymmetricPolygon previewRectangle;
 
     /**
-     * @param customizer the main class of the project
+     * @param application the main class of the project
      * @param container the currently loaded ObjectContainer
      */
-	public SymmetricPolygonTool(MCPCustomizer customizer, ObjectContainer container) {
-		super(customizer, container);
+	public SymmetricPolygonTool(CutCADApplet application, ObjectContainer container) {
+		super(application, container);
 		this.isDrawing = false;
 	}
 	
@@ -35,7 +35,7 @@ public class SymmetricPolygonTool extends Tool {
 	public void mouseButtonPressed(Vector2D position, int button)
 	{
 		if (view.containsPoint(position)){
-    		this.customizer.displayStatus("Use the mouse to drag the symmetric polygon to the size that you want");
+    		this.application.displayStatus("Use the mouse to drag the symmetric polygon to the size that you want");
 			isDrawing = true;
 
 			this.startCoord = view.positionRelativeToView(position);
@@ -56,7 +56,7 @@ public class SymmetricPolygonTool extends Tool {
         	}
         	else
         	{
-	    		this.customizer.displayStatus("Symmetric polygon created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
+	    		this.application.displayStatus("Symmetric polygon created! If you want to add another rectangle, click and hold the left mousebutton anywhere on the 2D view");
 	
 				Vector2D endCoord = view.positionRelativeToView(position);
 				Vector2D rectSize = endCoord.sub(this.startCoord);
@@ -74,7 +74,7 @@ public class SymmetricPolygonTool extends Tool {
 	public void mouseMoved(Vector2D position)
 	{
         Vector2D relativePosition = view.positionRelativeToView(position);
-        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
+        this.application.displayMousePosition(relativePosition.scale(0.1f));
         
 		if (isDrawing){
 
@@ -95,13 +95,13 @@ public class SymmetricPolygonTool extends Tool {
 
 	@Override
 	public void toolWasSelected() {
-		this.customizer.displayStatus("To draw a symmetric polygon, click and hold the left mousebutton anywhere on the 2D view");
+		this.application.displayStatus("To draw a symmetric polygon, click and hold the left mousebutton anywhere on the 2D view");
 		super.toolWasSelected();
 	}
 
 	@Override
 	public void toolWasUnselected() {
-		this.customizer.displayStatus("");
+		this.application.displayStatus("");
 		super.toolWasUnselected();
 	}
 	
