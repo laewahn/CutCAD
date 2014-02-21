@@ -36,7 +36,7 @@ public class DeleteTool extends Tool {
     public void mouseButtonPressed(Vector2D position, int button)
     {
         for(Shape s : this.objectContainer.allShapes()) {
-        	if (this.inView(position) && s.getGShape().isSelected() && button == PConstants.LEFT)
+        	if (view.containsPoint(position) && s.getGShape().isSelected() && button == PConstants.LEFT)
             {
                 removeConnectionsContaining(s);
                 removeCutoutsContaining(s);
@@ -45,7 +45,7 @@ public class DeleteTool extends Tool {
         }
                 
         for(Connection c : this.objectContainer.allConnections()) {
-        	if (this.inView(position) && c.isSelected() && button == PConstants.LEFT)
+        	if (view.containsPoint(position) && c.isSelected() && button == PConstants.LEFT)
             {
                 c.undoConnection();
                 this.objectContainer.removeConnection(c);
@@ -53,7 +53,7 @@ public class DeleteTool extends Tool {
         }
         
         for(Cutout o : this.objectContainer.allCutouts()) {
-        	if (this.inView(position) && o.isSelected() && button == PConstants.LEFT)
+        	if (view.containsPoint(position) && o.isSelected() && button == PConstants.LEFT)
             {
                 o.removeCutout();
             }
@@ -85,9 +85,9 @@ public class DeleteTool extends Tool {
 
     public void mouseMoved(Vector2D position)
     {
-        if (this.inView(position))
+        if (view.containsPoint(position))
         {
-            Vector2D relativePosition = this.positionRelativeToView(position);
+            Vector2D relativePosition = view.positionRelativeToView(position);
 	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 

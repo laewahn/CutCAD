@@ -60,22 +60,7 @@ public abstract class Tool implements Drawable2D {
 		return true;
 	}
 
-    protected Vector2D positionRelativeToView(Vector2D inPosition) 
-    {
-        Vector2D newPos = inPosition.sub(this.view.getOrigin());
-        newPos.set(newPos.x()/this.view.getTransformation().getScale(), newPos.y()/this.view.getTransformation().getScale());
-        newPos.addSelf(this.view.getTransformation().getTranslation());
-
-        newPos = newPos.scale(1/this.view.getTransformation().getScale());
-       
-        return newPos;
-    }
-
-    protected boolean inView(Vector2D position) 
-    {
-        return this.view.containsPoint(position);
-    }
-
+    
     public ShapeButton getButton() {
 		return this.button;
 	}

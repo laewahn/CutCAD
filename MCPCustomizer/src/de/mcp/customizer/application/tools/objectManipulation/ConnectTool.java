@@ -77,7 +77,7 @@ public class ConnectTool extends Tool {
 	public void mouseMoved(Vector2D position) {
 		this.customizer.displayStatus(this.lastMessage);
 		this.lastMousePosition = position;
-		Vector2D relativePosition = this.positionRelativeToView(position);
+		Vector2D relativePosition = view.positionRelativeToView(position);
 		this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 		for (Edge e : this.objectContainer.allEdges()) {
@@ -110,7 +110,7 @@ public class ConnectTool extends Tool {
 							.getPosition2D());
 			p.stroke(255, 0, 0);
 			Vector2D lineStart = mid.scale(scalingFactor);
-			Vector2D lineEnd = this.positionRelativeToView(this.lastMousePosition)
+			Vector2D lineEnd = view.positionRelativeToView(this.lastMousePosition)
 					.scale(scalingFactor);
 			p.line(lineStart.x(), lineStart.y(), lineEnd.x(), lineEnd.y());
 			p.stroke(0);

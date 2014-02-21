@@ -38,45 +38,45 @@ public class SelectTool extends Tool {
 	public void mouseButtonPressed(Vector2D position, int button) {
 		boolean noneSelected = true;
 		for (Shape s : this.objectContainer.allShapes()) {
-			if (this.inView(position) && s.getGShape().isSelected()
+			if (view.containsPoint(position) && s.getGShape().isSelected()
 					&& button == PConstants.LEFT) {
 				this.customizer.properties.show();
 				this.customizer.properties.plugTo(s);
-			} else if (this.inView(position) && s.getGShape().isSelected()
+			} else if (view.containsPoint(position) && s.getGShape().isSelected()
 					&& button == PConstants.RIGHT) {
 				this.dragging = true;
 				// this.originalMousePosition.set(position.sub(new
 				// Vector2D(view2DPosX, view2DPosY)));
-				Vector2D currentMousePosition = this
+				Vector2D currentMousePosition = view
 						.positionRelativeToView(position);
 				this.originalMousePosition.set(currentMousePosition);
 				noneSelected = false;
 			}
 		}
 		for (Cutout c : this.objectContainer.allCutouts()) {
-			if (this.inView(position) && c.isSelected()
+			if (view.containsPoint(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
 				this.customizer.properties.show();
 				this.customizer.properties.plugTo(c);
-			} else if (this.inView(position) && c.isSelected()
+			} else if (view.containsPoint(position) && c.isSelected()
 					&& button == PConstants.RIGHT) {
 				this.draggingCutout = true;
-				Vector2D currentMousePosition = this
+				Vector2D currentMousePosition = view
 						.positionRelativeToView(position);
 				this.originalMousePosition.set(currentMousePosition);
 				noneSelected = false;
 			}
 		}
 		for (Connection c : this.objectContainer.allConnections()) {
-			if (this.inView(position) && c.isSelected()
+			if (view.containsPoint(position) && c.isSelected()
 					&& button == PConstants.LEFT) {
 				this.customizer.properties.show();
 				this.customizer.properties.plugTo(c);
 			}
 		}
-		if (this.inView(position) && button == PConstants.RIGHT && noneSelected) {
+		if (view.containsPoint(position) && button == PConstants.RIGHT && noneSelected) {
 			this.dragging = true;
-			Vector2D currentMousePosition = this.positionRelativeToView(position);
+			Vector2D currentMousePosition = view.positionRelativeToView(position);
 			this.originalMousePosition.set(currentMousePosition);
 		}
 	}
@@ -96,8 +96,8 @@ public class SelectTool extends Tool {
 	 * @param position mouse pointer position
 	 */
 	public void mouseMoved(Vector2D position) {
-		if (this.inView(position)) {
-			Vector2D relativePosition = this.positionRelativeToView(position);
+		if (view.containsPoint(position)) {
+			Vector2D relativePosition = view.positionRelativeToView(position);
 	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
 			boolean noneSelected = true;
@@ -106,7 +106,7 @@ public class SelectTool extends Tool {
 						s.getGShape().mouseOver(relativePosition));
 
 				if (s.getGShape().isSelected() && this.dragging) {
-					Vector2D currentMousePosition = this
+					Vector2D currentMousePosition = view
 							.positionRelativeToView(position);
 					s.getGShape().translate2D(
 							currentMousePosition.sub(originalMousePosition));
@@ -122,7 +122,7 @@ public class SelectTool extends Tool {
 				}
 
 				if (c.isSelected() && this.draggingCutout) {
-					Vector2D currentMousePosition = this
+					Vector2D currentMousePosition = view
 							.positionRelativeToView(position);
 					c.translate2D(
 							currentMousePosition.sub(originalMousePosition));
@@ -138,13 +138,13 @@ public class SelectTool extends Tool {
 				}
 			}
 			if (noneSelected && this.dragging) {
-				Vector2D currentMousePosition = this
+				Vector2D currentMousePosition = view
 						.positionRelativeToView(position);
 
 				this.customizer.transform2D.translate(currentMousePosition
 						.sub(originalMousePosition));
 				originalMousePosition
-						.set(this.positionRelativeToView(position));
+						.set(view.positionRelativeToView(position));
 			}
 		} else {
 			for (Shape s : this.objectContainer.allShapes()) {

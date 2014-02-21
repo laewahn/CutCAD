@@ -45,13 +45,13 @@ public class CutoutTool extends Tool {
     {
         for (Shape s : this.objectContainer.allShapes())
         {
-            if (this.inView(position) && button == PConstants.LEFT)
+            if (view.containsPoint(position) && button == PConstants.LEFT)
             {
             	if (!selectedFirst && s.getGShape().isSelected() )
             	{
             		this.customizer.displayStatus("Now select the shape you want to add as a cutout");
             		s.getGShape().setSelected(true);
-            		Vector2D currentMousePosition = this.positionRelativeToView(position);
+            		Vector2D currentMousePosition = view.positionRelativeToView(position);
                     this.originalMousePosition.set(currentMousePosition);
             		masterShape = s;
             		selectedFirst = true;
@@ -75,9 +75,9 @@ public class CutoutTool extends Tool {
     
     public void mouseMoved(Vector2D position)
     {			
-        if (this.inView(position))
+        if (view.containsPoint(position))
         {
-            relativePosition = this.positionRelativeToView(position);
+            relativePosition = view.positionRelativeToView(position);
 	        this.customizer.displayMousePosition(relativePosition.scale(0.1f));
 
             for (Shape s : this.objectContainer.allShapes()) {

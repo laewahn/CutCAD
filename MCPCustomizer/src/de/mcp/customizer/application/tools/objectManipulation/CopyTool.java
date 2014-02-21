@@ -40,7 +40,7 @@ public class CopyTool extends Tool {
 	
     public void mouseButtonPressed(Vector2D position, int button)
     {
-    	if (this.inView(position)) {
+    	if (view.containsPoint(position)) {
     		if (!selected)
     		{
     			for (Shape s : this.objectContainer.allShapes())
@@ -78,8 +78,8 @@ public class CopyTool extends Tool {
 
     public void mouseMoved(Vector2D position)
     {
-		if (this.inView(position)) {
-			lastMousePosition = this.positionRelativeToView(position);
+		if (view.containsPoint(position)) {
+			lastMousePosition = view.positionRelativeToView(position);
 	        this.customizer.displayMousePosition(lastMousePosition.scale(0.1f));
 
 			for (Shape s : this.objectContainer.allShapes()) 

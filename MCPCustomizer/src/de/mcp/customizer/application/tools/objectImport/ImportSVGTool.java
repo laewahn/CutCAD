@@ -53,7 +53,7 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 
 	@Override
 	public void mouseMoved(Vector2D position) {
-		Vector2D currentMousePosition = this.positionRelativeToView(position);
+		Vector2D currentMousePosition = view.positionRelativeToView(position);
 		Vector2D translationVector = currentMousePosition.sub(originalMousePosition);
 		for (Shape s : shapes)
 		{
@@ -78,8 +78,6 @@ public class ImportSVGTool extends Tool implements FileDialogDelegate {
 		OpenFileDialog dialog = new OpenFileDialog(this);
 		dialog.showDialog("Select a SVG file to process:");
 	}
-	
-	
 	
 	@Override
 	public void toolWasUnselected()

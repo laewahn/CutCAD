@@ -57,6 +57,17 @@ public class DrawingView2D {
 		return this.frame.origin;
 	}
 	
+	public Vector2D positionRelativeToView(Vector2D inPosition) 
+    {
+        Vector2D newPos = inPosition.sub(this.getOrigin());
+        newPos.set(newPos.x()/this.getTransformation().getScale(), newPos.y()/this.getTransformation().getScale());
+        newPos.addSelf(this.getTransformation().getTranslation());
+
+        newPos = newPos.scale(1/this.getTransformation().getScale());
+       
+        return newPos;
+    }
+
 	public boolean containsPoint(Vector2D point) {
 		return this.frame.containsPoint(point);
 	}

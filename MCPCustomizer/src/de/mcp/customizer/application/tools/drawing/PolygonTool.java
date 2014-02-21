@@ -35,7 +35,7 @@ public class PolygonTool extends Tool {
 	@Override
 	public void mouseButtonReleased(Vector2D position, int button) {
 
-		if (!inView(position))
+		if (!view.containsPoint(position))
 			return;
 
 		if (vertices.size() > 1 && mouseOverCloseShape())
@@ -63,7 +63,7 @@ public class PolygonTool extends Tool {
 	
 	@Override
 	public void mouseMoved(Vector2D position) {
-		this.lastKnownMousePositon = this.positionRelativeToView(position);
+		this.lastKnownMousePositon = view.positionRelativeToView(position);
         this.customizer.displayMousePosition(lastKnownMousePositon.scale(0.1f));
 	}
 

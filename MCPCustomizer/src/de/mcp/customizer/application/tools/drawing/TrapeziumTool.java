@@ -35,12 +35,12 @@ public class TrapeziumTool extends Tool {
 	
 	public void mouseButtonPressed(Vector2D position, int button)
 	{
-		if (this.inView(position)){
+		if (view.containsPoint(position)){
 			
     		this.customizer.displayStatus("Use the mouse to drag the trapezoid to the size that you want");
 			isDrawing = true;
 
-			this.startCoord = this.positionRelativeToView(position);
+			this.startCoord = view.positionRelativeToView(position);
 
 			this.previewRectangle = new Trapezium(startCoord.to3DXY(), 0,0);
 		}
@@ -49,9 +49,9 @@ public class TrapeziumTool extends Tool {
 	public void mouseButtonReleased(Vector2D position, int button)
 	{
 
-		if (isDrawing && this.inView(position)) {
+		if (isDrawing && view.containsPoint(position)) {
 
-        	if (this.positionRelativeToView(position).equals(this.startCoord))
+        	if (view.positionRelativeToView(position).equals(this.startCoord))
         	{
                 this.previewRectangle = null;
                 isDrawing = false;
@@ -70,12 +70,12 @@ public class TrapeziumTool extends Tool {
 
 	public void mouseMoved(Vector2D position)
 	{
-        Vector2D relativePosition = this.positionRelativeToView(position);
+        Vector2D relativePosition = view.positionRelativeToView(position);
         this.customizer.displayMousePosition(relativePosition.scale(0.1f));
         
 		if (isDrawing){
 
-			Vector2D endCoord = this.positionRelativeToView(position);
+			Vector2D endCoord = view.positionRelativeToView(position);
 			Vector2D rectSize = endCoord.sub(this.startCoord);
 
 			this.previewRectangle.setSize(rectSize);
