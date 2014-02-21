@@ -176,7 +176,7 @@ class PrintSubDialogWindow extends PApplet
     }
     if(theEvent.isController() && theEvent.getName().equals("Next job"))
     {
-      this.parent.nextJob(); 
+      this.parent.nextJob();
     }
   }
 }

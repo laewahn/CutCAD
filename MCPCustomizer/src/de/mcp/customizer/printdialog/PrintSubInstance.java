@@ -210,8 +210,9 @@ class PrintSubInstance {
 	 * is signalled that this printSubInstance is done with cutting.
 	 */
 	void nextJob() {
-		printSubDialogWindow.destroy();
-		printSubDialogFrame.setVisible(false);
+		//this.printSubDialogWindow.destroy();
+		//this.printSubDialogFrame.dispose();
+		this.printSubDialogFrame.setVisible(false);
 		this.parent.printNext();
 	}
   
@@ -230,23 +231,24 @@ class PrintSubInstance {
 	 */
 	private PrintSubDialogWindow createPrintSubDialog(String printJobName) {
 		
-		printSubDialogFrame = new Frame(printJobName);
+		this.printSubDialogFrame = new Frame(printJobName);
 		PrintSubDialogWindow tempPrintSubDialog = new PrintSubDialogWindow(this,printJobName ,200,200);
-		printSubDialogFrame.add(tempPrintSubDialog);
+		this.printSubDialogFrame.add(tempPrintSubDialog);
 		
 		tempPrintSubDialog.init();
 		tempPrintSubDialog.setSize(250,310);
 		
-		printSubDialogFrame.setTitle(printJobName);
-		printSubDialogFrame.setSize(tempPrintSubDialog.getWidth(), tempPrintSubDialog.getHeight());
-		printSubDialogFrame.setLocation(100, 100);
-		printSubDialogFrame.setResizable(false);
-		printSubDialogFrame.setVisible(true);
+		this.printSubDialogFrame.setTitle(printJobName);
+		this.printSubDialogFrame.setSize(tempPrintSubDialog.getWidth(), tempPrintSubDialog.getHeight());
+		this.printSubDialogFrame.setLocation(100, 100);
+		this.printSubDialogFrame.setResizable(false);
+		this.printSubDialogFrame.setVisible(true);
 		
-		printSubDialogFrame.addWindowListener(new WindowAdapter() {
+		this.printSubDialogFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
 				printSubDialogWindow.destroy();
 				printSubDialogFrame.setVisible(false);
+				parent.printNext();
 			}
 		});
 		

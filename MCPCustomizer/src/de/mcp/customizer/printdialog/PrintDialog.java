@@ -28,6 +28,9 @@ public class PrintDialog {
  	 */
 	private ArrayList<PrintInstance> printInstances;  
   
+	//TODO comment
+	private PrintDialogInstance printDialogInstance;
+	
 	/**
 	 * Contains the object that manages the print dialog window
 	 */
@@ -57,11 +60,9 @@ public class PrintDialog {
 	public void preparePrintDialog() {
 		copyShapes();
 		calculateInstances();
-		this.printDialogWindow = addPrintDialogFrame(1100, 650, this.printInstances);
+		printDialogInstance = new PrintDialogInstance(this.printInstances);
 		
-		for(int i = 0; i < this.printInstances.size(); i++) {
-			this.printInstances.get(i).setParent(this.printDialogWindow);
-		}
+		this.printDialogWindow = addPrintDialogFrame(1100, 650, this.printInstances);
 	}
   
 	/** 
@@ -128,7 +129,8 @@ public class PrintDialog {
 	private PrintDialogWindow addPrintDialogFrame(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances) {
 		
 		this.printDialogFrame = new Frame("Print dialog");
-		PrintDialogWindow tempPrintDialogWindow = new PrintDialogWindow(theWidth, theHeight, printInstances);
+		PrintDialogWindow tempPrintDialogWindow = new PrintDialogWindow(theWidth, theHeight, printDialogInstance);
+		
 		this.printDialogFrame.add(tempPrintDialogWindow);
 		
 		tempPrintDialogWindow.init();
@@ -139,6 +141,9 @@ public class PrintDialog {
 		this.printDialogFrame.setLocation(100, 100);
 		this.printDialogFrame.setResizable(false);
 		this.printDialogFrame.setVisible(true);
+		
+		printDialogWindow = tempPrintDialogWindow;
+		this.printDialogInstance.setPrintDialogWindow(printDialogWindow);
 		
 		this.printDialogFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {

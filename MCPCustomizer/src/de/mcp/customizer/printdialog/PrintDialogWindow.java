@@ -1,5 +1,5 @@
 package de.mcp.customizer.printdialog;
-import java.io.File;
+
 import java.util.ArrayList;
 
 import processing.core.PApplet;
@@ -16,7 +16,6 @@ import controlP5.Textlabel;
 import de.mcp.customizer.model.primitives.Shape;
 import de.mcp.customizer.model.primitives.Vector2D;
 import de.mcp.customizer.printdialog.lasercutter.LaserCutter;
-import de.mcp.customizer.printdialog.selectpath.SelectPathDialogInstance;
 import de.mcp.customizer.view.Transformation;
 
 /**
@@ -27,9 +26,6 @@ import de.mcp.customizer.view.Transformation;
  */
 class PrintDialogWindow extends PApplet
 {
-	//TODO Refactor this class: View, controller combined in this class
-	//TODO make UI look consistent
-	
 	/**
 	 * 
 	 */
@@ -64,16 +60,9 @@ class PrintDialogWindow extends PApplet
 	 * Stores which of the print instances (material of a certain thickness) is currently 
 	 * active. 
 	 */
-	private int selectedInstance;
-	private int printCounter = 0;
-	private int printer;
-	private int confirmLevel;
-	private int selectedDPI = 0;
 	private boolean dragging;
-    private String overlapMessage;
     double[] dpi;
     
-    private LaserCutter selectedCutter;
     private Textfield cutterAddress;
 	
 	private PGraphics objectLayout;
@@ -93,26 +82,20 @@ class PrintDialogWindow extends PApplet
 	private Group instanceGroup; 
 	private ArrayList<Button> instanceButtons;
   
-	private ArrayList<PrintInstance> printInstances;
+	private PrintDialogInstance printDialogInstance;
 	private Vector2D originalMousePosition;
 	private Rect view;
   
-	public PrintDialogWindow(int theWidth, int theHeight, ArrayList<PrintInstance> printInstances)
+	public PrintDialogWindow(int theWidth, int theHeight, PrintDialogInstance printDialogInstance)
 	{
-		this.printInstances = printInstances;
-		if(printInstances.size() > 0)
-		{
-			selectedInstance = 0; 
-		}
+		this.printDialogInstance = printDialogInstance;
 		this.w = theWidth;
 		this.h = theHeight;
-		selectedCutter = new LaserCutter();
-		this.bedWidth = selectedCutter.returnBedWidth();
-	    this.bedHeight = selectedCutter.returnBedHeight();
+		this.bedWidth = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnBedWidth();
+	    this.bedHeight = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnBedHeight();
 	    this.dragging = false;
 	    this.view = new Rect(0,0,bedWidth,bedHeight);
 	    this.originalMousePosition = new Vector2D(0,0);
-	    this.overlapMessage = "";
 	}
   
   @Override
@@ -218,7 +201,7 @@ class PrintDialogWindow extends PApplet
 		   			   .setSize(150,30)
 		   			   .setColorValueLabel(0xffffff)
 		   			   .setFont(createFont("Georgia",12))
-		   			   .setText(selectedCutter.returnDevice());
+		   			   .setText(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
    dpiBox = cp5.addListBox("dpiBox")
 		   	   .setPosition(w-140,40)
 		   	   .setSize(120, 120)
@@ -237,7 +220,7 @@ class PrintDialogWindow extends PApplet
 			   		.setColorValueLabel(0xffffff)
 			   		.setFont(createFont("Georgia",12))
 			   		.setVisible(false)
-			   		.setText(Integer.toString(selectedDPI) + " DPI");
+			   		.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
    dpiSelectLabel = cp5.addTextlabel("dpiSelectLabel")
 		   			   .setPosition(w-140,200)
 		   			   .setSize(150,30)
@@ -272,7 +255,7 @@ class PrintDialogWindow extends PApplet
   private void updateDPIBox()
   {
 	  dpiBox.clear();
-	  this.dpi = this.selectedCutter.returnDPI();
+	  this.dpi = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDPI();
 	  for(int i = 0; i < dpi.length; i++) {
 		  dpiBox.addItem(Double.toString(dpi[i]), i);
 	  }
@@ -281,9 +264,9 @@ class PrintDialogWindow extends PApplet
   private void updateListBox()
   {
     unplacedShapesBox.clear();
-    if(printInstances.size() > 0)
+    if(this.printDialogInstance.printInstancesNotEmpty())
     {
-    	ArrayList<Shape> unplacedShapes = printInstances.get(selectedInstance).getUnplacedShapes();
+    	ArrayList<Shape> unplacedShapes = this.printDialogInstance.getUnplacedShapes();
     	for(int i = 0; i < unplacedShapes.size(); i++)
     	{
     		unplacedShapesBox.addItem(unplacedShapes.get(i).getGShape().getName(), i);
@@ -296,105 +279,114 @@ class PrintDialogWindow extends PApplet
   {
     if(theEvent.isGroup() && theEvent.getName().equals("unplacedShapesList"))
     {
-      int objectIndex = (int)theEvent.getGroup().getValue();
-      Shape toBePlacedShape = this.printInstances.get(selectedInstance).getUnplacedShapes().get(objectIndex);
-      printInstances.get(selectedInstance).placeShape(toBePlacedShape);
-      updateListBox();
-    } else if(theEvent.isGroup() && theEvent.getName().equals("cutterBox")) {
-        int objectIndex = (int)theEvent.getGroup().getValue();
-        this.selectedCutter.setDevice(objectIndex);
-        this.bedWidth = selectedCutter.returnBedWidth();
-        this.bedHeight = selectedCutter.returnBedHeight();
-        this.objectLayout = createGraphics(bedWidth, bedHeight);
-        this.view = new Rect(0,0,bedWidth,bedHeight);
-        this.cutterSelected.setText(selectedCutter.returnDevice());
-        this.selectedDPI = 0;
-        this.dpiBox.setVisible(true);
-        this.dpiSelected.setVisible(true);
-        this.dpiSelectLabel.setVisible(true);
-        this.dpiSelected.setText(Integer.toString(selectedDPI) + " DPI");
-        updateDPIBox();
-    } else if(theEvent.isGroup() && theEvent.getName().equals("dpiBox")) {
     	int objectIndex = (int)theEvent.getGroup().getValue();
-    	this.selectedDPI = (int)this.dpi[objectIndex];
-    	this.dpiSelected.setText(Integer.toString(selectedDPI) + " DPI");
+    	shapeListHandler(objectIndex);
+    } else if(theEvent.isGroup() && theEvent.getName().equals("cutterBox")) {
+    	
+        int objectIndex = (int)theEvent.getGroup().getValue();
+        cutterBoxHandler(objectIndex);
+    } else if(theEvent.isGroup() && theEvent.getName().equals("dpiBox")) {
+    	
+    	int objectIndex = (int)theEvent.getGroup().getValue();
+    	dpiListHandler(objectIndex);
     } else if(theEvent.isController() && theEvent.getName().equals("Start cutting")) {
-       print();
+    	printHandler(false);
     }
     else if(theEvent.isController() && theEvent.getName().equals("Export as SVG"))
     {
-       printSVG();
+    	printHandler(true);
     }
     else if(theEvent.isController() && theEvent.getName().equals("Add extra job"))
     {
-    	if(printInstances.size() > 0)
-    	{
-    		this.printInstances.get(selectedInstance).addSubInstance();
-    		createButtons();
-    	}
+      	addJobHandler();
     }
     else if(theEvent.isController() && theEvent.getName().equals("yes"))
     {
-    	confirmPrint.setVisible(false);
-		declinePrint.setVisible(false);
-		statusLabel.setText("");
-    	if(confirmLevel == 0)
-    	{
-    		checkUnplacedShapes();
-    	} else if(confirmLevel == 1)
-    	{
-    		startPrint();
-    		activateAll(true);
-    	}
+    	confirmHandler();	
     }
     else if(theEvent.isController() && theEvent.getName().equals("no"))
     {
-    	confirmPrint.setVisible(false);
-		declinePrint.setVisible(false);
-		activateAll(true);
-		statusLabel.setText("");
+		declineHandler();
     }
     else if(theEvent.isController())
     {
       int objectIndex = (int)theEvent.getController().getId();
-      boolean instanceFound = false;
-      int instance = 0;
-      int subInstance = 0;
-      int buttonNumber = 0;
-      for(int i = 0; i < selectedInstance; i++)
-      {
-        buttonNumber += printInstances.get(i).getNumberOfSubInstances();
-      }
-      buttonNumber += printInstances.get(selectedInstance).getSelectedSubInstance();
-      instanceButtons.get(buttonNumber).setColorBackground(color(128,128,128));
-      while(!instanceFound)
-      {
-        if((subInstance + printInstances.get(instance).getNumberOfSubInstances()) > objectIndex)
-        {
-         instanceFound = true;
-        } else
-        {
-          subInstance += printInstances.get(instance).getNumberOfSubInstances();
-          instance++;
-        }
-      }
-      subInstance = objectIndex-subInstance;
-      this.selectedInstance = instance;
-      printInstances.get(this.selectedInstance).setActiveSubInstance(subInstance);
-      updateListBox();
-      setActiveButton();
+      selectInstanceHandler(objectIndex);
     }
+  }
+  
+  private void shapeListHandler(int objectIndex) {
+      this.printDialogInstance.placeShape(objectIndex);
+      updateListBox();
+  }
+  
+  private void cutterBoxHandler(int objectIndex) {
+	  
+	  this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().setDevice(objectIndex);
+      this.bedWidth = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnBedWidth();
+      this.bedHeight = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnBedHeight();
+      this.objectLayout = createGraphics(bedWidth, bedHeight);
+      this.view = new Rect(0,0,bedWidth,bedHeight);
+      this.cutterSelected.setText(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
+      this.printDialogInstance.getLaserCutterSettings().setDPI(0);
+      this.dpiBox.setVisible(true);
+      this.dpiSelected.setVisible(true);
+      this.dpiSelectLabel.setVisible(true);
+      this.dpiSelected.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
+      updateDPIBox();
+  }
+  
+  private void dpiListHandler(int objectIndex) {
+	  this.printDialogInstance.getLaserCutterSettings().setDPI((int)this.dpi[objectIndex]);
+  	this.dpiSelected.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
+  }
+  
+  public void printHandler(boolean SVG)
+  {
+	  this.printDialogInstance.getLaserCutterSettings().setAddress(cutterAddress.getText());
+	  String result = printDialogInstance.print(SVG);
+	  if(!result.equals("passed")) {
+		  statusLabel.setText(result);
+	  }
+  }
+  
+  private void addJobHandler() {
+	  if(this.printDialogInstance.printInstancesNotEmpty())
+	  	{
+		  this.printDialogInstance.addSubInstance();
+	  		createButtons();
+	  	}
+	  
+  }
+  
+  private void confirmHandler() {
+	  confirmPrint.setVisible(false);
+		declinePrint.setVisible(false);
+		statusLabel.setText("");
+		String result = printDialogInstance.continuePrint();
+		if(!result.equals("passed")) {
+			statusLabel.setText(result);
+			activateAll(true);
+		}
+  }
+  
+  private void declineHandler() {
+	  confirmPrint.setVisible(false);
+		declinePrint.setVisible(false);
+		activateAll(true);
+		statusLabel.setText("");
+  }
+  
+  private void selectInstanceHandler(int objectIndex) {
+	  instanceButtons.get(this.printDialogInstance.activeButtonNumber()).setColorBackground(color(128,128,128));
+	  this.printDialogInstance.selectInstanceByButtonID(objectIndex);
+	  instanceButtons.get(this.printDialogInstance.activeButtonNumber()).setColorBackground(color(0,0,0));
+	  updateListBox();
   }
   
   private void setActiveButton()
   {
-	  int buttonNumber = 0;
-	  for(int i = 0; i < selectedInstance; i++)
-	  {
-		 buttonNumber += printInstances.get(i).getNumberOfSubInstances();
-	  }
-	  buttonNumber += printInstances.get(selectedInstance).getSelectedSubInstance();
-	  instanceButtons.get(buttonNumber).setColorBackground(color(0,0,0));
+	  instanceButtons.get(this.printDialogInstance.activeButtonNumber()).setColorBackground(color(0,0,0));
   }
   
   @Override
@@ -407,8 +399,8 @@ class PrintDialogWindow extends PApplet
   
   void createButtons()
   {
-	if(printInstances.size() > 0)
-	{
+	if(this.printDialogInstance.printInstancesNotEmpty()) {
+		ArrayList<PrintInstance> printInstances = this.printDialogInstance.getPrintInstances();
 	    int buttonNumber = 0;
 	    for(int i = 0; i < instanceButtons.size(); i++)
 	    {
@@ -445,9 +437,9 @@ class PrintDialogWindow extends PApplet
       objectLayout.background(100);
       ArrayList<Shape> drawShapes = new ArrayList<Shape>();
       Transformation t = new Transformation(1, new Vector2D(0,0));
-      if(printInstances.size() > 0)
+      if(this.printDialogInstance.printInstancesNotEmpty())
       {
-    	  drawShapes = printInstances.get(selectedInstance).getPlacedShapes();
+    	  drawShapes = this.printDialogInstance.getPlacedShapes();
       }
       for(int i = 0; i < drawShapes.size(); i++)
       {
@@ -459,12 +451,12 @@ class PrintDialogWindow extends PApplet
   
   public void mouseMoved()
   {
-	  if(printInstances.size() > 0)
+	  if(this.printDialogInstance.printInstancesNotEmpty())
 	  {
         Vector2D position =  new Vector2D(mouseX, mouseY);
         Vector2D relativePosition = this.positionRelativeToView(position);
 
-        for (Shape s : printInstances.get(selectedInstance).getPlacedShapes()) {
+        for (Shape s :  this.printDialogInstance.getPlacedShapes()) {
             s.getGShape().setSelected(s.getGShape().mouseOver(relativePosition));
         }
 	  }
@@ -472,9 +464,9 @@ class PrintDialogWindow extends PApplet
     
     public void mouseDragged()
     {
-    	if(printInstances.size() > 0)
+    	if(this.printDialogInstance.printInstancesNotEmpty())
   	  	{
-    		for (Shape s : printInstances.get(selectedInstance).getPlacedShapes()) {
+    		for(Shape s : this.printDialogInstance.getPlacedShapes()) {
 	            if (s.getGShape().isSelected() && this.dragging)
 	            {
 	                Vector2D position = new Vector2D(mouseX, mouseY);
@@ -488,10 +480,10 @@ class PrintDialogWindow extends PApplet
     
     public void mousePressed()
     {
-    	if(printInstances.size() > 0)
+    	if(this.printDialogInstance.printInstancesNotEmpty())
   	  	{
 	      Vector2D mousePosition = new Vector2D(mouseX, mouseY);
-	      ArrayList<Shape> placedShapes = printInstances.get(selectedInstance).getPlacedShapes();
+	      ArrayList<Shape> placedShapes = this.printDialogInstance.getPlacedShapes();
 	      ArrayList<Shape> shapes = new ArrayList<Shape>();
 	      for(int i = 0; i < placedShapes.size(); i++)
 	      {
@@ -505,7 +497,7 @@ class PrintDialogWindow extends PApplet
 	                Vector2D currentMousePosition = this.positionRelativeToView(mousePosition);
 	                this.originalMousePosition.set(currentMousePosition);
 	            } else if (s.getGShape().isSelected() && mouseButton == PConstants.RIGHT){
-	               printInstances.get(selectedInstance).unplaceShape(s);
+	            	this.printDialogInstance.unplaceShape(s);
 	               updateListBox();
 	            }
 	      }
@@ -524,189 +516,21 @@ class PrintDialogWindow extends PApplet
     {
         return inPosition.sub(this.view.getTopLeft());
     }
-    
-  public void print()
-  {
-	  printer = 0;
-	  checkPrintConstraints();
-  }
   
-  private void checkUnplacedShapes()
-  {
-	  boolean unplacedShapesFound = false;
-	  String result = "";
-	  for(int i = 0; i < this.printInstances.size(); i++)
-	  {
-		  if(this.printInstances.get(i).getUnplacedShapes().size() > 0)
-		  {
-			  if(result.equals(""))
-			  {
-				  result = "there are unplaced shapes for material(s): " + this.printInstances.get(i).getMaterial().getMaterialName();
-			  } else
-			  {
-				  result = result + ", " + this.printInstances.get(i).getMaterial().getMaterialName();
-			  }
-			  unplacedShapesFound = true;
-		  }
-	  }
-	  if(unplacedShapesFound)
-	  {
-		  statusLabel.setText(result);
-		  confirmLevel = 1;
-		  activateAll(false);
-		  confirmPrint.setVisible(true);
-		  declinePrint.setVisible(true);
-	  } else
-	  {
-		  startPrint();
-	  }
-  }
-  
-  private void startPrint() {
-	  if(printer == 0) {
-		  if(selectedCutter.returnDevice().equals("no selected")) {
-			  statusLabel.setText("No lasercutter has been selected");
-		  } else if (cutterAddress.getText().equals("")) { // TODO more torough check
-			  statusLabel.setText("The address of the lasercutter is not specified");
-		  } else if(this.selectedDPI == 0) {
-			  statusLabel.setText("No DPI setting has been selected");
-		  } else {
-			  setLaserCutter(cutterAddress.getText());
-			  setDPI();
-			  printCounter = 0;
-			  printInstances.get(printCounter).print();
-		  }
-	  } else if(printer == 1) {
-		  SelectPathDialogInstance selectPathInstance = new SelectPathDialogInstance();
-		  selectPathInstance.showSelectPathDialog();
-		  exportSVG(selectPathInstance.getSelectedPath());
-	  }
-  }
-  
-  protected void exportSVG(File thePath) {
-	  for(int i = 0; i < printInstances.size(); i++) {
-		  printInstances.get(i).printSVG(thePath);
-	  }
-  }
-  
-  private boolean checkOverlap(int printInstanceIndex)
-  {
-	  boolean overLapped = false;
-	  String result = this.printInstances.get(printInstanceIndex).checkOverlap();
-	  if(!result.equals("no overlap"))
-	  {
-		  if(!this.overlapMessage.equals(""))
-		  {
-			  this.overlapMessage = this.overlapMessage + ", " + result;
-		  } else
-		  {
-			  this.overlapMessage = this.overlapMessage + result;
-		  }
-		  overLapped = true;
-	  }
-	  return overLapped;
-  }
-  
-  private void checkPlacedShapes()
-  {
-	  boolean conditionsMet = false;
-	  boolean placedShapeNoMaterial = false;
-	  boolean overLapped = false;
-	  for(int i = 0; i < printInstances.size(); i++)
-	  {
-		if(printInstances.get(i).checkPlacedShapes())
-		{
-			if(!checkOverlap(i))
-			{
-				if(printInstances.get(i).getMaterial().getMaterialName().equals("Nothing 0,5 mm"))
-				{
-					placedShapeNoMaterial = true;
-				} else
-				{
-					conditionsMet = true;
-				}
-			} else
-			{
-				overLapped = true;
-				conditionsMet = false;
-			}
-		}
-	  }
-	  if(!conditionsMet)
-	  {
-		  if(overLapped)
-		  {
-			  statusLabel.setText(overlapMessage);
-		  } else if (placedShapeNoMaterial)
-		  {
-			  statusLabel.setText("No shape has been placed with a material assigned");
-		  } else
-		  {
-			  statusLabel.setText("No shape has been placed");
-		  }
-	  } else
-	  {
-		  if(placedShapeNoMaterial)
-		  {
-			  statusLabel.setText("There are object placed without material assigned, continue?");
-			  confirmLevel = 0;
-			  activateAll(false);
-			  confirmPrint.setVisible(true);
-			  declinePrint.setVisible(true);
-		  } else
-		  {
-			  checkUnplacedShapes();
-		  }
-	  }
-  }
-  
-  private void checkPrintConstraints()
-  {
-	  this.statusLabel.setText("");
-	  this.overlapMessage = "";
-	  if(!(printInstances.size() > 0))
-	  {
-		  statusLabel.setText("There are no shapes that can be printed");
-	  } else
-	  {
-		  checkPlacedShapes();
-	  }
-  }
-  
-  public void printNext()
-  {
-   printCounter++;
-   if(printCounter < printInstances.size())
-   {
-     printInstances.get(printCounter).print();
-   } else
-   {
-	   activateAll(true);
-   }
-  }
-  
-  public void printSVG()
-  {
-	printer = 1;
-	checkPrintConstraints();
-  }  
-  
-  public ControlP5 control() 
-  {
-    return cp5;
-  } 
-  
+  @Override
   public void setSize(int theHeight, int theWidth)
   {
     this.w = theWidth;
     this.h = theHeight;
   }
   
+  @Override
   public int getWidth()
   {
    return this.w; 
   }
   
+  @Override
   public int getHeight()
   {
    return this.h; 
@@ -719,19 +543,14 @@ class PrintDialogWindow extends PApplet
 	  this.addExtraJobButton.setVisible(state);
   }
   
-  private void setLaserCutter(String address)
-  {
-	  for(int i = 0; i < printInstances.size(); i++)
-	  {
-		  printInstances.get(i).setLaserCutter(selectedCutter,address);
-	  }
+  void printComplete() {
+	  activateAll(true);
   }
-  
-  private void setDPI()
-  {
-	  for(int i = 0; i < printInstances.size(); i++)
-	  {
-		  printInstances.get(i).setDPI(this.selectedDPI);
-	  }
-  }
+
+public void confirmationPrint() {
+	activateAll(false);
+	confirmPrint.setVisible(true);
+	declinePrint.setVisible(true);
+	
+}
 }

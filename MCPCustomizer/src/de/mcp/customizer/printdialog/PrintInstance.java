@@ -54,7 +54,7 @@ class PrintInstance
 	private int instancesPrinted;
   
 	//TODO will change after refactoring
-	private PrintDialogWindow parent;
+	private Printer printer;
   
 	/**
 	 * Constructs a new printInstance. 
@@ -236,7 +236,7 @@ class PrintInstance
 			  printNext();
 			}
 		} else {
-		  this.parent.printNext(); 
+		  this.printer.printNext(); 
 		}
 	}
   
@@ -265,9 +265,12 @@ class PrintInstance
 	}
   
 	//TODO will be changed after refactoring
-	void setParent(PrintDialogWindow parent) {
-		this.parent = parent; 
+	public void setPrinter(Printer printer) {
+		this.printer = printer;
 	}
+	//void setParent(PrintDialogInstance parent) {
+		//this.printer = parent; 
+	//}
   
 	/**
 	 * Returns the number of subInstances the printInstance possesses.
