@@ -34,9 +34,9 @@ public class Trapezium extends Shape {
 	 *            length of the side of the trapezium (0.1mm)
 	 */
 	public Trapezium(Vector3D position, int sizeX, int sizeY) {
-		this.sizeXTop = (sizeX / 10) * 10;
+		this.sizeXTop = (sizeX / 20) * 10;
 		this.sizeXBottom = (sizeX / 10) * 10;
-		this.sizeY = (sizeY / 10) * 10;
+		this.sizeY = ((int)(Math.sqrt(Math.pow((sizeY),2)+ Math.pow((sizeXBottom-sizeXTop)/2, 2))))/10*10;
 		basicShape = new ArrayList<Vector2D>();
 		basicShape.add(new Vector2D(0, 0));
 		basicShape.add(new Vector2D(sizeX, 0));
@@ -150,6 +150,7 @@ public class Trapezium extends Shape {
 	 * Recalculates the vectors of the trapezium based on the input parameter
 	 */
 	public void recalculate() {
+		if (Math.abs(sizeXTop-sizeXBottom)/2+1 > sizeY) sizeY = Math.abs(sizeXTop-sizeXBottom)/2+1;
 		basicShape.set(1, new Vector2D(sizeXTop, 0));
 		basicShape.set(
 				2,
@@ -171,9 +172,9 @@ public class Trapezium extends Shape {
 	 *            Length and Height of the trapezium (0.1mm)
 	 */
 	public void setSize(Vector2D newSize) {
-		this.sizeXTop = ((int) newSize.x() / 10) * 10;
+		this.sizeXTop = ((int) newSize.x() / 20) * 10;
 		this.sizeXBottom = ((int) newSize.x() / 10) * 10;
-		this.sizeY = (int) newSize.y();
+		this.sizeY = ((int)(Math.sqrt(Math.pow(((int) newSize.y()),2)+ Math.pow((sizeXBottom-sizeXTop)/2, 2))))/10*10;
 		recalculate();
 	}
 
