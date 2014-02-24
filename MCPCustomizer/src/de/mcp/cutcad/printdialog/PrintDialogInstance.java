@@ -21,14 +21,14 @@ class PrintDialogInstance {
 	 */
 	private int selectedInstance;
 	
-	PrintDialogInstance(ArrayList<PrintInstance> printInstances) {
+	PrintDialogInstance(ArrayList<PrintInstance> printInstances, LaserCutterSettings lasercutterSettings) {
 		
 		this.printInstances = printInstances;
 		if(printInstances.size() > 0)
 		{
 			selectedInstance = 0; 
 		}
-		laserCutterSettings = new LaserCutterSettings();
+		this.laserCutterSettings = lasercutterSettings;
 	}
 	
 	LaserCutterSettings getLaserCutterSettings() {
@@ -128,6 +128,11 @@ class PrintDialogInstance {
 
 	public void setPrintDialogWindow(PrintDialogWindow parent) {
 		this.parent = parent;
+	}
+
+	public void persistSettings() {
+		SettingsLoader settingsLoader = new SettingsLoader();
+		settingsLoader.persistSettings(this.laserCutterSettings);
 	}
 
 }

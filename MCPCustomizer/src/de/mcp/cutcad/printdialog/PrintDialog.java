@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.mcp.cutcad.model.primitives.Shape;
 import de.mcp.cutcad.model.primitives.Vector2D;
+import de.mcp.cutcad.printdialog.lasercutter.LaserCutterSettings;
 
 /**
  * Prepares the print dialog. Preparation consists of making a new window and processing applet.
@@ -28,8 +29,15 @@ public class PrintDialog {
  	 */
 	private ArrayList<PrintInstance> printInstances;  
   
-	//TODO comment
+	/**
+	 * The instance which will handle the shapes. 
+	 */
 	private PrintDialogInstance printDialogInstance;
+	
+	/**
+	 * Contains the settings to be used for the laser cutter.
+	 */
+	private LaserCutterSettings laserCutterSettings;
 	
 	/**
 	 * Contains the object that manages the print dialog window
@@ -54,15 +62,32 @@ public class PrintDialog {
 	/** 
 	 * Prepares the print dialog. It copies the shapes such that no side effects
 	 * can occur with the original shapes. Some properties of the shapes are altered
-	 * to be able to use them in the print dialog. The window of the print dialog is
+	 * to be able to use them in the print dialog. Furthermore, if there are laser 
+	 * cutter settings available, they are loaded. The window of the print dialog is
 	 * created here. 
 	 */
 	public void preparePrintDialog() {
 		copyShapes();
 		calculateInstances();
-		printDialogInstance = new PrintDialogInstance(this.printInstances);
+		loadPrintSettings();
+		
+		this.printDialogInstance = new PrintDialogInstance(this.printInstances, this.laserCutterSettings);
 		
 		this.printDialogWindow = addPrintDialogFrame(1100, 650, this.printInstances);
+	}
+	
+	/**
+	 * This method loads the settings for the laser cutter if any exists.
+	 * These settings include laser cutter type, address and DPI.
+	 */
+	private void loadPrintSettings() {
+		SettingsLoader settingsLoader = new SettingsLoader();
+		settingsLoader.loadSettingFile();
+		if(settingsLoader.settingsExists()) {
+			this.laserCutterSettings = settingsLoader.loadSettings();
+		} else {
+			this.laserCutterSettings = new LaserCutterSettings();
+		}
 	}
   
 	/** 
@@ -147,6 +172,8 @@ public class PrintDialog {
 		
 		this.printDialogFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
+				/*SettingsLoader settingsLoader = new SettingsLoader();
+				settingsLoader.persistSettings(laserCutterSettings);*/
 				printDialogWindow.destroy();
 				printDialogFrame.setVisible(false);
 			}

@@ -81,7 +81,8 @@ class PrintDialogWindow extends PApplet
     this.cp5 = new ControlP5(this);
     this.objectLayout = createGraphics(bedWidth, bedHeight);
     this.printDialogWidgets = new WidgetContainer(this.cp5, this.printDialogInstance);
-    this.printDialogWidgets.setupButtons(this.h, this.w, this.bedHeight, this.bedWidth);
+    this.dpi = this.printDialogWidgets.setupButtons(this.h, this.w, this.bedHeight, this.bedWidth);
+    prepareExitHandler ();
   }
   
   @Override
@@ -90,6 +91,28 @@ class PrintDialogWindow extends PApplet
       background(255);
       drawObjectLayout();
   }
+  
+  @Override
+  public void destroy() {
+	  this.printDialogInstance.persistSettings();
+	  super.destroy();
+  }
+  
+  private void prepareExitHandler () {
+
+	  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+	  public void run () {
+
+	  System.out.println("SHUTDOWN HOOK");
+
+	     printDialogInstance.persistSettings();
+
+	  }
+
+	  }));
+
+	  }
   
   public void controlEvent(ControlEvent theEvent) 
   {
@@ -105,6 +128,8 @@ class PrintDialogWindow extends PApplet
     	
     	int objectIndex = (int)theEvent.getGroup().getValue();
     	dpiListHandler(objectIndex);
+    } else if(theEvent.isController() && theEvent.getName().equals("Use address")) {
+    	addressEnteredHandler();
     } else if(theEvent.isController() && theEvent.getName().equals("Start cutting")) {
     	printHandler(false);
     }
@@ -153,9 +178,13 @@ class PrintDialogWindow extends PApplet
   	this.printDialogWidgets.setDPISelected(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
   }
   
+  private void addressEnteredHandler() {
+	  this.printDialogInstance.getLaserCutterSettings().setAddress(this.printDialogWidgets.getCutterAddress());
+	  this.printDialogWidgets.setAddressEntered(this.printDialogInstance.getLaserCutterSettings().getAddress());
+  }
+  
   public void printHandler(boolean SVG)
   {
-	  this.printDialogInstance.getLaserCutterSettings().setAddress(this.printDialogWidgets.getCutterAddress());
 	  String result = printDialogInstance.print(SVG);
 	  if(!result.equals("passed")) {
 		  this.printDialogWidgets.setStatusLabelText(result);
