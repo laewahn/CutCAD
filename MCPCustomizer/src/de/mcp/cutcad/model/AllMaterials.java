@@ -39,7 +39,7 @@ public class AllMaterials extends PApplet {
 
 		// ToDo: make sure load only xml-files
 		for (int i = 0; i < files.length; i++) {
-			XML material = loadXML(path + "/" + files[i].getName());
+			XML material = loadXML(path + File.separator + files[i].getName());
 
 			XML identity = material.getChild("identity");
 			String name = identity.getContent();

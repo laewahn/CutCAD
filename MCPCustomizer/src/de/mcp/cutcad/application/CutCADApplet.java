@@ -60,7 +60,7 @@ public class CutCADApplet extends PApplet implements ToolbarDelegate {
 		
 		setup3DDrawingView(view3DPosX, view3DPosY, viewSizeX, viewSizeY);
 		
-		new AllMaterials().addMaterialsFromFile(sketchPath("") + "/materials");
+		new AllMaterials().addMaterialsFromFile("materials");
 
 		cp5 = new ControlP5(this);
 		createProperties();
