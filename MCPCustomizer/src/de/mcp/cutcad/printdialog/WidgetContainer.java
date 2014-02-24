@@ -31,6 +31,7 @@ class WidgetContainer extends PApplet {
 	private Textlabel cutterSelected;
 	private Textlabel dpiSelected;
 	private Textlabel dpiSelectLabel;
+	private Textlabel addressEntered;
 	private Button lasercutButton;
 	private Button exportSVGButton;
 	private Button addExtraJobButton;
@@ -45,10 +46,10 @@ class WidgetContainer extends PApplet {
 		this.printDialogInstance = printDialogInstance;
 	}
 	
-	void setupButtons(int h, int w, int bedHeight, int bedWidth) {
+	double[] setupButtons(int h, int w, int bedHeight, int bedWidth) {
 		
 	    unplacedShapesBox = printDialogWindowController.addListBox("unplacedShapesList")
-	                         						   .setPosition(10, bedHeight+20)
+	                         						   .setPosition(10, 300+20)
 	                         						   .setSize(120, 120)
 								                       .setItemHeight(15)
 								                       .setBarHeight(15)
@@ -80,14 +81,15 @@ class WidgetContainer extends PApplet {
 			   				  						  .setColorForeground(color(0,0,0))
 			   				  						  .setColorCaptionLabel(color(255,255,255))
 			   				  						  .setId(2);
-	   statusLabel = printDialogWindowController.addTextlabel("")
+	   statusLabel = printDialogWindowController.addTextlabel("statusLabel")
 			   									.setPosition(10,h-100)
 			   									.setSize(120,30)
 			   									.setColorValueLabel(0xffff0000)
-			   									.setFont(createFont("Georgia",12));
+			   									.setFont(createFont("Georgia",12))
+			   									.setText("");
 	   instanceButtons = new ArrayList<Button>();
 	   instanceGroup = printDialogWindowController.addGroup("Jobs")
-	                      						  .setPosition(140,bedHeight+20)
+	                      						  .setPosition(140,300+20)
 	                      						  .setColorBackground(color(128,128,128))
 	                      						  .setColorForeground(color(128,128,128))
 	                      						  .setColorLabel(color(255,255,255))
@@ -125,7 +127,8 @@ class WidgetContainer extends PApplet {
 			   			  						  .setPosition(w-295,40)
 			   			  						  .setColorBackground(color(128,128,128))
 			   			  						  .setColorForeground(color(128,128,128))
-			   			  						  .setSize(120,30);
+			   			  						  .setSize(120,30)
+			   			  						  .setText(this.printDialogInstance.getLaserCutterSettings().getAddress());
 	   printDialogWindowController.addTextlabel("cutterAddressLabel")
 	   	  						  .setPosition(w-300,20)
 	   	  						  .setSize(150,30)
@@ -133,23 +136,22 @@ class WidgetContainer extends PApplet {
 	   	  						  .setFont(createFont("Georgia",12))
 	   	  						  .setText("Address of laser cutter");
 	   printDialogWindowController.addTextlabel("cutterSelectedLabel")
-		  						  .setPosition(w-440,200)
+		  						  .setPosition(w-460,200)
 		  						  .setSize(150,30)
 		  						  .setColorValueLabel(0xffffff)
 		  						  .setFont(createFont("Georgia",12))
 		  						  .setText("Lasercutter selected");
 	   cutterSelected = printDialogWindowController.addTextlabel("cutterSelected")
-			   			   						   .setPosition(w-440,220)
+			   			   						   .setPosition(w-460,220)
 			   			   						   .setSize(150,30)
 			   			   						   .setColorValueLabel(0xffffff)
 			   			   						   .setFont(createFont("Georgia",12))
-			   			   .setText(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
+			   			   						   .setText(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
 	   dpiBox = printDialogWindowController.addListBox("dpiBox")
 			   	   						   .setPosition(w-140,40)
 			   	   						   .setSize(120, 120)
 			   	   						   .setItemHeight(15)
 			   	   						   .setBarHeight(15)
-			   	   						   .setVisible(false)
 			   	   						   .setColorBackground(color(128,128,128))
 			   	   						   .setColorForeground(color(0,0,0))
 			   	   						   .setColorLabel(color(255,255,255))
@@ -161,15 +163,39 @@ class WidgetContainer extends PApplet {
 				   								.setSize(150,30)
 				   								.setColorValueLabel(0xffffff)
 				   								.setFont(createFont("Georgia",12))
-				   								.setVisible(false)
 				   								.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
 	   dpiSelectLabel = printDialogWindowController.addTextlabel("dpiSelectLabel")
 			   			   						   .setPosition(w-140,200)
 			   			   						   .setSize(150,30)
 			   			   						   .setColorValueLabel(0xffffff)
 			   			   						   .setFont(createFont("Georgia",12))
-			   			   						   .setVisible(false)
 			   			   						   .setText("DPI setting selected");
+	  printDialogWindowController.addButton("Use address")
+			 					  .setPosition(w-265,80)
+			 					  .setSize(60,30)
+			 					  .setColorBackground(color(128,128,128))
+			 					  .setColorForeground(color(0,0,0))
+			 					  .setColorCaptionLabel(color(255,255,255));
+	   printDialogWindowController.addTextlabel("addressEnteredLabel")
+					   		      .setPosition(w-295,200)
+					   		      .setSize(150,30)
+					   		      .setColorValueLabel(0xffffff)
+					   			  .setFont(createFont("Georgia",12))
+					    		  .setText("Address entered");
+	   addressEntered =  printDialogWindowController.addTextlabel("addressentered")
+			   										.setPosition(w-295,220)
+			   										.setSize(150,30)
+			   										.setColorValueLabel(0xffffff)
+			   										.setFont(createFont("Georgia",12))
+			   										.setText(this.printDialogInstance.getLaserCutterSettings().getAddress());
+	   if(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice().equals("no selected")) {
+		   dpiSelected.setVisible(false);
+		   dpiSelectLabel.setVisible(false);
+		   dpiBox.setVisible(false);
+		   return new double[0];
+	   } else {
+		   return updateDPIBox();
+	   }
 	}
 	
 	void updateListBox() {
@@ -288,6 +314,10 @@ class WidgetContainer extends PApplet {
 	 
 	 void setCutterSelected(String text) {
 		 this.cutterSelected.setText(text);
+	 }
+	 
+	 void setAddressEntered(String text) {
+		 this.addressEntered.setText(text);
 	 }
 	 
 	 String getCutterAddress() {
