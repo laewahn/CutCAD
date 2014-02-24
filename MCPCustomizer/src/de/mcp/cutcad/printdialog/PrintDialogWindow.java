@@ -6,16 +6,10 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import toxi.geom.Rect;
-import controlP5.Button;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
-import controlP5.Group;
-import controlP5.ListBox;
-import controlP5.Textfield;
-import controlP5.Textlabel;
 import de.mcp.cutcad.model.primitives.Shape;
 import de.mcp.cutcad.model.primitives.Vector2D;
-import de.mcp.cutcad.printdialog.lasercutter.LaserCutter;
 import de.mcp.cutcad.view.Transformation;
 
 /**
@@ -56,32 +50,13 @@ class PrintDialogWindow extends PApplet
 	 */
 	private int bedHeight;
 	
-	/**
-	 * Stores which of the print instances (material of a certain thickness) is currently 
-	 * active. 
-	 */
-	private boolean dragging;
-    double[] dpi;
-    
-    private Textfield cutterAddress;
 	
-	private PGraphics objectLayout;
-	private ListBox unplacedShapesBox;
-	private ListBox cutterBox;
-	private ListBox dpiBox;
-	private Textlabel statusLabel;
-	private Textlabel cutterSelected;
-	private Textlabel dpiSelected;
-	private Textlabel dpiSelectLabel;
-	private Button lasercutButton;
-	private Button exportSVGButton;
-	private Button addExtraJobButton;
-	private Button confirmPrint;
-	private Button declinePrint;
+	private boolean dragging;
+    private double[] dpi;
+    
+    private PGraphics objectLayout;
   
-	private Group instanceGroup; 
-	private ArrayList<Button> instanceButtons;
-  
+	private WidgetContainer printDialogWidgets;
 	private PrintDialogInstance printDialogInstance;
 	private Vector2D originalMousePosition;
 	private Rect view;
@@ -103,176 +78,17 @@ class PrintDialogWindow extends PApplet
   {
     size(h, w);
     frameRate(25);
-    cp5 = new ControlP5(this);
-    objectLayout = createGraphics(bedWidth, bedHeight);
-    unplacedShapesBox = cp5.addListBox("unplacedShapesList")
-                         .setPosition(10, bedHeight+20)
-                         .setSize(120, 120)
-                         .setItemHeight(15)
-                         .setBarHeight(15)
-                         .setColorBackground(color(128,128,128))
-                         .setColorForeground(color(0,0,0))
-                         .setColorLabel(color(255,255,255))
-                         .setCaptionLabel("Choose an object");
-    unplacedShapesBox.getCaptionLabel().getStyle().marginTop = 3;
-    unplacedShapesBox.getValueLabel().getStyle().marginTop = 3;
-   updateListBox();
-   lasercutButton = cp5.addButton("Start cutting")
-		   			   .setPosition(10,h-70)
-		   			   .setSize(100,30)
-		   			   .setColorBackground(color(128,128,128))
-                       .setColorForeground(color(0,0,0))
-                       .setColorCaptionLabel(color(255,255,255))
-		   			   .setId(0);
-   exportSVGButton = cp5.addButton("Export as SVG")
-		   				.setPosition(120,h-70)
-		   				.setSize(80,30)
-		   				.setColorBackground(color(128,128,128))
-                        .setColorForeground(color(0,0,0))
-                        .setColorCaptionLabel(color(255,255,255))
-		   				.setId(1);
-   addExtraJobButton = cp5.addButton("Add extra job")
-		   				  .setPosition(10,h-140)
-		   				  .setSize(100,30)
-		   				  .setColorBackground(color(128,128,128))
-                          .setColorForeground(color(0,0,0))
-                          .setColorCaptionLabel(color(255,255,255))
-		   				  .setId(2);
-   statusLabel = cp5.addTextlabel("")
-		   			.setPosition(10,h-100)
-		   			.setSize(120,30)
-		   			.setColorValueLabel(0xffff0000)
-                    .setFont(createFont("Georgia",12));
-   instanceButtons = new ArrayList<Button>();
-   instanceGroup = cp5.addGroup("Jobs")
-                      .setPosition(140,bedHeight+20)
-                      .setColorBackground(color(128,128,128))
-                      .setColorForeground(color(128,128,128))
-                      .setColorLabel(color(255,255,255))
-                      .hideArrow()
-                      .disableCollapse()
-                      .setWidth(790);			  
-   createButtons();
-   confirmPrint = cp5.addButton("yes")
-   					 .setPosition(450,h-110)
-   					 .setSize(30,30)
-   					 .setColorBackground(color(128,128,128))
-                     .setColorForeground(color(0,0,0))
-                     .setColorCaptionLabel(color(255,255,255))
-   					 .setVisible(false);
-   declinePrint = cp5.addButton("no")
-   					 .setPosition(490,h-110)
-   					 .setSize(30,30)
-   					 .setColorBackground(color(128,128,128))
-                     .setColorForeground(color(0,0,0))
-                     .setColorCaptionLabel(color(255,255,255))
-   					 .setVisible(false);
-   cutterBox = cp5.addListBox("cutterBox")
-           		  .setPosition(w-440, 40)
-           		  .setSize(120, 120)
-           		  .setItemHeight(15)
-           		  .setBarHeight(15)
-           		  .setColorBackground(color(128,128,128))
-                  .setColorForeground(color(0,0,0))
-                  .setColorLabel(color(255,255,255))
-           		  .setCaptionLabel("Choose an cutter");
-   cutterBox.getCaptionLabel().getStyle().marginTop = 3;
-   cutterBox.getValueLabel().getStyle().marginTop = 3;
-   updateCutters();
-   cutterAddress = cp5.addTextfield("cutterAddress")
-		   			  .setPosition(w-295,40)
-		   			  .setColorBackground(color(128,128,128))
-		   			  .setColorForeground(color(128,128,128))
-		   			  .setSize(120,30);
-   cp5.addTextlabel("cutterAddressLabel")
-   	  .setPosition(w-300,20)
-   	  .setSize(150,30)
-   	  .setColorValueLabel(0xffffff)
-      .setFont(createFont("Georgia",12))
-      .setText("Address of laser cutter");
-   cp5.addTextlabel("cutterSelectedLabel")
-	  .setPosition(w-440,200)
-	  .setSize(150,30)
-	  .setColorValueLabel(0xffffff)
-	  .setFont(createFont("Georgia",12))
-	  .setText("Lasercutter selected");
-   cutterSelected = cp5.addTextlabel("cutterSelected")
-		   			   .setPosition(w-440,220)
-		   			   .setSize(150,30)
-		   			   .setColorValueLabel(0xffffff)
-		   			   .setFont(createFont("Georgia",12))
-		   			   .setText(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
-   dpiBox = cp5.addListBox("dpiBox")
-		   	   .setPosition(w-140,40)
-		   	   .setSize(120, 120)
-		   	   .setItemHeight(15)
-     		   .setBarHeight(15)
-     		   .setVisible(false)
-     		   .setColorBackground(color(128,128,128))
-               .setColorForeground(color(0,0,0))
-               .setColorLabel(color(255,255,255))
-     		   .setCaptionLabel("Choose a dpi setting");
-   dpiBox.getCaptionLabel().getStyle().marginTop = 3;
-   dpiBox.getValueLabel().getStyle().marginTop = 3;
-   dpiSelected = cp5.addTextlabel("dpiSelected")
-			   		.setPosition(w-140,220)
-			   		.setSize(150,30)
-			   		.setColorValueLabel(0xffffff)
-			   		.setFont(createFont("Georgia",12))
-			   		.setVisible(false)
-			   		.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
-   dpiSelectLabel = cp5.addTextlabel("dpiSelectLabel")
-		   			   .setPosition(w-140,200)
-		   			   .setSize(150,30)
-		   			   .setColorValueLabel(0xffffff)
-		   			   .setFont(createFont("Georgia",12))
-		   			   .setVisible(false)
-		   			   .setText("DPI setting selected");
+    this.cp5 = new ControlP5(this);
+    this.objectLayout = createGraphics(bedWidth, bedHeight);
+    this.printDialogWidgets = new WidgetContainer(this.cp5, this.printDialogInstance);
+    this.printDialogWidgets.setupButtons(this.h, this.w, this.bedHeight, this.bedWidth);
   }
   
-  /**
-   * This method updates the list of laser cutters in the dropdown box for 
-   * selecting the laser cutter to be used. 
-   */
-  private void updateCutters()
+  @Override
+  public void draw() 
   {
-	  cutterBox.clear();
-	  boolean done = false;
-	  int counter = 0;
-	  while(!done)
-	  {
-		  LaserCutter cutter = new LaserCutter();
-		  cutter.setDevice(counter);
-		  if(!cutter.returnDevice().equals("no selected")) {
-			  cutterBox.addItem(cutter.returnDevice(), counter);
-		  } else {
-			  done = true;
-		  }
-		  counter++;
-	  }
-  }
-  
-  private void updateDPIBox()
-  {
-	  dpiBox.clear();
-	  this.dpi = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDPI();
-	  for(int i = 0; i < dpi.length; i++) {
-		  dpiBox.addItem(Double.toString(dpi[i]), i);
-	  }
-  }
-  
-  private void updateListBox()
-  {
-    unplacedShapesBox.clear();
-    if(this.printDialogInstance.printInstancesNotEmpty())
-    {
-    	ArrayList<Shape> unplacedShapes = this.printDialogInstance.getUnplacedShapes();
-    	for(int i = 0; i < unplacedShapes.size(); i++)
-    	{
-    		unplacedShapesBox.addItem(unplacedShapes.get(i).getGShape().getName(), i);
-    	}
-    	unplacedShapesBox.updateListBoxItems();
-    }
+      background(255);
+      drawObjectLayout();
   }
   
   public void controlEvent(ControlEvent theEvent) 
@@ -317,7 +133,7 @@ class PrintDialogWindow extends PApplet
   
   private void shapeListHandler(int objectIndex) {
       this.printDialogInstance.placeShape(objectIndex);
-      updateListBox();
+      this.printDialogWidgets.updateListBox();
   }
   
   private void cutterBoxHandler(int objectIndex) {
@@ -327,26 +143,22 @@ class PrintDialogWindow extends PApplet
       this.bedHeight = this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnBedHeight();
       this.objectLayout = createGraphics(bedWidth, bedHeight);
       this.view = new Rect(0,0,bedWidth,bedHeight);
-      this.cutterSelected.setText(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
+      this.printDialogWidgets.setCutterSelected(this.printDialogInstance.getLaserCutterSettings().getSelectedCutter().returnDevice());
       this.printDialogInstance.getLaserCutterSettings().setDPI(0);
-      this.dpiBox.setVisible(true);
-      this.dpiSelected.setVisible(true);
-      this.dpiSelectLabel.setVisible(true);
-      this.dpiSelected.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
-      updateDPIBox();
+      this.dpi = this.printDialogWidgets.showDPIBox();
   }
   
   private void dpiListHandler(int objectIndex) {
 	  this.printDialogInstance.getLaserCutterSettings().setDPI((int)this.dpi[objectIndex]);
-  	this.dpiSelected.setText(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
+  	this.printDialogWidgets.setDPISelected(Integer.toString(this.printDialogInstance.getLaserCutterSettings().getDPI()) + " DPI");
   }
   
   public void printHandler(boolean SVG)
   {
-	  this.printDialogInstance.getLaserCutterSettings().setAddress(cutterAddress.getText());
+	  this.printDialogInstance.getLaserCutterSettings().setAddress(this.printDialogWidgets.getCutterAddress());
 	  String result = printDialogInstance.print(SVG);
 	  if(!result.equals("passed")) {
-		  statusLabel.setText(result);
+		  this.printDialogWidgets.setStatusLabelText(result);
 	  }
   }
   
@@ -354,83 +166,44 @@ class PrintDialogWindow extends PApplet
 	  if(this.printDialogInstance.printInstancesNotEmpty())
 	  	{
 		  this.printDialogInstance.addSubInstance();
-	  		createButtons();
+	  		this.printDialogWidgets.createButtons();
 	  	}
 	  
   }
   
   private void confirmHandler() {
-	  confirmPrint.setVisible(false);
-		declinePrint.setVisible(false);
-		statusLabel.setText("");
+	  this.printDialogWidgets.activateConfirm(false);
+		this.printDialogWidgets.setStatusLabelText("");
 		String result = printDialogInstance.continuePrint();
 		if(!result.equals("passed")) {
-			statusLabel.setText(result);
-			activateAll(true);
+			this.printDialogWidgets.setStatusLabelText(result);
+			this.printDialogWidgets.activateAll(true);
 		}
   }
   
   private void declineHandler() {
-	  confirmPrint.setVisible(false);
-		declinePrint.setVisible(false);
-		activateAll(true);
-		statusLabel.setText("");
+	  this.printDialogWidgets.activateConfirm(false);
+		this.printDialogWidgets.activateAll(true);
+		this.printDialogWidgets.setStatusLabelText("");
   }
   
   private void selectInstanceHandler(int objectIndex) {
-	  instanceButtons.get(this.printDialogInstance.activeButtonNumber()).setColorBackground(color(128,128,128));
+	  this.printDialogWidgets.setButtonUnactive();
 	  this.printDialogInstance.selectInstanceByButtonID(objectIndex);
-	  instanceButtons.get(this.printDialogInstance.activeButtonNumber()).setColorBackground(color(0,0,0));
-	  updateListBox();
+	  this.printDialogWidgets.setActiveButton();
+	  printDialogWidgets.updateListBox();
   }
   
-  private void setActiveButton()
-  {
-	  instanceButtons.get(this.printDialogInstance.activeButtonNumber()).setColorBackground(color(0,0,0));
+  void printComplete() {
+	  this.printDialogWidgets.activateAll(true);
   }
-  
-  @Override
-  public void draw() 
-  {
-      background(255);
-      drawObjectLayout();
-  }
-  
-  
-  void createButtons()
-  {
-	if(this.printDialogInstance.printInstancesNotEmpty()) {
-		ArrayList<PrintInstance> printInstances = this.printDialogInstance.getPrintInstances();
-	    int buttonNumber = 0;
-	    for(int i = 0; i < instanceButtons.size(); i++)
-	    {
-	      cp5.remove(instanceButtons.get(i));
-	      instanceButtons.get(i).remove();
-	    }
-	    instanceButtons = new ArrayList<Button>();
-	    for(int i = 0; i < printInstances.size(); i++)
-	    {
-	      for(int j = 0; j < printInstances.get(i).getNumberOfSubInstances(); j++)
-	      {
-	       int row = (buttonNumber/5);
-	       int collumn = (buttonNumber%5);
-	       int name = j+1;
-	       Button newButton = cp5.addButton(printInstances.get(i).getMaterial().getMaterialName() + " - " + name)
-	                             .setPosition((collumn*160),(row*50))
-	                             .setSize(150,30)
-	                             .setId(buttonNumber)
-	                             .setColorBackground(color(128,128,128))
-	                             .setColorForeground(color(0,0,0))
-	                             .setColorCaptionLabel(color(255,255,255))
-	                             .setGroup(instanceGroup); 
-	       instanceButtons.add(newButton); 
-	       buttonNumber++;
-	      }
-	    }
-	    setActiveButton();
-	}
-  }
-  
+
+public void confirmationPrint() {
+	this.printDialogWidgets.activateAll(false);
+	this.printDialogWidgets.activateConfirm(true);
+	
+}
+
   void drawObjectLayout()
   {
       objectLayout.beginDraw();
@@ -498,7 +271,7 @@ class PrintDialogWindow extends PApplet
 	                this.originalMousePosition.set(currentMousePosition);
 	            } else if (s.getGShape().isSelected() && mouseButton == PConstants.RIGHT){
 	            	this.printDialogInstance.unplaceShape(s);
-	               updateListBox();
+	            	this.printDialogWidgets.updateListBox();
 	            }
 	      }
   	  	}
@@ -535,22 +308,4 @@ class PrintDialogWindow extends PApplet
   {
    return this.h; 
   }
-  
-  private void activateAll(boolean state)
-  {
-	  this.lasercutButton.setVisible(state);
-	  this.exportSVGButton.setVisible(state);
-	  this.addExtraJobButton.setVisible(state);
-  }
-  
-  void printComplete() {
-	  activateAll(true);
-  }
-
-public void confirmationPrint() {
-	activateAll(false);
-	confirmPrint.setVisible(true);
-	declinePrint.setVisible(true);
-	
-}
 }
