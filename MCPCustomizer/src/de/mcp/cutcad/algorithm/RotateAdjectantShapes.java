@@ -443,7 +443,7 @@ public class RotateAdjectantShapes {
 			}
 		}
 		for (int i = 0; i < 9; i++) {
-			float newAngle = (-angle + (float) Math.PI / 2 * (int) (i / 2))
+			float newAngle = (angle - (float) Math.PI / 2 * (int) (i / 2))
 					* (float) Math.pow(-1, (i + 1));
 			connection.connectEdges(masterEdge, slaveEdge, newAngle);
 
@@ -472,7 +472,7 @@ public class RotateAdjectantShapes {
 			Edge slaveEdge1, Edge slaveEdge2, float slaveAngle) {
 		boolean isCorrectAligned = false;
 		for (int i = 1; i < 9; i++) {
-			float newAngle = (masterAngle + (float) Math.PI / 2
+			float newAngle = (-masterAngle - (float) Math.PI / 2
 					* (int) ((i - 1) / 2))
 					* (float) Math.pow(-1, i);
 			connection.connectEdges(masterEdge1, masterEdge2, newAngle);
