@@ -80,6 +80,8 @@ public class DrawingView3D {
 	    
 	    if(meshSTL.isStlImported())
 	    {
+	    	context.fill(200);
+	    	context.stroke(180);
 	    	if(meshSTL.isPosChanged())
 	    	{
 	    		meshSTL.center();

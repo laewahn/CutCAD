@@ -56,7 +56,7 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 			if (PApplet.checkExtension(theFile.getAbsolutePath()).equals("stl")) {
 				String filePath = theFile.getPath();
 				TriangleMesh loadedMesh = importMeshFromPath(filePath);
-				this.mesh.setSTLMesh(loadedMesh.scale(0.5f));
+				this.mesh.setSTLMesh(loadedMesh.scale(10f));
 			}
 		}
 	}
