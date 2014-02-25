@@ -1,5 +1,5 @@
 <material>
-	<identity red="184" green="127" blue="91" alpha="255">Wood-Beech</identity>
+	<identity red="184" green="127" blue="91" alpha="255">Wood Beech</identity>
 		'<!--' Buche '-->'
 	<thickness value="80">
 		<cut>

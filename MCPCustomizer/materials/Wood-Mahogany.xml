@@ -1,0 +1,12 @@
+<material>
+	<identity red="131" green="65" blue="32" alpha="255">Wood Mahogany</identity>
+	'<!--' which means: Mahagoni :-) '-->'
+	<thickness value="200">
+		<cut>
+			<speed>100</speed>
+    		<power>100</power>
+    		<frequency>5000</frequency>
+    		<focus>0.0</focus>
+		</cut>
+	</thickness>
+</material>

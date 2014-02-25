@@ -1,5 +1,5 @@
 <material>
-	<identity red="215" green="174" blue="126" alpha="255">Wood-Pine</identity>
+	<identity red="215" green="174" blue="126" alpha="255">Wood Pine</identity>
 	'<!--' which means: Kiefer :-) '-->'
 	<thickness value="400">
 		<cut>

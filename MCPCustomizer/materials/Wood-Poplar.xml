@@ -1,5 +1,5 @@
 <material>
-	<identity red="245" green="217" blue="170" alpha="255">Wood-Poplar</identity>
+	<identity red="245" green="217" blue="170" alpha="255">Wood Poplar</identity>
 	'<!--' which means: Pappel :-) '-->'
 	<thickness value="400">
 		<cut>
