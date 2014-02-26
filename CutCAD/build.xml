@@ -61,28 +61,20 @@
 	</target>
 
 	<target name="jar" depends="build">
-			<mkdir dir="${deploy}" />
-			
-			<!--
-			<jar basedir="${bin}" manifest="META-INF/MANIFEST.MF" destfile="${deploy}/CutCAD.jar"/>
-			-->
-						
+			<mkdir dir="${deploy}" />		
 			<jar manifest="META-INF/MANIFEST.MF" destfile="${deploy}/CutCAD.jar">
 				<fileset dir="AddOns"/>
 				<fileset dir="${bin}"/>
 				<fileset dir="Libraries"/>
 			</jar>
-		
 			<copy todir="${deploy}/icons">
 				<fileset dir="icons"/>
 			</copy>
-			
 			<copy todir="${deploy}/materials">
 				<fileset dir="materials"/>
 			</copy>
-			
 			<copy file="Settings.xml" todir="${deploy}"/>
-			<copy file="printsettings.xml" todir="${deploy}"/>
-				
+			<copy file="printsettings.xml" todir="${deploy}"/>		
 		</target>
+		
 </project>
