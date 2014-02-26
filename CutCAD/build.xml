@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="CutCAD">
+    
+	<property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+
+	<property name="bin"  value="bin"/>
+	<property name="deploy" value="CutCAD"/>
+
+	    
+	<path id="CutCAD.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="Libraries/controlP5.jar"/>
+        <pathelement location="Libraries/core.jar"/>
+        <pathelement location="Libraries/gluegen-rt-natives-linux-amd64.jar"/>
+        <pathelement location="Libraries/gluegen-rt-natives-linux-armv6hf.jar"/>
+        <pathelement location="Libraries/gluegen-rt-natives-linux-i586.jar"/>
+        <pathelement location="Libraries/gluegen-rt-natives-macosx-universal.jar"/>
+        <pathelement location="Libraries/gluegen-rt-natives-windows-amd64.jar"/>
+        <pathelement location="Libraries/gluegen-rt-natives-windows-i586.jar"/>
+        <pathelement location="Libraries/gluegen-rt.jar"/>
+        <pathelement location="Libraries/jogl-all-natives-linux-amd64.jar"/>
+        <pathelement location="Libraries/jogl-all-natives-linux-armv6hf.jar"/>
+        <pathelement location="Libraries/jogl-all-natives-linux-i586.jar"/>
+        <pathelement location="Libraries/jogl-all-natives-macosx-universal.jar"/>
+        <pathelement location="Libraries/jogl-all-natives-windows-amd64.jar"/>
+        <pathelement location="Libraries/jogl-all-natives-windows-i586.jar"/>
+        <pathelement location="Libraries/jogl-all.jar"/>
+        <pathelement location="Libraries/LibLaserCut.jar"/>
+        <pathelement location="Libraries/toxiclibs_p5.jar"/>
+        <pathelement location="Libraries/toxiclibscore.jar"/>
+        <pathelement location="Libraries/geomerative.jar"/>
+        <pathelement location="Libraries/proscene.jar"/>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${bin}"/>
+        <copy includeemptydirs="false" todir="${bin}">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="clean">
+        <delete dir="${bin}"/>
+    </target>
+	
+    <target depends="init" name="build">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="${bin}" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="CutCAD.classpath"/>
+        </javac>
+    </target>
+
+	<target name="clean-jar">
+		<delete dir="${deploy}"/>
+	</target>
+
+	<target name="jar" depends="build">
+			<mkdir dir="${deploy}" />
+			
+			<!--
+			<jar basedir="${bin}" manifest="META-INF/MANIFEST.MF" destfile="${deploy}/CutCAD.jar"/>
+			-->
+						
+			<jar manifest="META-INF/MANIFEST.MF" destfile="${deploy}/CutCAD.jar">
+				<fileset dir="AddOns"/>
+				<fileset dir="${bin}"/>
+				<fileset dir="Libraries"/>
+			</jar>
+		
+			<copy todir="${deploy}/icons">
+				<fileset dir="icons"/>
+			</copy>
+			
+			<copy todir="${deploy}/materials">
+				<fileset dir="materials"/>
+			</copy>
+			
+			<copy file="Settings.xml" todir="${deploy}"/>
+			<copy file="printsettings.xml" todir="${deploy}"/>
+				
+		</target>
+</project>

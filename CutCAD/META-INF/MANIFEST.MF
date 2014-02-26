@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./ controlP5.jar core.jar gluegen-rt-natives-linux-am
+ d64.jar gluegen-rt-natives-linux-armv6hf.jar gluegen-rt-natives-linux
+ -i586.jar gluegen-rt-natives-macosx-universal.jar gluegen-rt-natives-
+ windows-amd64.jar gluegen-rt-natives-windows-i586.jar gluegen-rt.jar 
+ jogl-all-natives-linux-amd64.jar jogl-all-natives-linux-armv6hf.jar j
+ ogl-all-natives-linux-i586.jar jogl-all-natives-macosx-universal.jar 
+ jogl-all-natives-windows-amd64.jar jogl-all-natives-windows-i586.jar 
+ jogl-all.jar LibLaserCut.jar toxiclibs_p5.jar toxiclibscore.jar geome
+ rative.jar proscene.jar
+Class-Path: .
+Rsrc-Main-Class: de.mcp.cutcad.application.CutCADApplet
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
