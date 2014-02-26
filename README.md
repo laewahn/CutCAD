@@ -4,6 +4,9 @@ CutCAD
 
 CutCAD is the result of our work for the Media Computing Project 2014. It is supposed to help you to build housings for your electronics projects, create boxes to store things or build other crazy things with your lasercutter.
 
+For detailed information visit http://hci.rwth-aachen.de/CutCAD
+
+Check out the documentation on http://laewahn.github.io/
 
 How to compile it
 -----------------
