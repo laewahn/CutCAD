@@ -6,9 +6,9 @@
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
 
-	<property name="bin"  value="bin"/>
+	<property name="bin"  	value="bin"/>
 	<property name="deploy" value="CutCAD"/>
-
+	<property name="docs" 	value="docs"/>
 	    
 	<path id="CutCAD.classpath">
         <pathelement location="bin"/>
@@ -61,20 +61,24 @@
 	</target>
 
 	<target name="jar" depends="build">
-			<mkdir dir="${deploy}" />		
-			<jar manifest="META-INF/MANIFEST.MF" destfile="${deploy}/CutCAD.jar">
-				<fileset dir="AddOns"/>
-				<fileset dir="${bin}"/>
-				<fileset dir="Libraries"/>
-			</jar>
-			<copy todir="${deploy}/icons">
-				<fileset dir="icons"/>
-			</copy>
-			<copy todir="${deploy}/materials">
-				<fileset dir="materials"/>
-			</copy>
-			<copy file="Settings.xml" todir="${deploy}"/>
-			<copy file="printsettings.xml" todir="${deploy}"/>		
-		</target>
+		<mkdir dir="${deploy}" />		
+		<jar manifest="META-INF/MANIFEST.MF" destfile="${deploy}/CutCAD.jar">
+			<fileset dir="AddOns"/>
+			<fileset dir="${bin}"/>
+			<fileset dir="Libraries"/>
+		</jar>
+		<copy todir="${deploy}/icons">
+			<fileset dir="icons"/>
+		</copy>
+		<copy todir="${deploy}/materials">
+			<fileset dir="materials"/>
+		</copy>
+		<copy file="Settings.xml" todir="${deploy}"/>
+		<copy file="printsettings.xml" todir="${deploy}"/>		
+	</target>
+
+	<target name="javadoc">
+        <javadoc access="private" author="true" classpath="Libraries/gluegen-rt-natives-linux-armv6hf.jar:Libraries/gluegen-rt-natives-linux-i586.jar:Libraries/gluegen-rt-natives-windows-amd64.jar:Libraries/controlP5.jar:Libraries/proscene.jar:Libraries/jogl-all.jar:Libraries/gluegen-rt-natives-linux-amd64.jar:Libraries/toxiclibs_p5.jar:Libraries/core.jar:Libraries/jogl-all-natives-windows-amd64.jar:Libraries/gluegen-rt.jar:Libraries/gluegen-rt-natives-windows-i586.jar:Libraries/jogl-all-natives-linux-amd64.jar:Libraries/jogl-all-natives-windows-i586.jar:Libraries/jogl-all-natives-macosx-universal.jar:Libraries/jogl-all-natives-linux-i586.jar:Libraries/LibLaserCut.jar:Libraries/geomerative.jar:Libraries/jogl-all-natives-linux-armv6hf.jar:Libraries/toxiclibscore.jar:Libraries/gluegen-rt-natives-macosx-universal.jar" destdir="${docs}" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="de.mcp.cutcad.application.tools.objectImport,de.mcp.cutcad.model.primitives,de.mcp.cutcad.application.tools.fileManagement,de.mcp.cutcad.printdialog.selectpath,de.mcp.cutcad.application,de.mcp.cutcad.printdialog,de.mcp.cutcad.view,de.mcp.cutcad.application.tools.objectManipulation,de.mcp.cutcad.model.shapes,de.mcp.cutcad.model,de.mcp.cutcad.algorithm,de.mcp.cutcad.printdialog.lasercutter,de.mcp.cutcad.application.tools.drawing" source="1.7" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
 		
 </project>
