@@ -24,6 +24,7 @@ We included a build file for Ant in this project, with the following options:
 - jar: Creates an executable .jar file in the deployment folder (CutCAD/CutCAD)
 - clean: Cleans the build folder 
 - clean-jar: Cleans the deployment folder
+- javadoc: Builds the documentation
 
 Why CutCAD?
 -----------
@@ -48,6 +49,6 @@ The basic approach of CutCAD is to assemble three dimensional shapes by connecti
 Team Members:
 -------------
 * [Dennis Lewandowski](https://github.com/laewahn)
-* Jan Thar
+* [Jan Thar](https://github.com/JanThar)
 * [Mirko Hartmann](https://github.com/x2mirko)
 * Pierre Schoonbrood 
