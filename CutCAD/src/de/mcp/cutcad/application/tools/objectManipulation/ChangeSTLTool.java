@@ -3,14 +3,11 @@ package de.mcp.cutcad.application.tools.objectManipulation;
 import de.mcp.cutcad.application.CutCADApplet;
 import de.mcp.cutcad.application.Tool;
 import de.mcp.cutcad.model.ObjectContainer;
-import de.mcp.cutcad.model.STLMesh;
 
 /**
  * The ChangeSTLTool is used to move and rotate an imported STL mesh in the 3D-view
  */
 public class ChangeSTLTool extends Tool {
-
-	private STLMesh mesh;
 
 	/**
 	 * Creates a ChangeSTLTool
@@ -20,7 +17,6 @@ public class ChangeSTLTool extends Tool {
 	 */
 	public ChangeSTLTool(CutCADApplet application, ObjectContainer container) {
 		super(application, container);
-		this.mesh = container.getSTLMesh();
 	}
 	
 	@Override
@@ -30,10 +26,10 @@ public class ChangeSTLTool extends Tool {
 	
 	@Override
 	public void toolWasSelected() {
-		if(mesh.isStlImported())
+		if(objectContainer.getSTLMesh().isStlImported())
 		{
 			this.application.properties.show();
-			this.application.properties.plugTo(mesh);
+			this.application.properties.plugTo(objectContainer.getSTLMesh());
 		}
 		super.toolWasSelected();
 	}

@@ -8,7 +8,6 @@ import toxi.geom.mesh.TriangleMesh;
 import de.mcp.cutcad.application.CutCADApplet;
 import de.mcp.cutcad.application.Tool;
 import de.mcp.cutcad.model.ObjectContainer;
-import de.mcp.cutcad.model.STLMesh;
 import de.mcp.cutcad.view.FileDialogDelegate;
 import de.mcp.cutcad.view.OpenFileDialog;
 
@@ -19,8 +18,6 @@ import de.mcp.cutcad.view.OpenFileDialog;
  */
 public class ImportSTLTool extends Tool implements FileDialogDelegate {
 
-	private STLMesh mesh;
-
 	/**
 	 * @param application
 	 *            the main class of the project
@@ -29,7 +26,6 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 	 */
 	public ImportSTLTool(CutCADApplet application, ObjectContainer container) {
 		super(application, container);
-		this.mesh = container.getSTLMesh();
 	}
 
 	@Override
@@ -56,7 +52,7 @@ public class ImportSTLTool extends Tool implements FileDialogDelegate {
 			if (PApplet.checkExtension(theFile.getAbsolutePath()).equals("stl")) {
 				String filePath = theFile.getPath();
 				TriangleMesh loadedMesh = importMeshFromPath(filePath);
-				this.mesh.setSTLMesh(loadedMesh.scale(10f));
+				this.objectContainer.getSTLMesh().setSTLMesh(loadedMesh.scale(10f));
 			}
 		}
 	}
