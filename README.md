@@ -5,6 +5,26 @@ CutCAD
 CutCAD is the result of our work for the Media Computing Project 2014. It is supposed to help you to build housings for your electronics projects, create boxes to store things or build other crazy things with your lasercutter.
 
 
+How to compile it
+-----------------
+
+There are two ways for running CutCAD from source.
+
+1. Using Eclipse
+2. Using Ant
+
+### Using Eclipse
+
+If you are running Eclipse >= Kepler with Java >= 1.7, you can import the whole CutCAD project into your workspace by selecting File > Import > General/Existing Projects Into Eclipse.
+
+### Using Ant
+
+We included a build file for Ant in this project, with the following options:
+- build: Builds all source files into the build folder (CutCAD/bin)
+- jar: Creates an executable .jar file in the deployment folder (CutCAD/CutCAD)
+- clean: Cleans the build folder 
+- clean-jar: Cleans the deployment folder
+
 Why CutCAD?
 -----------
 
