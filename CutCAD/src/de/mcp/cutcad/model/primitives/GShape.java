@@ -8,6 +8,7 @@ import de.mcp.cutcad.algorithm.CreateTenons;
 import de.mcp.cutcad.model.AllMaterials;
 import de.mcp.cutcad.model.Connection;
 import de.mcp.cutcad.model.Material;
+import de.mcp.cutcad.model.ObjectContainer;
 import de.mcp.cutcad.view.Drawable2D;
 import de.mcp.cutcad.view.Drawable3D;
 import de.mcp.cutcad.view.Transformation;
@@ -39,6 +40,7 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 	private Material material;
 	private String name;
 	private float scalingFactor, scalingFactor3D;
+	//private ObjectContainer container;
 
 	/**
 	 * Creates edges with the 3D and 2D representation of this form (one edge between each pair of vertices)
@@ -511,12 +513,12 @@ public class GShape implements Drawable2D, Drawable3D, Serializable {
 		this.material = material;
 		if (this.getNumberOfConnections() > 0) {
 			for (Edge e : edges) {
-				for (Connection c : Connection.getConnections()) {
-					if (c.getMasterEdge() == e)
-						CreateTenons.createOutlineOfEdge(c.getSlaveEdge(), e);
-					else if (c.getSlaveEdge() == e)
-						CreateTenons.createOutlineOfEdge(c.getMasterEdge(), e);
-				}
+//				for (Connection c : container.allConnections()) {
+//					if (c.getMasterEdge() == e)
+//						CreateTenons.createOutlineOfEdge(c.getSlaveEdge(), e);
+//					else if (c.getSlaveEdge() == e)
+//						CreateTenons.createOutlineOfEdge(c.getMasterEdge(), e);
+//				}
 			}
 		}
 	}

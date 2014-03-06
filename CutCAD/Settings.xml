@@ -1,9 +1,4 @@
 <settings>
-	<laserCutter>
-		<name>epilogZing</name>
-		<ip>111.111.111.111</ip>
-		<dpi>500</dpi>
-	</laserCutter>
 	<standardMaterial>
 		<name>Pulp board(white coat)</name>
 		<thickness>300</thickness>
