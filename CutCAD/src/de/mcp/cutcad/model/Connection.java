@@ -24,7 +24,6 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	private Edge masterEdge, slaveEdge;
 	private float angle = 400;
 	private boolean isSelected, isActive;
-	//private static List<Connection> connections; // wrong place???
 	private float tolerance = 5f;
 	private float scalingFactor, boundingBoxSize;
 	private static ObjectContainer container;
@@ -36,10 +35,14 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	 */
 	public Connection(ObjectContainer container)
 	{
-		//Connection.connections = container.allConnections();
 		Connection.container = container;
 		this.isSelected = false;
 		this.isActive = false;
+	}
+	
+	public static void setContainer(ObjectContainer container)
+	{
+		Connection.container = container;
 	}
 
 	/**
