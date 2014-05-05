@@ -27,7 +27,7 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	//private static List<Connection> connections; // wrong place???
 	private float tolerance = 5f;
 	private float scalingFactor, boundingBoxSize;
-	private ObjectContainer container;
+	private static ObjectContainer container;
 
 	/** 
 	 * Creates a basic connection-object without specifying the two edges to be connected.
@@ -36,8 +36,8 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	 */
 	public Connection(ObjectContainer container)
 	{
-		//Connection.connections = connections;
-		this.container = container;
+		//Connection.connections = container.allConnections();
+		Connection.container = container;
 		this.isSelected = false;
 		this.isActive = false;
 	}
@@ -49,21 +49,22 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	 * @param slaveEdge The edge contained by the shape considered to be slave (will be moved/rotated when connecting the two shapes)
 	 * @param connections The list of existing connections
 	 */
-	public Connection(Edge masterEdge, Edge slaveEdge, List<Connection> connections)
+	public Connection(Edge masterEdge, Edge slaveEdge, ObjectContainer container)
 	{
 		this.masterEdge = masterEdge;
 		this.slaveEdge = slaveEdge;
-		//Connection.connections = connections;
+		//Connection.connections = container.allConnections();
+		Connection.container = container;
 		this.isSelected = false;
 	}
 
-//	/**
-//	 * @return The list of all existing connections
-//	 */
-//	public static List<Connection> getConnections()
-//	{
-//		return connections;
-//	}
+	/**
+	 * @return The list of all existing connections
+	 */
+	public static List<Connection> getConnections()
+	{
+		return Connection.container.allConnections();
+	}
 
 	/**
 	 * @return The masterEdge of the connection
@@ -188,20 +189,20 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 		}
 		if(masterEdge.getGShape().getNumberOfConnections() == 1) // Do weird stuff: lockup this connection and realign, maybe not necessary
 		{
-			recalculateConnectedEdge(masterEdge,  container);
+			recalculateConnectedEdge(masterEdge);
 		}
 		if(slaveEdge.getGShape().getNumberOfConnections() == 1)
 		{
-			recalculateConnectedEdge(slaveEdge,  container);
+			recalculateConnectedEdge(slaveEdge);
 		}  
 	}
 
-	private void recalculateConnectedEdge(Edge edge, ObjectContainer container)
+	private void recalculateConnectedEdge(Edge edge)
 	{
 		GShape shape = edge.getGShape();
 		for (Edge e : shape.getEdges())
 		{
-			for (Connection c : container.allConnections())
+			for (Connection c : this.container.allConnections())
 			{
 				if(c != this)
 				{
@@ -269,7 +270,7 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 						masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D1(), tolerance) || 
 						masterEdge.getP3D2().equalsWithTolerance(slaveEdge.getP3D2(), tolerance)))
 		{
-			if (RotateAdjectantShapes.rotateBothShapes(this, masterEdge, slaveEdge, container))
+			if (RotateAdjectantShapes.rotateBothShapes(this, masterEdge, slaveEdge))
 			{
 				return "Connection created!";
 			}
@@ -450,6 +451,5 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	{
 		setAngle(size);
 	}
-
 }
 

@@ -5,7 +5,6 @@ import toxi.geom.*;
 import java.util.*;
 
 import de.mcp.cutcad.model.Connection;
-import de.mcp.cutcad.model.ObjectContainer;
 import de.mcp.cutcad.model.primitives.Edge;
 import de.mcp.cutcad.model.primitives.Shape;
 import de.mcp.cutcad.model.primitives.Vector2D;
@@ -25,7 +24,6 @@ import static java.lang.System.*;
  */
 public class RotateAdjectantShapes {
 	private static float tolerance = 1f;
-	private static ObjectContainer container;
 
 	private static Shape virtualShape = new Rectangle(new Vector3D(0, 0, 0), 1, 1);
 	private static Edge edgeA = new Edge(virtualShape.getGShape(), new Vector3D(1,
@@ -63,7 +61,7 @@ public class RotateAdjectantShapes {
 	 * @return true if the shapes could be rotated until both edges are at the same position
 	 */
 	public static boolean rotateBothShapes(Connection connection,
-			Edge masterEdge, Edge slaveEdge, ObjectContainer theContainer) {
+			Edge masterEdge, Edge slaveEdge) {
 		// Assumption:
 		// - both vectors are not the same/ both are different is already
 		// checked (and not true)
@@ -71,7 +69,6 @@ public class RotateAdjectantShapes {
 		// - At least one of them could rotate
 		edgeA = masterEdge;
 		edgeB = slaveEdge;
-		container = theContainer;
 
 		if (getNormalVector(masterEdge, slaveEdge).isZeroVector()) {
 			out.println("Error: Parallel Edges"); // Special case both rotating
@@ -404,7 +401,7 @@ public class RotateAdjectantShapes {
 	 * edge forms a connection
 	 */
 	private static Edge getAlreadyConnectedEdge(Edge edge) {
-		for (Connection c : container.allConnections()) {
+		for (Connection c : Connection.getConnections()) {
 			if (c.getMasterEdge() == edge)
 				return c.getSlaveEdge();
 			if (c.getSlaveEdge() == edge)
