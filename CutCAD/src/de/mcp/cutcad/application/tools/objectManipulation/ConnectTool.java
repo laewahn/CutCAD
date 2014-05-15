@@ -44,8 +44,7 @@ public class ConnectTool extends Tool {
 				if (!selectedFirst) {
 					this.application.displayStatus("Select another edge to connect it to the first edge");
 					this.lastMessage = "Select another edge to connect it to the first edge";
-					this.previewConnection = new Connection(
-							this.objectContainer.allConnections());
+					this.previewConnection = new Connection(this.objectContainer);
 					this.previewConnection.setMasterEdge(e);
 					e.setSelected(true);
 					selectedFirst = true;

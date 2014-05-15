@@ -4,6 +4,7 @@ import java.io.File;
 
 import de.mcp.cutcad.application.CutCADApplet;
 import de.mcp.cutcad.application.Tool;
+import de.mcp.cutcad.model.Connection;
 import de.mcp.cutcad.model.ObjectContainer;
 import de.mcp.cutcad.view.FileDialogDelegate;
 import de.mcp.cutcad.view.OpenFileDialog;
@@ -30,6 +31,7 @@ public class LoadTool extends Tool implements FileDialogDelegate {
 	@Override
 	public void fileWasSelected(File theFile) {
 		this.objectContainer.load(theFile);
+		Connection.setContainer(this.objectContainer);
 	}
 	
 	@Override

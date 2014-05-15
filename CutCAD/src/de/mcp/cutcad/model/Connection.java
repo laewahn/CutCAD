@@ -24,20 +24,25 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	private Edge masterEdge, slaveEdge;
 	private float angle = 400;
 	private boolean isSelected, isActive;
-	private static List<Connection> connections; // wrong place???
 	private float tolerance = 5f;
 	private float scalingFactor, boundingBoxSize;
+	private static ObjectContainer container;
 
 	/** 
 	 * Creates a basic connection-object without specifying the two edges to be connected.
 	 * 
 	 * @param connections The list of existing connections
 	 */
-	public Connection(List<Connection> connections)
+	public Connection(ObjectContainer container)
 	{
-		Connection.connections = connections;
+		Connection.container = container;
 		this.isSelected = false;
 		this.isActive = false;
+	}
+	
+	public static void setContainer(ObjectContainer container)
+	{
+		Connection.container = container;
 	}
 
 	/**
@@ -47,11 +52,12 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	 * @param slaveEdge The edge contained by the shape considered to be slave (will be moved/rotated when connecting the two shapes)
 	 * @param connections The list of existing connections
 	 */
-	public Connection(Edge masterEdge, Edge slaveEdge, List<Connection> connections)
+	public Connection(Edge masterEdge, Edge slaveEdge, ObjectContainer container)
 	{
 		this.masterEdge = masterEdge;
 		this.slaveEdge = slaveEdge;
-		Connection.connections = connections;
+		//Connection.connections = container.allConnections();
+		Connection.container = container;
 		this.isSelected = false;
 	}
 
@@ -60,7 +66,7 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	 */
 	public static List<Connection> getConnections()
 	{
-		return connections;
+		return Connection.container.allConnections();
 	}
 
 	/**
@@ -199,7 +205,7 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 		GShape shape = edge.getGShape();
 		for (Edge e : shape.getEdges())
 		{
-			for (Connection c : Connection.getConnections())
+			for (Connection c : this.container.allConnections())
 			{
 				if(c != this)
 				{
@@ -448,6 +454,5 @@ public class Connection implements Drawable2D, Serializable, Pluggable
 	{
 		setAngle(size);
 	}
-
 }
 
